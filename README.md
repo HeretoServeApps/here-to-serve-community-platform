@@ -69,12 +69,12 @@ $ python manage.py runserver
 This endpoint allows you to login as an admin and easily view and update models.
 When you have successfully logged in, you should see this view:
 
-![](images/admin-view.png | width=100)
+![](images/admin-view.png)
 
 * localhost:8000 <br />
 
 This endpoint allows you to view the models as a rest API. 
 
-![](images/rest-view.png | width=100)
+![](images/rest-view.png)
 
 
