@@ -44,7 +44,7 @@ This will install all current requirements for the project.
 
 #### Migrations
 
-If you added new models or database tables to the project, or modified any model,
+If you just started or cloned the project, have added new models or database tables to the project, or modified any model,
 run the following commands to add the changes to the project. Make sure you are in 
 the same directory as manage.py:
 
@@ -61,3 +61,20 @@ More info on these commands [here](https://docs.djangoproject.com/en/3.0/ref/dja
 ```
 $ python manage.py runserver
 ```
+
+#### Important Endpoints
+
+* localhost:8000/admin <br />
+
+This endpoint allows you to login as an admin and easily view and update models.
+When you have successfully logged in, you should see this view:
+
+![](images/admin-view.png | width=100)
+
+* localhost:8000 <br />
+
+This endpoint allows you to view the models as a rest API. 
+
+![](images/rest-view.png | width=100)
+
+
