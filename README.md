@@ -1,5 +1,7 @@
 # Here to Serve
 
+![](images/logo-h2s.svg)
+
 ## Setting up
 
 In terminal/command line:
@@ -43,7 +45,8 @@ This will install all current requirements for the project.
 #### Migrations
 
 If you added new models or database tables to the project, or modified any model,
-run the following commands to add the changes to the project:
+run the following commands to add the changes to the project. Make sure you are in 
+the same directory as manage.py:
 
 ```
 $ python manage.py makemigrations
