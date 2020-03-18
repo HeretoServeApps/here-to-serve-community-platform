@@ -51,6 +51,8 @@ run the following commands to add the changes to the project. Make sure you are 
 the same directory as manage.py:
 
 ```
+$ pip install -r requirements.txt
+$ pip3 install django-cors-headers
 $ python manage.py makemigrations
 $ python manage.py migrate
 ```
@@ -83,5 +85,6 @@ This endpoint allows you to view the models as a rest API.
 
 ```
 $ cd frontend
+$ yarn install
 $ yarn start
 ```
