@@ -14,20 +14,22 @@ $ cd here-to-serve
 ##### Initialize a virtual environment
 
 Windows:
+
 ```
 $ python3 -m venv venv
 $ venv\Scripts\activate.bat
 ```
 
 Unix/MacOS:
+
 ```
 $ python3 -m venv venv
 $ source venv/bin/activate
 ```
+
 Learn more in [the documentation](https://docs.python.org/3/library/venv.html#creating-virtual-environments).
 
 Note: if you are using a python before 3.3, it doesn't come with venv. Install [virtualenv](https://docs.python-guide.org/dev/virtualenvs/#lower-level-virtualenv) with pip instead.
-
 
 #### Installing Requirements
 
@@ -45,7 +47,7 @@ This will install all current requirements for the project.
 #### Migrations
 
 If you just started or cloned the project, have added new models or database tables to the project, or modified any model,
-run the following commands to add the changes to the project. Make sure you are in 
+run the following commands to add the changes to the project. Make sure you are in
 the same directory as manage.py:
 
 ```
@@ -64,17 +66,22 @@ $ python manage.py runserver
 
 #### Important Endpoints
 
-* localhost:8000/admin <br />
+- localhost:8000/admin <br />
 
 This endpoint allows you to login as an admin and easily view and update models.
 When you have successfully logged in, you should see this view:
 
 ![](images/admin-view.png)
 
-* localhost:8000 <br />
+- localhost:8000 <br />
 
-This endpoint allows you to view the models as a rest API. 
+This endpoint allows you to view the models as a rest API.
 
 ![](images/rest-view.png)
 
+#### Starting the Front End
 
+```
+$ cd frontend
+$ yarn start
+```
