@@ -16,14 +16,14 @@ $ cd here-to-serve
 Windows:
 
 ```
-$ python3 -m venv venv
+$ python -m venv venv
 $ venv\Scripts\activate.bat
 ```
 
 Unix/MacOS:
 
 ```
-$ python3 -m venv venv
+$ python -m venv venv
 $ source venv/bin/activate
 ```
 
@@ -62,14 +62,20 @@ run the following commands to add the changes to the project. Make sure you are 
 the same directory as manage.py:
 
 ```
-$ pip install -r requirements.txt
-$ pip3 install django-cors-headers
 $ python manage.py makemigrations
 $ python manage.py migrate
 ```
 
 The reason that there are separate commands to make and apply migrations is because you’ll commit migrations to your version control system and ship them with your app; they not only make your development easier, they’re also usable by other developers and in production.
 More info on these commands [here](https://docs.djangoproject.com/en/3.0/ref/django-admin/#django-admin-makemigrations).
+
+#### Creating an admin user (if one isn't created already)
+
+```
+$ python manage.py createsuperuser
+```
+
+Enter in the admin information. 
 
 #### Running the Project Locally
 
@@ -87,6 +93,8 @@ When you have successfully logged in, you should see this view:
 ![](images/admin-view.png)
 
 - localhost:8000 <br />
+
+You can add communities as an admin directly on this interface. <br />
 
 This endpoint allows you to view the models as a rest API.
 
