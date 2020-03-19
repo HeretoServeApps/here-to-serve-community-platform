@@ -2,7 +2,7 @@
 
 ![](images/logo-h2s.svg)
 
-## Setting up
+## Setting up: Backend
 
 In terminal/command line:
 
@@ -42,7 +42,18 @@ $ pip install -r requirements.txt
 
 This will install all current requirements for the project.
 
-## Running Project
+## Setting Up: Frontend
+First install ```yarn```. ```yarn``` is a nice package for dependency management. For instructions
+on how to install ```yarn```, visit [yarn website](https://classic.yarnpkg.com/en/docs/install).
+
+Then install necessary frontend packages by:
+
+```
+$ cd frontend
+$ yarn install
+```
+
+## Running Project: Backend
 
 #### Migrations
 
@@ -81,10 +92,19 @@ This endpoint allows you to view the models as a rest API.
 
 ![](images/rest-view.png)
 
-#### Starting the Front End
+## Running Project: Frontend
 
 ```
 $ cd frontend
-$ yarn install
 $ yarn start
 ```
+
+If you navigate to localhost:3000, you should see the following view:
+
+![](images/frontend-view.png)
+
+These are test communities we added with the admin view. If you want to test further, 
+try going to admin view (localhost:8000/admin) and add some more communities.
+
+Note: You have to have both frontend and backend running to run the entire project. 
+If you only have the backend running, you can access the admin and API pages. 
