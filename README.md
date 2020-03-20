@@ -2,6 +2,16 @@
 
 ![](images/logo-h2s.svg)
 
+## Project structure
+
+The backend is under `app` folder, while the frontend is in the `frontend` folder. <br />
+
+Under the `app` folder is the applications of the project are stored. `backend` is our main app, 
+where we will add models like `Community` and `Group` to. The other is `authentication`, which is where we 
+will be storing our `User` model and login/registration logic. The subfolder `app` inside of the outter `app`
+folder stores our main settings (eg. when we add a new app we need to go to app/settings.py).  
+
+
 ## Setting up: Backend
 
 In terminal/command line:
