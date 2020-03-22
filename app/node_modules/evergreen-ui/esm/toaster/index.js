@@ -1,0 +1,2 @@
+export { default as toaster } from './src';
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uLy4uL3NyYy90b2FzdGVyL2luZGV4LmpzIl0sIm5hbWVzIjpbImRlZmF1bHQiLCJ0b2FzdGVyIl0sIm1hcHBpbmdzIjoiQUFBQSxTQUFTQSxPQUFPLElBQUlDLE9BQXBCLFFBQW1DLE9BQW5DIiwic291cmNlc0NvbnRlbnQiOlsiZXhwb3J0IHsgZGVmYXVsdCBhcyB0b2FzdGVyIH0gZnJvbSAnLi9zcmMnXG4iXX0=
