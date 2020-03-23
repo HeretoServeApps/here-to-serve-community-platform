@@ -37,9 +37,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'backend.apps.BackendConfig',
+    'backend',
     'rest_framework',
-    'corsheaders'
+    'corsheaders',
+    'phone_field'
 ]
 
 MIDDLEWARE = [
@@ -85,6 +86,8 @@ DATABASES = {
     }
 }
 
+# User model
+AUTH_USER_MODEL = 'backend.User'
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
