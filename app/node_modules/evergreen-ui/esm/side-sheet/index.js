@@ -1,0 +1,2 @@
+export { default as SideSheet } from './src/SideSheet';
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uLy4uL3NyYy9zaWRlLXNoZWV0L2luZGV4LmpzIl0sIm5hbWVzIjpbImRlZmF1bHQiLCJTaWRlU2hlZXQiXSwibWFwcGluZ3MiOiJBQUFBLFNBQVNBLE9BQU8sSUFBSUMsU0FBcEIsUUFBcUMsaUJBQXJDIiwic291cmNlc0NvbnRlbnQiOlsiZXhwb3J0IHsgZGVmYXVsdCBhcyBTaWRlU2hlZXQgfSBmcm9tICcuL3NyYy9TaWRlU2hlZXQnXG4iXX0=

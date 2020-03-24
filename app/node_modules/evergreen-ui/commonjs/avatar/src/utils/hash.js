@@ -1,0 +1,26 @@
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = hashCode;
+
+// http://erlycoder.com/49/javascript-hash-functions-to-convert-string-into-integer-hash-
+function hashCode(s) {
+  var str = String(s);
+  var hash = 0;
+
+  var _char;
+
+  if (str.trim().length === 0) return hash;
+
+  for (var i = 0; i < str.length; i++) {
+    _char = str.charCodeAt(i);
+    hash = (hash << 5) - hash + _char; // Convert to 32bit integer
+
+    hash &= hash;
+  }
+
+  return Math.abs(hash);
+}
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uLy4uLy4uLy4uL3NyYy9hdmF0YXIvc3JjL3V0aWxzL2hhc2guanMiXSwibmFtZXMiOlsiaGFzaENvZGUiLCJzIiwic3RyIiwiU3RyaW5nIiwiaGFzaCIsImNoYXIiLCJ0cmltIiwibGVuZ3RoIiwiaSIsImNoYXJDb2RlQXQiLCJNYXRoIiwiYWJzIl0sIm1hcHBpbmdzIjoiOzs7Ozs7O0FBQUE7QUFDZSxTQUFTQSxRQUFULENBQWtCQyxDQUFsQixFQUFxQjtBQUNsQyxNQUFNQyxHQUFHLEdBQUdDLE1BQU0sQ0FBQ0YsQ0FBRCxDQUFsQjtBQUNBLE1BQUlHLElBQUksR0FBRyxDQUFYOztBQUNBLE1BQUlDLEtBQUo7O0FBQ0EsTUFBSUgsR0FBRyxDQUFDSSxJQUFKLEdBQVdDLE1BQVgsS0FBc0IsQ0FBMUIsRUFBNkIsT0FBT0gsSUFBUDs7QUFDN0IsT0FBSyxJQUFJSSxDQUFDLEdBQUcsQ0FBYixFQUFnQkEsQ0FBQyxHQUFHTixHQUFHLENBQUNLLE1BQXhCLEVBQWdDQyxDQUFDLEVBQWpDLEVBQXFDO0FBQ25DSCxJQUFBQSxLQUFJLEdBQUdILEdBQUcsQ0FBQ08sVUFBSixDQUFlRCxDQUFmLENBQVA7QUFDQUosSUFBQUEsSUFBSSxHQUFHLENBQUNBLElBQUksSUFBSSxDQUFULElBQWNBLElBQWQsR0FBcUJDLEtBQTVCLENBRm1DLENBR25DOztBQUNBRCxJQUFBQSxJQUFJLElBQUlBLElBQVI7QUFDRDs7QUFFRCxTQUFPTSxJQUFJLENBQUNDLEdBQUwsQ0FBU1AsSUFBVCxDQUFQO0FBQ0QiLCJzb3VyY2VzQ29udGVudCI6WyIvLyBodHRwOi8vZXJseWNvZGVyLmNvbS80OS9qYXZhc2NyaXB0LWhhc2gtZnVuY3Rpb25zLXRvLWNvbnZlcnQtc3RyaW5nLWludG8taW50ZWdlci1oYXNoLVxuZXhwb3J0IGRlZmF1bHQgZnVuY3Rpb24gaGFzaENvZGUocykge1xuICBjb25zdCBzdHIgPSBTdHJpbmcocylcbiAgbGV0IGhhc2ggPSAwXG4gIGxldCBjaGFyXG4gIGlmIChzdHIudHJpbSgpLmxlbmd0aCA9PT0gMCkgcmV0dXJuIGhhc2hcbiAgZm9yIChsZXQgaSA9IDA7IGkgPCBzdHIubGVuZ3RoOyBpKyspIHtcbiAgICBjaGFyID0gc3RyLmNoYXJDb2RlQXQoaSlcbiAgICBoYXNoID0gKGhhc2ggPDwgNSkgLSBoYXNoICsgY2hhclxuICAgIC8vIENvbnZlcnQgdG8gMzJiaXQgaW50ZWdlclxuICAgIGhhc2ggJj0gaGFzaFxuICB9XG5cbiAgcmV0dXJuIE1hdGguYWJzKGhhc2gpXG59XG4iXX0=
