@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'backend',
     'rest_framework',
     'corsheaders',
+    'django_countries',
     'phone_field'
 ]
 
