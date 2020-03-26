@@ -104,5 +104,23 @@ class User(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return '{} <{}>'.format(self.get_full_name(), self.email)
 
+class CommunityUserRole(models.Model):
+    ADMIN = 'ADMIN'
+    COMM_LEADER = 'COMM_LEADER'
+    COORDINATOR = 'COORDINATOR'
+    COMM_MEMBER = 'COMM_MEMBER'
+    COMMUNITY_ROLE_CHOICES = [
+        (ADMIN, 'Administrator'),
+        (COMM_LEADER, 'Community Leader'),
+        (COORDINATOR, 'Coordinator'),
+        (COMM_MEMBER, 'Community Member'),
+    ]
 
-
+    community = models.ForeignKey(Community, on_delete=models.CASCADE, null=False, blank=False)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=False, blank=False)
+    role = models.CharField(
+        max_length=11,
+        choices=COMMUNITY_ROLE_CHOICES,
+        default=COMM_MEMBER,
+        blank=False,
+    )
