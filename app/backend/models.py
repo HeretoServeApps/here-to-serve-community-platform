@@ -89,7 +89,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     phone_number = PhoneField(blank=False)
     email = models.EmailField(max_length=255, unique=True)
     # password field supplied by AbstractBaseUser
-    role = models.CharField(max_length=30, blank=False)
     is_staff = models.BooleanField(default=False)
 
     objects = UserManager()
