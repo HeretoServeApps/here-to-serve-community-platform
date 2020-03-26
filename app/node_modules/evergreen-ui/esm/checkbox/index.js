@@ -1,0 +1,2 @@
+export { default as Checkbox } from './src/Checkbox';
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uLy4uL3NyYy9jaGVja2JveC9pbmRleC5qcyJdLCJuYW1lcyI6WyJkZWZhdWx0IiwiQ2hlY2tib3giXSwibWFwcGluZ3MiOiJBQUFBLFNBQVNBLE9BQU8sSUFBSUMsUUFBcEIsUUFBb0MsZ0JBQXBDIiwic291cmNlc0NvbnRlbnQiOlsiZXhwb3J0IHsgZGVmYXVsdCBhcyBDaGVja2JveCB9IGZyb20gJy4vc3JjL0NoZWNrYm94J1xuIl19

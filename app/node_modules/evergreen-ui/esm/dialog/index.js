@@ -1,0 +1,2 @@
+export { default as Dialog } from './src/Dialog';
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uLy4uL3NyYy9kaWFsb2cvaW5kZXguanMiXSwibmFtZXMiOlsiZGVmYXVsdCIsIkRpYWxvZyJdLCJtYXBwaW5ncyI6IkFBQUEsU0FBU0EsT0FBTyxJQUFJQyxNQUFwQixRQUFrQyxjQUFsQyIsInNvdXJjZXNDb250ZW50IjpbImV4cG9ydCB7IGRlZmF1bHQgYXMgRGlhbG9nIH0gZnJvbSAnLi9zcmMvRGlhbG9nJ1xuIl19

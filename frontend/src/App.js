@@ -1,25 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
+import { Route, Link, BrowserRouter as Router } from 'react-router-dom'
 
-const App = () => {
-  const [communities, setCommunities] = useState([])
+import Header from './components/header'
 
-  useEffect(() => {
-    axios.get('http://localhost:8000/community/').then(({ data }) => {
-      setCommunities(data)
-    })
-  }, [])
-
+export default function App() {
   return (
-    <div>
-      <h1>Here to Serve</h1>
-
-      <p>List of Communities:</p>
-      {communities.map(c => (
-        <li>{c.name}</li>
-      ))}
-    </div>
-  )
+     <Header/ >
+  );
 }
 
-export default App

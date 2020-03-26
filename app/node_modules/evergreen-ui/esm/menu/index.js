@@ -1,0 +1,2 @@
+export { default as Menu } from './src/Menu';
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uLy4uL3NyYy9tZW51L2luZGV4LmpzIl0sIm5hbWVzIjpbImRlZmF1bHQiLCJNZW51Il0sIm1hcHBpbmdzIjoiQUFBQSxTQUFTQSxPQUFPLElBQUlDLElBQXBCLFFBQWdDLFlBQWhDIiwic291cmNlc0NvbnRlbnQiOlsiZXhwb3J0IHsgZGVmYXVsdCBhcyBNZW51IH0gZnJvbSAnLi9zcmMvTWVudSdcbiJdfQ==

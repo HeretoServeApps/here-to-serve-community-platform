@@ -1,0 +1,2 @@
+export { default as Switch } from './src/Switch';
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uLy4uL3NyYy9zd2l0Y2gvaW5kZXguanMiXSwibmFtZXMiOlsiZGVmYXVsdCIsIlN3aXRjaCJdLCJtYXBwaW5ncyI6IkFBQUEsU0FBU0EsT0FBTyxJQUFJQyxNQUFwQixRQUFrQyxjQUFsQyIsInNvdXJjZXNDb250ZW50IjpbImV4cG9ydCB7IGRlZmF1bHQgYXMgU3dpdGNoIH0gZnJvbSAnLi9zcmMvU3dpdGNoJ1xuIl19

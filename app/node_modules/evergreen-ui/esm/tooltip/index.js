@@ -1,0 +1,2 @@
+export { default as Tooltip } from './src/Tooltip';
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uLy4uL3NyYy90b29sdGlwL2luZGV4LmpzIl0sIm5hbWVzIjpbImRlZmF1bHQiLCJUb29sdGlwIl0sIm1hcHBpbmdzIjoiQUFBQSxTQUFTQSxPQUFPLElBQUlDLE9BQXBCLFFBQW1DLGVBQW5DIiwic291cmNlc0NvbnRlbnQiOlsiZXhwb3J0IHsgZGVmYXVsdCBhcyBUb29sdGlwIH0gZnJvbSAnLi9zcmMvVG9vbHRpcCdcbiJdfQ==
