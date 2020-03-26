@@ -23,7 +23,7 @@ export default function Login() {
     // Non-evergreen styles
     var style = {
         position: "absolute",
-        left: "30%",
+        left: "35%",
         top: "25%"
     };
 
