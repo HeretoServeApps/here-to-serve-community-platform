@@ -1,6 +1,6 @@
 import React from 'react'
 import { Button } from 'evergreen-ui'
-import logo from './../images/logo-h2s.svg'
+import logo from './../../images/logo-h2s.svg'
 
 const welcomeText = {
     marginTop: '200px',
@@ -17,7 +17,7 @@ const button = {
 }
 
 
-export class WelcomeText extends React.Component {
+export class WelcomeHeader extends React.Component {
     render() {
         return(<div style={welcomeText}>
             <h1 style={{fontSize: '40px'}}>Start your <span style={{color: '#2C8595'}}>care community</span> today.</h1>
@@ -28,4 +28,4 @@ export class WelcomeText extends React.Component {
     }
 }
 
-export default WelcomeText
+export default WelcomeHeader
