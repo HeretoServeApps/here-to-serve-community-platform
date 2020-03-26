@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django_countries.fields import CountryField
 from django.contrib.auth.models import ( AbstractBaseUser, BaseUserManager, PermissionsMixin )
 from phone_field import PhoneField
-
+from django.conf import settings
 
 class Community(models.Model):
     # Choices for community purpose
@@ -31,7 +31,7 @@ class Community(models.Model):
     description = models.CharField(max_length=256, blank=False, default='')
     zipcode = models.IntegerField(blank=False, default=0)
     country = CountryField(blank_label='(select country)')
-    coordinator = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    coordinator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return self.name
