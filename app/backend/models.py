@@ -5,6 +5,26 @@ from django.contrib.auth.models import ( AbstractBaseUser, BaseUserManager, Perm
 from phone_field import PhoneField
 from django.conf import settings
 
+
+class CustomSection:
+    # Choices for type
+    GALLERY = 'GALLERY'
+    RESOURCES = 'RESOURCES'
+    DISCUSSIONS = 'DP'
+    GENERAL = 'GENERAL'
+    BUTTON = 'BUTTON'
+    TYPE_CHOICES = [
+        (GALLERY, 'Gallery'),
+        (RESOURCES, 'Resources'),
+        (DISCUSSIONS, 'Discussions and Pages'),
+        (GENERAL, 'General'),
+        (BUTTON, 'Button'),
+    ]
+
+    name = models.CharField(max_length=128, blank=False)
+    type = models.CharField(max_length=128, choices=TYPE_CHOICES, blank=False, default=GENERAL)
+
+
 class Community(models.Model):
     # Choices for community purpose
     CAREGIVING = 'C'
