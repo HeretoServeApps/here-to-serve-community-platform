@@ -1,7 +1,7 @@
 import React from 'react'
 
-import { Header } from './components/Header'
-import { WelcomeText } from './components/WelcomeText'
+import { Header } from '../components/Header'
+import { WelcomeText } from '../components/WelcomeText'
 import personOne from './images/welcome-person-1.png'
 import personTwo from './images/welcome-person-2.png'
 
