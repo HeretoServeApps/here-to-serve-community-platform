@@ -1,6 +1,5 @@
 import React from 'react'
 import { Button } from 'evergreen-ui'
-import logo from './../images/logo-h2s.svg'
 
 const welcomeText = {
     marginTop: '200px',
@@ -15,7 +14,6 @@ const button = {
     textAlign: 'center',
     marginBottom: '16px'
 }
-
 
 export class WelcomeText extends React.Component {
     render() {
