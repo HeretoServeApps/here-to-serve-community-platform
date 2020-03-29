@@ -12,26 +12,6 @@ import Box from 'react-bulma-components/lib/components/box'
 import '../stylesheets/App.sass';
 
 const Header = () => (
-    // <Router>
-    //     <Pane display="flex" padding={25} background="white" elevation={1}>
-    //         <Pane flex={1} alignItems="center" display="flex" marginLeft={50}>
-    //             <img src={require("../images/logo.png")} alt={""} width={150}/>
-    //         </Pane>
-    //         <Tab marginRight={25}>
-    //             <Link style={{ textDecoration: 'none' }} to="/welcome"><Text>Welcome</Text></Link>
-    //         </Tab>
-    //         <Tab marginRight={25}>
-    //             <Link style={{ textDecoration: 'none' }} to="/about"><Text>About</Text></Link>
-    //         </Tab>
-    //         <Tab marginRight={50}>
-    //             <Link style={{ textDecoration: 'none' }} to="/login"><Text>Login</Text></Link>
-    //         </Tab>
-    //     </Pane>
-    //     {/* Routes. */}
-    //     <Route path="/login" exact component={Login}/>
-    //     <Route path="/about" exact component={About}/>
-    //     <Route path="/welcome" exact component={Welcome}/>
-    // </Router>
     <Router>
         <Box>
             <Navbar color="white">
@@ -39,9 +19,13 @@ const Header = () => (
                     <Navbar.Item renderAs="a" href="#">
                         <img src={logo} alt="logo" height="100" width="130"/>
                     </Navbar.Item>
-                    <Navbar.Burger />
+                    <Navbar.Burger role="button" ariaLabel="menu" ariaExpanded="false" dataTarget="navbarBasicExample">
+                        <span ariaHidden="true"></span>
+                        <span ariaHidden="true"></span>
+                        <span ariaHidden="true"></span>
+                    </Navbar.Burger>
                 </Navbar.Brand>
-                <Navbar.Menu >
+                <Navbar.Menu id="navbarBasicExample">
                 <Navbar.Container position="end">
                     <Navbar.Item>
                         <Navbar.Link arrowless={true}>
