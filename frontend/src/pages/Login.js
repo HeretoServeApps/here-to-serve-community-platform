@@ -1,13 +1,15 @@
 import React from "react"
 
-import { Field, Input, Checkbox } from 'react-bulma-components/lib/components/form';
+import { Field, Input, Checkbox, Control } from 'react-bulma-components/lib/components/form';
 import Button from 'react-bulma-components/lib/components/button';
 import Container from 'react-bulma-components/lib/components/container';
 import Heading from 'react-bulma-components/lib/components/heading'
+import Columns from 'react-bulma-components/lib/components/columns';
+import Notification from 'react-bulma-components/lib/components/notification';
 
 export default function Login() {
     // Non-bulma styles
-    var style = {
+    var containerStyle = {
         marginLeft: "auto",
         marginRight: "auto",
         marginTop: "10%",
@@ -16,11 +18,20 @@ export default function Login() {
         border: "0.1rem solid #E5E5E5",
         borderRadius: "1rem",
     };
+    var checkBoxStyle= {
+        marginRight: "1rem",
+    };
+    var notifStyle = {
+        backgroundColor: "white",
+        padding: ".25rem .5rem .25rem .5rem"
+    };
     return (
-        <Container style={style}>
+        <Container style={containerStyle}>
                 <Heading size={4}>Log in to Here to Serve</Heading>
                 <Field>
-                    <Input name="email" type="email" placeholder="Email Address"/>
+                    <Control>
+                        <Input name="email" type="email" placeholder="Email Address" />
+                    </Control>                
                 </Field>
 
                 <Field>
@@ -28,35 +39,19 @@ export default function Login() {
                 </Field>
 
                 <Field>
-                    <Checkbox>
-                        Remember me
-                    </Checkbox>
+                    <Columns>
+                        <Columns.Column size={1}>
+                            <Checkbox/>
+                        </Columns.Column>
+                        <Columns.Column>
+                            Remember me
+                        </Columns.Column>
+                    </Columns>
                 </Field>
                 <Button style={{marginBottom: "1rem"}} color="primary" fullwidth={true}>LOGIN</Button>
-                <p><a href="#">Forgot Password?</a> or <a href="#">Create Account</a></p>
-        </Container>
-        // <Pane 
-        //     style={style}
-        //     borderRadius={10}
-        //     padding={50} 
-        //     height={350} 
-        //     width={400} 
-        //     border="default" 
-        //     display="flex"
-        //     flexDirection= "column"
-        //     alignItems="center"
-        //     justifyContent="center">
-        //         <Heading size={700} marginBottom={20} fontWeight={700}>Log in to Here to Serve</Heading>
-        //         <TextInput
-        //             placeholder="Email address" marginBottom={20}
-        //         />
-        //         <TextInput
-        //             placeholder="Password"
-        //         />
-        //         <Checkbox marginRight={180} label="Remember me" />
-        //         <LoginButton><Text color={"white"}>LOGIN</Text></LoginButton>
-        //         <Text> Forgot password? or Create Account</Text>
-        // </Pane>
-        
+                <Notification style={notifStyle}>
+                    <a href="#">Forgot Password?</a> or <a href="#">Create Account</a>
+                </Notification>
+        </Container>        
     )
 }

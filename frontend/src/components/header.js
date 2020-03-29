@@ -8,7 +8,7 @@ import logo from '../images/logo.png'
 
 import Navbar from 'react-bulma-components/lib/components/navbar'
 import Box from 'react-bulma-components/lib/components/box'
-
+import Heading from 'react-bulma-components/lib/components/heading'
 import '../stylesheets/App.sass';
 
 const Header = () => (
@@ -29,19 +29,17 @@ const Header = () => (
                 <Navbar.Container position="end">
                     <Navbar.Item>
                         <Navbar.Link arrowless={true}>
-                            <Link style={{ textDecoration: 'none' }} to="/welcome">Welcome</Link>
+                            <Link style={{ textDecoration: 'none' }} to="/home"><Heading size={6}>Home</Heading></Link>
                         </Navbar.Link>
                     </Navbar.Item>
-
                     <Navbar.Item>
                         <Navbar.Link arrowless={true}>
-                            <Link style={{ textDecoration: 'none' }} to="/about">About</Link>
+                            <Link style={{ textDecoration: 'none' }} to="/about"><Heading size={6}>About</Heading></Link>
                         </Navbar.Link>
                     </Navbar.Item>
-
                     <Navbar.Item>
                         <Navbar.Link arrowless={true}>
-                            <Link style={{ textDecoration: 'none' }} to="/login">Login</Link>
+                            <Link style={{ textDecoration: 'none' }} to="/login"><Heading size={6}>Login</Heading></Link>
                         </Navbar.Link>
                     </Navbar.Item>
                 </Navbar.Container>
@@ -51,7 +49,7 @@ const Header = () => (
         {/* Routes. */}
         <Route path="/login" exact component={Login}/>
         <Route path="/about" exact component={About}/>
-        <Route path="/welcome" exact component={Welcome}/>
+        <Route path="/home" exact component={Welcome}/>
     </Router>
 );
 
