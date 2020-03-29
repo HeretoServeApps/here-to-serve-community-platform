@@ -1,9 +1,9 @@
 import React from "react"
 
-import { Text } from "evergreen-ui"
+import WelcomeText from '../components/Welcome/WelcomeText'
 
 export default function About() {
     return (
-        <Text>About Us</Text>
+        <WelcomeText></WelcomeText>
     );
 }

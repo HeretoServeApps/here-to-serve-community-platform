@@ -3,7 +3,7 @@ import { Button } from 'evergreen-ui'
 import logo from './../../images/logo-h2s.svg'
 
 const welcomeText = {
-    marginTop: '200px',
+    marginTop: '100',
     marginLeft: '100px',
     width: '400px'
 }

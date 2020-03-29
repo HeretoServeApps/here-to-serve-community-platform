@@ -6,7 +6,7 @@ import styled, { css } from "styled-components"
 
 const LoginButton = styled.button`
 background: #2C8595;
-border-radius: 3px;
+border-radius: 5px;
 margin: 1em 1em;
 padding: 0.50em 1em;
 width: 95%;
@@ -26,10 +26,10 @@ export default function Login() {
         left: "35%",
         top: "25%"
     };
-
     return (
         <Pane 
             style={style}
+            borderRadius={10}
             padding={50} 
             height={350} 
             width={400} 
