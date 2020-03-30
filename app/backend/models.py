@@ -39,7 +39,7 @@ class Community(models.Model):
 
 class UserManager(BaseUserManager):
     def create_user(
-        self, email, first_name, last_name, phone_number, role, password=None, 
+        self, email, first_name, last_name, phone_number, password=None, 
         commit=True):
 
         if not first_name:
@@ -50,15 +50,12 @@ class UserManager(BaseUserManager):
             raise ValueError(_('Users must have a phone number'))
         if not email:
             raise ValueError(_('Users must have an email address'))
-        if not role:
-            raise ValueError(_('Users must have a role'))
 
         user = self.model(
                 first_name=first_name,
                 last_name=last_name,
                 phone_number=phone_number,
                 email=self.normalize_email(email),
-                role=role
             )
 
         user.set_password(password)
@@ -66,7 +63,7 @@ class UserManager(BaseUserManager):
             user.save(using=self._db)
         return user
 
-    def create_superuser(self, email, first_name, last_name, phone_number, role, password=None, 
+    def create_superuser(self, email, first_name, last_name, phone_number, password=None, 
         commit=True):
         user = self.create_user(
             email=self.normalize_email(email),
@@ -74,7 +71,6 @@ class UserManager(BaseUserManager):
             first_name=first_name,
             last_name=last_name,
             phone_number=phone_number,
-            role=role,
             commit=False,
         )
         user.is_staff = True
@@ -94,7 +90,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['first_name', 'last_name', 'phone_number','role']
+    REQUIRED_FIELDS = ['first_name', 'last_name', 'phone_number']
 
     def get_full_name(self):
         full_name = '%s %s' % (self.first_name, self.last_name)
