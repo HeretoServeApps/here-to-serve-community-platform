@@ -23,6 +23,11 @@ class CustomSection:
 
     name = models.CharField(max_length=128, blank=False)
     type = models.CharField(max_length=128, choices=TYPE_CHOICES, blank=False, default=GENERAL)
+    # For gallery, pages, general, and resources pages only
+    link = models.URLField(blank=True)
+    # For resources and general types only
+    title = models.CharField(max_length=64, blank=True)
+    description = models.CharField(max_length=128, blank=True)
 
 
 class Community(models.Model):
