@@ -11,8 +11,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         fake = Faker()
-        num_users = options['num_users']
-        community = Community.query.all()
+        num_users = options['num_communities']
 
         for i in range(num_users):
             fake_name = fake.company()
@@ -21,7 +20,6 @@ class Command(BaseCommand):
             fake_description = fake.sentence()
             fake_country = fake.country()
             fake_zipcode = fake.zipcode()
-            fake_coordinator = ""
 
             c = Community(
                 name=fake_name,
@@ -29,10 +27,7 @@ class Command(BaseCommand):
                 is_closed=fake_is_closed,
                 description=fake_description,
                 country=fake_country,
-                zipcode=fake_zipcode,
-                password='password',
-                confirmed=True,
-                coordinator=fake_coordinator)
+                zipcode=fake_zipcode)
             c.save()
         self.stdout.write(self.style.SUCCESS('Successfully created fake communities'))
 

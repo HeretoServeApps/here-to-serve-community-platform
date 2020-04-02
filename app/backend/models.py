@@ -31,7 +31,6 @@ class Community(models.Model):
     description = models.CharField(max_length=256, blank=False, default='')
     zipcode = models.IntegerField(blank=False, default=0)
     country = CountryField(blank_label='(select country)')
-    coordinator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return self.name
