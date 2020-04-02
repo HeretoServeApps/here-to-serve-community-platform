@@ -39,8 +39,7 @@ class Community(models.Model):
 
 class UserManager(BaseUserManager):
     def create_user(
-        self, email, first_name, last_name, phone_number, password=None,
-        commit=True):
+        self, email, first_name, last_name, phone_number, password=None, commit=True):
 
         if not first_name:
             raise ValueError(_('Users must have a first name'))
@@ -55,7 +54,7 @@ class UserManager(BaseUserManager):
                 first_name=first_name,
                 last_name=last_name,
                 phone_number=phone_number,
-                email=self.normalize_email(email),
+                email=self.normalize_email(email)
             )
 
         user.set_password(password)
@@ -63,8 +62,7 @@ class UserManager(BaseUserManager):
             user.save(using=self._db)
         return user
 
-    def create_superuser(self, email, first_name, last_name, phone_number, password=None,
-        commit=True):
+    def create_superuser(self, email, first_name, last_name, phone_number, password=None, commit=True):
         user = self.create_user(
             email=self.normalize_email(email),
             password=password,
@@ -98,6 +96,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return '{} <{}>'.format(self.get_full_name(), self.email)
+
 
 class CommunityUserRole(models.Model):
     ADMIN = 'ADMIN'
