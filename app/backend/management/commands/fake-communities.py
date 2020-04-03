@@ -15,8 +15,11 @@ class Command(BaseCommand):
 
         for i in range(num_users):
             fake_name = fake.company()
-            fake_purpose = fake.sentence()
-            fake_is_closed = random.choice(["Yes", "No"])
+
+            fake_purpose = random.choice(['Caregiving' 'Eldercare & Long Term care',
+                                          'Military & Veterans Families', 'Volunteering', 'Parenting',
+                                          'Schools', 'Religious Groups'])
+            fake_is_closed = random.choice([True, False])
             fake_description = fake.sentence()
             fake_country = fake.country()
             fake_zipcode = fake.zipcode()
