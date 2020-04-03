@@ -29,7 +29,7 @@ class Command(BaseCommand):
                 purpose=fake_purpose,
                 is_closed=fake_is_closed,
                 description=fake_description,
-                country=fake_country,
+                country='US',
                 zipcode=fake_zipcode)
             c.save()
         self.stdout.write(self.style.SUCCESS('Successfully created fake communities'))
