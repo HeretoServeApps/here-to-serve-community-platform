@@ -33,7 +33,7 @@ const Header = () => (
         </Navbar.Brand>
         <Navbar.Menu id='navItems'>
           <Navbar.Container position='end'>
-            <Link className={'navbar-item'} to='/home'>
+            <Link className={'navbar-item'} to='/'>
               <Heading size={6}>Home</Heading>
             </Link>
             <Link className={'navbar-item'} to='/about'>
@@ -52,7 +52,7 @@ const Header = () => (
     {/* Routes. */}
     <Route path='/login' exact component={Login} />
     <Route path='/about' exact component={About} />
-    <Route path='/home' exact component={Welcome} />
+    <Route path='/' exact component={Welcome} />
     <Route path='/create-community' exact component={CreateCommunity} />
   </Router>
 )

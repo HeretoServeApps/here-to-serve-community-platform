@@ -3,7 +3,6 @@ import countryList from 'react-select-country-list'
 
 import {
   Field,
-  Checkbox,
   Control,
   Input,
   Select,
@@ -15,17 +14,13 @@ import Heading from 'react-bulma-components/lib/components/heading'
 import Columns from 'react-bulma-components/lib/components/columns'
 import Notification from 'react-bulma-components/lib/components/notification'
 
-const CheckboxField = ({ text }) => (
-  <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
-    <Checkbox style={{ marginRight: '10px' }} />
-    <p>{text}</p>
-  </div>
-)
+import CheckboxField from '../components/checkboxfield'
+
 
 export default function CreateCommunity() {
   // Non-bulma styles
   var containerStyle = {
-    margin: '10% auto',
+    margin: '5% auto',
     maxWidth: '700px',
     padding: '4rem',
     border: '0.1rem solid #E5E5E5',

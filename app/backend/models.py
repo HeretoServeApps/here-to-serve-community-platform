@@ -37,8 +37,7 @@ class Community(models.Model):
 
 
 class UserManager(BaseUserManager):
-    def create_user(
-        self, email, first_name, last_name, phone_number, password=None, commit=True):
+    def create_user(self, email, first_name, last_name, phone_number, password=None, commit=True):
 
         if not first_name:
             raise ValueError(_('Users must have a first name'))
@@ -54,8 +53,7 @@ class UserManager(BaseUserManager):
                 last_name=last_name,
                 phone_number=phone_number,
                 email=self.normalize_email(email)
-            )
-
+        )
         user.set_password(password)
         if commit:
             user.save(using=self._db)
