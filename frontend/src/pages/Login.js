@@ -27,12 +27,6 @@ export default function Login() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [logged_in, setStatus] = useState(false)
-    const [token, setToken] = useState('')
-
-    let history = useHistory();
-    function redirectAfterLogin() {
-        history.push("/my-communities");
-    }
 
     const handleSubmit = useCallback((email, password) => {
         fetch('http://localhost:8000/token-auth/', {
@@ -48,13 +42,18 @@ export default function Login() {
         .then(res => res.json())
         .then(json => {
             localStorage.setItem('token', json.token)
-            setToken(json.token)
-            setStatus(json.token == '' ? false : true)
+            JSON.stringify(json.token) ? setStatus(true) : setStatus(false)
         })
-        if(logged_in) {
-            redirectAfterLogin()
-        }
     }, [email, password])
+
+    let history = useHistory();
+    function redirectAfterLogin() {
+        history.push("/my-communities")
+    }
+
+    useEffect(() => {
+        if(logged_in) redirectAfterLogin()
+    }, [logged_in]);
 
     return (
         <Container style={containerStyle}>
