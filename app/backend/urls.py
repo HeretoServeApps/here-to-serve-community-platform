@@ -6,6 +6,7 @@ from .views import current_user, UserList
 
 router = routers.DefaultRouter()
 router.register(r'community', views.CommunityViewSet)
+router.register(r'users', views.UsersViewSet)
 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.

@@ -9,18 +9,25 @@ from rest_framework.views import APIView
 from .serializers import CommunitySerializer, UserSerializer, UserSerializerWithToken
 from .models import Community, User
 
+
 class CommunityViewSet(viewsets.ModelViewSet):
     queryset = Community.objects.all().order_by('name')
     serializer_class = CommunitySerializer
+
+
+class UsersViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all().order_by('last_name')
+    serializer_class = UserSerializer
+
 
 @api_view(['GET'])
 def current_user(request):
     """
     Determine the current user by their token, and return their data
     """
-    
     serializer = UserSerializer(request.user)
     return Response(serializer.data)
+
 
 class UserList(APIView):
     """

@@ -20,6 +20,6 @@ class Command(BaseCommand):
                 fake.last_name(),
                 fake.phone_number(),
                 'password', 
-                )
+            )
 
             self.stdout.write(self.style.SUCCESS(f'Created user {i} of {num_users}'))
