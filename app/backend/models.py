@@ -59,16 +59,13 @@ class Community(models.Model):
     description = models.CharField(max_length=256, blank=False, default='')
     zipcode = models.IntegerField(blank=False, default=0)
     country = CountryField(blank_label='(select country)')
-    coordinator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return self.name
 
 
 class UserManager(BaseUserManager):
-    def create_user(
-        self, email, first_name, last_name, phone_number, password=None,
-        commit=True):
+    def create_user(self, email, first_name, last_name, phone_number, password=None, commit=True):
 
         if not first_name:
             raise ValueError(_('Users must have a first name'))
@@ -79,21 +76,18 @@ class UserManager(BaseUserManager):
         if not email:
             raise ValueError(_('Users must have an email address'))
 
-
         user = self.model(
                 first_name=first_name,
                 last_name=last_name,
                 phone_number=phone_number,
-                email=self.normalize_email(email),
-            )
-
+                email=self.normalize_email(email)
+        )
         user.set_password(password)
         if commit:
             user.save(using=self._db)
         return user
 
-    def create_superuser(self, email, first_name, last_name, phone_number, password=None,
-        commit=True):
+    def create_superuser(self, email, first_name, last_name, phone_number, password=None, commit=True):
         user = self.create_user(
             email=self.normalize_email(email),
             password=password,
@@ -127,6 +121,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return '{} <{}>'.format(self.get_full_name(), self.email)
+
 
 class CommunityUserRole(models.Model):
     ADMIN = 'ADMIN'

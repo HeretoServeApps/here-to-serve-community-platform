@@ -1,53 +1,79 @@
-import React from "react"
+import React, { useState, useEffect, useCallback } from "react"
+import { Redirect, Router, useHistory } from 'react-router-dom'
 
-import { Pane, Checkbox, TextInput, Heading, Button, Text } from "evergreen-ui";
+import { Field, Input, Control } from 'react-bulma-components/lib/components/form';
+import Button from 'react-bulma-components/lib/components/button';
+import Container from 'react-bulma-components/lib/components/container';
+import Heading from 'react-bulma-components/lib/components/heading'
+import Notification from 'react-bulma-components/lib/components/notification';
 
-import styled, { css } from "styled-components"
+import CheckboxField from '../components/checkboxfield'
 
-const LoginButton = styled.button`
-background: #2C8595;
-border-radius: 3px;
-margin: 1em 1em;
-padding: 0.50em 1em;
-width: 95%;
 
-${props =>
-  props.primary &&
-  css`
-    background: palevioletred;
-    color: white;
-  `};
-`
+export default function Login() {    
+    // Non-bulma styles
+    var containerStyle = {
+        margin: '5% auto',
+        maxWidth: "400px",
+        padding: "4rem",
+        border: "0.1rem solid #E5E5E5",
+        borderRadius: "1rem",
+    }
+    var notifStyle = {
+        backgroundColor: "white",
+        padding: ".25rem .5rem .25rem .5rem"
+    }
 
-export default function Login() {
-    // Non-evergreen styles
-    var style = {
-        position: "absolute",
-        left: "35%",
-        top: "25%"
-    };
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [logged_in, setStatus] = useState(false)
+
+    const handleSubmit = useCallback((email, password) => {
+        fetch('http://localhost:8000/token-auth/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                'email': email,
+                'password': password
+            })
+        })
+        .then(res => res.json())
+        .then(json => {
+            localStorage.setItem('token', json.token)
+            JSON.stringify(json.token) ? setStatus(true) : setStatus(false)
+        })
+    }, [email, password])
+
+    let history = useHistory();
+    function redirectAfterLogin() {
+        history.push("/my-communities")
+    }
+
+    useEffect(() => {
+        if(logged_in) redirectAfterLogin()
+    }, [logged_in]);
 
     return (
-        <Pane 
-            style={style}
-            padding={50} 
-            height={350} 
-            width={400} 
-            border="default" 
-            display="flex"
-            flexDirection= "column"
-            alignItems="center"
-            justifyContent="center">
-                <Heading size={700} marginBottom={20} fontWeight={700}>Log in to Here to Serve</Heading>
-                <TextInput
-                    placeholder="Email address" marginBottom={20}
-                />
-                <TextInput
-                    placeholder="Password"
-                />
-                <Checkbox marginRight={180} label="Remember me" />
-                <LoginButton><Text color={"white"}>LOGIN</Text></LoginButton>
-                <Text> Forgot password? or Create Account</Text>
-        </Pane>
+        <Container style={containerStyle}>
+            <Heading size={4}>Log in to Here to Serve</Heading>
+            <Field>
+                <Control>
+                    <Input value={email} type="email" placeholder="Email Address" onChange={e => setEmail(e.target.value)}/>
+                </Control>                
+            </Field>
+
+            <Field>
+                <Input value ={password} type="password" placeholder="Password" onChange={e => setPassword(e.target.value)}/>
+            </Field>
+            <Field>
+                <CheckboxField text={"Remember me"}/>
+            </Field>
+            <Button style={{marginBottom: "1rem"}} color="primary" fullwidth={true} onClick={() => handleSubmit(email, password)}>LOGIN</Button>
+            <Notification style={notifStyle}>
+                <a href="#">Forgot Password?</a> or <a href="#">Create Account</a>
+            </Notification>
+        </Container>       
     )
 }

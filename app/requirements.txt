@@ -4,11 +4,12 @@ django-cors-headers==3.2.1
 django-countries==6.1.2
 django-phone-field==1.8.0
 djangorestframework==3.11.0
+djangorestframework-jwt==1.11.0
 djangorestframework-simplejwt==4.4.0
-djangorestframework-jwt==1.11.0
-PyJWT==1.7.1
 Faker==4.0.2
+PyJWT==1.7.1
+python-dateutil==2.8.1
 pytz==2019.3
+six==1.14.0
 sqlparse==0.3.1
-djangorestframework-jwt==1.11.0
-
+text-unidecode==1.3
