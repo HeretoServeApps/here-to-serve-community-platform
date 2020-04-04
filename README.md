@@ -126,3 +126,31 @@ try going to admin view (localhost:8000/admin) and add some more communities.
 
 Note: You have to have both frontend and backend running to run the entire project. 
 If you only have the backend running, you can access the admin and API pages. 
+
+## Test Data
+There are management commands you can call to generate fake data to test the app.
+
+To generate fake communities + users + roles, type into terminal (in the same directory as manage.py):
+
+```
+$ python3 manage.py generate-fake-data input1 input2 input3 input4
+```
+For example: 
+```
+$ python3 manage.py generate-fake-data 4 1 2 5
+```
+This will create 4 new communities, each with 1 leader, 2 coordinators, and 5 members. 
+
+To generate fake communities:
+
+```
+$ python3 manage.py fake-communities 4
+```
+This will generate 4 new communities.
+
+To generate fake users:
+
+```
+$ python3 manage.py generate-fake-users 4
+```
+This will generate 4 new users.
