@@ -13,7 +13,7 @@ import Heading from 'react-bulma-components/lib/components/heading'
 import '../stylesheets/App.sass'
 
 const Header = () => (
-  <Router>
+  <div>
     <Box>
       <Navbar color='white'>
         <Navbar.Brand style={{ display: 'flex', alignItems: 'center' }}>
@@ -54,7 +54,7 @@ const Header = () => (
     <Route path='/about' exact component={About} />
     <Route path='/' exact component={Welcome} />
     <Route path='/create-community' exact component={CreateCommunity} />
-  </Router>
+  </div>
 )
 
 export default Header
