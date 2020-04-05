@@ -58,7 +58,7 @@ class Community(models.Model):
     is_closed = models.BooleanField(blank=False, default=False)
     description = models.CharField(max_length=256, blank=False, default='')
     zipcode = models.IntegerField(blank=False, default=0)
-    country = CountryField(blank_label='(select country)')
+    country = CountryField(blank_label='(select country)', default='US')
 
     def __str__(self):
         return self.name
