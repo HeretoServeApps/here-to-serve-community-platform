@@ -18,6 +18,16 @@ import {
 
 import CheckboxTermofUse from '../components/checkboxTermofUse'
 
+
+const createCommunityEntries = (communities) => {
+    communities.map(c => {
+        return <tr>
+            <td>{c.name}</td>
+            <td>Checkbox</td>
+        </tr>
+    });
+}
+
 export default function SelectCommunities() {
     // Non-bulma styles
     var containerStyle = {
@@ -31,40 +41,64 @@ export default function SelectCommunities() {
 
     const [communities, setCommunities] = useState([])
 
-    useEffect(() => {
-        axios.get('http://localhost:8000/community/').then(({ data }) => {
-          setCommunities(data)
-        })
-      }, [])
+    // useEffect(() => {
+    //     axios.get('http://localhost:8000/community/', {
+    //         headers: {
+    //             headers: {
+    //                 Authorization: 'Bearer' + localStorage.getItem('token')
+    //             }
+    //         }
+    //     })
+    //     .then((response) => {
+    //         console.log(response.data)
+    //     }, (error) => {
+    //         console.log(error)
+    //     });
+    // }, [])
 
-    // Currently still requires user auth to make the call 
-    function createCommunityEntries() {
-        communities.map((c) => {
-          return <tr>
-                <td>{c.name}</td>
-                <td>Checkbox</td>
-            </tr>
-        });
-    }
+    useEffect(() => {
+        fetch('http://localhost:8000/community/', {
+            headers: {
+                Authorization: `JWT ${localStorage.getItem('token')}`
+            }
+        })
+        .then(res => res.json())
+        .then(json => {
+            console.log(json)
+        })
+    }, [])
     
-    return(
-        <Container style={containerStyle}>
-            <Heading size={4}>Join Communities</Heading>
-            <Table>
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Join</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {createCommunityEntries()}
-                </tbody>
-            </Table>
-            <Button style={{ marginTop: '1rem', marginBottom: '1rem' }} color='primary' fullwidth={true}>
-                DONE
-            </Button>
-        </Container>
+    
+
+    
+    // return(
+    //     <Container style={containerStyle}>
+    //         <Heading size={4}>Join Communities</Heading>
+    //         <Table>
+    //             <thead>
+    //                 <tr>
+    //                     <th>Name</th>
+    //                     <th>Join</th>
+    //                 </tr>
+    //             </thead>
+    //             <tbody>
+    //                 {createCommunityEntries(communities)}
+    //             </tbody>
+    //         </Table>
+    //         <Button style={{ marginTop: '1rem', marginBottom: '1rem' }} color='primary' fullwidth={true}>
+    //             DONE
+    //         </Button>
+    //     </Container>
             
-    )
+    // )
+    return (
+        <div>
+          <h1>Here to Serve</h1>
+{/*     
+          <p>List of Communities:</p>
+          {communities.map(c => (
+            <li>{c.name}</li>
+          ))} */}
+        </div>
+      )
 }
