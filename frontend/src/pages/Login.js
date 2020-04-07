@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react"
-import { Redirect, Router, useHistory } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 
 import { Field, Input, Control } from 'react-bulma-components/lib/components/form';
 import Button from 'react-bulma-components/lib/components/button';
@@ -46,14 +46,14 @@ export default function Login() {
         })
     }, [email, password])
 
-    let history = useHistory();
+    let history = useHistory()
     function redirectAfterLogin() {
         history.push("/my-communities")
     }
 
     useEffect(() => {
         if(logged_in) redirectAfterLogin()
-    }, [logged_in]);
+    }, [logged_in])
 
     return (
         <Container style={containerStyle}>
@@ -72,7 +72,7 @@ export default function Login() {
             </Field>
             <Button style={{marginBottom: "1rem"}} color="primary" fullwidth={true} onClick={() => handleSubmit(email, password)}>LOGIN</Button>
             <Notification style={notifStyle}>
-                <a href="#">Forgot Password?</a> or <a href="#">Create Account</a>
+                <a href="#">Forgot Password?</a> or <Link to='/register'>Create Account</Link>
             </Notification>
         </Container>       
     )

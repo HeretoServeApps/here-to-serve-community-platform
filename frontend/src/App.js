@@ -6,16 +6,20 @@ import {
 } from 'react-router-dom'
 
 import Header from './components/header'
+import Register from './pages/Register'
 import MyCommunities from './pages/MyCommunities'
+import SelectCommunities from './pages/SelectCommunities'
 
 export default function App() {
   return (
     <div>
-      <Header/ >
       <Router>
+        <Header/ >
         <Switch>
             <Route path="/my-communities" component={MyCommunities}/>
-          </Switch>
+            <Route path="/register" component={Register}/>
+            <Route path="/select-communities" component={SelectCommunities}/>
+        </Switch>
       </Router>
     </div>
   );

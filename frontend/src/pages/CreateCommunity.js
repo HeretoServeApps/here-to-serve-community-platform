@@ -15,7 +15,7 @@ import Columns from 'react-bulma-components/lib/components/columns'
 import Notification from 'react-bulma-components/lib/components/notification'
 
 import CheckboxField from '../components/checkboxfield'
-
+import CheckboxTermofUse from '../components/checkboxTermofUse'
 
 export default function CreateCommunity() {
   // Non-bulma styles
@@ -95,10 +95,9 @@ export default function CreateCommunity() {
           }
         />
         <CheckboxField text={'Allow all members to send invitations.'} />
-        <CheckboxField text={'I have read and agreed to the Terms of Use.'} />
+        <CheckboxTermofUse/>
       </Field>
-      <br />
-      <Button style={{ marginBottom: '1rem' }} color='primary' fullwidth={true}>
+      <Button style={{ marginTop: '1rem', marginBottom: '1rem' }} color='primary' fullwidth={true}>
         CREATE COMMUNITY
       </Button>
       <Notification className='has-text-grey'>
