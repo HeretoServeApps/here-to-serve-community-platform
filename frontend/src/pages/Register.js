@@ -1,6 +1,8 @@
-import React, { useState } from "react"
+import React, { useState, useCallback, useEffect } from "react"
 import countryList from 'react-select-country-list'
 import { useHistory } from 'react-router-dom'
+import axios from 'axios'
+
 
 import Container from 'react-bulma-components/lib/components/container'
 import Heading from 'react-bulma-components/lib/components/heading'
@@ -36,8 +38,46 @@ export default function Register() {
     const [password, setPassword] = useState('')
     const [confirmEmail, setConfirmEmail] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
+    const [submitStatus, setSubmitStatus] = useState(false)
+    const [validForm, setValidForm] = useState(false)
+
 
     let history = useHistory()
+
+    const handleSubmit = useCallback(
+        () => {
+                // FIX ME
+                axios.post('http://localhost:8000/register-user/', {
+                    'email': email,
+                    'first_name': firstName,
+                    'last_name': lastName,
+                    'password': password,
+                    'phone_number': phoneNumber
+                }).then((response)=> {
+                    console.log(response);
+                    setSubmitStatus(true);
+                }).catch((err)=>{
+                    console.log(err);
+                    setSubmitStatus(false);
+                })
+        },
+        [firstName, lastName, phoneNumber, email, password],
+    );
+
+    useEffect(() => {
+        const formValues = [firstName, lastName, address, city, country, state, zipcode, phoneNumber, email, password, confirmEmail, confirmPassword];
+
+        const notValidForm = formValues.some((formVal) => { return formVal === '' }) || (email !== confirmEmail) || (password !== confirmPassword);
+        setValidForm(notValidForm);
+    }, [firstName, lastName, address, city, country, state, zipcode, phoneNumber, email, password, confirmEmail, confirmPassword],
+    );
+
+    useEffect(() => {
+        if(submitStatus) {
+            history.push('/select-communities');
+        }
+    }, [submitStatus, history],
+    );
 
     return(
         <Container style={containerStyle}>
@@ -181,7 +221,7 @@ export default function Register() {
                 </Columns.Column>      
             </Columns>
             <CheckboxTermofUse/>
-            <Button style={{ marginTop: '1rem' }} color='primary' fullwidth={true} onClick={() => history.push('/select-communities')}>
+            <Button style={{ marginTop: '1rem' }} color='primary' fullwidth={true} disabled={validForm} onClick={() => handleSubmit()}>
                 CREATE ACCOUNT
             </Button>
         </Container>
