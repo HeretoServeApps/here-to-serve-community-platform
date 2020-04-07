@@ -43,33 +43,63 @@ export default function Register() {
 
 
     let history = useHistory()
-
-    const handleSubmit = useCallback(
-        () => {
-                // FIX ME
-                axios.post('http://localhost:8000/register-user/', {
-                    'email': email,
-                    'first_name': firstName,
-                    'last_name': lastName,
-                    'password': password,
-                    'phone_number': phoneNumber
-                }).then((response)=> {
-                    console.log(response);
-                    setSubmitStatus(true);
-                }).catch((err)=>{
-                    console.log(err);
-                    setSubmitStatus(false);
-                })
-        },
-        [firstName, lastName, phoneNumber, email, password],
-    );
+    // handle_signup = (e, data) => {
+    //     e.preventDefault();
+    //     fetch('http://localhost:8000/core/users/', {
+    //       method: 'POST',
+    //       headers: {
+    //         'Content-Type': 'application/json'
+    //       },
+    //       body: JSON.stringify(data)
+    //     })
+    //       .then(res => res.json())
+    //       .then(json => {
+    //         localStorage.setItem('token', json.token);
+    //         this.setState({
+    //           logged_in: true,
+    //           displayed_form: '',
+    //           username: json.username
+    //         });
+    //       });
+    //   };
+    const handleSubmit = useCallback(() => {
+            // FIX ME
+        // Register user
+        fetch('/users/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                email: email,
+                password: password,
+            })
+        })
+        .then(res => res.json())
+        .then(json => {
+            localStorage.setItem('token', json.token)
+            setSubmitStatus(true)
+        })
+    }, [email, password])
 
     useEffect(() => {
-        const formValues = [firstName, lastName, address, city, country, state, zipcode, phoneNumber, email, password, confirmEmail, confirmPassword];
+            const formValues = [
+                firstName,
+                lastName,
+                address,
+                city,
+                country,
+                state,
+                zipcode,
+                phoneNumber,
+                email,
+                password,
+                confirmEmail,
+                confirmPassword]
 
-        const notValidForm = formValues.some((formVal) => { return formVal === '' }) || (email !== confirmEmail) || (password !== confirmPassword);
-        setValidForm(notValidForm);
-    }, [firstName, lastName, address, city, country, state, zipcode, phoneNumber, email, password, confirmEmail, confirmPassword],
+            const notValidForm = formValues.some((formVal) => { return formVal === '' }) || (email !== confirmEmail) || (password !== confirmPassword);
+            setValidForm(notValidForm)
+        }, [firstName, lastName, address, city, country, state, zipcode, phoneNumber, email, password, confirmEmail, confirmPassword],
     );
 
     useEffect(() => {
