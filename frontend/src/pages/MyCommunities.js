@@ -3,11 +3,11 @@ import axios from 'axios'
 
 export default function MyCommunities() {
     const [communities, setCommunities] = useState([])
-
+    const token = localStorage.getItem('token')
     useEffect(() => {
-        axios.get('http://localhost:8000/community/', {
+        axios.get('/community', {
             headers: {
-                'Authorization': 'Bearer ' + localStorage.getItem('token'),
+                'Authorization': `Bearer ${token}`,
             }
         })
         .then((response) => {
@@ -15,7 +15,7 @@ export default function MyCommunities() {
             setCommunities(response.data)
         }, (error) => {
             console.log(error)
-        });
+        })
     }, [])
     
     return(

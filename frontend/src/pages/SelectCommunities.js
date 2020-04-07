@@ -57,9 +57,9 @@ export default function SelectCommunities() {
     // }, [])
 
     useEffect(() => {
-        fetch('http://localhost:8000/community/', {
+        fetch('/community/', {
             headers: {
-                Authorization: `JWT ${localStorage.getItem('token')}`
+                Authorization: `Bearer ${localStorage.getItem('token')}`
             }
         })
         .then(res => res.json())
@@ -67,6 +67,33 @@ export default function SelectCommunities() {
             console.log(json)
         })
     }, [])
+
+    // useEffect(() => {
+    //     console.log(localStorage.getItem('token'))
+    //     axios.get('/community', {
+    //         headers: {
+    //             headers: {
+    //                 Authorization: `Bearer ${localStorage.getItem('token')}`,
+    //             }
+    //         }
+    //     })
+    //     .then((response) => {
+    //         console.log(response.data)
+    //         setCommunities(response.data)
+    //     }, (error) => {
+    //         console.log(error)
+    //     })
+    // }, [])
+    
+    return(
+        <div>
+        <h1>Here to Serve</h1>
+        <p>List of Communities:</p>
+        {communities.map(c => (
+          <li>{c.name}</li>
+        ))}
+      </div>
+    )
     
     
 
@@ -91,14 +118,4 @@ export default function SelectCommunities() {
     //     </Container>
             
     // )
-    return (
-        <div>
-          <h1>Here to Serve</h1>
-{/*     
-          <p>List of Communities:</p>
-          {communities.map(c => (
-            <li>{c.name}</li>
-          ))} */}
-        </div>
-      )
 }
