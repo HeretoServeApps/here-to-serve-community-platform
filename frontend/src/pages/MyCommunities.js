@@ -34,13 +34,6 @@ export default function MyCommunities() {
     margin: '5% 10%',
   }
 
-  const splitEvery = (array, length) =>
-    array.reduce((result, item, index) => {
-      if (index % length === 0) result.push([])
-      result[Math.floor(index / length)].push(item)
-      return result
-    }, [])
-
   return (
     <Container style={containerStyle}>
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -73,15 +66,13 @@ export default function MyCommunities() {
         </Columns.Column>
       </Columns>
 
-      {splitEvery(communities, 3).map((row) => (
-        <Columns>
-          {row.map((c) => (
-            <Columns.Column>
-              <CommunityCard text={c.name} />
-            </Columns.Column>
-          ))}
-        </Columns>
-      ))}
+      <Columns isMultiline={true}>
+        {communities.map((c) => (
+          <Columns.Column size={4}>
+            <CommunityCard text={c.name} />
+          </Columns.Column>
+        ))}
+      </Columns>
     </Container>
   )
 }
