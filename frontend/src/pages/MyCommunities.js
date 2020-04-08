@@ -66,14 +66,14 @@ export default function MyCommunities() {
           <Button
             color='light'
             fullwidth={true}
-            style={{ marginRight: '10px' }}
+            style={{ marginRight: '10%' }}
           >
             Search
           </Button>
         </Columns.Column>
       </Columns>
 
-      {splitEvery(communities, 4).map((row) => (
+      {splitEvery(communities, 3).map((row) => (
         <Columns>
           {row.map((c) => (
             <Columns.Column>

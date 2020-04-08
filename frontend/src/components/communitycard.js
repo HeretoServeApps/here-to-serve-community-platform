@@ -19,7 +19,7 @@ const CommunityLabel = styled.div`
 
 const CommunityCard = ({ text }) => (
   <Card>
-    <div style={{ width: '100%', height: '80%' }}></div>
+    <div style={{ maxWidth: '20%', height: '80%' }}></div>
     <CommunityLabel>
       <p style={{ margin: 'auto' }}>{text}</p>
     </CommunityLabel>
