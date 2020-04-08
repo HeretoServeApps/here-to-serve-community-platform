@@ -9,7 +9,7 @@ import Heading from 'react-bulma-components/lib/components/heading';
 export default function About() {
     var cardStyle = {
         margin: "2rem auto", 
-        width: "50rem"
+        width: "50rem",
     }
     return (
         <Container>

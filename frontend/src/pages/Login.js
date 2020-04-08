@@ -47,7 +47,7 @@ export default function Login() {
         (error) => {
             console.log(error);
         })
-    }, [email, password])
+    }, [])
 
     let history = useHistory()
     function redirectAfterLogin() {
@@ -55,8 +55,10 @@ export default function Login() {
     }
 
     useEffect(() => {
-        if(logged_in) redirectAfterLogin()
-    }, [logged_in])
+        if(logged_in) {
+            redirectAfterLogin()
+        }
+    })
 
     return (
         <Container style={containerStyle}>

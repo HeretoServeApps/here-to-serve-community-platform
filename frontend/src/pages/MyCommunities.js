@@ -12,6 +12,7 @@ export default function MyCommunities() {
   const [communities, setCommunities] = useState([])
   const [search, setSearch] = useState('')
   const token = localStorage.getItem('token')
+  
   useEffect(() => {
     axios
       .get('/community', {
@@ -28,7 +29,7 @@ export default function MyCommunities() {
           console.log(error)
         }
       )
-  }, [])
+  }, [token])
 
   const containerStyle = {
     margin: '5% 10%',
