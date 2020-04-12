@@ -43,7 +43,8 @@ export default function Welcome() {
     borderRadius: '10px',
     margin: '5%',
     padding: '1%',
-    boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.25)'
+    boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.25)',
+    height: '15rem'
   }
 
   return (
@@ -58,16 +59,18 @@ export default function Welcome() {
               <Heading size={2}>
                 Start your <HighLight>care community</HighLight> today.
               </Heading>
-              <Button
-                style={{
-                  marginBottom: '1rem',
-                  boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)'
-                }}
-                color='primary'
-                fullwidth={true}
-              >
-                REGISTER TODAY
-              </Button>
+              <Link to='/register'>
+                <Button
+                  style={{
+                    marginBottom: '1rem',
+                    boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)'
+                  }}
+                  color='primary'
+                  fullwidth={true}
+                >
+                  REGISTER TODAY
+                </Button>
+              </Link>
               <ButtonBg>
                 <Link to='/login'>
                   <Button

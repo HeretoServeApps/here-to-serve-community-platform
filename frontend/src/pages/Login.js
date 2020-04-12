@@ -29,7 +29,7 @@ export default function Login() {
     const [logged_in, setStatus] = useState(false)
 
     const handleSubmit = useCallback((email, password) => {
-        fetch('http://localhost:8000/token-auth/', {
+        fetch('/token-auth/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -43,8 +43,11 @@ export default function Login() {
         .then(json => {
             localStorage.setItem('token', json.token)
             JSON.stringify(json.token) ? setStatus(true) : setStatus(false)
+        },
+        (error) => {
+            console.log(error);
         })
-    }, [email, password])
+    }, [])
 
     let history = useHistory()
     function redirectAfterLogin() {
@@ -52,8 +55,10 @@ export default function Login() {
     }
 
     useEffect(() => {
-        if(logged_in) redirectAfterLogin()
-    }, [logged_in])
+        if(logged_in) {
+            redirectAfterLogin()
+        }
+    })
 
     return (
         <Container style={containerStyle}>
