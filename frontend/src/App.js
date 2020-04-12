@@ -14,7 +14,7 @@ export default function App() {
   return (
     <div>
       <Router>
-        <Header/ >
+        <Header />
         <Switch>
             <Route path="/my-communities" component={MyCommunities}/>
             <Route path="/register" component={Register}/>

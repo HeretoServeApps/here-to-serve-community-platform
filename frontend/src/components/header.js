@@ -1,11 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Route, Link, BrowserRouter as Router } from 'react-router-dom'
 
 import Login from '../pages/Login'
 import About from '../pages/About'
 import Welcome from '../pages/Welcome'
-import CreateCommunity from '../pages/CreateCommunity'
 import logo from '../images/logo.png'
+import CreateCommunity from '../pages/CreateCommunity'
 
 import Navbar from 'react-bulma-components/lib/components/navbar'
 import Box from 'react-bulma-components/lib/components/box'
@@ -14,6 +14,46 @@ import '../stylesheets/App.sass'
 
 const Header = () => {
   const [active, setActive] = useState(false)
+  const [loggedIn, setLoggedIn] = useState(false)
+  let navLinks;
+
+  if (localStorage.getItem('token')) {
+    setLoggedIn(true);
+  } else {
+     setLoggedIn(false);
+  }
+
+ /* useEffect(() => {
+        if(loggedIn) {
+            navLinks = <Navbar.Container position='end'>
+                <Link className={'navbar-item'} to='/my-communities'>
+                  <Heading size={6}>My Communities</Heading>
+                </Link>
+                <Link className={'navbar-item'} to='/create-community'>
+                  <Heading size={6}>Create Community</Heading>
+                </Link>
+              </Navbar.Container>
+        } else {
+            navLinks = <Navbar.Container position='end'>
+                <Link className={'navbar-item'} to='/'>
+                  <Heading size={6}>Home</Heading>
+                </Link>
+                <Link className={'navbar-item'} to='/login'>
+                  <Heading size={6}>Login</Heading>
+                </Link>
+              </Navbar.Container>
+        }
+    }, [loggedIn])*/
+
+    navLinks = <Navbar.Container position='end'>
+                <Link className={'navbar-item'} to='/'>
+                  <Heading size={6}>Home</Heading>
+                </Link>
+                <Link className={'navbar-item'} to='/login'>
+                  <Heading size={6}>Login</Heading>
+                </Link>
+              </Navbar.Container>
+
   return (
       <div>
         <Box>
@@ -36,25 +76,15 @@ const Header = () => {
               </Navbar.Burger>
             </Navbar.Brand>
             <Navbar.Menu id='navItems' className={active && 'is-active'}>
-              <Navbar.Container position='end'>
-                <Link className={'navbar-item'} to='/'>
-                  <Heading size={6}>Home</Heading>
-                </Link>
-                <Link className={'navbar-item'} to='/login'>
-                  <Heading size={6}>Login</Heading>
-                </Link>
-                <Link className={'navbar-item'} to='/create-community'>
-                  <Heading size={6}>Create Community</Heading>
-                </Link>
-              </Navbar.Container>
+              {navLinks}
             </Navbar.Menu>
           </Navbar>
         </Box>
         {/* Routes. */}
+        <Route path='/create-community' exact component={CreateCommunity} />
         <Route path='/login' exact component={Login} />
         <Route path='/about' exact component={About} />
         <Route path='/' exact component={Welcome} />
-        <Route path='/create-community' exact component={CreateCommunity} />
       </div>
   )
 }
