@@ -1,5 +1,6 @@
-import React, { useState, useEffect, useCallback } from "react"
+import React, { useState, useEffect } from "react"
 import { Link, useHistory } from 'react-router-dom'
+import PropTypes from 'prop-types';
 
 import { Field, Input, Control } from 'react-bulma-components/lib/components/form';
 import Button from 'react-bulma-components/lib/components/button';
@@ -10,7 +11,7 @@ import Notification from 'react-bulma-components/lib/components/notification';
 import CheckboxField from '../components/checkboxfield'
 
 
-export default function Login() {    
+export default function Login(props) {    
     // Non-bulma styles
     var containerStyle = {
         margin: '5% auto',
@@ -26,40 +27,14 @@ export default function Login() {
 
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    const [logged_in, setStatus] = useState(false)
-
-    const handleSubmit = useCallback((email, password) => {
-        fetch('/token-auth/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                'email': email,
-                'password': password
-            })
-        })
-        .then(res => res.json())
-        .then(json => {
-            localStorage.setItem('token', json.token)
-            JSON.stringify(json.token) ? setStatus(true) : setStatus(false)
-        },
-        (error) => {
-            console.log(error);
-        })
-    }, [])
 
     let history = useHistory()
-    function redirectAfterLogin() {
-        history.push("/my-communities")
-    }
-
     useEffect(() => {
-        if(logged_in) {
-            redirectAfterLogin()
+        if(props.logged_in) {
+            history.push('/my-communities')
         }
+    
     })
-
     return (
         <Container style={containerStyle}>
             <Heading size={4}>Log in to Here to Serve</Heading>
@@ -75,10 +50,15 @@ export default function Login() {
             <Field>
                 <CheckboxField text={"Remember me"}/>
             </Field>
-            <Button style={{marginBottom: "1rem"}} color="primary" fullwidth={true} onClick={() => handleSubmit(email, password)}>LOGIN</Button>
+            <Button style={{marginBottom: "1rem"}} color="primary" fullwidth={true} onClick={() => props.handle_login(email, password)}>LOGIN</Button>
             <Notification style={notifStyle}>
                 <a href="#">Forgot Password?</a> or <Link to='/register'>Create Account</Link>
             </Notification>
         </Container>       
     )
 }
+
+Login.propTypes = {
+    handle_login: PropTypes.func.isRequired,
+    logged_in: PropTypes.bool.isRequired
+};

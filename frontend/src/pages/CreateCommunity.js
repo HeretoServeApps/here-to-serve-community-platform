@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import countryList from 'react-select-country-list'
+import axios from 'axios'
 
 import {
   Field,
@@ -35,6 +36,18 @@ export default function CreateCommunity() {
   const [description, setDescription] = useState('')
   const [zipCode, setZipCode] = useState('')
   const [country, setCountry] = useState('United States')
+
+//   axios({
+//   method: 'post',
+//   url: '/community',
+//   data: {
+//     name: name,
+//     description: description,
+//     zipcode: zipCode,
+//     country: country,
+//   }
+// });
+
   return (
     <Container style={containerStyle}>
       <Heading size={4}>Create New Community</Heading>
