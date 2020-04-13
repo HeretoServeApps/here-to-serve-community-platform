@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useCallback } from 'react'
 import countryList from 'react-select-country-list'
 import axios from 'axios'
 
@@ -7,7 +7,8 @@ import {
   Control,
   Input,
   Select,
-  Textarea
+  Textarea,
+  Checkbox
 } from 'react-bulma-components/lib/components/form'
 import Button from 'react-bulma-components/lib/components/button'
 import Container from 'react-bulma-components/lib/components/container'
@@ -34,19 +35,34 @@ export default function CreateCommunity() {
   }
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
-  const [zipCode, setZipCode] = useState('')
+  const [zipcode, setZipcode] = useState('')
   const [country, setCountry] = useState('United States')
+  const [isClosed, setIsClosed] = useState(false)
 
-//   axios({
-//   method: 'post',
-//   url: '/community',
-//   data: {
-//     name: name,
-//     description: description,
-//     zipcode: zipCode,
-//     country: country,
-//   }
-// });
+  const handleSubmit = useCallback(() => {
+    axios
+      .post('/community/', {
+        headers: {
+          Authorization: `JWT ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json'
+        },
+        data: {
+          name: name,
+          description: description,
+          zipcode: zipcode,
+          country: country,
+        }
+      })
+      .then(
+        (response) => {
+          console.log(response.data)
+        },
+        (error) => {
+          console.log(error)
+        }
+      )
+  }, [name, description, zipcode, country, isClosed])
+
 
   return (
     <Container style={containerStyle}>
@@ -73,8 +89,8 @@ export default function CreateCommunity() {
           <Columns.Column>
             <Field>
               <Input
-                value={zipCode}
-                onChange={e => setZipCode(e.target.value)}
+                value={zipcode}
+                onChange={e => setZipcode(e.target.value)}
                 placeholder='Zip Code'
               />
             </Field>
@@ -102,15 +118,14 @@ export default function CreateCommunity() {
       </p>
       <br />
       <Field className='has-text-grey'>
-        <CheckboxField
-          text={
-            'Allow friends and family to find this community by name and/or postal code.'
-          }
-        />
+        <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
+          <Checkbox style={{ marginRight: '10px' }} onChange={e => setIsClosed(e.target.value)}/>
+          <p>Allow friends and family to find this community by name and/or postal code.</p>
+        </div>
         <CheckboxField text={'Allow all members to send invitations.'} />
-        <CheckboxTermofUse/>
+        <CheckboxTermofUse />
       </Field>
-      <Button style={{ marginTop: '1rem', marginBottom: '1rem' }} color='primary' fullwidth={true}>
+      <Button onClick={() => handleSubmit()} style={{ marginTop: '1rem', marginBottom: '1rem' }} color='primary' fullwidth={true}>
         CREATE COMMUNITY
       </Button>
       <Notification className='has-text-grey'>

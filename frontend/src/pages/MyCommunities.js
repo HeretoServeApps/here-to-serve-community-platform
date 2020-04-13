@@ -7,6 +7,7 @@ import Heading from 'react-bulma-components/lib/components/heading'
 import Columns from 'react-bulma-components/lib/components/columns'
 import Button from 'react-bulma-components/lib/components/button'
 import CommunityCard from '../components/communitycard'
+import { Link } from 'react-router-dom'
 
 export default function MyCommunities() {
   const [communities, setCommunities] = useState([])
@@ -41,7 +42,9 @@ export default function MyCommunities() {
         <Heading size={4}>My Communities</Heading>
         <div style={{ display: 'flex' }}>
           <Button color='primary' style={{ marginRight: '10px' }}>
+            <Link to='/select-communities' style={{color: 'white'}}>
             Add
+            </Link>
           </Button>
           <Button color='primary' outlined={true}>
             Edit
