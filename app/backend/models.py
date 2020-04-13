@@ -34,30 +34,11 @@ class CustomSection(models.Model):
 
 
 class Community(models.Model):
-    # Choices for community purpose
-    CAREGIVING = 'C'
-    ELDERLYCARE = 'E'
-    MILITARY = 'M'
-    VOLUNTEERING = 'V'
-    PARENTING = 'P'
-    SCHOOL = 'S'
-    RELIGIOUS = 'R'
-    PURPOSE_CHOICES = [
-        (CAREGIVING, 'Caregiving'),
-        (ELDERLYCARE, 'Eldercare & Long Term care'),
-        (MILITARY, 'Military & Veterans Families'),
-        (VOLUNTEERING, 'Volunteering'),
-        (PARENTING, 'Parenting'),
-        (SCHOOL, 'Schools'),
-        (RELIGIOUS, 'Religious Groups'),
-    ]
-
     # defaults were just for already existing rows, no real meaning
-    name = models.CharField(max_length=128, blank=False, default='')
-    purpose = models.CharField(max_length=128, choices=PURPOSE_CHOICES, blank=False, default=CAREGIVING)
-    is_closed = models.BooleanField(blank=False, default=False)
-    description = models.CharField(max_length=256, blank=False, default='')
-    zipcode = models.IntegerField(blank=False, default=0)
+    name = models.CharField(max_length=128, default='')
+    is_closed = models.BooleanField(default=False)
+    description = models.CharField(max_length=256, default='')
+    zipcode = models.IntegerField(default=0)
     country = CountryField(blank_label='(select country)')
 
     def __str__(self):

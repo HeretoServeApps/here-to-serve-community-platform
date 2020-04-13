@@ -104,10 +104,9 @@ export default function Register() {
 
     useEffect(() => {
         if(submitStatus) {
-            history.push('/select-communities');
+            history.push('/my-communities');
         }
-    }, [submitStatus, history],
-    );
+    }, [submitStatus, history])
 
     return(
         <Container style={containerStyle}>
