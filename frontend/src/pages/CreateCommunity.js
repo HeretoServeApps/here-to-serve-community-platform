@@ -37,16 +37,16 @@ export default function CreateCommunity() {
   const [zipCode, setZipCode] = useState('')
   const [country, setCountry] = useState('United States')
 
-  axios({
-  method: 'post',
-  url: '/community',
-  data: {
-    name: name,
-    description: description,
-    zipcode: zipCode,
-    country: country,
-  }
-});
+//   axios({
+//   method: 'post',
+//   url: '/community',
+//   data: {
+//     name: name,
+//     description: description,
+//     zipcode: zipCode,
+//     country: country,
+//   }
+// });
 
   return (
     <Container style={containerStyle}>

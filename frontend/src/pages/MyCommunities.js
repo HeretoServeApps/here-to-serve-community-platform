@@ -17,7 +17,7 @@ export default function MyCommunities() {
     axios
       .get('/community', {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `JWT ${token}`,
         },
       })
       .then(
