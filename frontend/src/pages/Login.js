@@ -27,14 +27,19 @@ export default function Login(props) {
 
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [rememberMe, setRememberMe] = useState(false)
 
     let history = useHistory()
     useEffect(() => {
-        if(props.logged_in) {
+        if((localStorage.getItem('token') != null) || props.logged_in) {
             history.push('/my-communities')
         }
-    
     })
+
+    function handleRememberMe() {
+        setRememberMe(!rememberMe)
+    }
+
     return (
         <Container style={containerStyle}>
             <Heading size={4}>Log in to Here to Serve</Heading>
@@ -48,9 +53,9 @@ export default function Login(props) {
                 <Input value ={password} type="password" placeholder="Password" onChange={e => setPassword(e.target.value)}/>
             </Field>
             <Field>
-                <CheckboxField text={"Remember me"}/>
+                <CheckboxField text={"Remember me"} onChange={handleRememberMe}/>
             </Field>
-            <Button style={{marginBottom: "1rem"}} color="primary" fullwidth={true} onClick={() => props.handle_login(email, password)}>LOGIN</Button>
+            <Button style={{marginBottom: "1rem"}} color="primary" fullwidth={true} onClick={() => props.handle_login(email, password, rememberMe)}>LOGIN</Button>
             <Notification style={notifStyle}>
                 <a href="#">Forgot Password?</a> or <Link to='/register'>Create Account</Link>
             </Notification>
