@@ -43,12 +43,13 @@ export default function CreateCommunity() {
   let history = useHistory()
 
   const handleSubmit = useCallback(() => {
-    const param = {
+    const param = JSON.stringify({
       'name': name,
       'description': description,
       'zipcode': zipcode,
       'country': country,
-    }
+      'is_closed': isClosed
+    })
     axios.post('/community/', param, {
         headers: {
           'Authorization': `JWT ${token}`,
@@ -65,28 +66,6 @@ export default function CreateCommunity() {
       )
       history.push('/my-communities')
   }, [name, description, zipcode, country, isClosed, token])
-
-  //   const response = fetch("http://localhost:8000/community/",
-  //           {
-  //               method: 'POST',
-  //               body: JSON.stringify({
-  //                   name: name,
-  //                   description: description, 
-  //                   zipcode: zipcode,
-  //                   country: country,
-  //                   is_closed: isClosed
-  //                   // Other body stuff
-  //               }),
-  //               headers: {
-  //                   'Authorization': `JWT ${token}`,
-  //                   'Content-Type': 'application/json'
-  //                   // Other possible headers
-  //               }
-  //           }
-  //       );
-  //     console.log(response)
-  // }, [name, description, zipcode, country, isClosed, token])
-
 
   return (
     <Container style={containerStyle}>
