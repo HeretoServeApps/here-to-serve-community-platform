@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from 'react'
 import countryList from 'react-select-country-list'
 import axios from 'axios'
+import { useHistory } from 'react-router-dom'
 
 import {
   Field,
@@ -38,30 +39,53 @@ export default function CreateCommunity() {
   const [zipcode, setZipcode] = useState('')
   const [country, setCountry] = useState('United States')
   const [isClosed, setIsClosed] = useState(false)
+  const token = localStorage.getItem('token')
+  let history = useHistory()
 
   const handleSubmit = useCallback(() => {
-    axios
-      .post('/community/', {
+    const param = {
+      'name': name,
+      'description': description,
+      'zipcode': zipcode,
+      'country': country,
+    }
+    axios.post('/community/', param, {
         headers: {
-          Authorization: `JWT ${localStorage.getItem('token')}`,
-          'Content-Type': 'application/json'
+          'Authorization': `JWT ${token}`,
+          'Content-Type': 'application/json',
         },
-        data: {
-          name: name,
-          description: description,
-          zipcode: zipcode,
-          country: country,
-        }
       })
       .then(
         (response) => {
-          console.log(response.data)
+          console.log(response)
         },
         (error) => {
           console.log(error)
         }
       )
-  }, [name, description, zipcode, country, isClosed])
+      history.push('/my-communities')
+  }, [name, description, zipcode, country, isClosed, token])
+
+  //   const response = fetch("http://localhost:8000/community/",
+  //           {
+  //               method: 'POST',
+  //               body: JSON.stringify({
+  //                   name: name,
+  //                   description: description, 
+  //                   zipcode: zipcode,
+  //                   country: country,
+  //                   is_closed: isClosed
+  //                   // Other body stuff
+  //               }),
+  //               headers: {
+  //                   'Authorization': `JWT ${token}`,
+  //                   'Content-Type': 'application/json'
+  //                   // Other possible headers
+  //               }
+  //           }
+  //       );
+  //     console.log(response)
+  // }, [name, description, zipcode, country, isClosed, token])
 
 
   return (
@@ -109,6 +133,13 @@ export default function CreateCommunity() {
                   </option>
                 ))}
             </Select>
+            {/* <Field>
+              <Input
+                value={country}
+                onChange={e => setCountry(e.target.value)}
+                placeholder='Country'
+              />
+            </Field> */}
           </Columns.Column>
         </Columns>
       </Field>
