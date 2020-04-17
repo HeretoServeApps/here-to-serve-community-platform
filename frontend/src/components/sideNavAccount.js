@@ -1,6 +1,6 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
-import Box from 'react-bulma-components/lib/components/box'
 import Menu from 'react-bulma-components/lib/components/menu';
 
 import '../stylesheets/App.sass'
@@ -8,16 +8,16 @@ import '../stylesheets/App.sass'
 const SideNavAccount = (props) => {
   return (
     <div>
-      <Box>
-        <Menu color='white'>
-            <Menu.List.Item>
-                General Account Settings
-            </Menu.List.Item>
-            <Menu.List.Item>
-                Email Settings
-            </Menu.List.Item>
+        <Menu color='white' maxWidth='50%'>
+            <Menu.List>
+                <Menu.List.Item>
+                    <Link to='/account-settings'>General Account Settings</Link>
+                </Menu.List.Item>
+                <Menu.List.Item>
+                <Link to='/email-settings'>Email Settings</Link>
+                </Menu.List.Item>
+            </Menu.List>
         </Menu>
-      </Box>
     </div>
   )
 }
