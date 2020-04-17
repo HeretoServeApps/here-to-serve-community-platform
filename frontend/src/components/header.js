@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import { Route, Link, useHistory } from 'react-router-dom'
+import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types';
 
 import logo from '../images/logo.png'
@@ -30,6 +30,9 @@ const Header = (props) => {
       </Link>
       <Link className={'navbar-item'} to='/create-community'>
         <Heading size={6}>Create Community</Heading>
+      </Link>
+      <Link className={'navbar-item'} to='/account-settings'>
+        <Heading size={6}>My Account</Heading>
       </Link>
     </Navbar.Container>
   )

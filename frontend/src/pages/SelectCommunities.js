@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import { Link, useHistory } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import axios from 'axios'
 
 import Container from 'react-bulma-components/lib/components/container'
@@ -7,8 +7,6 @@ import Heading from 'react-bulma-components/lib/components/heading'
 import CheckboxField from '../components/checkboxfield'
 import Button from 'react-bulma-components/lib/components/button'
 import Table from 'react-bulma-components/lib/components/table'
-
-import CheckboxTermofUse from '../components/checkboxTermofUse'
 
 
 export default function SelectCommunities() {

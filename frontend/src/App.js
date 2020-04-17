@@ -1,9 +1,8 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useCallback } from 'react'
 import { 
   Route, 
   Switch,
   BrowserRouter as Router,
-  useHistory,
 } from 'react-router-dom'
 
 import Header from './components/header'
@@ -14,6 +13,8 @@ import CreateCommunity from './pages/CreateCommunity'
 import Login from './pages/Login'
 import About from './pages/About'
 import Welcome from './pages/Welcome'
+import AccountSettings from './pages/AccountSettings'
+import EmailSettings from './pages/EmailSettings'
 
 export default function App() {
   const [loggedIn, setLoggedIn] = useState(localStorage.getItem('token') ? true : false)
@@ -55,6 +56,8 @@ export default function App() {
             />
             <Route path='/about' exact component={About} />
             <Route path='/' exact component={Welcome} />
+            <Route path='/account-settings' exact component={AccountSettings} />
+            <Route path='/email-settings' exact component={EmailSettings} />
         </Switch>
       </Router>
     </div>
