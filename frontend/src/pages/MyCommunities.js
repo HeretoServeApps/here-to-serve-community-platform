@@ -13,7 +13,7 @@ export default function MyCommunities() {
   const [communities, setCommunities] = useState([])
   const [search, setSearch] = useState('')
   const token = localStorage.getItem('token')
-  
+
   useEffect(() => {
     axios
       .get('/community', {
@@ -36,14 +36,20 @@ export default function MyCommunities() {
     margin: '5% 10%',
   }
 
+  var noteStyle = {
+    color: '#E5E5E5',
+    fontStyle: 'italic',
+    margin: '15px',
+  }
+
   return (
     <Container style={containerStyle}>
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <Heading size={4}>My Communities</Heading>
         <div style={{ display: 'flex' }}>
           <Button color='primary' style={{ marginRight: '10px' }}>
-            <Link to='/select-communities' style={{color: 'white'}}>
-            Add
+            <Link to='/select-communities' style={{ color: 'white' }}>
+              Add
             </Link>
           </Button>
           <Button color='primary' outlined={true}>
@@ -59,23 +65,30 @@ export default function MyCommunities() {
             placeholder='Search Communities'
           />
         </Columns.Column>
-        <Columns.Column size={2}>
-          <Button
-            color='light'
-            fullwidth={true}
-            style={{ marginRight: '10%' }}
-          >
-            Search
-          </Button>
-        </Columns.Column>
       </Columns>
 
       <Columns isMultiline={true}>
-        {communities.map((c) => (
-          <Columns.Column size={4}>
-            <CommunityCard text={c.name} />
-          </Columns.Column>
-        ))}
+        {communities.filter(
+          (c) =>
+            search === '' || c.name.toLowerCase().includes(search.toLowerCase())
+        ).length > 0 ? (
+          communities
+            .filter(
+              (c) =>
+                search === '' ||
+                c.name.toLowerCase().includes(search.toLowerCase())
+            )
+            .map((c) => (
+              <Columns.Column size={4}>
+                <CommunityCard text={c.name} />
+              </Columns.Column>
+            ))
+        ) : (
+          <p className='has-text-grey-light' style={noteStyle}>
+            No communities match this search. Click 'Add' to request to join
+            more communities.
+          </p>
+        )}
       </Columns>
     </Container>
   )
