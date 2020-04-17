@@ -16,7 +16,7 @@ export default function MyCommunities() {
   
   useEffect(() => {
     axios
-      .get('/community', {
+      .get('/community/', {
         headers: {
           Authorization: `JWT ${token}`,
         },
