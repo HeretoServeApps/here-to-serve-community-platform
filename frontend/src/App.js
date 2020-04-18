@@ -20,7 +20,7 @@ import CommunityHome from './pages/CommunityHome'
 export default function App() {
   const [loggedIn, setLoggedIn] = useState(localStorage.getItem('token') ? true : false)
 
-  const handleLogin = useCallback((email, password) => {
+  const handleLogin = useCallback((email, password, rememberMe) => {
     fetch('/token-auth/', {
       method: 'POST',
       headers: {
@@ -34,6 +34,7 @@ export default function App() {
       .then(res => res.json())
       .then(json => {
         localStorage.setItem('token', json.token)
+        localStorage.setItem('rememberMe', rememberMe)
         JSON.stringify(json.token) ? setLoggedIn(true) : setLoggedIn(false)
       },
         (error) => {
