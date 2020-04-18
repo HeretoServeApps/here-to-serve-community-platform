@@ -5,6 +5,7 @@ import Columns from 'react-bulma-components/lib/components/columns'
 import Heading from 'react-bulma-components/lib/components/heading'
 import Table from 'react-bulma-components/lib/components/table'
 import Button from 'react-bulma-components/lib/components/button';
+import { Link } from 'react-router-dom'
 import {
     Field,
     Control,
@@ -27,7 +28,20 @@ export default function AccountSettings() {
 
     return (
         <Container style={containerStyle}>
-            <Heading size={4} style={{margin:'0% 0% 3% 30%',}}>Account Information</Heading>
+            <Columns style={{fullWidth: true, margin: '0% 0% 1% 18%'}}>
+                <Columns.Column>
+                    <Heading size={4} style={{margin:'0% 0% 3% 30%'}}>Account Information</Heading>
+                </Columns.Column>
+                <Columns.Column>
+                    <div style={{ display: 'flex' }}>
+                        <Button color='primary' style={{ marginRight: '10px' }}>
+                            <Link to='#' style={{ color: 'white' }}>
+                                Edit
+                        </Link>
+                        </Button>
+                    </div>
+                </Columns.Column>
+            </Columns>
             <Columns>
                 <Columns.Column style={{ maxWidth:'30%' }}>
                     <SideNavAccount />

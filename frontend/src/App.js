@@ -15,6 +15,7 @@ import About from './pages/About'
 import Welcome from './pages/Welcome'
 import AccountSettings from './pages/AccountSettings'
 import EmailSettings from './pages/EmailSettings'
+import CommunityHome from './pages/CommunityHome'
 
 export default function App() {
   const [loggedIn, setLoggedIn] = useState(localStorage.getItem('token') ? true : false)
@@ -58,6 +59,7 @@ export default function App() {
             <Route path='/' exact component={Welcome} />
             <Route path='/account-settings' exact component={AccountSettings} />
             <Route path='/email-settings' exact component={EmailSettings} />
+            <Route path='/community-home' exact component={CommunityHome} />
         </Switch>
       </Router>
     </div>

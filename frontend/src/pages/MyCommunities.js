@@ -49,11 +49,11 @@ export default function MyCommunities() {
         <div style={{ display: 'flex' }}>
           <Button color='primary' style={{ marginRight: '10px' }}>
             <Link to='/select-communities' style={{ color: 'white' }}>
-              Add
+              Join
             </Link>
           </Button>
           <Button color='primary' outlined={true}>
-            Edit
+              Edit
           </Button>
         </div>
       </div>
@@ -66,7 +66,6 @@ export default function MyCommunities() {
           />
         </Columns.Column>
       </Columns>
-
       <Columns isMultiline={true}>
         {communities.filter(
           (c) =>
@@ -80,7 +79,9 @@ export default function MyCommunities() {
             )
             .map((c) => (
               <Columns.Column size={4}>
-                <CommunityCard text={c.name} />
+                <Link to='/community-home'>
+                  <CommunityCard text={c.name} />
+                </Link>
               </Columns.Column>
             ))
         ) : (
