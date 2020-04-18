@@ -44,7 +44,7 @@ export default function Welcome() {
     margin: '5%',
     padding: '1%',
     boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.25)',
-    height: '20rem'
+    height: '20rem',
   }
 
   return (
@@ -57,13 +57,13 @@ export default function Welcome() {
           <Columns.Column>
             <Container style={{ padding: '5% 30% 0 5%' }}>
               <Heading size={2}>
-                Start your <HighLight>care community</HighLight> today.
+                Join a <HighLight>care community</HighLight> today.
               </Heading>
               <Link to='/register'>
                 <Button
                   style={{
                     marginBottom: '1rem',
-                    boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)'
+                    boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)',
                   }}
                   color='primary'
                   fullwidth={true}
@@ -75,7 +75,7 @@ export default function Welcome() {
                 <Link to='/login'>
                   <Button
                     style={{
-                      boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)'
+                      boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)',
                     }}
                     fullwidth={true}
                     outlined={true}
