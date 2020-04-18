@@ -79,7 +79,9 @@ export default function MyCommunities() {
             )
             .map((c) => (
               <Columns.Column size={4}>
-                <CommunityCard text={c.name} />
+                <Link to='/community-home'>
+                  <CommunityCard text={c.name} />
+                </Link>
               </Columns.Column>
             ))
         ) : (
