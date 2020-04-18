@@ -1,7 +1,7 @@
-import React, { useState, useCallback, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import countryList from 'react-select-country-list'
 import { useHistory } from 'react-router-dom'
-import axios from 'axios'
+import PropTypes from 'prop-types';
 
 import Container from 'react-bulma-components/lib/components/container'
 import Heading from 'react-bulma-components/lib/components/heading'
@@ -16,7 +16,7 @@ import {
 
 import CheckboxTermofUse from '../components/checkboxTermofUse'
 
-export default function Register() {
+export default function Register(props) {
   // Non-bulma styles
   var containerStyle = {
     margin: '5% auto',
@@ -37,48 +37,9 @@ export default function Register() {
   const [password, setPassword] = useState('')
   const [confirmEmail, setConfirmEmail] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
-  const [submitStatus, setSubmitStatus] = useState(false)
   const [validForm, setValidForm] = useState(false)
 
   let history = useHistory()
-  // handle_signup = (e, data) => {
-  //     e.preventDefault();
-  //     fetch('http://localhost:8000/core/users/', {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json'
-  //       },
-  //       body: JSON.stringify(data)
-  //     })
-  //       .then(res => res.json())
-  //       .then(json => {
-  //         localStorage.setItem('token', json.token);
-  //         this.setState({
-  //           logged_in: true,
-  //           displayed_form: '',
-  //           username: json.username
-  //         });
-  //       });
-  //   };
-  const handleSubmit = useCallback(() => {
-    // FIX ME
-    // Register user
-    fetch('/users/', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        email: email,
-        password: password,
-      }),
-    })
-      .then((res) => res.json())
-      .then((json) => {
-        localStorage.setItem('token', json.token)
-        setSubmitStatus(true)
-      })
-  }, [email, password])
 
   useEffect(() => {
     const formValues = [
@@ -95,7 +56,6 @@ export default function Register() {
       confirmEmail,
       confirmPassword,
     ]
-
     const notValidForm =
       formValues.some((formVal) => {
         return formVal === ''
@@ -119,10 +79,10 @@ export default function Register() {
   ])
 
   useEffect(() => {
-    if (submitStatus) {
+    if ((localStorage.getItem('token') != null) || props.logged_in) {
       history.push('/my-communities')
     }
-  }, [submitStatus, history])
+  })
 
   return (
     <Container style={containerStyle}>
@@ -271,10 +231,15 @@ export default function Register() {
         color='primary'
         fullwidth={true}
         disabled={validForm}
-        onClick={() => handleSubmit()}
+        onClick={() => props.handle_signup(firstName, lastName, address, city, country, state, zipcode, phoneNumber, email, password)}
       >
         CREATE ACCOUNT
       </Button>
     </Container>
   )
 }
+
+Register.propTypes = {
+  handle_signup: PropTypes.func.isRequired,
+  logged_in: PropTypes.bool.isRequired
+};

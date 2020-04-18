@@ -68,7 +68,7 @@ export default function Welcome() {
                   color='primary'
                   fullwidth={true}
                 >
-                  REGISTER TODAY
+                  JOIN
                 </Button>
               </Link>
               <ButtonBg>

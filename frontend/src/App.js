@@ -42,6 +42,24 @@ export default function App() {
         })
   }, [])
 
+  const handleSignup = useCallback((firstName, lastName, address, city, country, state, zipcode, phoneNumber, email, password) => {
+    fetch('/users/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email: email,
+        password: password,
+      }),
+    })
+      .then((res) => res.json())
+      .then((json) => {
+        localStorage.setItem('token', json.token)
+        JSON.stringify(json.token) ? setLoggedIn(true) : setLoggedIn(false)
+      })
+  }, [])
+
   return (
     <div>
       <Router>
@@ -50,7 +68,9 @@ export default function App() {
         />
         <Switch>
             <Route path="/my-communities" exact component={MyCommunities}/>
-            <Route path="/register" exact component={Register}/>
+            <Route path="/register" render={
+              () => <Register handle_signup={handleSignup} logged_in={loggedIn}/>}
+            />
             <Route path="/select-communities" exact component={SelectCommunities}/>
             <Route path='/create-community' exact component={CreateCommunity} />
             <Route path='/login' render={
