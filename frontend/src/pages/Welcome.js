@@ -54,7 +54,7 @@ export default function Welcome() {
       <Container style={{ marginBottom: '50px', width: '80%' }}>
         <Columns>
           <Columns.Column>
-            <Container style={{ padding: '5% 30% 0 5%' }}>
+            <Container style={{ padding: '20% 40% 0 5%' }}>
               <Heading size={2}>
                 Join a <HighLight>care community</HighLight> today.
               </Heading>
