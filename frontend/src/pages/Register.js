@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import countryList from 'react-select-country-list'
 import { useHistory } from 'react-router-dom'
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'
 
 import Container from 'react-bulma-components/lib/components/container'
 import Heading from 'react-bulma-components/lib/components/heading'
@@ -12,6 +12,7 @@ import {
   Control,
   Input,
   Select,
+  Textarea,
 } from 'react-bulma-components/lib/components/form'
 
 import CheckboxTermofUse from '../components/checkboxTermofUse'
@@ -37,6 +38,7 @@ export default function Register(props) {
   const [password, setPassword] = useState('')
   const [confirmEmail, setConfirmEmail] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
+  const [hearAbout, setHearAbout] = useState('')
   const [validForm, setValidForm] = useState(false)
 
   let history = useHistory()
@@ -79,7 +81,7 @@ export default function Register(props) {
   ])
 
   useEffect(() => {
-    if ((localStorage.getItem('token') != null) || props.logged_in) {
+    if (localStorage.getItem('token') != null || props.logged_in) {
       history.push('/my-communities')
     }
   })
@@ -225,13 +227,33 @@ export default function Register(props) {
           </Field>
         </Columns.Column>
       </Columns>
+      <Field>
+        <Textarea
+          value={hearAbout}
+          onChange={(e) => setHearAbout(e.target.value)}
+          placeholder='How did you hear about us?'
+        />
+      </Field>
       <CheckboxTermofUse />
       <Button
         style={{ marginTop: '1rem' }}
         color='primary'
         fullwidth={true}
         disabled={validForm}
-        onClick={() => props.handle_signup(firstName, lastName, address, city, country, state, zipcode, phoneNumber, email, password)}
+        onClick={() =>
+          props.handle_signup(
+            firstName,
+            lastName,
+            address,
+            city,
+            country,
+            state,
+            zipcode,
+            phoneNumber,
+            email,
+            password
+          )
+        }
       >
         CREATE ACCOUNT
       </Button>
@@ -241,5 +263,5 @@ export default function Register(props) {
 
 Register.propTypes = {
   handle_signup: PropTypes.func.isRequired,
-  logged_in: PropTypes.bool.isRequired
-};
+  logged_in: PropTypes.bool.isRequired,
+}
