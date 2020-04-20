@@ -28,56 +28,60 @@ export default function Login(props) {
     padding: '.25rem .5rem .25rem .5rem',
   }
 
-export default function Login(props) {    
-    // Non-bulma styles
-    var containerStyle = {
-        margin: '5% auto',
-        maxWidth: "400px",
-        padding: "4rem",
-        border: "0.1rem solid #E5E5E5",
-        borderRadius: "1rem",
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [rememberMe, setRememberMe] = useState(false)
+
+  let history = useHistory()
+  useEffect(() => {
+    if (localStorage.getItem('token') != null || props.logged_in) {
+      history.push('/my-communities')
     }
-    var notifStyle = {
-        backgroundColor: "white",
-        padding: ".25rem .5rem .25rem .5rem"
-    }
+  })
 
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
-    const [rememberMe, setRememberMe] = useState(false)
+  function handleRememberMe() {
+    setRememberMe(!rememberMe)
+  }
 
-    let history = useHistory()
-    useEffect(() => {
-        if((localStorage.getItem('token') != null) || props.logged_in) {
-            history.push('/my-communities')
-        }
-    })
+  return (
+    <Container style={containerStyle}>
+      <Heading size={4}>Log in to Here to Serve</Heading>
+      <Field>
+        <Control>
+          <Input
+            value={email}
+            type='email'
+            placeholder='Email Address'
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </Control>
+      </Field>
 
-    function handleRememberMe() {
-        setRememberMe(!rememberMe)
-    }
-
-    return (
-        <Container style={containerStyle}>
-            <Heading size={4}>Log in to Here to Serve</Heading>
-            <Field>
-                <Control>
-                    <Input value={email} type="email" placeholder="Email Address" onChange={e => setEmail(e.target.value)}/>
-                </Control>                
-            </Field>
-
-            <Field>
-                <Input value ={password} type="password" placeholder="Password" onChange={e => setPassword(e.target.value)}/>
-            </Field>
-            <Field>
-                <CheckboxField text={"Remember me"} onChange={handleRememberMe}/>
-            </Field>
-            <Button style={{marginBottom: "1rem"}} color="primary" fullwidth={true} onClick={() => props.handle_login(email, password, rememberMe)}>LOGIN</Button>
-            <Notification style={notifStyle}>
-                <a href="/forgot-password">Forgot Password?</a> or <Link to='/register'>Create Account</Link>
-            </Notification>
-        </Container>       
-    )
+      <Field>
+        <Input
+          value={password}
+          type='password'
+          placeholder='Password'
+          onChange={(e) => setPassword(e.target.value)}
+        />
+      </Field>
+      <Field>
+        <CheckboxField text={'Remember me'} onChange={handleRememberMe} />
+      </Field>
+      <Button
+        style={{ marginBottom: '1rem' }}
+        color='primary'
+        fullwidth={true}
+        onClick={() => props.handle_login(email, password, rememberMe)}
+      >
+        LOGIN
+      </Button>
+      <Notification style={notifStyle}>
+        <a href='/forgot-password'>Forgot Password?</a> or{' '}
+        <Link to='/register'>Create Account</Link>
+      </Notification>
+    </Container>
+  )
 }
 
 Login.propTypes = {
