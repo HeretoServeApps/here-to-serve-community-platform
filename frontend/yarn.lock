@@ -2602,6 +2602,11 @@ bulma-react-components@^1.0.2:
     utilsfn "^1.0.9"
     value-parser "^1.0.1"
 
+bulma-switch@1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/bulma-switch/-/bulma-switch-1.0.1.tgz#447bf2e45ea5ed8e83919ae22b586e6ebc17a4ce"
+  integrity sha1-RHvy5F6l7Y6DkZriK1hubrwXpM4=
+
 bulma@0.7.5, bulma@^0.7.1:
   version "0.7.5"
   resolved "https://registry.yarnpkg.com/bulma/-/bulma-0.7.5.tgz#35066c37f82c088b68f94450be758fc00a967208"
@@ -2880,6 +2885,11 @@ class-utils@^0.3.5:
     define-property "^0.2.5"
     isobject "^3.0.0"
     static-extend "^0.1.1"
+
+classnames@2.2.5:
+  version "2.2.5"
+  resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.2.5.tgz#fb3801d453467649ef3603c7d61a02bd129bde6d"
+  integrity sha1-+zgB1FNGdknvNgPH1hoCvRKb3m0=
 
 classnames@2.2.6, classnames@^2.2, classnames@^2.2.5, classnames@^2.2.6:
   version "2.2.6"
@@ -9055,13 +9065,21 @@ react-app-polyfill@^1.0.6:
     regenerator-runtime "^0.13.3"
     whatwg-fetch "^3.0.0"
 
-react-bulma-components@^3.2.0:
+react-bulma-components@3.2.0:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/react-bulma-components/-/react-bulma-components-3.2.0.tgz#cc1f2634cdd6307bad2346b386c790817688c467"
   integrity sha512-2xQJb/YitEWNVAhjZgfJPIDpkjflCxOWhxQwsL7mbkV0sqYhUu7Rar3LeP5MEc3wNxfh+mlo+3facNRVqk/7OQ==
   dependencies:
     bulma "0.7.5"
     classnames "2.2.6"
+
+react-bulma-switch@0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/react-bulma-switch/-/react-bulma-switch-0.0.3.tgz#7d2577691f3ef8539d14ffa62330c2fb861cdd35"
+  integrity sha512-YSCiakkVJLHafSUg9ITiJxTr6jtabrufeGf61vVjOapRrfHs1SzfOC3LwECl4QcFz4ovqqaPmAXRdUWQG1S8jQ==
+  dependencies:
+    bulma-switch "1.0.1"
+    classnames "2.2.5"
 
 react-datepicker@^1.5.0:
   version "1.8.0"
@@ -9294,6 +9312,13 @@ react-select-country-list@^2.1.2:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/react-select-country-list/-/react-select-country-list-2.1.2.tgz#c46341bb845e95ecf3e89144422ec40b66a8d23d"
   integrity sha512-05D09+sK/51u3LI0+UkS0ZcDS/jsrHtv2b0zoIwJAkjXSmu7xCIt3wdUfCmvDNsqQP8GClzCGiwYPcGg8Qnkuw==
+
+react-switch@^5.0.1:
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/react-switch/-/react-switch-5.0.1.tgz#449277f4c3aed5286fffd0f50d5cbc2a23330406"
+  integrity sha512-Pa5kvqRfX85QUCK1Jv0rxyeElbC3aNpCP5hV0LoJpU/Y6kydf0t4kRriQ6ZYA4kxWwAYk/cH51T4/sPzV9mCgQ==
+  dependencies:
+    prop-types "^15.6.2"
 
 react-tiny-virtual-list@^2.1.4:
   version "2.2.0"
