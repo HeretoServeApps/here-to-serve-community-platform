@@ -36,10 +36,10 @@ class CustomSection(models.Model):
 class Community(models.Model):
     # defaults were just for already existing rows, no real meaning
     name = models.CharField(max_length=128, default='')
-    is_closed = models.BooleanField(default=False)
+    is_closed = models.CharField(default='false', max_length=5)
     description = models.CharField(max_length=256, default='')
-    zipcode = models.IntegerField(default=0)
-    country = CountryField(blank_label='(select country)')
+    zipcode = models.CharField(max_length=10, default='')
+    country = models.CharField(max_length=128, default='US')
 
     def __str__(self):
         return self.name

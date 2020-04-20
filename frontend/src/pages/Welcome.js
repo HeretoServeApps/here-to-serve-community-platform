@@ -10,8 +10,7 @@ import Card from 'react-bulma-components/lib/components/card'
 import Columns from 'react-bulma-components/lib/components/columns'
 import styled from 'styled-components'
 
-import personOne from '../images/welcome-person-1.png'
-import personTwo from '../images/welcome-person-2.png'
+import family from '../images/family.png'
 import img from '../images/welcome-background.svg'
 
 const Background = styled.div`
@@ -52,10 +51,10 @@ export default function Welcome() {
       <BackgroundWrapper>
         <Background />
       </BackgroundWrapper>
-      <Container style={{ marginBottom: '50px' }}>
+      <Container style={{ marginBottom: '50px', width: '80%' }}>
         <Columns>
           <Columns.Column>
-            <Container style={{ padding: '5% 30% 0 5%' }}>
+            <Container style={{ padding: '20% 40% 0 5%' }}>
               <Heading size={2}>
                 Join a <HighLight>care community</HighLight> today.
               </Heading>
@@ -68,7 +67,7 @@ export default function Welcome() {
                   color='primary'
                   fullwidth={true}
                 >
-                  REGISTER TODAY
+                  JOIN
                 </Button>
               </Link>
               <ButtonBg>
@@ -90,14 +89,9 @@ export default function Welcome() {
           <Columns.Column>
             <Container style={{ width: '80%' }}>
               <img
-                src={personOne}
-                style={{ width: '45%' }}
-                alt='person one'
-              ></img>
-              <img
-                src={personTwo}
-                style={{ width: '55%' }}
-                alt='person two'
+                src={family}
+                style={{ width: '100%' }}
+                alt='family'
               ></img>
             </Container>
           </Columns.Column>

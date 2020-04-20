@@ -13,7 +13,7 @@ class CommunitySerializer(serializers.HyperlinkedModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('email', 'password')
+        fields = ('email', 'first_name', 'last_name', 'phone_number', 'email')
 
 
 class UserSerializerWithToken(serializers.ModelSerializer):
@@ -37,4 +37,4 @@ class UserSerializerWithToken(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('token', 'email', 'password', )
+        fields = ('token', 'email', 'password',)

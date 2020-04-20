@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react'
-import { Route, Link, useHistory } from 'react-router-dom'
-import PropTypes from 'prop-types';
+import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
+import PropTypes from 'prop-types'
 
 import logo from '../images/logo.png'
 
@@ -31,6 +31,9 @@ const Header = (props) => {
       <Link className={'navbar-item'} to='/create-community'>
         <Heading size={6}>Create Community</Heading>
       </Link>
+      <Link className={'navbar-item'} to='/account-settings'>
+        <Heading size={6}>My Account</Heading>
+      </Link>
     </Navbar.Container>
   )
 
@@ -39,7 +42,7 @@ const Header = (props) => {
       <Box>
         <Navbar color='white'>
           <Navbar.Brand style={{ display: 'flex', alignItems: 'center' }}>
-            <a href='/'>
+            <a href={props.logged_in ? '/my-communities' : '/'}>
               <img src={logo} alt='logo' width='160' />
             </a>
             <Navbar.Burger
@@ -47,7 +50,7 @@ const Header = (props) => {
               ariaLabel='menu'
               ariaExpanded='false'
               dataTarget='navItems'
-              onClick={e => setActive(!active)}
+              onClick={(e) => setActive(!active)}
               className={active && 'is-active'}
             >
               <span ariaHidden='true'></span>
@@ -68,4 +71,4 @@ export default Header
 
 Header.propTypes = {
   logged_in: PropTypes.bool.isRequired,
-};
+}
