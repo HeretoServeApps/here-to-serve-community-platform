@@ -46,13 +46,15 @@ class Community(models.Model):
 
 
 class UserManager(BaseUserManager):
-    def create_user(self, email, first_name, last_name, phone_number, password=None, commit=True):
+    def create_user(self, email, first_name, last_name, address_line_1, address_line_2,
+                    city, state, zipcode, country, phone_number_1, phone_number_1_type, phone_number_2,
+                    phone_number_2_type, how_learn, how_help, how_know, skills_to_offer, password=None, commit=True):
 
         if not first_name:
             raise ValueError(_('Users must have a first name'))
         if not last_name:
             raise ValueError(_('Users must have a last name'))
-        if not phone_number:
+        if not phone_number_1:
             raise ValueError(_('Users must have a phone number'))
         if not email:
             raise ValueError(_('Users must have an email address'))
@@ -60,8 +62,21 @@ class UserManager(BaseUserManager):
         user = self.model(
                 first_name=first_name,
                 last_name=last_name,
-                phone_number=phone_number,
-                email=self.normalize_email(email)
+                email=self.normalize_email(email),
+                address_line_1=address_line_1,
+                address_line_2=address_line_2,
+                city=city,
+                state=state,
+                zipcode=zipcode,
+                country=country,
+                phone_number_1=phone_number_1,
+                phone_number_2=phone_number_2,
+                phone_number_1_type=phone_number_1_type,
+                phone_number_2_type=phone_number_2_type,
+                how_learn=how_learn,
+                how_help=how_help,
+                how_know=how_know,
+                skills_to_offer=skills_to_offer
         )
         user.set_password(password)
         if commit:
@@ -84,17 +99,104 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
+
+    FAMILY = 'FAMILY'
+    FRIEND = 'FRIEND'
+    FRIEND_OF_FRIEND = 'FRIEND_OF_FRIEND'
+    COWORKER = 'COWORKER'
+    ATTEND_SAME_SCHOOL = 'ATTEND_SAME_SCHOOL'
+    NEIGHBOR = 'NEIGHBOR'
+    SOCIAL_MEDIA = 'SOCIAL_MEDIA'
+    WORSHIP_TOGETHER = 'WORSHIP_TOGETHER'
+    DONT_PERSONALLY = 'DONT_PERSONALLY'
+
+    HOW_KNOW_CHOICES = [
+        (FAMILY, 'Family'),
+        (FRIEND, 'Friend'),
+        (FRIEND_OF_FRIEND, 'Friend of a friend'),
+        (COWORKER, 'Coworker'),
+        (ATTEND_SAME_SCHOOL, 'Attend the same school'),
+        (NEIGHBOR, 'Neighbor'),
+        (SOCIAL_MEDIA, 'Social Media'),
+        (WORSHIP_TOGETHER, 'Worship together'),
+        (DONT_PERSONALLY, 'Do not personally know')
+    ]
+
+    INDIVIDUAL = 'INDIVIDUAL'
+    HOUSE_OF_WORSHIP = 'HOUSE_OF_WORSHIP'
+    ORGANIZATION = 'ORGANIZATION'
+
+    HOW_HELP_CHOICES = [
+        (INDIVIDUAL, 'As an individual volunteer'),
+        (HOUSE_OF_WORSHIP, 'Through my house of worship'),
+        (ORGANIZATION, 'Through a volunteer organization that I am a member of')
+    ]
+
+    NO_SELECTION = 'NO_SELECTION'
+    CARED_HEALTH_CRISIS = 'CARED_HEALTH_CRISIS'
+    HAD_HEALTH_CRISIS = 'HAD_HEALTH_CRISIS'
+    HEALTHCARE_PROVIDER = 'HEALTHCARE_PROVIDER'
+    TECH = 'TECH'
+    FINANCIAL = 'FINANCIAL'
+    CHILD_CARE = 'CHILD_CARE'
+    LEGAL = 'LEGAL'
+    COUNSELING = 'COUNSELING'
+    HEALTH_INSURANCE = 'HEALTH_INSURANCE'
+    OTHER = 'OTHER'
+
+    SKILLS_TO_OFFER = [
+        (NO_SELECTION, 'No Selection'),
+        (CARED_HEALTH_CRISIS, "Cared for someone with a life-threatening health crisis"),
+        (HAD_HEALTH_CRISIS, "I have had a life-threatening health crisis"),
+        (HEALTHCARE_PROVIDER, "Healthcare provider"),
+        (TECH, "Computer, technology, and social media"),
+        (FINANCIAL, "Accounting, financial services"),
+        (CHILD_CARE, 'Provide licensed child care'),
+        (LEGAL, "Legal, attorney"),
+        (COUNSELING, "Counseling"),
+        (HEALTH_INSURANCE, "Skilled in complex health insurance issues"),
+        (OTHER, 'Other')
+    ]
+
     first_name = models.CharField(max_length=30, blank=False)
     last_name = models.CharField(max_length=150, blank=False)
-    phone_number = PhoneField(blank=False)
     email = models.EmailField(max_length=255, unique=True)
+    address_line_1 = models.CharField(max_length=150, blank=True, default='')
+    address_line_2 = models.CharField(max_length=150, blank=True, default='')
+    city = models.CharField(max_length=30, blank=True, default='')
+    state = models.CharField(max_length=30, blank=True, default='')
+    zipcode = models.CharField(max_length=10, blank=True, default='')
+    country = models.CharField(max_length=128, blank=True, default='US')
+    phone_number_1 = models.CharField(max_length=30, blank=True, default='')
+    phone_number_1_type = models.CharField(max_length=30, blank=True, default='')
+    phone_number_2 = models.CharField(max_length=30, blank=True, default='')
+    phone_number_2_type = models.CharField(max_length=30, blank=True, default='')
+    how_learn = models.TextField(blank=True, default='')
+    how_help = models.CharField(
+        max_length=20,
+        choices=HOW_HELP_CHOICES,
+        default=INDIVIDUAL,
+        blank=False,
+    )
+    how_know = models.CharField(
+        max_length=50,
+        choices=HOW_KNOW_CHOICES,
+        default=FRIEND,
+        blank=False,
+    )
+    skills_to_offer = models.CharField(
+        max_length=50,
+        choices=SKILLS_TO_OFFER,
+        default=NO_SELECTION,
+        blank=False,
+    )
     # password field supplied by AbstractBaseUser
     is_staff = models.BooleanField(default=False)
 
     objects = UserManager()
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['first_name', 'last_name', 'phone_number']
+    REQUIRED_FIELDS = ['first_name', 'last_name', 'phone_number_1']
 
     def get_full_name(self):
         full_name = '%s %s' % (self.first_name, self.last_name)

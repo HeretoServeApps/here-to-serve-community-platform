@@ -29,14 +29,29 @@ class Command(BaseCommand):
 
             user_ids = []
             for i in range(1, L+C+M+1):
-                user = User(
+                email = fake.email()
+                User.objects.create_user(
+                    email=email,
                     first_name=fake.first_name(),
                     last_name=fake.last_name(),
-                    phone_number=fake.phone_number(),
-                    email=fake.email()
-                    )
-                user.set_password("password");
-                user.save()
+                    address_line_1=fake.street_address(),
+                    address_line_2='apt 1',
+                    city=fake.city(),
+                    state=fake.state(),
+                    country='US',
+                    zipcode=fake.postcode(),
+                    phone_number_1=fake.phone_number(),
+                    phone_number_1_type='cell',
+                    phone_number_2=fake.phone_number(),
+                    phone_number_2_type='cell',
+                    how_learn='Social Media',
+                    how_help='As an individual volunteer',
+                    how_know='Friend',
+                    skills_to_offer='No Selection',
+                    password='password',
+                )
+
+                user = User.objects.get(email=email)
                 user_ids.append(user.id)
 
             comm_member_roles = []
