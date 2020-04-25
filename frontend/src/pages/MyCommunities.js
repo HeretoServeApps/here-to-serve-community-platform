@@ -78,7 +78,7 @@ export default function MyCommunities() {
                 c.name.toLowerCase().includes(search.toLowerCase())
             )
             .map((c) => (
-              <Columns.Column size={4}>
+              <Columns.Column size={4} key={c.id}>
                 <Link to='/community-home'>
                   <CommunityCard text={c.name} />
                 </Link>
