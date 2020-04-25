@@ -2,7 +2,7 @@ from django.urls import include, path
 from rest_framework import routers
 from rest_framework_jwt.views import obtain_jwt_token
 from . import views
-from .views import current_user, UserList
+from .views import current_user, UserList, ResetPassword
 
 router = routers.DefaultRouter()
 router.register(r'community', views.CommunityViewSet)
@@ -15,5 +15,6 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('token-auth/', obtain_jwt_token),
     path('current_user/', current_user),
-    path('users/', UserList.as_view())
+    path('users/', UserList.as_view()),
+    path('reset-password/', ResetPassword.as_view())
 ]

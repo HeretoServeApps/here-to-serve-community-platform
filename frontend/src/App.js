@@ -10,6 +10,7 @@ import Login from './pages/Login'
 import About from './pages/About'
 import Welcome from './pages/Welcome'
 import ForgotPassword from './pages/ForgotPassword'
+import ResetPassword from './pages/ResetPassword'
 import AccountSettings from './pages/AccountSettings'
 import EmailSettings from './pages/EmailSettings'
 import CommunityHome from './pages/CommunityHome'
@@ -78,6 +79,16 @@ export default function App() {
     []
   )
 
+  const handleForgotPassword = useCallback((email) => {
+    fetch('/reset-password/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email: email }),
+    }).then((res) => res.json())
+  }, [])
+
   return (
     <div>
       <Router>
@@ -107,7 +118,13 @@ export default function App() {
           <Route path='/account-settings' exact component={AccountSettings} />
           <Route path='/email-settings' exact component={EmailSettings} />
           <Route path='/community-home' exact component={CommunityHome} />
-          <Route path='/forgot-password' exact component={ForgotPassword} />
+          <Route
+            path='/forgot-password'
+            render={() => (
+              <ForgotPassword handle_forgot_password={handleForgotPassword} />
+            )}
+          />
+          <Route path='/reset-password' exact component={ResetPassword} />
         </Switch>
       </Router>
     </div>

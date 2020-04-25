@@ -12,7 +12,7 @@ import Container from 'react-bulma-components/lib/components/container'
 import Heading from 'react-bulma-components/lib/components/heading'
 import Notification from 'react-bulma-components/lib/components/notification'
 
-export default function ForgotPassword(props) {
+export default function ResetPassword(props) {
   // Non-bulma styles
   var containerStyle = {
     margin: '5% auto',
@@ -21,13 +21,9 @@ export default function ForgotPassword(props) {
     border: '0.1rem solid #E5E5E5',
     borderRadius: '1rem',
   }
-  var notifStyle = {
-    backgroundColor: 'white',
-    padding: '.25rem .5rem .25rem .5rem',
-    textAlign: 'center',
-  }
 
-  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [passwordConfirm, setPasswordConfirm] = useState('')
 
   let history = useHistory()
   useEffect(() => {
@@ -37,37 +33,37 @@ export default function ForgotPassword(props) {
   })
   return (
     <Container style={containerStyle}>
-      <Heading size={4}>Forgot Password?</Heading>
-      <p className='has-text-grey-light'>
-        Enter your email address to be sent a password reset link.
-      </p>
+      <Heading size={4}>Reset Password</Heading>
+      <p className='has-text-grey-light'>Enter new password to reset.</p>
       <br />
       <Field>
         <Control>
           <Input
-            value={email}
-            type='email'
-            placeholder='Email Address'
-            onChange={(e) => setEmail(e.target.value)}
+            value={password}
+            type='password'
+            placeholder='New Password'
+            onChange={(e) => setPassword(e.target.value)}
           />
         </Control>
       </Field>
-      <Button
-        style={{ marginBottom: '1rem' }}
-        color='primary'
-        fullwidth={true}
-        onClick={() => props.handle_forgot_password(email)}
-      >
-        SEND
+      <Field>
+        <Control>
+          <Input
+            value={passwordConfirm}
+            type='password'
+            placeholder='Confirm New Password'
+            onChange={(e) => setPasswordConfirm(e.target.value)}
+          />
+        </Control>
+      </Field>
+      <Button style={{ marginBottom: '1rem' }} color='primary' fullwidth={true}>
+        RESET
       </Button>
-      <Notification style={notifStyle}>
-        <Link to='/login'>Back to Login</Link>
-      </Notification>
     </Container>
   )
 }
 
-ForgotPassword.propTypes = {
+ResetPassword.propTypes = {
   handle_login: PropTypes.func.isRequired,
   logged_in: PropTypes.bool.isRequired,
 }
