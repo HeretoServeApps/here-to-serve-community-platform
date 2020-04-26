@@ -7,12 +7,16 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .serializers import CommunitySerializer, UserSerializer, UserSerializerWithToken
-from .models import Community, User
+from .models import Community, User, CommunityUserRole
 
 
 class CommunityViewSet(viewsets.ModelViewSet):
     queryset = Community.objects.all().order_by('name')
     serializer_class = CommunitySerializer
+
+    def get_queryset(self):
+        comms = CommunityUserRole.objects.filter(user=self.request.user).values_list('community', flat=True)
+        return Community.objects.filter(id__in=comms)
 
 
 class UsersViewSet(viewsets.ModelViewSet):

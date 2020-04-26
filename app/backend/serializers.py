@@ -1,13 +1,13 @@
 from rest_framework import serializers
 
 from rest_framework_jwt.settings import api_settings
-from .models import Community, User
+from .models import Community, User, CommunityUserRole
 
 
 class CommunitySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Community
-        fields = ('name', 'is_closed', 'description', 'zipcode', 'country')
+        fields = ('id', 'name', 'is_closed', 'description', 'zipcode', 'country')
 
 
 class UserSerializer(serializers.ModelSerializer):
