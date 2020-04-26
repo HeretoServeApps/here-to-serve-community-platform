@@ -83,13 +83,13 @@ class UserManager(BaseUserManager):
             user.save(using=self._db)
         return user
 
-    def create_superuser(self, email, first_name, last_name, phone_number, password=None, commit=True):
+    def create_superuser(self, email, first_name, last_name, phone_number_1, password=None, commit=True):
         user = self.create_user(
             email=self.normalize_email(email),
             password=password,
             first_name=first_name,
             last_name=last_name,
-            phone_number=phone_number,
+            phone_number1=phone_number_1,
             commit=False,
         )
         user.is_staff = True
