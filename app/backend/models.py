@@ -46,9 +46,9 @@ class Community(models.Model):
 
 
 class UserManager(BaseUserManager):
-    def create_user(self, email, first_name, last_name, address_line_1, address_line_2,
-                    city, state, zipcode, country, phone_number_1, phone_number_1_type, phone_number_2,
-                    phone_number_2_type, how_learn, how_help, how_know, skills_to_offer, password=None, commit=True):
+    def create_user(self, email, first_name, last_name, phone_number_1, address_line_1='', address_line_2='', 
+                    city='', state='', zipcode='', country='US', phone_number_1_type='mobile', phone_number_2='',
+                    phone_number_2_type='', how_learn='', how_help='', how_know='', skills_to_offer='', password=None, commit=True):
 
         if not first_name:
             raise ValueError(_('Users must have a first name'))
@@ -89,7 +89,7 @@ class UserManager(BaseUserManager):
             password=password,
             first_name=first_name,
             last_name=last_name,
-            phone_number1=phone_number_1,
+            phone_number_1=phone_number_1,
             commit=False,
         )
         user.is_staff = True
