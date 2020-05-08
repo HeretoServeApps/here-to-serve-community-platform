@@ -23,7 +23,6 @@ export default function MyCommunities() {
       })
       .then(
         (response) => {
-          console.log(response.data)
           setCommunities(response.data)
         },
         (error) => {

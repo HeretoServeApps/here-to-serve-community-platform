@@ -42,7 +42,9 @@ export default function App() {
         })
   }, [])
 
-  const handleSignup = useCallback((firstName, lastName, address, city, country, state, zipcode, phoneNumber, email, password) => {
+  const handleSignup = useCallback((email, password, firstName, lastName, addressLine1, addressLine2, city, country, state, zipcode,
+                                    phoneNumber1, phoneNumber1Type, phoneNumber2, phoneNumber2Type, 
+                                    howLearn, howHelp, howKnow, skillsToOffer) => {
     fetch('/users/', {
       method: 'POST',
       headers: {
@@ -51,6 +53,22 @@ export default function App() {
       body: JSON.stringify({
         email: email,
         password: password,
+        first_name: firstName,
+        last_name: lastName,
+        address_line_1: addressLine1,
+        addressLine2: addressLine2,
+        city: city,
+        country: country,
+        state: state,
+        zipcode: zipcode,
+        phone_number_1: phoneNumber1,
+        phone_number_1_type: phoneNumber1Type,
+        phone_number_2: phoneNumber2,
+        phone_number_2_type: phoneNumber2Type,
+        how_learn: howLearn,
+        how_help: howHelp,
+        how_know: howKnow,
+        skills_to_offer: skillsToOffer,
       }),
     })
       .then((res) => res.json())
