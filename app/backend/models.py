@@ -100,15 +100,15 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser, PermissionsMixin):
 
-    FAMILY = 'FAMILY'
-    FRIEND = 'FRIEND'
-    FRIEND_OF_FRIEND = 'FRIEND_OF_FRIEND'
-    COWORKER = 'COWORKER'
-    ATTEND_SAME_SCHOOL = 'ATTEND_SAME_SCHOOL'
-    NEIGHBOR = 'NEIGHBOR'
-    SOCIAL_MEDIA = 'SOCIAL_MEDIA'
-    WORSHIP_TOGETHER = 'WORSHIP_TOGETHER'
-    DONT_PERSONALLY = 'DONT_PERSONALLY'
+    FAMILY = 'Family'
+    FRIEND = 'Friend'
+    FRIEND_OF_FRIEND = 'Friend of a friend'
+    COWORKER = 'Coworker'
+    ATTEND_SAME_SCHOOL = 'Attend the same school'
+    NEIGHBOR = 'Neighbor'
+    SOCIAL_MEDIA = 'Social Media'
+    WORSHIP_TOGETHER = 'Worship together'
+    DONT_PERSONALLY = 'Do not personally know'
 
     HOW_KNOW_CHOICES = [
         (FAMILY, 'Family'),
@@ -122,9 +122,9 @@ class User(AbstractBaseUser, PermissionsMixin):
         (DONT_PERSONALLY, 'Do not personally know')
     ]
 
-    INDIVIDUAL = 'INDIVIDUAL'
-    HOUSE_OF_WORSHIP = 'HOUSE_OF_WORSHIP'
-    ORGANIZATION = 'ORGANIZATION'
+    INDIVIDUAL = 'As an individual volunteer'
+    HOUSE_OF_WORSHIP = 'Through my house of worship'
+    ORGANIZATION = 'Through a volunteer organization that I am a member of'
 
     HOW_HELP_CHOICES = [
         (INDIVIDUAL, 'As an individual volunteer'),
@@ -132,17 +132,17 @@ class User(AbstractBaseUser, PermissionsMixin):
         (ORGANIZATION, 'Through a volunteer organization that I am a member of')
     ]
 
-    NO_SELECTION = 'NO_SELECTION'
-    CARED_HEALTH_CRISIS = 'CARED_HEALTH_CRISIS'
-    HAD_HEALTH_CRISIS = 'HAD_HEALTH_CRISIS'
-    HEALTHCARE_PROVIDER = 'HEALTHCARE_PROVIDER'
-    TECH = 'TECH'
-    FINANCIAL = 'FINANCIAL'
-    CHILD_CARE = 'CHILD_CARE'
-    LEGAL = 'LEGAL'
-    COUNSELING = 'COUNSELING'
-    HEALTH_INSURANCE = 'HEALTH_INSURANCE'
-    OTHER = 'OTHER'
+    NO_SELECTION = 'No Selection'
+    CARED_HEALTH_CRISIS = 'Cared for someone with a life-threatening health crisis'
+    HAD_HEALTH_CRISIS = 'I have had a life-threatening health crisis'
+    HEALTHCARE_PROVIDER = 'Healthcare provider'
+    TECH = 'Computer, technology, and social media'
+    FINANCIAL = 'Accounting, financial services'
+    CHILD_CARE = 'Provide licensed child care'
+    LEGAL = 'Legal, attorney'
+    COUNSELING = 'Counseling'
+    HEALTH_INSURANCE = 'Skilled in complex health insurance issues'
+    OTHER = 'Other'
 
     SKILLS_TO_OFFER = [
         (NO_SELECTION, 'No Selection'),
@@ -173,19 +173,19 @@ class User(AbstractBaseUser, PermissionsMixin):
     phone_number_2_type = models.CharField(max_length=30, blank=True, default='')
     how_learn = models.TextField(blank=True, default='')
     how_help = models.CharField(
-        max_length=20,
+        max_length=128,
         choices=HOW_HELP_CHOICES,
         default=INDIVIDUAL,
         blank=False,
     )
     how_know = models.CharField(
-        max_length=50,
+        max_length=128,
         choices=HOW_KNOW_CHOICES,
         default=FRIEND,
         blank=False,
     )
     skills_to_offer = models.CharField(
-        max_length=50,
+        max_length=128,
         choices=SKILLS_TO_OFFER,
         default=NO_SELECTION,
         blank=False,
