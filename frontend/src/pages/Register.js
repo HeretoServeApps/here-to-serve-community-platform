@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import countryList from 'react-select-country-list'
 import { useHistory } from 'react-router-dom'
 import PropTypes from 'prop-types'
+import axios from 'axios'
 
 import Container from 'react-bulma-components/lib/components/container'
 import Heading from 'react-bulma-components/lib/components/heading'
@@ -15,6 +16,7 @@ import {
   Textarea,
   Label
 } from 'react-bulma-components/lib/components/form'
+import Autocomplete from '../components/autocomplete'
 
 import CheckboxTermofUse from '../components/checkboxTermofUse'
 
@@ -49,10 +51,10 @@ export default function Register(props) {
   const [howKnow, setHowKnow] = useState('')
   const [skillsToOffer, setSkillsToOffer] = useState('')
   const [validForm, setValidForm] = useState(false)
+  const [communities, setCommunities] = useState([])
 
   let history = useHistory()
 
-  
   useEffect(() => {
     const formValues = [
       firstName,
@@ -96,12 +98,21 @@ export default function Register(props) {
     confirmPassword,
   ])
 
-
+  // If token is verified, logs the user in
   useEffect(() => {
-    if (localStorage.getItem('token') != null || props.logged_in) {
+    if (localStorage.getItem('token') != undefined || props.logged_in) {
       history.push('/my-communities')
     }
   })
+
+  // Get communities without token for the "who would you like to help?" field
+  useEffect(() => {
+    axios.get('/communities/')
+      .then((response) => {
+        console.log(response.data)
+        setCommunities(response.data)
+      })
+  }, [])
 
   return (
     <Container style={containerStyle}>
@@ -199,7 +210,7 @@ export default function Register(props) {
           </Field>
         </Columns.Column>
       </Columns>
-      
+
       <Columns>
         <Columns.Column>
           <Field>
@@ -251,15 +262,13 @@ export default function Register(props) {
         </Columns.Column>
       </Columns>
 
-      <Heading size={6} style={{marginTop: '5%'}}>Community Information</Heading>
+      <Heading size={6} style={{ marginTop: '5%' }}>Community Information</Heading>
       <Field>
-        <Control>
-          <Input
-            value={who}
-            onChange={(e) => setWho(e.target.value)}
-            placeholder='Who would you like to help?'
-          />
-        </Control>
+        <p><strong>Who would you like to help?*</strong></p>
+        <Autocomplete
+          suggestions={communities}
+          set_who={setWho}
+        />
       </Field>
       <Field>
         <Label>How did you know this person?*</Label>
@@ -307,7 +316,7 @@ export default function Register(props) {
           </Select>
         </Control>
       </Field>
-      <Heading size={6} style={{marginTop: '5%'}}>Login Information</Heading>
+      <Heading size={6} style={{ marginTop: '5%' }}>Login Information</Heading>
       <Field>
         <Control>
           <Input
@@ -359,7 +368,7 @@ export default function Register(props) {
           placeholder='How did you hear about us?'
         />
       </Field>
-      <CheckboxTermofUse />
+      <CheckboxTermofUse />     
       <Button
         style={{ marginTop: '1rem' }}
         color='primary'
@@ -382,6 +391,7 @@ export default function Register(props) {
             phoneNumber2,
             phoneNumber2Type,
             howLearn,
+            who,
             howHelp,
             howKnow,
             skillsToOffer,

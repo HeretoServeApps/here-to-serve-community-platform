@@ -45,7 +45,7 @@ export default function App() {
   const handleSignup = useCallback((email, password, firstName, lastName, addressLine1, addressLine2,
                                     city, country, state, zipcode,
                                     phoneNumber1, phoneNumber1Type, phoneNumber2, phoneNumber2Type, 
-                                    howLearn, howHelp, howKnow, skillsToOffer) => {
+                                    howLearn, who, howHelp, howKnow, skillsToOffer) => {
     fetch('/users/', {
       method: 'POST',
       headers: {
@@ -67,6 +67,7 @@ export default function App() {
         phone_number_2: phoneNumber2,
         phone_number_2_type: phoneNumber2Type,
         how_learn: howLearn,
+        who_help: who,
         how_help: howHelp,
         how_know: howKnow,
         skills_to_offer: skillsToOffer,
