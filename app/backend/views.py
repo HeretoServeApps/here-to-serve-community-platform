@@ -9,7 +9,6 @@ from rest_framework.views import APIView
 from .serializers import CommunitySerializer, UserSerializer, UserSerializerWithToken
 from .models import Community, User, CommunityUserRole
 
-
 class CommunityViewSet(viewsets.ModelViewSet):
     queryset = Community.objects.all().order_by('name')
     serializer_class = CommunitySerializer
@@ -47,3 +46,14 @@ class UserList(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class CommunityList(APIView):
+    """
+    Get names of communities without requiring a token.
+    """
+    permission_classes = (permissions.AllowAny, )
+
+    def get(self, request, format=None):
+        communities = [community.name for community in Community.objects.all()]
+        return Response(communities)

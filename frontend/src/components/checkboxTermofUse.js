@@ -1,4 +1,3 @@
-
 import React from 'react'
 import { Checkbox } from 'react-bulma-components/lib/components/form'
 
@@ -10,4 +9,3 @@ const CheckboxTermofUse = () => (
 )
 
 export default CheckboxTermofUse
-  

@@ -48,7 +48,7 @@ class Community(models.Model):
 class UserManager(BaseUserManager):
     def create_user(self, email, first_name, last_name, phone_number_1, address_line_1='', address_line_2='', 
                     city='', state='', zipcode='', country='US', phone_number_1_type='mobile', phone_number_2='',
-                    phone_number_2_type='', how_learn='', how_help='', how_know='', skills_to_offer='', password=None, commit=True):
+                    phone_number_2_type='', who_help='', how_learn='', how_help='', how_know='', skills_to_offer='', password=None, commit=True):
 
         if not first_name:
             raise ValueError(_('Users must have a first name'))
@@ -74,6 +74,7 @@ class UserManager(BaseUserManager):
                 phone_number_1_type=phone_number_1_type,
                 phone_number_2_type=phone_number_2_type,
                 how_learn=how_learn,
+                who_help=who_help,
                 how_help=how_help,
                 how_know=how_know,
                 skills_to_offer=skills_to_offer
@@ -172,6 +173,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     phone_number_2 = models.CharField(max_length=30, blank=True, default='')
     phone_number_2_type = models.CharField(max_length=30, blank=True, default='')
     how_learn = models.TextField(blank=True, default='')
+    who_help = models.CharField(max_length=256, blank=True, default='')
     how_help = models.CharField(
         max_length=128,
         choices=HOW_HELP_CHOICES,
