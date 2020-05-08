@@ -251,6 +251,7 @@ export default function Register(props) {
         </Columns.Column>
       </Columns>
 
+      <Heading size={6} style={{marginTop: '5%'}}>Community Information</Heading>
       <Field>
         <Control>
           <Input
@@ -299,7 +300,7 @@ export default function Register(props) {
             <option>Computer, technology, and social media</option>
             <option>Accounting, financial services</option>
             <option>Provide licensed child care</option>
-            <option>egal, attorney</option>
+            <option>Legal, attorney</option>
             <option>Counseling</option>
             <option>Skilled in complex health insurance issues</option>
             <option>Other</option>
@@ -333,6 +334,7 @@ export default function Register(props) {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder='Password*'
+                type='password'
               />
             </Control>
           </Field>
@@ -344,6 +346,7 @@ export default function Register(props) {
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 placeholder='Confirm Password*'
+                type='password'
               />
             </Control>
           </Field>
