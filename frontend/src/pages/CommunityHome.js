@@ -1,62 +1,74 @@
-import React from "react"
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 
-import Container from 'react-bulma-components/lib/components/container';
+import Container from 'react-bulma-components/lib/components/container'
 import Columns from 'react-bulma-components/lib/components/columns'
 import Heading from 'react-bulma-components/lib/components/heading'
-import SideNavCommunity from '../components/sideNavCommunity'
 import CommunityHomeCard from '../components/communityHomeCard'
-import Button from 'react-bulma-components/lib/components/button';
+import CommunityNavbar from '../components/communityNavbar'
+import Button from 'react-bulma-components/lib/components/button'
+import CheckboxField from '../components/checkboxfield'
+import { Select, Control } from 'react-bulma-components/lib/components/form'
 
 export default function CommunityHome() {
-    var containerStyle = {
-        margin: '5% auto',
-        maxWidth: '80%',
-        padding: '4rem',
-    }
+  const [month, setMonth] = useState('')
+  var containerStyle = {
+    margin: '5% auto',
+    maxWidth: '80%',
+  }
 
-    return (
-        <Container style={containerStyle}>
-            <Columns style={{width: '70%', margin: '0% 0% 1% 14%'}}> 
-                <Columns.Column size={11}>
-                    <Heading size={4} style={{margin:'0% 0% 3% 30%'}}>Community Name</Heading>
-                </Columns.Column>
-                <Columns.Column size={1}>
-                    <div style={{ display: 'flex' }}>
-                        <Button color='primary' style={{ marginRight: '10px' }}>
-                            <Link to='#' style={{ color: 'white' }}>
-                                Edit
-                            </Link>
-                        </Button>
-                        <Button color='primary' style={{ marginRight: '10px' }}>
-                            <Link to='#' style={{ color: 'white' }}>
-                                Add
-                            </Link>
-                        </Button>
-                    </div>
-                </Columns.Column>
-            </Columns>
-            <Columns isMultiline={true}>
-                <Columns.Column size={4}>
-                    <SideNavCommunity />
-                </Columns.Column>
-                <Columns.Column size={7}>
-                    <Columns isMultiline={true}>
-                        <Columns.Column size={6}>
-                            <CommunityHomeCard title="Donate" link='#'/>
-                        </Columns.Column>
-                        <Columns.Column size={6}>
-                            <CommunityHomeCard title="Custom Link 1" link='#'/>
-                        </Columns.Column>
-                        <Columns.Column size={6}>
-                            <CommunityHomeCard title="Custom Link 2" link='#'/>
-                        </Columns.Column>
-                        <Columns.Column size={6}>
-                            <CommunityHomeCard title="Custom Link 3" link='#'/>
-                        </Columns.Column>
-                    </Columns>
-                </Columns.Column>
-            </Columns>
-        </Container>
-    );
+  return (
+    <div>
+      <CommunityNavbar />
+      <Container style={containerStyle}>
+        <Columns isMultiline={true}>
+          <Columns.Column size={3}>
+            <Heading size={4}>Community Name</Heading>
+            <Heading size={6}>About</Heading>
+            <p>About This Community</p>
+            <br />
+            <Heading size={6}>Community Leaders</Heading>
+            <Button color='primary'>
+              <Link to='#' style={{ color: 'white' }}>
+                Edit Community
+              </Link>
+            </Button>
+          </Columns.Column>
+          <Columns.Column size={6}>
+            <Control>
+              <Select
+                onChange={(e) => setMonth(e.target.value)}
+                name='month'
+                value={month}
+              >
+                <option>May 2020</option>
+                <option>April 2020</option>
+                <option>March 2020</option>
+              </Select>
+            </Control>
+            <br />
+            <CommunityHomeCard link='#' />
+            <br />
+            <Heading size={6}>Activity Feed</Heading>
+          </Columns.Column>
+          <Columns.Column size={3}>
+            <Button color='primary' className='is-fullwidth'>
+              <Link to='#' style={{ color: 'white' }}>
+                Create a New Activity
+              </Link>
+            </Button>
+            <br />
+            <Heading size={6}>Upcoming Tasks</Heading>
+            <CommunityHomeCard link='#' />
+            <br />
+            <Heading size={6}>Filter Activity</Heading>
+            <CheckboxField text='Well Wishes' />
+            <CheckboxField text='Announcements' />
+            <CheckboxField text='Message Board' />
+            <CheckboxField text='Photos' />
+          </Columns.Column>
+        </Columns>
+      </Container>
+    </div>
+  )
 }
