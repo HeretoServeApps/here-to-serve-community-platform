@@ -1,11 +1,12 @@
 from django.urls import include, path
 from rest_framework import routers
 from rest_framework_jwt.views import obtain_jwt_token
-from .views import current_user, UserList, CommunityList, UsersViewSet, CommunityViewSet
+from .views import current_user, UserList, CommunityList, UsersViewSet, CommunityViewSet, OneCommunityViewSet
 
 router = routers.DefaultRouter()
 router.register(r'all-users', UsersViewSet)
 router.register(r'community', CommunityViewSet)
+router.register(r'one-community', OneCommunityViewSet)
 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.

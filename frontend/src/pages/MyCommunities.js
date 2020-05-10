@@ -52,7 +52,7 @@ export default function MyCommunities() {
             </Link>
           </Button>
           <Button color='primary' outlined={true}>
-              Edit
+            Edit
           </Button>
         </div>
       </div>
@@ -78,7 +78,16 @@ export default function MyCommunities() {
             )
             .map((c) => (
               <Columns.Column size={4} key={c.id}>
-                <Link to='/community-home'>
+                <Link
+                  to={{
+                    pathname: '/community-home/',
+                    state: {
+                      name: c.name,
+                      zipcode: c.zipcode,
+                      is_closed: c.is_closed,
+                    },
+                  }}
+                >
                   <CommunityCard text={c.name} />
                 </Link>
               </Columns.Column>
