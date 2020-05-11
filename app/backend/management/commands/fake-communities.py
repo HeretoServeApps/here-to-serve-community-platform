@@ -14,7 +14,7 @@ class Command(BaseCommand):
         num_users = options['num_communities']
 
         for i in range(num_users):
-            fake_name = fake.company()
+            fake_name = fake.first_name() + ' ' + fake.last_name()
 
             fake_purpose = random.choice(['Caregiving' 'Eldercare & Long Term care',
                                           'Military & Veterans Families', 'Volunteering', 'Parenting',
