@@ -17,6 +17,15 @@ class CommunityViewSet(viewsets.ModelViewSet):
         comms = CommunityUserRole.objects.filter(user=self.request.user).values_list('community', flat=True)
         return Community.objects.filter(id__in=comms)
 
+class OneCommunityViewSet(viewsets.ModelViewSet):
+    queryset = Community.objects.all().order_by('name')
+    serializer_class = CommunitySerializer
+
+    def get_queryset(self):
+        name = self.request.query_params.get('name')
+        zipcode = self.request.query_params.get('zipcode')
+        is_closed = self.request.query_params.get('is_closed')
+        return Community.objects.filter(name=name, zipcode=zipcode, is_closed=is_closed)
 
 class UsersViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all().order_by('last_name')
@@ -30,7 +39,6 @@ def current_user(request):
     """
     serializer = UserSerializer(request.user)
     return Response(serializer.data)
-
 
 class UserList(APIView):
     """
