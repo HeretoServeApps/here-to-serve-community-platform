@@ -98,10 +98,24 @@ export default function Register(props) {
     confirmPassword,
   ])
 
-  // If token is verified, logs the user in
+  // If token is verified, logs the user in and add them to the community they chose to join
   useEffect(() => {
-    if (localStorage.getItem('token') != undefined || props.logged_in) {
-      history.push('/my-communities')
+    if (localStorage.getItem('token') != undefined) {
+      var formdata = new FormData();
+      formdata.append("community", who);
+      formdata.append("user", email);
+      formdata.append("role", "COMM_MEMBER");
+
+      var requestOptions = {
+        method: 'POST',
+        body: formdata,
+        redirect: 'follow'
+      };
+
+      fetch("/community-role-register/", requestOptions)
+        .then(response => response.text())
+        .then(result => history.push('/my-communities'))
+        .catch(error => console.log('error', error));
     }
   })
 
@@ -109,7 +123,6 @@ export default function Register(props) {
   useEffect(() => {
     axios.get('/communities/')
       .then((response) => {
-        console.log(response.data)
         setCommunities(response.data)
       })
   }, [])
@@ -368,7 +381,7 @@ export default function Register(props) {
           placeholder='How did you hear about us?'
         />
       </Field>
-      <CheckboxTermofUse />     
+      <CheckboxTermofUse />
       <Button
         style={{ marginTop: '1rem' }}
         color='primary'

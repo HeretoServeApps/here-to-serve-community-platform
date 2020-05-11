@@ -40,3 +40,9 @@ class UserSerializerWithToken(serializers.ModelSerializer):
         fields = ('token', 'email', 'password', 'first_name', 'last_name', 'address_line_1', 'address_line_2',
                   'city', 'state', 'zipcode', 'country', 'phone_number_1', 'phone_number_1_type', 'phone_number_2',
                   'phone_number_2_type', 'who_help', 'how_learn', 'how_help', 'how_know', 'skills_to_offer')
+
+
+class CommunityUserRoleSerializer(serializers.ModelSerializer):    
+    class Meta:
+        model = CommunityUserRole
+        fields = ('community', 'user', 'role')

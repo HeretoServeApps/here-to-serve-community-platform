@@ -6,7 +6,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .serializers import CommunitySerializer, UserSerializer, UserSerializerWithToken
+from .serializers import CommunitySerializer, UserSerializer, UserSerializerWithToken, CommunityUserRoleSerializer
 from .models import Community, User, CommunityUserRole
 
 class CommunityViewSet(viewsets.ModelViewSet):
@@ -30,6 +30,11 @@ class OneCommunityViewSet(viewsets.ModelViewSet):
 class UsersViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all().order_by('last_name')
     serializer_class = UserSerializer
+
+
+class CommunityUserRoleViewSet(viewsets.ModelViewSet):
+    queryset = CommunityUserRole.objects.all()
+    serializer_class = CommunityUserRoleSerializer
 
 
 @api_view(['GET'])
@@ -65,3 +70,24 @@ class CommunityList(APIView):
     def get(self, request, format=None):
         communities = [community.name for community in Community.objects.all()]
         return Response(communities)
+
+
+class CommunityUserRoleRegister(APIView):
+    """
+    When a user registers, they can select an existing community to join. This adds the relationship to the database. 
+    """
+    permission_classes = (permissions.AllowAny,)
+
+    def post(self, request, format=None):
+        community_name = request.POST['community']
+        user_email = request.POST['user']
+        community = Community.objects.get(name=community_name).id
+        user = User.objects.get(email=user_email).id
+        request.POST._mutable = True
+        request.POST['community'] = community
+        request.POST['user'] = user
+        serializer = CommunityUserRoleSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

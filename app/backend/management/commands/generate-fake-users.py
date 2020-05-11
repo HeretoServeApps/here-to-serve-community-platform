@@ -1,7 +1,7 @@
 from faker import Faker
 
 from django.core.management.base import BaseCommand, CommandError
-from backend.models import User
+from backend.models import User, Community
 
 class Command(BaseCommand):
     help = 'Generate <N> fake instances of the User model'

@@ -21,7 +21,7 @@ class Command(BaseCommand):
 
         for _ in range(1, N+1):
             community = Community(
-                name=f"{fake.first_name()}'s Fake Community",
+                name=fake.first_name() + ' ' + fake.last_name(),
                 description=fake.text()[0:128],
                 country='US'
             )
@@ -45,7 +45,7 @@ class Command(BaseCommand):
                     phone_number_2=fake.phone_number(),
                     phone_number_2_type='cell',
                     how_learn='Social Media',
-                    who_help=Community.objects.order_by('?').first().name,
+                    who_help=community.name,
                     how_help='As an individual volunteer',
                     how_know='Friend',
                     skills_to_offer='No Selection',
