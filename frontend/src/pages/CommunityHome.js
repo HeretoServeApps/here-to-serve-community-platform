@@ -29,9 +29,9 @@ export default function CommunityHome(props) {
           Authorization: `JWT ${token}`,
         },
         params: {
-          name: props.location.state.name,
-          zipcode: props.location.state.zipcode,
-          is_closed: props.location.state.is_closed,
+          name: localStorage.getItem('community-name'),
+          zipcode: localStorage.getItem('community-zipcode'),
+          is_closed: localStorage.getItem('community-is-closed'),
         },
       })
       .then(
