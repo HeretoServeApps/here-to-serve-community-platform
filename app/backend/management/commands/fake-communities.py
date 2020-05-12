@@ -15,10 +15,6 @@ class Command(BaseCommand):
 
         for i in range(num_users):
             fake_name = fake.first_name() + ' ' + fake.last_name()
-
-            fake_purpose = random.choice(['Caregiving' 'Eldercare & Long Term care',
-                                          'Military & Veterans Families', 'Volunteering', 'Parenting',
-                                          'Schools', 'Religious Groups'])
             fake_is_closed = random.choice([True, False])
             fake_description = fake.sentence()
             fake_country = fake.country()
@@ -26,7 +22,6 @@ class Command(BaseCommand):
 
             c = Community(
                 name=fake_name,
-                purpose=fake_purpose,
                 is_closed=fake_is_closed,
                 description=fake_description,
                 country='US',

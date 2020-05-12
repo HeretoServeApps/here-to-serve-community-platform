@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import axios from 'axios'
 
 import { Input } from 'react-bulma-components/lib/components/form'
@@ -30,6 +30,13 @@ export default function MyCommunities() {
         }
       )
   }, [token])
+
+  const setCommunityInfoInLocalStorage = useCallback((name, zipcode, is_closed) => {
+    localStorage.setItem('community-name', name)
+    localStorage.setItem('community-zipcode', zipcode)
+    localStorage.setItem('community-is-closed', is_closed)
+  }, [])
+
 
   const containerStyle = {
     margin: '5% 10%',
@@ -87,6 +94,7 @@ export default function MyCommunities() {
                       is_closed: c.is_closed,
                     },
                   }}
+                  onClick={() => setCommunityInfoInLocalStorage(c.name, c.zipcode, c.is_closed)}
                 >
                   <CommunityCard text={c.name} />
                 </Link>
