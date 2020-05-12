@@ -11,13 +11,13 @@ const Bar = styled.div`
 `
 
 const links = [
-  'Home',
-  'Calendar',
-  'Announcements',
-  'Ways to Help',
-  'Message Board',
-  'Photo Gallery',
-  'Well Wishes',
+  ['Home', '/community-home'],
+  ['Calendar', '/calendar'],
+  ['Announcements', '/announcements'],
+  ['Ways to Help', '/ways-to-help'],
+  ['Message Board','/message-board'],
+  ['Photo Gallery', '/photo-gallery'],
+  ['Well Wishes', '/well-wishes']
 ]
 
 const activeLink = 'Home'
@@ -30,7 +30,7 @@ const CommunityNavbar = (props) => {
           <Columns>
             {links.map((title) => (
               <Columns.Column>
-                <Link to='#'>
+                <Link to={title[1]}>
                   <Button
                     className={
                       title === activeLink
@@ -38,7 +38,7 @@ const CommunityNavbar = (props) => {
                         : 'is-small is-primary'
                     }
                   >
-                    {title}
+                    {title[0]}
                   </Button>
                 </Link>
               </Columns.Column>
