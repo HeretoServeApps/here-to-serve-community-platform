@@ -228,3 +228,115 @@ class CommunityUserRole(models.Model):
         default=COMM_MEMBER,
         blank=False,
     )
+
+
+class Activity(models.Model):
+
+    GIVING_RIDES = "Giving Rides"
+    PREPARING_MEALS = "Preparing Meals"
+    SHOPPING = "Shopping"
+    CHILDCARE = "Childcare"
+    VISITS = "Visits"
+    COVERAGE = "Coverage"
+    MISCELLANEOUS = "Miscellaneous"
+    EVENT = "Event"
+
+    ACTIVITY_TYPE_CHOICES = [
+        (GIVING_RIDES, "Giving Rides"),
+        (PREPARING_MEALS, "Preparing Meals"),
+        (SHOPPING, "Shopping"),
+        (CHILDCARE, "Childcare"),
+        (VISITS, "Visits"),
+        (COVERAGE, "Coverage"),
+        (MISCELLANEOUS, "Miscellaneous"),
+        (EVENT, "Event")
+    ]
+
+    NEVER = "Never"
+    WEEKLY = "Weekly"
+    CUSTOM = "Custom"
+
+    REPEAT_CHOICES = [
+        (NEVER, "Never"),
+        (WEEKLY, "Weekly"),
+        (CUSTOM, "Custom")
+    ]
+
+    NONE = "None"
+    VEGETARIAN = "Vegetarian"
+    KOSHER = "Kosher"
+    NUT_FREE = "Nut-free"
+    LACTOSE_FREE = "Lactose-free"
+    WHEAT_FREE = "Wheat-free"
+    GLUTEN_FREE = "Gluten-free"
+    SOY_FREE = "Soy-free"
+    SUGAR_FREE = "Sugar-free"
+    LOW_FAT = "Low-fat"
+    LOW_CARB = "Low-carb"
+    LOW_SALT = "Low-salt"
+    OTHER = "Other (see notes)"
+
+    DIETARY_RESTRICT_CHOICES = [
+        (NONE, "None"),
+        (VEGETARIAN, "Vegetarian"),
+        (KOSHER, "Kosher"),
+        (NUT_FREE, "Nut-free"),
+        (LACTOSE_FREE, "Lactose-free"),
+        (WHEAT_FREE, "Wheat-free"),
+        (GLUTEN_FREE, "Gluten-free"),
+        (SOY_FREE, "Soy-free"),
+        (SUGAR_FREE, "Sugar-free"),
+        (LOW_FAT, "Low-fat"),
+        (LOW_CARB, "Low-carb"),
+        (LOW_SALT, "Low-salt"),
+        (OTHER, "Other (see notes)")
+    ]
+
+    community = models.ForeignKey(Community, on_delete=models.CASCADE, null=False, blank=False)
+    role = models.CharField(
+        max_length=20,
+        choices=ACTIVITY_TYPE_CHOICES,
+        default=EVENT,
+        blank=False,
+    )
+    name = models.CharField(max_length=30, blank=False)
+    notes = models.CharField(max_length=200, blank=False)
+    # next two are year, month, date
+    start_date = models.CharField(max_length=30, blank=False)
+    end_date = models.CharField(max_length=30, blank=False)
+
+    repeat = models.CharField(
+        max_length=6,
+        choices=REPEAT_CHOICES,
+        default=NEVER,
+        blank=False,
+    )
+    weekly_repeat_dates = models.CharField(max_length=150, blank=True, default='')
+    custom_repeat_dates = models.CharField(max_length=150, blank=True, default='')
+
+    # next four are not for event
+    est_hours = models.CharField(max_length=10, blank=True, default='')
+    est_minutes = models.CharField(max_length=20, blank=True, default='')
+    volunteers_needed = models.CharField(max_length=20, blank=True, default='')
+    volunteers_signed_up = models.CharField(max_length=20, blank=True, default='')
+
+    # next 6 are giving rides fields
+    pickup_time = models.CharField(max_length=150, blank=True, default='')
+    pickup_location = models.CharField(max_length=150, blank=True, default='')
+    pickup_between = models.CharField(max_length=150, blank=True, default='')
+    arrive_time = models.CharField(max_length=150, blank=True, default='')
+    pickup_location = models.CharField(max_length=150, blank=True, default='')
+    destination = models.CharField(max_length=150, blank=True, default='')
+
+    # next 3 are for preparing meals
+    dietary_restrictions = models.ListCharField(
+        base_field=models.CharField(max_length=20, choices=DIETARY_RESTRICT_CHOICES),
+        blank=False,
+    )
+    delivery_between = models.CharField(max_length=150, blank=True, default='')
+    delivery_location = models.CharField(max_length=150, blank=True, default='')
+
+    # next 3 are for shopping, childcare, visit, coverage, misc, and event
+    start_time = models.CharField(max_length=150, blank=True, default='')
+    end_time = models.CharField(max_length=150, blank=True, default='')
+    location = models.CharField(max_length=150, blank=True, default='')
