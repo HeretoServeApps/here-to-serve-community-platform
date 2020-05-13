@@ -15,7 +15,7 @@ export default function Login(props) {
     // Non-bulma styles
     var containerStyle = {
         margin: '5% auto',
-        maxWidth: "400px",
+        maxWidth: "450px",
         padding: "4rem",
         border: "0.1rem solid #E5E5E5",
         borderRadius: "1rem",
@@ -31,7 +31,7 @@ export default function Login(props) {
 
     let history = useHistory()
     useEffect(() => {
-        if((localStorage.getItem('token') != null) || props.logged_in) {
+        if(localStorage.getItem('token')) {
             history.push('/my-communities')
         }
     })

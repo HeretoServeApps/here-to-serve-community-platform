@@ -82,11 +82,17 @@ export default function App() {
       })
   }, [])
 
+  const handleLogout = useCallback(() => {
+    localStorage.clear()
+    setLoggedIn(false)
+  })
+
   return (
     <div>
       <Router>
         <Header 
           logged_in = {loggedIn}
+          handle_logout = {handleLogout}
         />
         <Switch>
             <Route path="/my-communities" exact component={MyCommunities}/>

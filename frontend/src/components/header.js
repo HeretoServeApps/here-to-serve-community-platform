@@ -34,6 +34,9 @@ const Header = (props) => {
       <Link className={'navbar-item'} to='/account-settings'>
         <Heading size={6}>My Account</Heading>
       </Link>
+      <Link className={'navbar-item'} to='/' onClick={() => props.handle_logout()}>
+        <Heading size={6}>Logout</Heading>
+      </Link>
     </Navbar.Container>
   )
 
@@ -71,4 +74,5 @@ export default Header
 
 Header.propTypes = {
   logged_in: PropTypes.bool.isRequired,
+  handle_logout: PropTypes.func.isRequired
 }
