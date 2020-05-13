@@ -100,7 +100,7 @@ export default function Register(props) {
 
   // If token is verified, logs the user in and add them to the community they chose to join
   useEffect(() => {
-    if (localStorage.getItem('token') != undefined) {
+    if (localStorage.getItem('token')) {
       var formdata = new FormData();
       formdata.append("community", who);
       formdata.append("user", email);
