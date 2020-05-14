@@ -8,6 +8,7 @@ import Container from 'react-bulma-components/lib/components/container'
 import Heading from 'react-bulma-components/lib/components/heading'
 import Columns from 'react-bulma-components/lib/components/columns'
 import Button from 'react-bulma-components/lib/components/button'
+import Notification from 'react-bulma-components/lib/components/notification'
 import {
   Field,
   Control,
@@ -28,6 +29,12 @@ export default function Register(props) {
     padding: '4rem',
     border: '0.1rem solid #E5E5E5',
     borderRadius: '1rem',
+  }
+  var notifStyle = {
+    backgroundColor: 'white',
+    padding: '.25rem .5rem .25rem .5rem',
+    marginTop: '10px',
+    textAlign: 'center',
   }
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
@@ -354,6 +361,7 @@ export default function Register(props) {
             <Control>
               <Input
                 value={password}
+                type='password'
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder='Password*'
                 type='password'
@@ -366,6 +374,7 @@ export default function Register(props) {
             <Control>
               <Input
                 value={confirmPassword}
+                type='password'
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 placeholder='Confirm Password*'
                 type='password'
@@ -413,6 +422,9 @@ export default function Register(props) {
       >
         CREATE ACCOUNT
       </Button>
+      <Notification style={notifStyle}>
+        Already have an account? <a href='/login'>Log in here.</a>
+      </Notification>
     </Container>
   )
 }
