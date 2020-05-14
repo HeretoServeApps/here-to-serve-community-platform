@@ -81,7 +81,7 @@ export default function CommunityHome(props) {
           </Columns.Column>
           <Columns.Column size={3}>
             <Button color='primary' className='is-fullwidth'>
-              <Link to='#' style={{ color: 'white' }}>
+              <Link to='/create-new-activity' style={{ color: 'white' }}>
                 Create a New Activity
               </Link>
             </Button>
