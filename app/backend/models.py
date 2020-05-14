@@ -4,7 +4,7 @@ from django_countries.fields import CountryField
 from django.contrib.auth.models import ( AbstractBaseUser, BaseUserManager, PermissionsMixin )
 from phone_field import PhoneField
 from django.conf import settings
-
+import json
 
 class CustomSection(models.Model):
     # Choices for type
@@ -230,6 +230,16 @@ class CommunityUserRole(models.Model):
     )
 
 
+# for activity class
+def compute_display_type(role, vn, vs):
+    if not role == 'Event':
+        return 'Event'
+    elif vn > vs:
+        return 'Help Needed'
+    else:
+        return 'Needs Met'
+
+
 class Activity(models.Model):
 
     GIVING_RIDES = "Giving Rides"
@@ -320,6 +330,11 @@ class Activity(models.Model):
     volunteers_needed = models.CharField(max_length=20, blank=True, default='')
     volunteers_signed_up = models.CharField(max_length=20, blank=True, default='')
 
+    # might be wonky w current char fields
+
+    display_type = models.CharField(max_length=12, default=compute_display_type(role, volunteers_needed,
+                                                                volunteers_signed_up), blank=True)
+
     # next 6 are giving rides fields
     pickup_time = models.CharField(max_length=150, blank=True, default='')
     pickup_location = models.CharField(max_length=150, blank=True, default='')
@@ -329,10 +344,14 @@ class Activity(models.Model):
     destination = models.CharField(max_length=150, blank=True, default='')
 
     # next 3 are for preparing meals
-    dietary_restrictions = models.ListCharField(
-        base_field=models.CharField(max_length=20, choices=DIETARY_RESTRICT_CHOICES),
-        blank=False,
-    )
+    dietary_restrictions = models.CharField(max_length=500, choices=DIETARY_RESTRICT_CHOICES, blank=True, default='')
+
+    def set_dietary_rest(self, x):
+        self.dietary_restrictions = json.dumps(x)
+
+    def get_dietary_rest(self):
+        return json.loads(self.dietary_restrictions)
+
     delivery_between = models.CharField(max_length=150, blank=True, default='')
     delivery_location = models.CharField(max_length=150, blank=True, default='')
 
