@@ -76,7 +76,7 @@ class CommunityUserRoleRegister(APIView):
     """
     When a user registers, they can select an existing community to join. This adds the relationship to the database. 
     """
-    permission_classes = (permissions.AllowAny,)
+    permission_classes = (permissions.AllowAny, )
 
     def post(self, request, format=None):
         community_name = request.POST['community']
