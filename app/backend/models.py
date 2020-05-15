@@ -228,3 +228,26 @@ class CommunityUserRole(models.Model):
         default=COMM_MEMBER,
         blank=False,
     )
+
+
+class Announcement(models.Model):
+    TRUE = 'True'
+    FALSE = 'False'
+
+    SHOW_CHOICES = [
+        (TRUE, 'True'),
+        (FALSE, 'False')
+    ]
+
+    subject = models.CharField(max_length=30, blank=False)
+    message = models.CharField(max_length=120, blank=False)
+    # making date/time and show strings for now
+    date_time = models.CharField(max_length=30, blank=False)
+    show_on_page = models.CharField(
+        max_length=5,
+        choices=SHOW_CHOICES,
+        default=TRUE,
+        blank=False,
+    )
+    community = models.ForeignKey(Community, on_delete=models.CASCADE, null=False, blank=False)
+
