@@ -31,6 +31,7 @@ export default function Login(props) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [rememberMe, setRememberMe] = useState(false)
+  const [validForm, setValidForm] = useState(false)
 
   let history = useHistory()
   useEffect(() => {
@@ -42,6 +43,18 @@ export default function Login(props) {
   function handleRememberMe() {
     setRememberMe(!rememberMe)
   }
+
+  useEffect(() => {
+    const formValues = [
+      email,
+      password
+    ]
+    const notValidForm =
+      formValues.some((formVal) => {
+        return formVal === ''
+      })
+    setValidForm(notValidForm)
+  }, [email, password])
 
   return (
     <Container style={containerStyle}>
@@ -73,6 +86,7 @@ export default function Login(props) {
         color='primary'
         fullwidth={true}
         onClick={() => props.handle_login(email, password, rememberMe)}
+        disabled={validForm}
       >
         LOGIN
       </Button>

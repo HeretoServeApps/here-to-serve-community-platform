@@ -15,7 +15,7 @@ import AccountSettings from './pages/AccountSettings'
 import EmailSettings from './pages/EmailSettings'
 import CommunityHome from './pages/CommunityHome'
 import CalendarPage from './pages/CalendarPage'
-
+import PasswordResetConfirmation from './pages/PasswordResetConfirmation'
 
 export default function App() {
   const [loggedIn, setLoggedIn] = useState(
@@ -134,6 +134,7 @@ export default function App() {
             () => (<ForgotPassword handle_forgot_password={handleForgotPassword} />)}
           />
           <Route path='/reset-password' exact component={ResetPassword} />
+          <Route path='/reset-password-confirmation' exact component={PasswordResetConfirmation} />
         </Switch>
       </Router>
     </div>

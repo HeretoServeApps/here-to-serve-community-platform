@@ -7,7 +7,7 @@ from .models import Community, User, CommunityUserRole
 class CommunitySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Community
-        fields = ('id', 'name', 'is_closed', 'description', 'zipcode', 'country')
+        fields = ('name', 'is_closed', 'description', 'zipcode', 'country')
 
 
 class UserSerializer(serializers.ModelSerializer):

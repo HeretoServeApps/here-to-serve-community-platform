@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import PropTypes from 'prop-types'
 
@@ -30,6 +30,7 @@ export default function ForgotPassword(props) {
   const [email, setEmail] = useState('')
 
   let history = useHistory()
+
   useEffect(() => {
     if (props.logged_in) {
       history.push('/my-communities')
@@ -57,8 +58,10 @@ export default function ForgotPassword(props) {
         style={{ marginBottom: '1rem' }}
         color='primary'
         fullwidth={true}
-        onClick={() => props.handle_forgot_password(email)}
-      >
+        onClick={() => {
+          props.handle_forgot_password(email);
+          history.push('/reset-password-confirmation');
+        }}>
         SEND
       </Button>
       <Notification style={notifStyle}>
@@ -69,6 +72,5 @@ export default function ForgotPassword(props) {
 }
 
 ForgotPassword.propTypes = {
-  handle_login: PropTypes.func.isRequired,
   logged_in: PropTypes.bool.isRequired,
 }

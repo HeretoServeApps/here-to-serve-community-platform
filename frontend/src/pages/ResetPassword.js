@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Link, useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import PropTypes from 'prop-types'
 
 import {
@@ -10,7 +10,6 @@ import {
 import Button from 'react-bulma-components/lib/components/button'
 import Container from 'react-bulma-components/lib/components/container'
 import Heading from 'react-bulma-components/lib/components/heading'
-import Notification from 'react-bulma-components/lib/components/notification'
 
 export default function ResetPassword(props) {
   // Non-bulma styles
@@ -24,6 +23,7 @@ export default function ResetPassword(props) {
 
   const [password, setPassword] = useState('')
   const [passwordConfirm, setPasswordConfirm] = useState('')
+  const [validForm, setValidForm] = useState(false)
 
   let history = useHistory()
   useEffect(() => {
@@ -31,6 +31,20 @@ export default function ResetPassword(props) {
       history.push('/my-communities')
     }
   })
+
+  useEffect(() => {
+    const formValues = [
+      password,
+      passwordConfirm
+    ]
+    const notValidForm =
+      formValues.some((formVal) => {
+        return formVal === ''
+      }) ||
+      password !== passwordConfirm
+    setValidForm(notValidForm)
+  }, [password, passwordConfirm])
+
   return (
     <Container style={containerStyle}>
       <Heading size={4}>Reset Password</Heading>
@@ -56,7 +70,7 @@ export default function ResetPassword(props) {
           />
         </Control>
       </Field>
-      <Button style={{ marginBottom: '1rem' }} color='primary' fullwidth={true}>
+      <Button style={{ marginBottom: '1rem' }} color='primary' fullwidth={true} disabled={validForm}>
         RESET
       </Button>
     </Container>
@@ -64,6 +78,5 @@ export default function ResetPassword(props) {
 }
 
 ResetPassword.propTypes = {
-  handle_login: PropTypes.func.isRequired,
   logged_in: PropTypes.bool.isRequired,
 }

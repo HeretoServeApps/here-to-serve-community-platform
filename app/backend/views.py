@@ -35,6 +35,7 @@ class OneCommunityViewSet(viewsets.ModelViewSet):
         is_closed = self.request.query_params.get('is_closed')
         return Community.objects.filter(name=name, zipcode=zipcode, is_closed=is_closed)
 
+
 class UsersViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all().order_by('last_name')
     serializer_class = UserSerializer
