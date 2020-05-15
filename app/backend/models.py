@@ -1,10 +1,11 @@
+import json, uuid
+
 from django.db import models
 from django.contrib.auth.models import User
 from django_countries.fields import CountryField
 from django.contrib.auth.models import ( AbstractBaseUser, BaseUserManager, PermissionsMixin )
 from phone_field import PhoneField
 from django.conf import settings
-
 
 class CustomSection(models.Model):
     # Choices for type
@@ -228,3 +229,91 @@ class CommunityUserRole(models.Model):
         default=COMM_MEMBER,
         blank=False,
     )
+
+class Activity(models.Model):
+
+    GIVING_RIDES = "Giving Rides"
+    PREPARING_MEALS = "Preparing Meals"
+    SHOPPING = "Shopping"
+    CHILDCARE = "Childcare"
+    VISITS = "Visits"
+    COVERAGE = "Coverage"
+    MISCELLANEOUS = "Miscellaneous"
+    OCCASSION = "Occassion"
+
+    ACTIVITY_TYPE_CHOICES = [
+        (GIVING_RIDES, "Giving Rides"),
+        (PREPARING_MEALS, "Preparing Meals"),
+        (SHOPPING, "Shopping"),
+        (CHILDCARE, "Childcare"),
+        (VISITS, "Visits"),
+        (COVERAGE, "Coverage"),
+        (MISCELLANEOUS, "Miscellaneous"),
+        (OCCASSION, "Occassion")
+    ]
+
+    community = models.ForeignKey(Community, on_delete=models.CASCADE)
+    activity_type = models.CharField(
+        max_length=20,
+        choices=ACTIVITY_TYPE_CHOICES,
+        default=OCCASSION
+    )
+    name = models.CharField(max_length=30)
+    description = models.TextField(blank=True, default='')
+
+    # next two are year, month, date
+    start_date = models.DateField()
+    end_date = models.DateField()
+
+    is_recurring = models.BooleanField(default=False)
+    # event(s) in an event batch will share a unique ID 
+    # non-recurring events will be the only event in their batch
+    # used to relate and manage recurring events
+    event_batch = models.UUIDField(default=uuid.uuid4)
+
+    est_hours = models.IntegerField(blank=True, null=True)
+    est_minutes = models.IntegerField(blank=True, null=True)
+    volunteers_needed = models.IntegerField(blank=True, null=True)
+    volunteers_signed_up = models.IntegerField(blank=True, null=True)
+
+
+class RideActivity(models.Model):
+    activity = models.OneToOneField(
+        Activity,
+        on_delete=models.CASCADE,
+        primary_key=True,
+    )
+    pickup_time = models.TimeField(blank=True, null=True)
+    # pickup_time_buffer will serve as the latest "pick up by" time
+    pickup_time_buffer  = models.TimeField(blank=True, null=True)
+    arrive_time = models.TimeField(blank=True, null=True)
+    pickup_location = models.CharField(max_length=150, blank=True, default='')
+    destination_location = models.CharField(max_length=150, blank=True, default='')
+
+
+class MealActivity(models.Model):
+    activity = models.OneToOneField(
+        Activity,
+        on_delete=models.CASCADE,
+        primary_key=True,
+    )
+    delivery_time = models.TimeField(blank=True, null=True)
+    delivery_location = models.CharField(max_length=150, blank=True, default='')
+    dietary_restrictions = models.CharField(max_length=500, blank=True, default='None')
+
+    def set_dietary_restrictions(self, restrs):
+        self.dietary_restrictions = json.dumps(restrs)
+
+    def get_dietary_restrictions(self):
+        return json.loads(self.dietary_restrictions)
+
+
+class EventActivity(models.Model):
+    activity = models.OneToOneField(
+        Activity,
+        on_delete=models.CASCADE,
+        primary_key=True,
+    )
+    start_time = models.TimeField(blank=True, null=True)
+    end_time = models.TimeField(blank=True, null=True)
+    location = models.CharField(max_length=150, blank=True, default='')
