@@ -1,10 +1,11 @@
+import json, uuid
+
 from django.db import models
 from django.contrib.auth.models import User
 from django_countries.fields import CountryField
 from django.contrib.auth.models import ( AbstractBaseUser, BaseUserManager, PermissionsMixin )
 from phone_field import PhoneField
 from django.conf import settings
-import json
 
 class CustomSection(models.Model):
     # Choices for type
@@ -229,17 +230,6 @@ class CommunityUserRole(models.Model):
         blank=False,
     )
 
-
-# for activity class
-def compute_display_type(role, vn, vs):
-    if not role == 'Event':
-        return 'Event'
-    elif vn > vs:
-        return 'Help Needed'
-    else:
-        return 'Needs Met'
-
-
 class Activity(models.Model):
 
     GIVING_RIDES = "Giving Rides"
@@ -249,7 +239,7 @@ class Activity(models.Model):
     VISITS = "Visits"
     COVERAGE = "Coverage"
     MISCELLANEOUS = "Miscellaneous"
-    EVENT = "Event"
+    OCCASSION = "Occassion"
 
     ACTIVITY_TYPE_CHOICES = [
         (GIVING_RIDES, "Giving Rides"),
@@ -259,103 +249,71 @@ class Activity(models.Model):
         (VISITS, "Visits"),
         (COVERAGE, "Coverage"),
         (MISCELLANEOUS, "Miscellaneous"),
-        (EVENT, "Event")
+        (OCCASSION, "Occassion")
     ]
 
-    NEVER = "Never"
-    WEEKLY = "Weekly"
-    CUSTOM = "Custom"
-
-    REPEAT_CHOICES = [
-        (NEVER, "Never"),
-        (WEEKLY, "Weekly"),
-        (CUSTOM, "Custom")
-    ]
-
-    NONE = "None"
-    VEGETARIAN = "Vegetarian"
-    KOSHER = "Kosher"
-    NUT_FREE = "Nut-free"
-    LACTOSE_FREE = "Lactose-free"
-    WHEAT_FREE = "Wheat-free"
-    GLUTEN_FREE = "Gluten-free"
-    SOY_FREE = "Soy-free"
-    SUGAR_FREE = "Sugar-free"
-    LOW_FAT = "Low-fat"
-    LOW_CARB = "Low-carb"
-    LOW_SALT = "Low-salt"
-    OTHER = "Other (see notes)"
-
-    DIETARY_RESTRICT_CHOICES = [
-        (NONE, "None"),
-        (VEGETARIAN, "Vegetarian"),
-        (KOSHER, "Kosher"),
-        (NUT_FREE, "Nut-free"),
-        (LACTOSE_FREE, "Lactose-free"),
-        (WHEAT_FREE, "Wheat-free"),
-        (GLUTEN_FREE, "Gluten-free"),
-        (SOY_FREE, "Soy-free"),
-        (SUGAR_FREE, "Sugar-free"),
-        (LOW_FAT, "Low-fat"),
-        (LOW_CARB, "Low-carb"),
-        (LOW_SALT, "Low-salt"),
-        (OTHER, "Other (see notes)")
-    ]
-
-    community = models.ForeignKey(Community, on_delete=models.CASCADE, null=False, blank=False)
-    role = models.CharField(
+    community = models.ForeignKey(Community, on_delete=models.CASCADE)
+    activity_type = models.CharField(
         max_length=20,
         choices=ACTIVITY_TYPE_CHOICES,
-        default=EVENT,
-        blank=False,
+        default=OCCASSION
     )
-    name = models.CharField(max_length=30, blank=False)
-    notes = models.CharField(max_length=200, blank=False)
+    name = models.CharField(max_length=30)
+    description = models.TextField(blank=True, default='')
+
     # next two are year, month, date
-    start_date = models.CharField(max_length=30, blank=False)
-    end_date = models.CharField(max_length=30, blank=False)
+    start_date = models.DateField()
+    end_date = models.DateField()
 
-    repeat = models.CharField(
-        max_length=6,
-        choices=REPEAT_CHOICES,
-        default=NEVER,
-        blank=False,
+    is_recurring = models.BooleanField(default=False)
+    # event(s) in an event batch will share a unique ID 
+    # non-recurring events will be the only event in their batch
+    # used to relate and manage recurring events
+    event_batch = models.UUIDField(default=uuid.uuid4)
+
+    est_hours = models.IntegerField(blank=True, null=True)
+    est_minutes = models.IntegerField(blank=True, null=True)
+    volunteers_needed = models.IntegerField(blank=True, null=True)
+    volunteers_signed_up = models.IntegerField(blank=True, null=True)
+
+
+class RideActivity(models.Model):
+    activity = models.OneToOneField(
+        Activity,
+        on_delete=models.CASCADE,
+        primary_key=True,
     )
-    weekly_repeat_dates = models.CharField(max_length=150, blank=True, default='')
-    custom_repeat_dates = models.CharField(max_length=150, blank=True, default='')
-
-    # next four are not for event
-    est_hours = models.CharField(max_length=10, blank=True, default='')
-    est_minutes = models.CharField(max_length=20, blank=True, default='')
-    volunteers_needed = models.CharField(max_length=20, blank=True, default='')
-    volunteers_signed_up = models.CharField(max_length=20, blank=True, default='')
-
-    # might be wonky w current char fields
-
-    display_type = models.CharField(max_length=12, default=compute_display_type(role, volunteers_needed,
-                                                                volunteers_signed_up), blank=True)
-
-    # next 6 are giving rides fields
-    pickup_time = models.CharField(max_length=150, blank=True, default='')
+    pickup_time = models.TimeField(blank=True, null=True)
+    # pickup_time_buffer will serve as the latest "pick up by" time
+    pickup_time_buffer  = models.TimeField(blank=True, null=True)
+    arrive_time = models.TimeField(blank=True, null=True)
     pickup_location = models.CharField(max_length=150, blank=True, default='')
-    pickup_between = models.CharField(max_length=150, blank=True, default='')
-    arrive_time = models.CharField(max_length=150, blank=True, default='')
-    pickup_location = models.CharField(max_length=150, blank=True, default='')
-    destination = models.CharField(max_length=150, blank=True, default='')
+    destination_location = models.CharField(max_length=150, blank=True, default='')
 
-    # next 3 are for preparing meals
-    dietary_restrictions = models.CharField(max_length=500, choices=DIETARY_RESTRICT_CHOICES, blank=True, default='')
 
-    def set_dietary_rest(self, x):
-        self.dietary_restrictions = json.dumps(x)
+class MealActivity(models.Model):
+    activity = models.OneToOneField(
+        Activity,
+        on_delete=models.CASCADE,
+        primary_key=True,
+    )
+    delivery_time = models.TimeField(blank=True, null=True)
+    delivery_location = models.CharField(max_length=150, blank=True, default='')
+    dietary_restrictions = models.CharField(max_length=500, blank=True, default='None')
 
-    def get_dietary_rest(self):
+    def set_dietary_restrictions(self, restrs):
+        self.dietary_restrictions = json.dumps(restrs)
+
+    def get_dietary_restrictions(self):
         return json.loads(self.dietary_restrictions)
 
-    delivery_between = models.CharField(max_length=150, blank=True, default='')
-    delivery_location = models.CharField(max_length=150, blank=True, default='')
 
-    # next 3 are for shopping, childcare, visit, coverage, misc, and event
-    start_time = models.CharField(max_length=150, blank=True, default='')
-    end_time = models.CharField(max_length=150, blank=True, default='')
+class EventActivity(models.Model):
+    activity = models.OneToOneField(
+        Activity,
+        on_delete=models.CASCADE,
+        primary_key=True,
+    )
+    start_time = models.TimeField(blank=True, null=True)
+    end_time = models.TimeField(blank=True, null=True)
     location = models.CharField(max_length=150, blank=True, default='')
