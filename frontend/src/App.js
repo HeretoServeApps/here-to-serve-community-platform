@@ -37,6 +37,7 @@ export default function App() {
       .then(json => {
         localStorage.setItem('token', json.token)
         localStorage.setItem('rememberMe', rememberMe)
+        localStorage.setItem('email', email)
         JSON.stringify(json.token) ? setLoggedIn(true) : setLoggedIn(false)
       },
         (error) => {
@@ -78,6 +79,7 @@ export default function App() {
       .then((res) => res.json())
       .then((json) => {
         localStorage.setItem('token', json.token)
+        localStorage.setItem('email', email)
         JSON.stringify(json.token) ? setLoggedIn(true) : setLoggedIn(false)
       })
   }, [])

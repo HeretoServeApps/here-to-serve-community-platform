@@ -43,12 +43,13 @@ export default function CreateCommunity() {
   let history = useHistory()
 
   const handleSubmit = useCallback(() => {
+    // First add the new community to the database
     const param = JSON.stringify({
       'name': name,
       'description': description,
       'zipcode': zipcode,
       'country': country,
-      'is_closed': isClosed
+      'is_closed': isClosed.toString()
     })
     axios.post('/community/', param, {
         headers: {
@@ -58,13 +59,27 @@ export default function CreateCommunity() {
       })
       .then(
         (response) => {
-          console.log(response)
+          // After user creates the community, they are added as a community leader
+          var formdata = new FormData();
+          formdata.append("community", name);
+          formdata.append("user", localStorage.getItem('email'));
+          formdata.append("role", "COMM_LEADER");
+    
+          var requestOptions = {
+            method: 'POST',
+            body: formdata,
+            redirect: 'follow'
+          };
+    
+          fetch("/community-role-register/", requestOptions)
+            .then(response => response.text())
+            .then(result => history.push('/my-communities'))
+            .catch(error => console.log('error', error));
         },
         (error) => {
           console.log(error)
         }
       )
-      history.push('/my-communities')
   }, [name, description, zipcode, country, isClosed, token])
 
   return (
@@ -129,7 +144,7 @@ export default function CreateCommunity() {
       <br />
       <Field className='has-text-grey'>
         <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
-          <Checkbox style={{ marginRight: '10px' }} onChange={e => setIsClosed(e.target.value)}/>
+          <Checkbox style={{ marginRight: '10px' }} onChange={e => setIsClosed(e.target.checked)}/>
           <p>Allow friends and family to find this community by name and/or postal code.</p>
         </div>
         <CheckboxField text={'Allow all members to send invitations.'} />
