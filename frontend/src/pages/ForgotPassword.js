@@ -60,7 +60,7 @@ export default function ForgotPassword(props) {
         fullwidth={true}
         onClick={() => {
           props.handle_forgot_password(email);
-          history.push('/reset-password-confirmation');
+          history.push('/forgot-password-confirmation');
         }}>
         SEND
       </Button>

@@ -59,7 +59,7 @@ export default function ResetPassword(props) {
       axios.post('/reset-password/confirm/', body, config)
       .then(
         (response) => {
-          history.push('/login')
+          history.push('/reset-password-confirmation')
         },
         (error) => {
           console.log(error)

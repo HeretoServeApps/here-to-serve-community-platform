@@ -2,7 +2,7 @@ import React from 'react'
 
 import Container from 'react-bulma-components/lib/components/container'
 
-export default function PasswordResetConfirmation() {
+export default function ForgotPasswordConfirm() {
   // Non-bulma styles
   var containerStyle = {
     margin: '5% auto',
@@ -14,7 +14,7 @@ export default function PasswordResetConfirmation() {
 
   return (
     <Container style={containerStyle}>
-      <p className='has-text-grey-light'>
+      <p>
         Please check your email for a password reset link. 
         If you did not receive this email, please try again <a href="/forgot-password">here</a>. 
       </p>
