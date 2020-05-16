@@ -46,3 +46,4 @@ class CommunityUserRoleSerializer(serializers.ModelSerializer):
     class Meta:
         model = CommunityUserRole
         fields = ('community', 'user', 'role')
+

@@ -9,11 +9,12 @@ from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 
 from rest_framework import viewsets, permissions, status
+from rest_framework import generics
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .serializers import CommunitySerializer, UserSerializer, UserSerializerWithToken, CommunityUserRoleSerializer
+from .serializers import CommunitySerializer, UserSerializer, CommunityUserRoleSerializer, UserSerializerWithToken
 from .models import Community, User, CommunityUserRole
 from django.conf import settings 
 
@@ -104,7 +105,7 @@ class CommunityUserRoleRegister(APIView):
 
 class ResetPassword(APIView):
     permission_classes = (permissions.AllowAny,)
-
+    
     def post(self, request, format=None):
         data = request.data
         email = data["email"]
@@ -138,5 +139,3 @@ class ResetPassword(APIView):
         active_users = get_user_model()._default_manager.filter(
             email__iexact=email)
         return (u for u in active_users if u.has_usable_password())
-
-

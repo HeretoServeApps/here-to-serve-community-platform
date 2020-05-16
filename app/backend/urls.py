@@ -20,5 +20,5 @@ urlpatterns = [
     path('users/', views.UserList.as_view()),
     path('communities/', views.CommunityList.as_view()),
     path('community-role-register/', views.CommunityUserRoleRegister.as_view()),
-    path('reset-password/', views.ResetPassword.as_view())
+    path('reset-password/', views.ResetPassword.as_view()),
 ]

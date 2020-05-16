@@ -9,16 +9,7 @@ import ToggleSwitch from '../components/switch'
 
 import { Link } from 'react-router-dom'
 import Button from 'react-bulma-components/lib/components/button'
-import Media from 'react-bulma-components/lib/components/media'
-import Content from 'react-bulma-components/lib/components/content'
-import Card from 'react-bulma-components/lib/components/card'
-import styled from 'styled-components'
 
-
-const ButtonBg = styled.div`
-  background-color: white;
-  border-radius: 5px;
-`
 
 export default function AccountSettings() {
     var containerStyle = {
