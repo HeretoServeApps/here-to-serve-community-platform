@@ -7,13 +7,15 @@ from .models import Community, User, CommunityUserRole, Activity, EventActivity,
 class CommunitySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Community
-        fields = ('name', 'is_closed', 'description', 'zipcode', 'country')
+        fields = ('id', 'name', 'is_closed', 'description', 'zipcode', 'country')
 
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('email', )
+        fields = ('email', 'first_name', 'last_name', 'phone_number_1', 'phone_number_1_type',
+                  'phone_number_2', 'phone_number_2_type', 'address_line_1', 'address_line_2', 
+                  'city', 'zipcode', 'state', 'country')
 
 
 class UserSerializerWithToken(serializers.ModelSerializer):
