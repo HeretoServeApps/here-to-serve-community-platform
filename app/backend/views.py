@@ -7,6 +7,9 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.template import loader
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
+from django.utils.decorators import method_decorator
+from django.views.decorators.debug import sensitive_post_parameters
+
 
 from rest_framework import viewsets, permissions, status
 from rest_framework import generics
@@ -14,9 +17,14 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .serializers import CommunitySerializer, UserSerializer, CommunityUserRoleSerializer, UserSerializerWithToken
+from .serializers import (
+    CommunitySerializer, UserSerializer, CommunityUserRoleSerializer, UserSerializerWithToken, PasswordResetConfirmSerializer
+)
 from .models import Community, User, CommunityUserRole
 from django.conf import settings 
+
+
+sensitive_post_parameters_m = method_decorator(sensitive_post_parameters())
 
 class CommunityViewSet(viewsets.ModelViewSet):
     queryset = Community.objects.all().order_by('name')
@@ -105,7 +113,7 @@ class CommunityUserRoleRegister(APIView):
 
 class ResetPassword(APIView):
     permission_classes = (permissions.AllowAny,)
-    
+
     def post(self, request, format=None):
         data = request.data
         email = data["email"]
@@ -139,3 +147,20 @@ class ResetPassword(APIView):
         active_users = get_user_model()._default_manager.filter(
             email__iexact=email)
         return (u for u in active_users if u.has_usable_password())
+
+
+class PasswordResetConfirmView(generics.GenericAPIView):
+    serializer_class = PasswordResetConfirmSerializer
+    permission_classes = (permissions.AllowAny,)
+
+    @sensitive_post_parameters_m
+    def dispatch(self, *args, **kwargs):
+        return super(PasswordResetConfirmView, self).dispatch(*args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(
+            {"detail": ("Password has been reset with the new password.")}
+       )

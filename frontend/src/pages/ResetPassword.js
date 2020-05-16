@@ -25,6 +25,8 @@ export default function ResetPassword(props) {
   const [password, setPassword] = useState('')
   const [passwordConfirm, setPasswordConfirm] = useState('')
   const [email, setEmail] = useState('')
+  const [token, setToken] = useState('')
+  const [uid, setUid] = useState('')
   const [validForm, setValidForm] = useState(false)
 
   let history = useHistory()
@@ -34,21 +36,38 @@ export default function ResetPassword(props) {
     }
   })
 
+  // Parse the token and uid from the URL sent to user's email so that we can access the user in the backend
+  useEffect(() => {
+    var url = window.location.search
+    var uid = new URLSearchParams(url).get('uid')
+    var token = new URLSearchParams(url).get('token')
+    setToken(token)
+    setUid(uid)
+  }, [])
+
   const handleChangePassword = useCallback((password) => {
-    axios.put('/reset-password/', JSON.stringify({'new_password': password, 'email': email}), {
+    const config = {
       headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-    .then(
-      (response) => {
-        history.push('/login')
-      },
-      (error) => {
-        console.log(error)
-      }
-    )
+        "Content-Type": "application/json"
+        }
+      };
+      const body = JSON.stringify({ 
+          new_password1: password,
+          new_password2: passwordConfirm,
+          uid: uid,
+          token: token,
+      })
+      axios.post('/reset-password/confirm/', body, config)
+      .then(
+        (response) => {
+          history.push('/login')
+        },
+        (error) => {
+          console.log(error)
+        }
+      )
   }, [history])
+  
 
   useEffect(() => {
     const formValues = [
