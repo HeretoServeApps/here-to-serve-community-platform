@@ -144,7 +144,7 @@ export default function CreateCommunity() {
       <br />
       <Field className='has-text-grey'>
         <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
-          <Checkbox style={{ marginRight: '10px' }} onChange={e => setIsClosed(e.target.checked)}/>
+          <Checkbox style={{ marginRight: '10px' }} onChange={e => setIsClosed(!e.target.checked)}/>
           <p>Allow friends and family to find this community by name and/or postal code.</p>
         </div>
         <CheckboxField text={'Allow all members to send invitations.'} />

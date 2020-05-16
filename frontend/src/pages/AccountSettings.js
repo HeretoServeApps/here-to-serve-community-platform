@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 
 import Container from 'react-bulma-components/lib/components/container';
 import Columns from 'react-bulma-components/lib/components/columns'
@@ -19,6 +19,20 @@ export default function AccountSettings() {
     const [currentPassword, setCurrentPassword] = useState('')
     const [newPassword, setNewPassword] = useState('')
     const [confirmNewPassword, setConfirmNewPassword] = useState('')
+    const [firstName, setFirstName] = useState('')
+    const [lastName, setLastName] = useState('')
+    const [email, setEmail] = useState('')
+    const [phone1, setPhone1] = useState('')
+    const [phone1Type, setPhone1Type] = useState('')
+    const [phone2, setPhone2] = useState('')
+    const [phone2Type, setPhone2Type] = useState('')
+    const [addressLine1, setAddressLine1] = useState('')
+    const [addressLine2, setAddressLine2] = useState('')
+    const [zipcode, setZipcode]  = useState('')
+    const [city, setCity] = useState('')
+    const [state, setState] = useState('')
+    const [country, setCountry] = useState('')
+
 
     var containerStyle = {
         margin: '5% auto',
@@ -26,11 +40,37 @@ export default function AccountSettings() {
         padding: '4rem',
     }
 
+    useEffect(() => {
+        if (localStorage.getItem('token')) {
+            fetch('/current_user/', {
+                headers: {
+                    Authorization: `JWT ${localStorage.getItem('token')}`
+                }
+            })
+                .then(res => res.json())
+                .then(json => {
+                    setFirstName(json.first_name)
+                    setLastName(json.last_name)
+                    setEmail(json.email)
+                    setPhone1(json.phone_number_1)
+                    setPhone1Type(json.phone_number_1_type)
+                    json.phone_number_2 ? setPhone2(json.phone_number_2) : setPhone2('-')
+                    json.phone_number_2_type ? setPhone2Type(json.phone_number_2_type) : setPhone2Type('-')
+                    setAddressLine1(json.address_line_1)
+                    json.address_line_2 ? setAddressLine2(json.address_line_2) : setAddressLine2('-')
+                    setCity(json.city)
+                    json.state ? setState(json.state) : setState('-')
+                    setCountry(json.country)
+                    json.zipcode ? setZipcode(json.zipcode) : setZipcode('-')
+                })
+        }
+    }, [])
+
     return (
         <Container style={containerStyle}>
-            <Columns style={{fullWidth: true, margin: '0% 0% 1% 18%'}}>
+            <Columns style={{ fullWidth: true, margin: '0% 0% 1% 18%' }}>
                 <Columns.Column>
-                    <Heading size={4} style={{margin:'0% 0% 3% 30%'}}>Account Information</Heading>
+                    <Heading size={4} style={{ margin: '0% 0% 3% 30%' }}>Account Information</Heading>
                 </Columns.Column>
                 <Columns.Column>
                     <div style={{ display: 'flex' }}>
@@ -43,7 +83,7 @@ export default function AccountSettings() {
                 </Columns.Column>
             </Columns>
             <Columns>
-                <Columns.Column style={{ maxWidth:'30%' }}>
+                <Columns.Column style={{ maxWidth: '30%' }}>
                     <SideNavAccount />
                 </Columns.Column>
                 <Columns.Column>
@@ -51,56 +91,60 @@ export default function AccountSettings() {
                         <tbody>
                             <tr>
                                 <td align='right'><strong>First Name</strong></td>
-                                <td>Lebron</td>
+                                <td>{firstName}</td>
                             </tr>
                             <tr>
                                 <td align='right'><strong>Last Name</strong></td>
-                                <td>James</td>
+                                <td>{lastName}</td>
                             </tr>
                             <tr>
                                 <td align='right'><strong>Email</strong></td>
-                                <td>lebron.james@basketball.com</td>
+                                <td>{email}</td>
                             </tr>
                             <tr>
                                 <td align='right'><strong>Phone 1</strong></td>
-                                <td>(123) - 456 - 7890</td>
+                                <td>{phone1}</td>
                             </tr>
                             <tr>
                                 <td align='right'><strong>Phone 1 Type</strong></td>
-                                <td>Cell</td>
+                                <td>{phone1Type}</td>
                             </tr>
                             <tr>
                                 <td align='right'><strong>Phone 2</strong></td>
-                                <td>(123) - 456 - 7890</td>
+                                <td>{phone2}</td>
                             </tr>
                             <tr>
                                 <td align='right'><strong>Phone 2 Type</strong></td>
-                                <td>Home</td>
+                                <td>{phone2Type}</td>
                             </tr>
                             <tr>
-                                <td align='right'><strong>Adress</strong></td>
-                                <td>123 Street Name</td>
+                                <td align='right'><strong>Address Line 1</strong></td>
+                                <td>{addressLine1}</td>
+                            </tr>
+                            <tr>
+                                <td align='right'><strong>Address Line 2</strong></td>
+                                <td>{addressLine2}</td>
                             </tr>
                             <tr>
                                 <td align='right'><strong>City</strong></td>
-                                <td>Philadelphia</td>
+                                <td>{city}</td>
                             </tr>
                             <tr>
                                 <td align='right'><strong>Zip code</strong></td>
-                                <td>12345</td>
+                                <td>{zipcode}</td>
                             </tr>
                             <tr>
                                 <td align='right'><strong>State/Province</strong></td>
-                                <td>PA</td>
+                                <td>{state}</td>
                             </tr>
                             <tr>
                                 <td align='right'><strong>Country</strong></td>
-                                <td>United States</td>
+                                <td>{country}</td>
                             </tr>
                         </tbody>
                     </Table>
-                    <Heading size={4} style={{margin:'8% 0% 3% 0%',}}>Edit Password</Heading>
-                    <Field style={{maxWidth:'50%'}}>
+                    <Heading size={4} style={{ margin: '8% 0% 3% 0%', }}>Edit Password</Heading>
+                    <Field style={{ maxWidth: '50%' }}>
                         <Label>Current Password</Label>
                         <Control>
                             <Input
@@ -110,7 +154,7 @@ export default function AccountSettings() {
                             />
                         </Control>
                     </Field>
-                    <Field style={{maxWidth:'50%'}}>
+                    <Field style={{ maxWidth: '50%' }}>
                         <Label>New Password</Label>
                         <Control>
                             <Input
@@ -120,7 +164,7 @@ export default function AccountSettings() {
                             />
                         </Control>
                     </Field>
-                    <Field style={{maxWidth:'50%'}}>
+                    <Field style={{ maxWidth: '50%' }}>
                         <Label>Confirm New Password</Label>
                         <Control>
                             <Input
@@ -130,7 +174,7 @@ export default function AccountSettings() {
                             />
                         </Control>
                     </Field>
-                    <Columns style={{margin: '3% auto', maxWidth: '80%'}}>
+                    <Columns style={{ margin: '3% auto', maxWidth: '80%' }}>
                         <Columns.Column>
                             <Button color="primary" fullwidth={true}>SAVE CHANGES</Button>
                         </Columns.Column>
