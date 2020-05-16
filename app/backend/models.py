@@ -230,6 +230,28 @@ class CommunityUserRole(models.Model):
         blank=False,
     )
 
+class Announcement(models.Model):
+    TRUE = 'true'
+    FALSE = 'false'
+
+    SHOW_CHOICES = [
+        (TRUE, 'true'),
+        (FALSE, 'false')
+    ]
+
+    subject = models.CharField(max_length=30, blank=False)
+    message = models.CharField(max_length=120, blank=False)
+    # making date/time and show strings for now
+    date_time = models.CharField(max_length=30, blank=False)
+    show_on_page = models.CharField(
+        max_length=5,
+        choices=SHOW_CHOICES,
+        default=TRUE,
+        blank=False,
+    )
+    community = models.ForeignKey(Community, on_delete=models.CASCADE, null=False, blank=False)
+
+    
 class Activity(models.Model):
 
     GIVING_RIDES = "Giving Rides"
