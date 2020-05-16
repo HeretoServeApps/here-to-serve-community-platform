@@ -5,6 +5,7 @@ from .models import Community, User, CommunityUserRole
 
 from django.contrib.auth.forms import SetPasswordForm
 from django.core.exceptions import ValidationError
+from django.utils.http import urlsafe_base64_decode
 
 class CommunitySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -64,7 +65,7 @@ class PasswordResetConfirmSerializer(serializers.Serializer):
     def validate(self, attrs):
         self._errors = {}
         try:
-            self.user = User._default_manager.get(pk=attrs['uid'])
+            self.user = User._default_manager.get(pk=urlsafe_base64_decode(attrs['uid']).decode())
         except (TypeError, ValueError, OverflowError, User.DoesNotExist):
             raise ValidationError({'uid': ['Invalid value']})
         self.custom_validation(attrs)

@@ -24,7 +24,6 @@ export default function ResetPassword(props) {
 
   const [password, setPassword] = useState('')
   const [passwordConfirm, setPasswordConfirm] = useState('')
-  const [email, setEmail] = useState('')
   const [token, setToken] = useState('')
   const [uid, setUid] = useState('')
   const [validForm, setValidForm] = useState(false)
@@ -45,7 +44,7 @@ export default function ResetPassword(props) {
     setUid(uid)
   }, [])
 
-  const handleChangePassword = useCallback((password) => {
+  const handleChangePassword = useCallback((password, passwordConfirm, uid, token) => {
     const config = {
       headers: {
         "Content-Type": "application/json"
@@ -71,7 +70,6 @@ export default function ResetPassword(props) {
 
   useEffect(() => {
     const formValues = [
-      email,
       password,
       passwordConfirm
     ]
@@ -88,16 +86,6 @@ export default function ResetPassword(props) {
       <Heading size={4}>Reset Password</Heading>
       <p className='has-text-grey-light'>Enter new password to reset.</p>
       <br />
-      <Field>
-        <Control>
-          <Input
-            value={email}
-            type='email'
-            placeholder='Email'
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </Control>
-      </Field>
       <Field>
         <Control>
           <Input
@@ -123,7 +111,7 @@ export default function ResetPassword(props) {
        color='primary' 
        fullwidth={true} 
        disabled={validForm}
-       onClick={() => handleChangePassword(password)}
+       onClick={() => handleChangePassword(password, passwordConfirm, uid, token)}
       >
         RESET
       </Button>
