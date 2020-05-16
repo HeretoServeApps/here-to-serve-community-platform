@@ -43,27 +43,6 @@ export default function App() {
         })
   }, [])
 
-  const handleSignup = useCallback((email, password, firstName, lastName, addressLine1, addressLine2,
-                                    city, country, state, zipcode,
-                                    phoneNumber1, phoneNumber1Type, phoneNumber2, phoneNumber2Type, 
-                                    howLearn, who, howHelp, howKnow, skillsToOffer) => {
-    fetch('/users/', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        email: email,
-        password: password,
-      }),
-    })
-      .then((res) => res.json())
-      .then((json) => {
-        localStorage.setItem('token', json.token)
-        localStorage.setItem('email', email)
-        JSON.stringify(json.token) ? setLoggedIn(true) : setLoggedIn(false)
-      })
-  }, [])
 
   const handleSignup = useCallback(
     (
