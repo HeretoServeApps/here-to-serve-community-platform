@@ -23,7 +23,7 @@ class Command(BaseCommand):
             community = Community(
                 name=fake.first_name() + ' ' + fake.last_name(),
                 description=fake.text()[0:128],
-                country='US'
+                country='US',
                 zipcode=fake.zipcode()
             )
             community.save()
