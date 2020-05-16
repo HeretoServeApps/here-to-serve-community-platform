@@ -19,11 +19,12 @@ import {
   Textarea,
   Checkbox,
 } from 'react-bulma-components/lib/components/form'
+import axios from 'axios'
 
 export default function CreateNewActivity(props) {
   //Styles
   var containerStyle = {
-    margin: '5% 5% 0% 0%',
+    margin: '5% auto',
     maxWidth: '80%',
   }
   var formContainerStyle = {
@@ -311,7 +312,7 @@ export default function CreateNewActivity(props) {
     var current = new Date(start)
 
     while (current <= end) {
-      if (current.getDay() === day) {
+      if (current.getDay() == day) {
         result.push(current)
       }
       current = new Date(current.getTime() + 1000 * 60 * 60 * 24)
@@ -399,7 +400,7 @@ export default function CreateNewActivity(props) {
     setEndYear(new Date().getFullYear())
     setNumVolunteers(1)
     setActivityCoordinator('Coordinator 1')
-  }, [months])
+  }, [])
 
   useEffect(() => {
     var newSelectedDays = selectedDays
@@ -410,7 +411,7 @@ export default function CreateNewActivity(props) {
         DateUtils.isDayInRange(d, { from: startDate, to: endDate })
       )
     )
-  }, [startDay, startMonth, startYear, endDay, endMonth, endYear, months, selectedDays])
+  }, [startDay, startMonth, startYear, endDay, endMonth, endYear])
 
   useEffect(() => {
     const formValues = [
