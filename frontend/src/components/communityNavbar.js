@@ -17,7 +17,8 @@ const links = [
   ['Ways to Help', '/ways-to-help'],
   ['Message Board','/message-board'],
   ['Photo Gallery', '/photo-gallery'],
-  ['Well Wishes', '/well-wishes']
+  ['Well Wishes', '/well-wishes'],
+  ['People', '/community-people'],
 ]
 
 const activeLink = 'Home'
