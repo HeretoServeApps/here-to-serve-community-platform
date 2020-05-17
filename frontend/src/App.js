@@ -2,6 +2,8 @@ import React, { useState, useCallback } from 'react'
 import { Route, Switch, BrowserRouter as Router } from 'react-router-dom'
 
 import Header from './components/header'
+import PrivateRoute from './components/privateroute.js'
+
 import Register from './pages/Register'
 import MyCommunities from './pages/MyCommunities'
 import SelectCommunities from './pages/SelectCommunities'
@@ -114,7 +116,7 @@ export default function App() {
   const handleLogout = useCallback(() => {
     localStorage.clear()
     setLoggedIn(false)
-  })
+  }, [])
 
   const handleForgotPassword = useCallback((email) => {
     fetch('/reset-password/', {
@@ -136,19 +138,11 @@ export default function App() {
       <Router>
         <Header logged_in={loggedIn} handle_logout={handleLogout} />
         <Switch>
-          <Route path='/my-communities' exact component={MyCommunities} />
+          {/* Routes that are available without authentication */}
           <Route
             path='/register'
-            render={() => (
-              <Register handle_signup={handleSignup} logged_in={loggedIn} />
-            )}
+            render={() => (<Register handle_signup={handleSignup} logged_in={loggedIn} />)}
           />
-          <Route
-            path='/select-communities'
-            exact
-            component={SelectCommunities}
-          />
-          <Route path='/create-community' exact component={CreateCommunity} />
           <Route
             path='/login'
             render={() => (
@@ -157,17 +151,27 @@ export default function App() {
           />
           <Route path='/about' exact component={About} />
           <Route path='/' exact component={Welcome} />
-          <Route path='/account-settings' exact component={AccountSettings} />
-          <Route path='/email-settings' exact component={EmailSettings} />
-          <Route path='/community-home' exact component={CommunityHome} />
-          <Route path='/calendar' exact component={CalendarPage} />
-          <Route path='/forgot-password' render={
-            () => (<ForgotPassword handle_forgot_password={handleForgotPassword} />)}
+          <Route 
+            path='/forgot-password' 
+            render={() => (<ForgotPassword handle_forgot_password={handleForgotPassword} />)}
           />
           <Route path='/reset-password' exact component={ResetPassword} />
           <Route path='/forgot-password-confirmation' exact component={ForgotPasswordConfirm} />
           <Route path='/reset-password-confirmation' exact component={ResetPasswordConfirm} />
-          <Route
+          
+          
+          {/* Routes that are available only if user logs in */}
+          <PrivateRoute path='/my-communities' exact component={MyCommunities} />
+          <PrivateRoute
+            path='/select-communities'
+            exact component={SelectCommunities}
+          />
+          <PrivateRoute path='/create-community' exact component={CreateCommunity} />
+          <PrivateRoute path='/account-settings' exact component={AccountSettings} />
+          <PrivateRoute path='/email-settings' exact component={EmailSettings} />
+          <PrivateRoute path='/community-home' exact component={CommunityHome} />
+          <PrivateRoute path='/calendar' exact component={CalendarPage} />
+          <PrivateRoute
             path='/create-new-activity'
             exact component={CreateNewActivity}
           />
