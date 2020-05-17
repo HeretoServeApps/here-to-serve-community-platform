@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.mail import send_mail, EmailMultiAlternatives, BadHeaderError
 from django.contrib.auth import get_user_model
@@ -10,7 +10,6 @@ from django.utils.encoding import force_bytes
 from django.utils.decorators import method_decorator
 from django.views.decorators.debug import sensitive_post_parameters
 
-
 from rest_framework import viewsets, permissions, status
 from rest_framework import generics
 from rest_framework.decorators import api_view
@@ -18,9 +17,13 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .serializers import (
-    CommunitySerializer, UserSerializer, CommunityUserRoleSerializer, UserSerializerWithToken, PasswordResetConfirmSerializer
+    CommunitySerializer, UserSerializer, CommunityUserRoleSerializer, UserSerializerWithToken, 
+    PasswordResetConfirmSerializer, ActivitySerializer, RideActivitySerializer, MealActivitySerializer, 
+    EventActivitySerializer 
 )
-from .models import Community, User, CommunityUserRole
+from .models import (
+    Community, User, CommunityUserRole, Activity, EventActivity, MealActivity, RideActivity 
+)
 from django.conf import settings 
 
 
@@ -94,7 +97,7 @@ class CommunityUserRoleRegister(APIView):
     """
     When a user registers, they can select an existing community to join. This adds the relationship to the database. 
     """
-    permission_classes = (permissions.AllowAny,)
+    permission_classes = (permissions.AllowAny, )
 
     def post(self, request, format=None):
         community_name = request.POST['community']
@@ -120,6 +123,7 @@ class ResetPassword(APIView):
         url = ''
         if len(list(self.get_users(email))) == 0: 
             return Response(status=status.HTTP_404_NOT_FOUND)
+            
         for user in self.get_users(email):
             uid = urlsafe_base64_encode(force_bytes(user.pk))
             token = default_token_generator.make_token(user)
@@ -166,3 +170,47 @@ class PasswordResetConfirmView(generics.GenericAPIView):
         return Response(
             {"detail": ("Password has been reset with the new password.")}
        )
+
+
+class ActivityViewSet(viewsets.ViewSet):
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def list(self, request):
+        user_comms = request.user.communityuserrole_set.values_list("community", flat=True)
+        queryset = Activity.objects.filter(community__in=user_comms)
+        serializer = ActivitySerializer(queryset, many=True)
+
+        return Response(serializer.data)
+
+    def retrieve(self, request, pk=None):
+        queryset = Activity.objects.all()
+        activity = get_object_or_404(queryset, pk=pk)
+        if(activity.activity_type == 'Giving Rides'):
+            activity = get_object_or_404(RideActivity.objects.all(), pk=pk)
+            serializer = RideActivitySerializer(activity)
+        elif(activity.activity_type == 'Preparing Meals'):
+            activity = get_object_or_404(MealActivity.objects.all(), pk=pk)
+            serializer = MealActivitySerializer(activity)
+        else:
+            activity = get_object_or_404(EventActivity.objects.all(), pk=pk)
+            serializer = EventActivitySerializer(activity)
+
+        return Response(serializer.data)
+
+    def create(self, request):
+        community_id = request.POST['community']
+        user_email = request.POST['user']
+        user = User.objects.get(email=user_email).id
+
+    def post(self, request, format=None):
+        if(request.POST['activity_type'] == 'Getting Rides'):
+            serializer = RideActivitySerializer(data=request.data)
+        elif(request.POST['activity_type'] == 'Preparing Meals'):
+            serializer = MealActivitySerializer(data=request.data)
+        else:
+            serializer = EventSerializer(data=request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

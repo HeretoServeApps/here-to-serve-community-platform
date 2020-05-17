@@ -1,7 +1,6 @@
 from rest_framework import serializers
 from rest_framework_jwt.settings import api_settings
-
-from .models import Community, User, CommunityUserRole
+from .models import Community, User, CommunityUserRole, Activity, EventActivity, MealActivity, RideActivity
 
 from django.contrib.auth.forms import SetPasswordForm
 from django.core.exceptions import ValidationError
@@ -16,7 +15,9 @@ class CommunitySerializer(serializers.HyperlinkedModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('email', )
+        fields = ('email', 'first_name', 'last_name', 'phone_number_1', 'phone_number_1_type',
+                  'phone_number_2', 'phone_number_2_type', 'address_line_1', 'address_line_2', 
+                  'city', 'zipcode', 'state', 'country')
 
 
 class UserSerializerWithToken(serializers.ModelSerializer):
@@ -45,7 +46,7 @@ class UserSerializerWithToken(serializers.ModelSerializer):
                   'phone_number_2_type', 'who_help', 'how_learn', 'how_help', 'how_know', 'skills_to_offer')
 
 
-class CommunityUserRoleSerializer(serializers.ModelSerializer):    
+class CommunityUserRoleSerializer(serializers.ModelSerializer):
     class Meta:
         model = CommunityUserRole
         fields = ('community', 'user', 'role')
@@ -77,3 +78,27 @@ class PasswordResetConfirmSerializer(serializers.Serializer):
         return attrs
     def save(self):
         return self.set_password_form.save()
+
+        
+class ActivitySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Activity
+        fields = '__all__'
+
+class RideActivitySerializer(serializers.ModelSerializer):
+    activity_ptr = ActivitySerializer(required=True)
+    class Meta:
+        model = RideActivity
+        fields = ('activity_ptr', 'pickup_time', 'pickup_time_buffer', 'arrive_time', 'pickup_location', 'destination_location')
+
+class MealActivitySerializer(serializers.ModelSerializer):
+    activity_ptr = ActivitySerializer(required=True)
+    class Meta:
+        model = MealActivity
+        fields = ('activity_ptr', 'delivery_time', 'delivery_location', 'dietary_restrictions')
+
+class EventActivitySerializer(serializers.ModelSerializer):
+    activity_ptr = ActivitySerializer(required=True)
+    class Meta:
+        model = EventActivity
+        fields = ('activity_ptr', 'start_time', 'end_time', 'location')

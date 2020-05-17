@@ -80,11 +80,11 @@ export default function CommunityHome(props) {
             <Heading size={6}>Activity Feed</Heading>
           </Columns.Column>
           <Columns.Column size={3}>
-            <Button color='primary' className='is-fullwidth'>
-              <Link to='#' style={{ color: 'white' }}>
+            <Link to='/create-new-activity' style={{ color: 'white' }}>
+              <Button color='primary' className='is-fullwidth'>
                 Create a New Activity
-              </Link>
-            </Button>
+              </Button>
+            </Link>
             <br />
             <Heading size={6}>Upcoming Tasks</Heading>
             <CommunityHomeCard link='#' />
