@@ -43,11 +43,11 @@ export default function Welcome() {
     margin: '5%',
     padding: '1%',
     boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.25)',
-    height: '50%',
+    height: '20rem',
   }
 
   return (
-    <div style={{ backgroundColor: '#2C8595', paddingBottom: '80px'}}>
+    <div style={{ backgroundColor: '#2C8595', paddingBottom: '80px' }}>
       <BackgroundWrapper>
         <Background />
       </BackgroundWrapper>
