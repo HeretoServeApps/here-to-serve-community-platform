@@ -9,12 +9,14 @@ from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 from django.utils.decorators import method_decorator
 from django.views.decorators.debug import sensitive_post_parameters
+from django.conf import settings 
 
 from rest_framework import viewsets, permissions, status
 from rest_framework import generics
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
+import json
 
 from .serializers import (
     CommunitySerializer, UserSerializer, CommunityUserRoleSerializer, UserSerializerWithToken, 
@@ -24,7 +26,6 @@ from .serializers import (
 from .models import (
     Community, User, CommunityUserRole, Activity, EventActivity, MealActivity, RideActivity 
 )
-from django.conf import settings 
 
 
 sensitive_post_parameters_m = method_decorator(sensitive_post_parameters())
@@ -214,3 +215,48 @@ class ActivityViewSet(viewsets.ViewSet):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class CommunityPeopleList(APIView):
+    """
+    Get names of people in the same community as the request's user.
+    """
+    permission_classes = (permissions.IsAuthenticated, )
+
+    def get(self, request, format=None):
+        request_dict = json.loads(list(request.query_params.values())[0])
+        community_name = request_dict['community']
+        user_email = request_dict['user']
+        community, user = None, None
+        try:
+            community = Community.objects.get(name=community_name).id
+        except Community.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        try:
+            user = User.objects.get(email=user_email).id
+        except User.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        # Get the role of the user in the community to determine viewing permission
+        user_role = CommunityUserRole.objects.get(user=user, community=community).role
+
+        # Get all the members' pk of the community
+        community_people = CommunityUserRole.objects.filter(community=community).values_list('user')
+        
+        people_list = []
+        for pk in community_people:
+            member = User.objects.get(pk=pk[0])
+            people_list.append({
+                'name': member.first_name + ' ' + member.last_name,
+                'email': member.email,
+                'phone_number': member.phone_number_1
+            })
+
+        return Response({
+                'user_role' : user_role,
+                'people': people_list,
+            }, 
+            status=status.HTTP_200_OK
+        )
+

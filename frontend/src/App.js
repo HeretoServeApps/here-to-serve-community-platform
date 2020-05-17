@@ -20,6 +20,7 @@ import CalendarPage from './pages/CalendarPage'
 import ForgotPasswordConfirm from './pages/ForgotPasswordConfirm.js'
 import ResetPasswordConfirm from './pages/ResetPasswordConfirm.js'
 import CreateNewActivity from './pages/CreateNewActivity'
+import CommunityPeople from './pages/CommunityPeople'
 
 export default function App() {
   const [loggedIn, setLoggedIn] = useState(
@@ -175,6 +176,7 @@ export default function App() {
             path='/create-new-activity'
             exact component={CreateNewActivity}
           />
+          <PrivateRoute path='/community-people' exact component={CommunityPeople}/>
         </Switch>
       </Router>
     </div>
