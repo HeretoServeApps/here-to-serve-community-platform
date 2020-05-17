@@ -15,8 +15,9 @@ export default function ForgotPasswordConfirm() {
   return (
     <Container style={containerStyle}>
       <p>
-        Please check your email for a password reset link. 
+        An email has been sent to the email address you entered. 
         If you did not receive this email, please try again <a href="/forgot-password">here</a>. 
+        Make sure the email you entered is associated with a valid account.  
       </p>
       <br />
     </Container>

@@ -117,7 +117,9 @@ class ResetPassword(APIView):
     def post(self, request, format=None):
         data = request.data
         email = data["email"]
-
+        url = ''
+        if len(list(self.get_users(email))) == 0: 
+            return Response(status=status.HTTP_404_NOT_FOUND)
         for user in self.get_users(email):
             uid = urlsafe_base64_encode(force_bytes(user.pk))
             token = default_token_generator.make_token(user)
