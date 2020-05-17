@@ -7,10 +7,8 @@ import Button from 'react-bulma-components/lib/components/button'
 import Container from 'react-bulma-components/lib/components/container'
 import Dropdown from 'react-bulma-components/lib/components/dropdown';
 import CommunityNavbar from '../components/communityNavbar'
-import axios from 'axios'
 
 export default function CalendarPage(props) {
-  const token = localStorage.getItem('token')
   const [selectedMonth, setSelectedMonth] = useState(moment().format("MMMM"))
   const [selectedYear, setSelectedYear] = useState(moment().format("YYYY"))
   const [date, setDate] = useState()

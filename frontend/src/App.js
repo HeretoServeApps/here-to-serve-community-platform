@@ -9,38 +9,47 @@ import CreateCommunity from './pages/CreateCommunity'
 import Login from './pages/Login'
 import About from './pages/About'
 import Welcome from './pages/Welcome'
+import ForgotPassword from './pages/ForgotPassword'
+import ResetPassword from './pages/ResetPassword'
 import AccountSettings from './pages/AccountSettings'
 import EmailSettings from './pages/EmailSettings'
 import CommunityHome from './pages/CommunityHome'
 import CalendarPage from './pages/CalendarPage'
+import ForgotPasswordConfirm from './pages/ForgotPasswordConfirm.js'
+import ResetPasswordConfirm from './pages/ResetPasswordConfirm.js'
 import CreateNewActivity from './pages/CreateNewActivity'
 
 export default function App() {
   const [loggedIn, setLoggedIn] = useState(
-    localStorage.getItem('token') ? true : false
+    localStorage.getItem('token') && 
+    localStorage.getItem('token') !== 'undefined' &&
+    localStorage.getItem('token') !== undefined ? 
+      true : false
   )
 
   const handleLogin = useCallback((email, password, rememberMe) => {
     fetch('/token-auth/', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        'email': email,
-        'password': password
-      })
+        email: email,
+        password: password,
+      }),
     })
       .then(res => res.json())
       .then(json => {
         localStorage.setItem('token', json.token)
         localStorage.setItem('rememberMe', rememberMe)
         localStorage.setItem('email', email)
-        JSON.stringify(json.token) ? setLoggedIn(true) : setLoggedIn(false)
+        localStorage.getItem('token') &&  localStorage.getItem('token') !== 'undefined' && localStorage.getItem('token') !== undefined  ? 
+          setLoggedIn(true) : setLoggedIn(false)
       },
         (error) => {
-          console.log(error);
-        })
+          console.log(error)
+        }
+      )
   }, [])
 
 
@@ -107,6 +116,21 @@ export default function App() {
     setLoggedIn(false)
   })
 
+  const handleForgotPassword = useCallback((email) => {
+    fetch('/reset-password/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email: email }),
+    })
+      .then((res) => res.json())
+      .then((json) => { },
+      (error) => {
+        console.log(error)
+      })
+  }, [])
+
   return (
     <div>
       <Router>
@@ -137,10 +161,15 @@ export default function App() {
           <Route path='/email-settings' exact component={EmailSettings} />
           <Route path='/community-home' exact component={CommunityHome} />
           <Route path='/calendar' exact component={CalendarPage} />
+          <Route path='/forgot-password' render={
+            () => (<ForgotPassword handle_forgot_password={handleForgotPassword} />)}
+          />
+          <Route path='/reset-password' exact component={ResetPassword} />
+          <Route path='/forgot-password-confirmation' exact component={ForgotPasswordConfirm} />
+          <Route path='/reset-password-confirmation' exact component={ResetPasswordConfirm} />
           <Route
             path='/create-new-activity'
-            exact
-            component={CreateNewActivity}
+            exact component={CreateNewActivity}
           />
         </Switch>
       </Router>

@@ -166,3 +166,11 @@ CORS_ORIGIN_WHITELIST = [
 ALLOWED_HOSTS = ['*']
 CORS_ORIGIN_ALLOW_ALL = True
 
+
+# Email Settings
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com' # mail service smtp
+EMAIL_HOST_USER = 'h4i.heretoserve@gmail.com' # email id
+EMAIL_HOST_PASSWORD = 'h4ipassword123' #password

@@ -120,7 +120,5 @@ GitHub.sublime-settings
 .idea/
 .vscode/*
 
-*/DS_Store
-.DS_Store
-
+*/.DS_Store
 .DS_Store

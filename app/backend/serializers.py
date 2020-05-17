@@ -1,8 +1,10 @@
 from rest_framework import serializers
-
 from rest_framework_jwt.settings import api_settings
 from .models import Community, User, CommunityUserRole, Activity, EventActivity, MealActivity, RideActivity
 
+from django.contrib.auth.forms import SetPasswordForm
+from django.core.exceptions import ValidationError
+from django.utils.http import urlsafe_base64_decode
 
 class CommunitySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -50,6 +52,34 @@ class CommunityUserRoleSerializer(serializers.ModelSerializer):
         fields = ('community', 'user', 'role')
 
 
+class PasswordResetConfirmSerializer(serializers.Serializer):
+    new_password1 = serializers.CharField(max_length=128) # password
+    new_password2 = serializers.CharField(max_length=128) # confirm password
+
+    uid = serializers.CharField()
+    token = serializers.CharField()
+
+    set_password_form_class = SetPasswordForm
+    def custom_validation(self, attrs):
+        pass
+
+    def validate(self, attrs):
+        self._errors = {}
+        try:
+            self.user = User._default_manager.get(pk=urlsafe_base64_decode(attrs['uid']).decode())
+        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+            raise ValidationError({'uid': ['Invalid value']})
+        self.custom_validation(attrs)
+        self.set_password_form = self.set_password_form_class(
+            user=self.user, data=attrs
+        )
+        if not self.set_password_form.is_valid():
+            raise serializers.ValidationError(self.set_password_form.errors)
+        return attrs
+    def save(self):
+        return self.set_password_form.save()
+
+        
 class ActivitySerializer(serializers.ModelSerializer):
     class Meta:
         model = Activity
