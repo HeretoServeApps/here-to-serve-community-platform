@@ -44,27 +44,6 @@ export default function CommunityPeople() {
             )
     }, [])
 
-    // useEffect(() => {
-    //     var myHeaders = new Headers();
-    //     myHeaders.append("Authorization", `JWT ${localStorage.getItem('token')}`);
-
-    //     var formdata = new FormData();
-    //     formdata.append("user", localStorage.getItem('email'));
-    //     formdata.append("community", localStorage.getItem('community-name'));
-
-    //     var requestOptions = {
-    //         method: 'GET',
-    //         headers: myHeaders,
-    //         body: formdata,
-    //         redirect: 'follow'
-    //     };
-
-    //     fetch("/community-people/", requestOptions)
-    //     .then(response => response.text())
-    //     .then(result => console.log(result))
-    //     .catch(error => console.log('error', error));
-    // }, [])
-
     return (
         <div>
         <CommunityNavbar />
