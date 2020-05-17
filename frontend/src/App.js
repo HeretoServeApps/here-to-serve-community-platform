@@ -21,7 +21,10 @@ import CreateNewActivity from './pages/CreateNewActivity'
 
 export default function App() {
   const [loggedIn, setLoggedIn] = useState(
-    localStorage.getItem('token') && localStorage.getItem('token') !== 'undefined' ? true : false
+    localStorage.getItem('token') && 
+    localStorage.getItem('token') !== 'undefined' &&
+    localStorage.getItem('token') !== undefined ? 
+      true : false
   )
 
   const handleLogin = useCallback((email, password, rememberMe) => {
@@ -40,7 +43,8 @@ export default function App() {
         localStorage.setItem('token', json.token)
         localStorage.setItem('rememberMe', rememberMe)
         localStorage.setItem('email', email)
-        JSON.stringify(json.token) ? setLoggedIn(true) : setLoggedIn(false)
+        localStorage.getItem('token') &&  localStorage.getItem('token') !== 'undefined' && localStorage.getItem('token') !== undefined  ? 
+          setLoggedIn(true) : setLoggedIn(false)
       },
         (error) => {
           console.log(error)

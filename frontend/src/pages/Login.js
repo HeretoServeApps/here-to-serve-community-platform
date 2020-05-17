@@ -35,7 +35,9 @@ export default function Login(props) {
 
   let history = useHistory()
   useEffect(() => {
-    if (localStorage.getItem('token')) {
+    if (localStorage.getItem('token') && 
+        localStorage.getItem('token') !== 'undefined' &&
+        localStorage.getItem('token') !== undefined) {
       history.push('/my-communities')
     }
   })

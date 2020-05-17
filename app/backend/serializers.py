@@ -9,7 +9,7 @@ from django.utils.http import urlsafe_base64_decode
 class CommunitySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Community
-        fields = ('name', 'is_closed', 'description', 'zipcode', 'country')
+        fields = ('id', 'name', 'is_closed', 'description', 'zipcode', 'country')
 
 
 class UserSerializer(serializers.ModelSerializer):
