@@ -48,3 +48,21 @@ input.autocomplete {
 .suggestions li:not(:last-of-type) {
   border-bottom: 1px solid #999;
 }
+
+/*Scrollable table styles*/ 
+thead, tbody { display: block; }
+
+tbody {
+    height: 500px;       /* Just for the demo          */
+    overflow-y: auto;    /* Trigger vertical scroll    */
+    overflow-x: auto;  /* Hide the horizontal scroll */
+}
+
+table {
+    width: 100%;
+}
+
+tbody td, thead th {
+    width: 10%; 
+}
+/*End of scrollable table styles*/

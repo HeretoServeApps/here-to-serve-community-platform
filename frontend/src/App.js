@@ -21,6 +21,7 @@ import ForgotPasswordConfirm from './pages/ForgotPasswordConfirm.js'
 import ResetPasswordConfirm from './pages/ResetPasswordConfirm.js'
 import CreateNewActivity from './pages/CreateNewActivity'
 import CommunityPeople from './pages/CommunityPeople'
+import OneCommunityMember from './pages/CommunityOneMember'
 
 export default function App() {
   const [loggedIn, setLoggedIn] = useState(
@@ -177,6 +178,7 @@ export default function App() {
             exact component={CreateNewActivity}
           />
           <PrivateRoute path='/community-people' exact component={CommunityPeople}/>
+          <PrivateRoute path='/:member' exact component={OneCommunityMember}/>
         </Switch>
       </Router>
     </div>
