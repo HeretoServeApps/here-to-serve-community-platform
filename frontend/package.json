@@ -23,6 +23,7 @@
     "react-scripts": "3.4.0",
     "react-select-country-list": "^2.1.2",
     "react-switch": "^5.0.1",
+    "react-table": "^7.1.0",
     "styled-components": "^5.0.1",
     "yarn": "^1.22.4"
   },

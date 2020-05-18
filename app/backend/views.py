@@ -242,19 +242,22 @@ class CommunityPeopleList(APIView):
         user_role = CommunityUserRole.objects.get(user=user, community=community).role
 
         # Get all the members' pk of the community
-        community_people = CommunityUserRole.objects.filter(community=community).values_list('user')
+        community_people = CommunityUserRole.objects.filter(community=community).values_list('user', 'role')
         
+        community_roles_map = dict(CommunityUserRole.COMMUNITY_ROLE_CHOICES)
+
         people_list = []
-        for pk in community_people:
-            member = User.objects.get(pk=pk[0])
+        for pk, role in community_people:
+            member = User.objects.get(pk=pk)
             people_list.append({
                 'name': member.first_name + ' ' + member.last_name,
                 'email': member.email,
-                'phone_number': member.phone_number_1
+                'phone_number': member.phone_number_1,
+                'role': community_roles_map[role]
             })
 
         return Response({
-                'user_role' : user_role,
+                'user_role' : community_roles_map[user_role],
                 'people': people_list,
             }, 
             status=status.HTTP_200_OK
