@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
-import styled from 'styled-components'
+import { Link } from 'react-router-dom'
 
+import { Input } from 'react-bulma-components/lib/components/form'
 import Container from 'react-bulma-components/lib/components/container'
 import Heading from 'react-bulma-components/lib/components/heading'
 import Table from 'react-bulma-components/lib/components/table'
@@ -9,51 +10,27 @@ import Columns from 'react-bulma-components/lib/components/columns'
 import Button from 'react-bulma-components/lib/components/button'
 
 import CommunityNavbar from '../components/communityNavbar'
-import PaginationTable from '../components/paginationTable'
-
-const Styles = styled.div`
-  padding: 1rem;
-
-  table {
-    border-spacing: 5%;
-
-    tr {
-      :last-child {
-        td {
-          border-bottom: 0;
-        }
-      }
-    }
-
-    th,
-    td {
-      margin: 0;
-      padding: 0.5rem;
-      border-bottom: 1px solid grey;
-
-      :last-child {
-        border-right: 0;
-      }
-    }
-  }
-
-  .pagination {
-    padding: 0.5rem;
-  }
-`
 
 export default function CommunityPeople() {
     var containerStyle = {
         margin: '5% auto',
-        maxWidth: '800px',
+        maxWidth: '870px',
         maxHeight: '1000px',
         padding: '4rem',
         border: '0.1rem solid #E5E5E5',
         borderRadius: '1rem'
     }
 
+    var noteStyle = {
+        color: '#E5E5E5',
+        fontStyle: 'italic',
+        margin: '15px',
+    }
+
     const [people, setPeople] = useState([])
     const [userRole, setUserRole] = useState('')
+    const [search, setSearch] = useState('')
+
 
     useEffect(() => {
         axios
@@ -78,29 +55,6 @@ export default function CommunityPeople() {
             )
     }, [])
 
-    // const header = ["Name", "Role", "Email", "Phone"];
-    const columns = React.useMemo(
-        () => [
-        {
-            Header: 'Name',
-            accessor: 'name'
-        },
-        {
-            Header: 'Role',
-            accessor: 'role'
-        },
-        {
-            Header: 'Email',
-            accessor: 'email'
-        },
-        {
-            Header: 'Phone',
-            accessor: 'phone_number'
-        }
-        ],
-        []
-    )
-
     return (
         <div>
             <CommunityNavbar />
@@ -117,14 +71,66 @@ export default function CommunityPeople() {
                             }}
                             color='primary'
                         >
-                            Add members
+                            Add Members
                         </Button>
                     </Columns.Column>
                 </Columns>
-                <Styles>
-                    <PaginationTable columns={columns} data={people} />
-                </Styles>
-
+                <Input
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    placeholder='Search members by name.'
+                    style={{marginBottom: '3%'}}
+                />
+                <Table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone Number</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {people.filter(
+                        (p) =>
+                            search === '' || p.name.toLowerCase().includes(search.toLowerCase())
+                        ).length > 0 ? (
+                            people.filter(
+                                (p) =>
+                                    search === '' ||
+                                    p.name.toLowerCase().includes(search.toLowerCase())
+                            )
+                            .map((p) => (
+                                <tr>
+                                    <td>
+                                        <strong>
+                                            <Link 
+                                                to={{
+                                                    pathname: '/' + p.name,
+                                                    state: {
+                                                        name: p.name,
+                                                        email: p.email,
+                                                        phone: p.phone_number,
+                                                        role: p.role
+                                                    },
+                                                }}
+                                            >
+                                                {p.name}
+                                            </Link>
+                                        </strong> 
+                                        <br /> 
+                                        {p.role}
+                                    </td>
+                                    <td>{p.email}</td>
+                                    <td>{p.phone_number}</td>
+                                </tr>
+                            ))
+                        ) : (
+                            <p className='has-text-grey-light' style={noteStyle}>
+                                No members match this search. 
+                            </p>
+                        )}
+                    </tbody>
+                </Table>
             </Container>
         </div>
     )

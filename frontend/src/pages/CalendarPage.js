@@ -21,7 +21,7 @@ export default function CalendarPage(props) {
 
 
 
-  const years = [2017, 2018, 2019, 2020]
+  const years = [...Array(15).keys()].map(i => i + 2020);
   const months = [
     'January',
     'February',
