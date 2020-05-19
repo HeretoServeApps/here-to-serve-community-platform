@@ -489,17 +489,126 @@ export default function CreateNewActivity(props) {
                 {category === 'Preparing Meals' && (
                   <Field>
                     <Label>Dietary Restrictions</Label>
-                    <p style={noteStyle}>
-                      e.g. Vegetarian, kosher, nut-free, lactose-free,
-                      wheat-free, gluten-free, soy-free, sugar-free, low-fat,
-                      low-carb, low-salt
-                    </p>
-                    <Control>
-                      <Input
-                        value={diet}
-                        onChange={(e) => setDiet(e.target.value)}
-                      />
-                    </Control>
+                    <Columns>
+                      <Columns.Column>
+                        <Control>
+                          <div className='vegetarian' style={checkboxStyle}>
+                            <Checkbox
+                              style={{ marginRight: '10px' }}
+                              onClick={(e) => {
+                                setVegetarian(!vegetarian)
+                              }}
+                              checked={!vegetarian}
+                            />
+                            <p>Vegetarian</p>
+                          </div>
+                          <div className='kosher' style={checkboxStyle}>
+                            <Checkbox
+                              style={{ marginRight: '10px' }}
+                              onClick={(e) => {
+                                setKosher(!kosher)
+                              }}
+                              checked={!kosher}
+                            />
+                            <p>Kosher</p>
+                          </div>
+                          <div className='nutfree' style={checkboxStyle}>
+                            <Checkbox
+                              style={{ marginRight: '10px' }}
+                              onClick={(e) => {
+                                setNutFree(!nutFree)
+                              }}
+                              checked={!nutFree}
+                            />
+                            <p>Nut-Free</p>
+                          </div>
+                          <div className='lactosefree' style={checkboxStyle}>
+                            <Checkbox
+                              style={{ marginRight: '10px' }}
+                              onClick={(e) => {
+                                setLactoseFree(!lactoseFree)
+                              }}
+                              checked={!lactoseFree}
+                            />
+                            <p>Lactose-Free</p>
+                          </div>
+                          <div className='wheatfree' style={checkboxStyle}>
+                            <Checkbox
+                              style={{ marginRight: '10px' }}
+                              onClick={(e) => {
+                                setWheatFree(!wheatFree)
+                              }}
+                              checked={!wheatFree}
+                            />
+                            <p>Wheat-Free</p>
+                          </div>
+                          <div className='glutenfree' style={checkboxStyle}>
+                            <Checkbox
+                              style={{ marginRight: '10px' }}
+                              onClick={(e) => {
+                                setGlutenFree(!glutenFree)
+                              }}
+                              checked={!glutenFree}
+                            />
+                            <p>Gluten-Free</p>
+                          </div>
+                        </Control>
+                      </Columns.Column>
+                      <Columns.Column>
+                        <Control>
+                          <div className='soyfree' style={checkboxStyle}>
+                            <Checkbox
+                              style={{ marginRight: '10px' }}
+                              onClick={(e) => {
+                                setSoyFree(!soyFree)
+                              }}
+                              checked={!soyFree}
+                            />
+                            <p>Soy-Free</p>
+                          </div>
+                          <div className='sugarfree' style={checkboxStyle}>
+                            <Checkbox
+                              style={{ marginRight: '10px' }}
+                              onClick={(e) => {
+                                setSugarFree(!sugarFree)
+                              }}
+                              checked={!sugarFree}
+                            />
+                            <p>Sugar-Free</p>
+                          </div>
+                          <div className='lowfat' style={checkboxStyle}>
+                            <Checkbox
+                              style={{ marginRight: '10px' }}
+                              onClick={(e) => {
+                                setLowFat(!lowFat)
+                              }}
+                              checked={!lowFat}
+                            />
+                            <p>Low Fat</p>
+                          </div>
+                          <div className='lowcarb' style={checkboxStyle}>
+                            <Checkbox
+                              style={{ marginRight: '10px' }}
+                              onClick={(e) => {
+                                setLowCarb(!lowCarb)
+                              }}
+                              checked={!lowCarb}
+                            />
+                            <p>Low Carb</p>
+                          </div>
+                          <div className='lowsalt' style={checkboxStyle}>
+                            <Checkbox
+                              style={{ marginRight: '10px' }}
+                              onClick={(e) => {
+                                setLowSalt(!lowSalt)
+                              }}
+                              checked={!lowSalt}
+                            />
+                            <p>Low Salt</p>
+                          </div>
+                        </Control>
+                      </Columns.Column>
+                    </Columns>
                   </Field>
                 )}
                 <Field>
