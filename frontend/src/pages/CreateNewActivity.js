@@ -87,7 +87,8 @@ export default function CreateNewActivity(props) {
   const [numVolunteers, setNumVolunteers] = useState('')
   const coordinators = ['Coordinator 1', 'Coordinator 2']
 
-  const years = [2017, 2018, 2019, 2020, 2021, 2022, 2023]
+  const years = Array.from(Array(5).keys()).map((y) => (y+(new Date().getFullYear())))
+
   const months = [
     'January',
     'February',
@@ -218,58 +219,7 @@ export default function CreateNewActivity(props) {
     '11:30 PM',
     '11:45 PM',
   ]
-  const count = [
-    1,
-    2,
-    3,
-    4,
-    5,
-    6,
-    7,
-    8,
-    9,
-    10,
-    11,
-    12,
-    13,
-    14,
-    15,
-    16,
-    17,
-    18,
-    19,
-    20,
-    21,
-    22,
-    23,
-    24,
-    25,
-    26,
-    27,
-    28,
-    29,
-    30,
-    31,
-    32,
-    33,
-    34,
-    35,
-    36,
-    37,
-    38,
-    39,
-    40,
-    41,
-    42,
-    43,
-    44,
-    45,
-    46,
-    47,
-    48,
-    49,
-    50,
-  ]
+  const count = Array.from(Array(51).keys()).slice(1,51)
 
   //Dietary Restrictions (kept in case checkbox implementation is needed)
   const [vegetarian, setVegetarian] = useState(false)
@@ -313,22 +263,16 @@ export default function CreateNewActivity(props) {
 
     while (current <= end) {
       if (current.getDay() == day) {
-        result.push(current)
+        result.push(new Date(current))
       }
-      current = new Date(current.getTime() + 1000 * 60 * 60 * 24)
+      current.setDate(current.getDate()+1)
     }
     console.log(result)
     return result
   }
 
   const containsDay = (array = [], day) => {
-    var contains = false
-    array.forEach((d) => {
-      if (DateUtils.isSameDay(d, day)) {
-        contains = true
-      }
-    })
-    return contains
+    return array.some((d) => (DateUtils.isSameDay(d, day)))
   }
 
   const handleDayClick = (day, modifiers = {}) => {
@@ -723,150 +667,80 @@ export default function CreateNewActivity(props) {
                   <Control>
                     <p style={noteStyle}>Repeats</p>
                     <div className='sunday' style={checkboxStyle}>
-                      {sunday ? (
-                        <Checkbox
-                          style={{ marginRight: '10px' }}
-                          onClick={(e) => {
-                            handleWeekdayToggle('Sunday', sunday)
-                            setSunday(!sunday)
-                          }}
-                        />
-                      ) : (
-                        <Checkbox
-                          style={{ marginRight: '10px' }}
-                          onClick={(e) => {
-                            handleWeekdayToggle('Sunday', sunday)
-                            setSunday(!sunday)
-                          }}
-                          checked
-                        />
-                      )}
+                      <Checkbox
+                        style={{ marginRight: '10px' }}
+                        onClick={(e) => {
+                          handleWeekdayToggle('Sunday', sunday)
+                          setSunday(!sunday)
+                        }}
+                        checked={!sunday}
+                      />
                       <p>Sunday</p>
                     </div>
                     <div className='monday' style={checkboxStyle}>
-                      {monday ? (
-                        <Checkbox
-                          style={{ marginRight: '10px' }}
-                          onClick={(e) => {
-                            handleWeekdayToggle('Monday', monday)
-                            setMonday(!monday)
-                          }}
-                        />
-                      ) : (
-                        <Checkbox
-                          style={{ marginRight: '10px' }}
-                          onClick={(e) => {
-                            handleWeekdayToggle('Monday', monday)
-                            setMonday(!monday)
-                          }}
-                          checked
-                        />
-                      )}
+                      <Checkbox
+                        style={{ marginRight: '10px' }}
+                        onClick={(e) => {
+                          handleWeekdayToggle('Monday', monday)
+                          setMonday(!monday)
+                        }}
+                        checked={!monday}
+                      />
                       <p>Monday</p>
                     </div>
                     <div className='tuesday' style={checkboxStyle}>
-                      {tuesday ? (
-                        <Checkbox
-                          style={{ marginRight: '10px' }}
-                          onClick={(e) => {
-                            handleWeekdayToggle('Tuesday', tuesday)
-                            setTuesday(!tuesday)
-                          }}
-                        />
-                      ) : (
-                        <Checkbox
-                          style={{ marginRight: '10px' }}
-                          onClick={(e) => {
-                            handleWeekdayToggle('Tuesday', tuesday)
-                            setTuesday(!tuesday)
-                          }}
-                          checked
-                        />
-                      )}
+                      <Checkbox
+                        style={{ marginRight: '10px' }}
+                        onClick={(e) => {
+                          handleWeekdayToggle('Tuesday', tuesday)
+                          setTuesday(!tuesday)
+                        }}
+                        checked={!tuesday}
+                      />
                       <p>Tuesday</p>
                     </div>
                     <div className='wednesday' style={checkboxStyle}>
-                      {wednesday ? (
-                        <Checkbox
-                          style={{ marginRight: '10px' }}
-                          onClick={(e) => {
-                            handleWeekdayToggle('Wednesday', wednesday)
-                            setWednesday(!wednesday)
-                          }}
-                        />
-                      ) : (
-                        <Checkbox
-                          style={{ marginRight: '10px' }}
-                          onClick={(e) => {
-                            handleWeekdayToggle('Wednesday', wednesday)
-                            setWednesday(!wednesday)
-                          }}
-                          checked
-                        />
-                      )}
+                      <Checkbox
+                        style={{ marginRight: '10px' }}
+                        onClick={(e) => {
+                          handleWeekdayToggle('Wednesday', wednesday)
+                          setWednesday(!wednesday)
+                        }}
+                        checked={!wednesday}
+                      />
                       <p>Wednesday</p>
                     </div>
                     <div className='thursday' style={checkboxStyle}>
-                      {thursday ? (
-                        <Checkbox
-                          style={{ marginRight: '10px' }}
-                          onClick={(e) => {
-                            handleWeekdayToggle('Thursday', thursday)
-                            setThursday(!thursday)
-                          }}
-                        />
-                      ) : (
-                        <Checkbox
-                          style={{ marginRight: '10px' }}
-                          onClick={(e) => {
-                            handleWeekdayToggle('Thursday', thursday)
-                            setThursday(!thursday)
-                          }}
-                          checked
-                        />
-                      )}
+                      <Checkbox
+                        style={{ marginRight: '10px' }}
+                        onClick={(e) => {
+                          handleWeekdayToggle('Thursday', thursday)
+                          setThursday(!thursday)
+                        }}
+                        checked={!thursday}
+                      />
                       <p>Thursday</p>
                     </div>
                     <div className='friday' style={checkboxStyle}>
-                      {friday ? (
-                        <Checkbox
-                          style={{ marginRight: '10px' }}
-                          onClick={(e) => {
-                            handleWeekdayToggle('Friday', friday)
-                            setFriday(!friday)
-                          }}
-                        />
-                      ) : (
-                        <Checkbox
-                          style={{ marginRight: '10px' }}
-                          onClick={(e) => {
-                            handleWeekdayToggle('Friday', friday)
-                            setFriday(!friday)
-                          }}
-                          checked
-                        />
-                      )}
+                      <Checkbox
+                        style={{ marginRight: '10px' }}
+                        onClick={(e) => {
+                          handleWeekdayToggle('Friday', friday)
+                          setFriday(!friday)
+                        }}
+                        checked={!friday}
+                      />
                       <p>Friday</p>
                     </div>
                     <div className='saturday' style={checkboxStyle}>
-                      {saturday ? (
-                        <Checkbox
-                          style={{ marginRight: '10px' }}
-                          onClick={(e) => {
-                            handleWeekdayToggle('Saturday', saturday)
-                            setSaturday(!saturday)
-                          }}
-                        />
-                      ) : (
-                        <Checkbox
-                          style={{ marginRight: '10px' }}
-                          onClick={(e) => {
-                            handleWeekdayToggle('Saturday', saturday)
-                            setSaturday(!saturday)
-                          }}
-                          checked
-                        />
-                      )}
+                      <Checkbox
+                        style={{ marginRight: '10px' }}
+                        onClick={(e) => {
+                          handleWeekdayToggle('Saturday', saturday)
+                          setSaturday(!saturday)
+                        }}
+                        checked={!saturday}
+                      />
                       <p>Saturday</p>
                     </div>
                   </Control>
