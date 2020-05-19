@@ -210,11 +210,6 @@ class ActivityViewSet(viewsets.ViewSet):
         return Response(serializer.data)
 
     def create(self, request):
-        community_id = request.POST['community']
-        user_email = request.POST['user']
-        user = User.objects.get(email=user_email).id
-
-    def post(self, request, format=None):
         if(request.POST['activity_type'] == 'Getting Rides'):
             serializer = RideActivitySerializer(data=request.data)
         elif(request.POST['activity_type'] == 'Preparing Meals'):
