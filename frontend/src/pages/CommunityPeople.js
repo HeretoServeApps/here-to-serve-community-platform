@@ -105,23 +105,34 @@ export default function CommunityPeople() {
                                         <strong>
                                             <Link 
                                                 to={{
-                                                    pathname: '/' + p.name,
+                                                    pathname: '/' + p.first_name + p.last_name,
                                                     state: {
-                                                        name: p.name,
+                                                        first_name: p.first_name,
+                                                        last_name: p.last_name,
                                                         email: p.email,
-                                                        phone: p.phone_number,
-                                                        role: p.role
+                                                        phone_number_1: p.phone_number_1,
+                                                        phone_number_1_type: p.phone_number_1_type,
+                                                        phone_number_2: p.phone_number_2,
+                                                        phone_number_2_type: p.phone_number_2_type,
+                                                        address_line_1: p.address_line_1,
+                                                        address_line_2: p.address_line_2,
+                                                        city: p.city,
+                                                        state: p.state,
+                                                        zipcode: p.zipcode,
+                                                        country: p.country,
+                                                        role: p.role,
+                                                        pk: p.pk,
                                                     },
                                                 }}
                                             >
-                                                {p.name}
+                                                {p.first_name} {p.last_name}
                                             </Link>
                                         </strong> 
                                         <br /> 
                                         {p.role}
                                     </td>
                                     <td>{p.email}</td>
-                                    <td>{p.phone_number}</td>
+                                    <td>{p.phone_number_1}</td>
                                 </tr>
                             ))
                         ) : (

@@ -38,6 +38,7 @@ class CommunityViewSet(viewsets.ModelViewSet):
         comms = CommunityUserRole.objects.filter(user=self.request.user).values_list('community', flat=True)
         return Community.objects.filter(id__in=comms)
 
+
 class OneCommunityViewSet(viewsets.ModelViewSet):
     queryset = Community.objects.all().order_by('name')
     serializer_class = CommunitySerializer
@@ -53,6 +54,15 @@ class UsersViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all().order_by('last_name')
     serializer_class = UserSerializer
 
+    def get_queryset(self):
+        email = self.request.query_params.get('email')
+        return User.objects.filter(email=email)
+    
+
+class UserViewUpdate(generics.RetrieveUpdateDestroyAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
 
 class CommunityUserRoleViewSet(viewsets.ModelViewSet):
     queryset = CommunityUserRole.objects.all()
@@ -66,6 +76,7 @@ def current_user(request):
     """
     serializer = UserSerializer(request.user)
     return Response(serializer.data)
+
 
 class UserList(APIView):
     """
@@ -250,10 +261,21 @@ class CommunityPeopleList(APIView):
         for pk, role in community_people:
             member = User.objects.get(pk=pk)
             people_list.append({
-                'name': member.first_name + ' ' + member.last_name,
+                'first_name': member.first_name,
+                'last_name': member.last_name,
                 'email': member.email,
-                'phone_number': member.phone_number_1,
-                'role': community_roles_map[role]
+                'phone_number_1': member.phone_number_1,
+                'phone_number_type_1': member.phone_number_1_type,
+                'role': community_roles_map[role],
+                'phone_number_2': member.phone_number_2,
+                'phone_number_2_type': member.phone_number_2_type,
+                'address_line_1': member.address_line_1,
+                'address_line_2': member.address_line_2,
+                'city': member.city,
+                'state': member.state,
+                'country': member.country,
+                'zipcode': member.zipcode,
+                'pk': member.id,
             })
 
         return Response({
