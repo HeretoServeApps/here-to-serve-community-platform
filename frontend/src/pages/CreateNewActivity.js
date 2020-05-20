@@ -46,53 +46,7 @@ export default function CreateNewActivity(props) {
     justifyContent: 'flex-start',
   }
 
-  const token = localStorage.getItem('token')
-
-
-  const [activeTab, setActiveTab] = useState('What')
-  const [validForm, setValidForm] = useState(false)
-
-  //What
-  const [category, setCategory] = useState('Giving Rides')
-  const [activityName, setActivityName] = useState('')
-  const [calendarLabel, setCalendarLabel] = useState('')
-  const [notes, setNotes] = useState('')
-  const [diet, setDiet] = useState('')
-
-  //When
-  const [startTime, setStartTime] = useState('12:00 PM')
-  const [endTime, setEndTime] = useState('12:00 PM')
-  const [noEndTime, setNoEndTime] = useState(false)
-  const [allDay, setAllDay] = useState(false)
-  const [startMonth, setStartMonth] = useState('')
-  const [startDay, setStartDay] = useState('')
-  const [startYear, setStartYear] = useState('')
-  const [endMonth, setEndMonth] = useState('')
-  const [endDay, setEndDay] = useState('')
-  const [endYear, setEndYear] = useState('')
-  const [selectedDays, setSelectedDays] = useState([])
-  const [sunday, setSunday] = useState(true)
-  const [monday, setMonday] = useState(true)
-  const [tuesday, setTuesday] = useState(true)
-  const [wednesday, setWednesday] = useState(true)
-  const [thursday, setThursday] = useState(true)
-  const [friday, setFriday] = useState(true)
-  const [saturday, setSaturday] = useState(true)
-
-  //Where
-  const [pickupLocation, setPickupLocation] = useState('')
-  const [destination, setDestination] = useState('')
-  const [location, setLocation] = useState('')
-
-  //Who
-  const [activityCoordinator, setActivityCoordinator] = useState('')
-  const [estimatedHours, setEstimatedHours] = useState('')
-  const [estimatedMinutes, setEstimatedMinutes] = useState('')
-  const [numVolunteers, setNumVolunteers] = useState('')
-  const coordinators = ['Coordinator 1', 'Coordinator 2']
-
   const years = Array.from(Array(5).keys()).map((y) => (y+(new Date().getFullYear())))
-
   const months = [
     'January',
     'February',
@@ -106,15 +60,6 @@ export default function CreateNewActivity(props) {
     'October',
     'November',
     'December',
-  ]
-  const daysOfWeek = [
-    'Sunday',
-    'Monday',
-    'Tuesday',
-    'Wednesday',
-    'Thursday',
-    'Friday',
-    'Saturday',
   ]
 
   const times = [
@@ -225,31 +170,83 @@ export default function CreateNewActivity(props) {
   ]
   const count = Array.from(Array(51).keys()).slice(1,51)
 
-  //Dietary Restrictions (kept in case checkbox implementation is needed)
-  const [vegetarian, setVegetarian] = useState(false)
-  const [kosher, setKosher] = useState(false)
-  const [nutFree, setNutFree] = useState(false)
-  const [lactoseFree, setLactoseFree] = useState(false)
-  const [wheatFree, setWheatFree] = useState(false)
-  const [glutenFree, setGlutenFree] = useState(false)
-  const [soyFree, setSoyFree] = useState(false)
-  const [sugarFree, setSugarFree] = useState(false)
-  const [lowFat, setLowFat] = useState(false)
-  const [lowCarb, setLowCarb] = useState(false)
-  const [lowSalt, setLowSalt] = useState(false)
-  const dietaryRestrictions = [
-    'Vegetarian',
-    'Kosher',
-    'Nut-free',
-    'Lactose-free',
-    'Wheat-free',
-    'Gluten-free',
-    'Soy-free',
-    'Sugar-free',
-    'Low-fat',
-    'Low-carb',
-    'Low-salt',
+
+
+
+  const token = localStorage.getItem('token')
+
+  const [activeTab, setActiveTab] = useState('What')
+  const [validForm, setValidForm] = useState(false)
+
+  //What
+  const [category, setCategory] = useState('Giving Rides')
+  const [activityName, setActivityName] = useState('')
+  const [calendarLabel, setCalendarLabel] = useState('')
+  const [notes, setNotes] = useState('')
+
+  //When
+  const [startTime, setStartTime] = useState('12:00 PM')
+  const [endTime, setEndTime] = useState('12:00 PM')
+  const [noEndTime, setNoEndTime] = useState(false)
+  const [allDay, setAllDay] = useState(false)
+  const [startMonth, setStartMonth] = useState(months[new Date().getMonth()])
+  const [startDay, setStartDay] = useState(new Date().getDate())
+  const [startYear, setStartYear] = useState(new Date().getFullYear())
+  const [endMonth, setEndMonth] = useState(months[new Date().getMonth()])
+  const [endDay, setEndDay] = useState(new Date().getDate())
+  const [endYear, setEndYear] = useState(new Date().getFullYear())
+  const [selectedDays, setSelectedDays] = useState([])
+
+  //Where
+  const [pickupLocation, setPickupLocation] = useState('')
+  const [destination, setDestination] = useState('')
+  const [location, setLocation] = useState('')
+
+  //Who
+  const [activityCoordinator, setActivityCoordinator] = useState('Coordinator 1')
+  const [estimatedHours, setEstimatedHours] = useState('')
+  const [estimatedMinutes, setEstimatedMinutes] = useState('')
+  const [numVolunteers, setNumVolunteers] = useState(1)
+  const coordinators = ['Coordinator 1', 'Coordinator 2']
+
+
+  const categories = [
+    'Giving Rides',
+    'Preparing Meals',
+    'Shopping',
+    'Childcare',
+    'Visits',
+    'Coverage',
+    'Miscellaneous',
+    'Event'
   ]
+  
+  //Dietary Restrictions (kept in case checkbox implementation is needed)
+  const initDietaryRestrictions = [
+    {name: 'Vegetarian', isChecked: false},
+    {name: 'Kosher', isChecked: false},
+    {name: 'Nut-free', isChecked: false},
+    {name: 'Lactose-free', isChecked: false},
+    {name: 'Wheat-free', isChecked: false},
+    {name: 'Gluten-free', isChecked: false},
+    {name: 'Soy-free', isChecked: false},
+    {name: 'Sugar-free', isChecked: false},
+    {name: 'Low-fat', isChecked: false},
+    {name: 'Low-carb', isChecked: false},
+    {name: 'Low-salt', isChecked: false},
+  ]
+  const [dietaryRestrictions, setDietaryRestrictions] = useState(initDietaryRestrictions)
+
+  const initDaysOfWeek = [
+    {name: 'Sunday', isChecked: false},
+    {name: 'Monday', isChecked: false},
+    {name: 'Tuesday', isChecked: false},
+    {name: 'Wednesday', isChecked: false},
+    {name: 'Thursday', isChecked: false},
+    {name: 'Friday', isChecked: false},
+    {name: 'Saturday', isChecked: false}
+  ]
+  const [daysOfWeek, setDaysOfWeek] = useState(initDaysOfWeek)
 
   const monthDiff = (d1, d2) => {
     var months
@@ -266,7 +263,7 @@ export default function CreateNewActivity(props) {
     var current = new Date(start)
 
     while (current <= end) {
-      if (current.getDay() == day) {
+      if (current.getDay() === day) {
         result.push(new Date(current))
       }
       current.setDate(current.getDate()+1)
@@ -340,28 +337,6 @@ export default function CreateNewActivity(props) {
   }
 
   useEffect(() => {
-    setStartMonth(months[new Date().getMonth()])
-    setStartDay(new Date().getDate())
-    setStartYear(new Date().getFullYear())
-    setEndMonth(months[new Date().getMonth()])
-    setEndDay(new Date().getDate())
-    setEndYear(new Date().getFullYear())
-    setNumVolunteers(1)
-    setActivityCoordinator('Coordinator 1')
-  }, [])
-
-  useEffect(() => {
-    var newSelectedDays = selectedDays
-    var startDate = new Date(startYear, months.indexOf(startMonth), startDay)
-    var endDate = new Date(endYear, months.indexOf(endMonth), endDay)
-    setSelectedDays(
-      newSelectedDays.filter((d) =>
-        DateUtils.isDayInRange(d, { from: startDate, to: endDate })
-      )
-    )
-  }, [startDay, startMonth, startYear, endDay, endMonth, endYear])
-
-  useEffect(() => {
     const formValues = [
       activityName,
       calendarLabel,
@@ -401,9 +376,11 @@ export default function CreateNewActivity(props) {
   ])
 
 
-
-
   const handleSubmit = useCallback(() => {
+    const dietaryRestrictionStatus = {}
+    dietaryRestrictions.forEach((restriction) => dietaryRestrictionStatus[restriction.name] = restriction.isChecked)
+    console.log(dietaryRestrictionStatus)
+
     const param = JSON.stringify({
       'name': activityName,
       'calendar_label': calendarLabel,
@@ -417,7 +394,7 @@ export default function CreateNewActivity(props) {
       'pickup_location': pickupLocation,
       'destination_location': destination,
       'location': location,
-      'dietary_restrictions': {vegetarian: vegetarian, kosher: kosher, nutfree: nutFree, lactoseFree: lactoseFree, wheatfree: wheatFree, glutenfree: glutenFree, wheatfree: wheatFree, glutenfree: glutenFree, soyfree: soyFree, sugarfree: sugarFree, lowfat: lowFat, lowcarb: lowCarb, lowsalt: lowSalt},
+      'dietary_restrictions': dietaryRestrictionStatus,
       'start_time': startTime,
       'end_time': endTime,
       'all_day': allDay,
@@ -434,7 +411,7 @@ export default function CreateNewActivity(props) {
           console.log(response)
           console.log(err)
       })
-  }, [activityName, calendarLabel, notes, category, selectedDays, estimatedHours, estimatedMinutes, numVolunteers, pickupLocation, destination, location, startTime, endTime, token, vegetarian, kosher, nutFree, lactoseFree, wheatFree, glutenFree, wheatFree, glutenFree, soyFree, sugarFree, lowFat, lowCarb, lowSalt])
+  }, [activityName, calendarLabel, notes, category, selectedDays, estimatedHours, estimatedMinutes, numVolunteers, pickupLocation, destination, location, startTime, endTime, token, allDay, noEndTime, dietaryRestrictions])
 
 
   return (
@@ -494,14 +471,7 @@ export default function CreateNewActivity(props) {
                       name='category'
                       value={category}
                     >
-                      <option>Giving Rides</option>
-                      <option>Preparing Meals</option>
-                      <option>Shopping</option>
-                      <option>Childcare</option>
-                      <option>Visits</option>
-                      <option>Coverage</option>
-                      <option>Miscellaneous</option>
-                      <option>Event</option>
+                    {categories.map((cat) => (<option>{cat}</option>))}
                     </Select>
                   </Control>
                 </Field>
@@ -533,120 +503,18 @@ export default function CreateNewActivity(props) {
                     <Columns>
                       <Columns.Column>
                         <Control>
-                          <div className='vegetarian' style={checkboxStyle}>
+                          { dietaryRestrictions.map((restriction, i) => (
+                            <div style={checkboxStyle}>
                             <Checkbox
                               style={{ marginRight: '10px' }}
-                              onClick={(e) => {
-                                setVegetarian(!vegetarian)
-                              }}
-                              checked={vegetarian}
+                              onChange={() => {setDietaryRestrictions((dietaryRestrictions) => {
+                                dietaryRestrictions[i].isChecked = !dietaryRestrictions[i].isChecked
+                                return dietaryRestrictions
+                              })}}
                             />
-                            <p>Vegetarian</p>
-                          </div>
-                          <div className='kosher' style={checkboxStyle}>
-                            <Checkbox
-                              style={{ marginRight: '10px' }}
-                              onClick={(e) => {
-                                setKosher(!kosher)
-                              }}
-                              checked={kosher}
-                            />
-                            <p>Kosher</p>
-                          </div>
-                          <div className='nutfree' style={checkboxStyle}>
-                            <Checkbox
-                              style={{ marginRight: '10px' }}
-                              onClick={(e) => {
-                                setNutFree(!nutFree)
-                              }}
-                              checked={nutFree}
-                            />
-                            <p>Nut-Free</p>
-                          </div>
-                          <div className='lactosefree' style={checkboxStyle}>
-                            <Checkbox
-                              style={{ marginRight: '10px' }}
-                              onClick={(e) => {
-                                setLactoseFree(!lactoseFree)
-                              }}
-                              checked={lactoseFree}
-                            />
-                            <p>Lactose-Free</p>
-                          </div>
-                          <div className='wheatfree' style={checkboxStyle}>
-                            <Checkbox
-                              style={{ marginRight: '10px' }}
-                              onClick={(e) => {
-                                setWheatFree(!wheatFree)
-                              }}
-                              checked={wheatFree}
-                            />
-                            <p>Wheat-Free</p>
-                          </div>
-                          <div className='glutenfree' style={checkboxStyle}>
-                            <Checkbox
-                              style={{ marginRight: '10px' }}
-                              onClick={(e) => {
-                                setGlutenFree(!glutenFree)
-                              }}
-                              checked={glutenFree}
-                            />
-                            <p>Gluten-Free</p>
-                          </div>
-                        </Control>
-                      </Columns.Column>
-                      <Columns.Column>
-                        <Control>
-                          <div className='soyfree' style={checkboxStyle}>
-                            <Checkbox
-                              style={{ marginRight: '10px' }}
-                              onClick={(e) => {
-                                setSoyFree(!soyFree)
-                              }}
-                              checked={soyFree}
-                            />
-                            <p>Soy-Free</p>
-                          </div>
-                          <div className='sugarfree' style={checkboxStyle}>
-                            <Checkbox
-                              style={{ marginRight: '10px' }}
-                              onClick={(e) => {
-                                setSugarFree(!sugarFree)
-                              }}
-                              checked={sugarFree}
-                            />
-                            <p>Sugar-Free</p>
-                          </div>
-                          <div className='lowfat' style={checkboxStyle}>
-                            <Checkbox
-                              style={{ marginRight: '10px' }}
-                              onClick={(e) => {
-                                setLowFat(!lowFat)
-                              }}
-                              checked={lowFat}
-                            />
-                            <p>Low Fat</p>
-                          </div>
-                          <div className='lowcarb' style={checkboxStyle}>
-                            <Checkbox
-                              style={{ marginRight: '10px' }}
-                              onClick={(e) => {
-                                setLowCarb(!lowCarb)
-                              }}
-                              checked={lowCarb}
-                            />
-                            <p>Low Carb</p>
-                          </div>
-                          <div className='lowsalt' style={checkboxStyle}>
-                            <Checkbox
-                              style={{ marginRight: '10px' }}
-                              onClick={(e) => {
-                                setLowSalt(!lowSalt)
-                              }}
-                              checked={lowSalt}
-                            />
-                            <p>Low Salt</p>
-                          </div>
+                            <p>{restriction.name}</p>
+                            </div>
+                          ))}
                         </Control>
                       </Columns.Column>
                     </Columns>
@@ -673,35 +541,20 @@ export default function CreateNewActivity(props) {
                     <Field style={{ marginRight: '10px' }}>
                       Start Time
                       <Control>
-                        {allDay ? (
-                          <Select
-                            onChange={(e) => setStartTime(e.target.value)}
-                            name='startTime'
-                            value={startTime}
-                            disabled
-                          >
-                            {times.map((t) => (
-                              <option>{t}</option>
-                            ))}
-                          </Select>
-                        ) : (
-                          <Select
-                            onChange={(e) => setStartTime(e.target.value)}
-                            name='startTime'
-                            value={startTime}
-                          >
-                            {times.map((t) => (
-                              <option>{t}</option>
-                            ))}
-                          </Select>
-                        )}
+                        <Select
+                          onChange={(e) => setStartTime(e.target.value)}
+                          name='startTime'
+                          value={startTime}
+                          disabled={allDay}
+                        >
+                          {times.map((t) => (
+                            <option>{t}</option>
+                          ))}
+                        </Select>
                         <div style={checkboxStyle}>
                             <Checkbox
                               style={{ marginRight: '10px' }}
-                              onClick={() => {
-                                setAllDay(!allDay)
-                              }}
-                              checked={allDay}
+                              onChange={() => {setAllDay(!allDay)}}
                             />
                           <p>All Day</p>
                         </div>
@@ -712,35 +565,20 @@ export default function CreateNewActivity(props) {
                     <Field>
                       End Time {'(optional)'}
                       <Control>
-                        {noEndTime ? (
-                          <Select
-                            onChange={(e) => setEndTime(e.target.value)}
-                            name='endTime'
-                            value={endTime}
-                            disabled
-                          >
-                            {times.map((t) => (
-                              <option>{t}</option>
-                            ))}
-                          </Select>
-                        ) : (
-                          <Select
-                            onChange={(e) => setEndTime(e.target.value)}
-                            name='endTime'
-                            value={endTime}
-                          >
-                            {times.map((t) => (
-                              <option>{t}</option>
-                            ))}
-                          </Select>
-                        )}
+                        <Select
+                          onChange={(e) => setEndTime(e.target.value)}
+                          name='endTime'
+                          value={endTime}
+                          disabled={noEndTime}
+                        >
+                          {times.map((t) => (
+                            <option>{t}</option>
+                          ))}
+                        </Select>
                         <div style={checkboxStyle}>
                             <Checkbox
                               style={{ marginRight: '10px' }}
-                              onClick={() => {
-                                setNoEndTime(!noEndTime)
-                              }}
-                              checked={noEndTime}
+                              onChange={() => {setNoEndTime(!noEndTime)}}
                             />
                           <p>None</p>
                         </div>
@@ -828,86 +666,24 @@ export default function CreateNewActivity(props) {
                   </Columns.Column>
                 </Columns>
                 <Field>
-                  <Control>
-                    <p style={noteStyle}>Repeats</p>
-                    <div className='sunday' style={checkboxStyle}>
+                <Control>
+                  <p style={noteStyle}>Repeats</p>
+                  { daysOfWeek.map((day, i) => (
+                    <div style={checkboxStyle}>
                       <Checkbox
                         style={{ marginRight: '10px' }}
-                        onClick={(e) => {
-                          handleWeekdayToggle('Sunday', sunday)
-                          setSunday(!sunday)
+                        onChange={() => {
+                          handleWeekdayToggle(day.name, !day.isChecked)
+                          setDaysOfWeek((daysOfWeek) => {
+                            day.isChecked = !day.isChecked
+                            return daysOfWeek
+                          })
                         }}
-                        checked={!sunday}
                       />
-                      <p>Sunday</p>
+                      <p>{day.name}</p>
                     </div>
-                    <div className='monday' style={checkboxStyle}>
-                      <Checkbox
-                        style={{ marginRight: '10px' }}
-                        onClick={(e) => {
-                          handleWeekdayToggle('Monday', monday)
-                          setMonday(!monday)
-                        }}
-                        checked={!monday}
-                      />
-                      <p>Monday</p>
-                    </div>
-                    <div className='tuesday' style={checkboxStyle}>
-                      <Checkbox
-                        style={{ marginRight: '10px' }}
-                        onClick={(e) => {
-                          handleWeekdayToggle('Tuesday', tuesday)
-                          setTuesday(!tuesday)
-                        }}
-                        checked={!tuesday}
-                      />
-                      <p>Tuesday</p>
-                    </div>
-                    <div className='wednesday' style={checkboxStyle}>
-                      <Checkbox
-                        style={{ marginRight: '10px' }}
-                        onClick={(e) => {
-                          handleWeekdayToggle('Wednesday', wednesday)
-                          setWednesday(!wednesday)
-                        }}
-                        checked={!wednesday}
-                      />
-                      <p>Wednesday</p>
-                    </div>
-                    <div className='thursday' style={checkboxStyle}>
-                      <Checkbox
-                        style={{ marginRight: '10px' }}
-                        onClick={(e) => {
-                          handleWeekdayToggle('Thursday', thursday)
-                          setThursday(!thursday)
-                        }}
-                        checked={!thursday}
-                      />
-                      <p>Thursday</p>
-                    </div>
-                    <div className='friday' style={checkboxStyle}>
-                      <Checkbox
-                        style={{ marginRight: '10px' }}
-                        onClick={(e) => {
-                          handleWeekdayToggle('Friday', friday)
-                          setFriday(!friday)
-                        }}
-                        checked={!friday}
-                      />
-                      <p>Friday</p>
-                    </div>
-                    <div className='saturday' style={checkboxStyle}>
-                      <Checkbox
-                        style={{ marginRight: '10px' }}
-                        onClick={(e) => {
-                          handleWeekdayToggle('Saturday', saturday)
-                          setSaturday(!saturday)
-                        }}
-                        checked={!saturday}
-                      />
-                      <p>Saturday</p>
-                    </div>
-                  </Control>
+                  ))}
+                </Control>
                 </Field>
                 <p style={noteStyle}>
                   <b>Select all applicable dates on the calendar below.</b>
