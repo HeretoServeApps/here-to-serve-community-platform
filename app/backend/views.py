@@ -51,7 +51,6 @@ class OneCommunityViewSet(viewsets.ModelViewSet):
         is_closed = self.request.query_params.get('is_closed')
         return Community.objects.filter(name=name, zipcode=zipcode, is_closed=is_closed)
 
-
 class UsersViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all().order_by('last_name')
     serializer_class = UserSerializer
@@ -184,6 +183,17 @@ class PasswordResetConfirmView(generics.GenericAPIView):
         return Response(
             {"detail": ("Password has been reset with the new password.")}
        )
+
+
+class CommunityCoordinatorsList(generics.ListAPIView):
+
+    permission_classes=(permissions.AllowAny,)
+
+    def get(self, request, community_id):
+        user_ids = CommunityUserRole.objects.filter(community=community_id, role__in=['COORDINATOR', 'COMM_LEADER']).values_list('user', flat=True)
+        users = User.objects.filter(id__in=user_ids).values("email", "first_name", "last_name")
+        serializer = UserSerializer(users, many=True)
+        return Response(serializer.data)
 
 
 class ActivityViewSet(viewsets.ViewSet):
