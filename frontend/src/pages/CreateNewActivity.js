@@ -181,7 +181,6 @@ export default function CreateNewActivity(props) {
   //What
   const [category, setCategory] = useState('Giving Rides')
   const [activityName, setActivityName] = useState('')
-  const [calendarLabel, setCalendarLabel] = useState('')
   const [notes, setNotes] = useState('')
 
   //When
@@ -339,7 +338,6 @@ export default function CreateNewActivity(props) {
   useEffect(() => {
     const formValues = [
       activityName,
-      calendarLabel,
       startDay,
       startMonth,
       startYear,
@@ -364,7 +362,6 @@ export default function CreateNewActivity(props) {
     }
   }, [
     activityName,
-    calendarLabel,
     startDay,
     startMonth,
     startYear,
@@ -383,7 +380,6 @@ export default function CreateNewActivity(props) {
 
     const param = JSON.stringify({
       'name': activityName,
-      'calendar_label': calendarLabel,
       'description': notes,
       'activity_type': category,
       'community': localStorage.getItem('community-id'),
@@ -411,7 +407,7 @@ export default function CreateNewActivity(props) {
           console.log(response)
           console.log(err)
       })
-  }, [activityName, calendarLabel, notes, category, selectedDays, estimatedHours, estimatedMinutes, numVolunteers, pickupLocation, destination, location, startTime, endTime, token, allDay, noEndTime, dietaryRestrictions])
+  }, [activityName, notes, category, selectedDays, estimatedHours, estimatedMinutes, numVolunteers, pickupLocation, destination, location, startTime, endTime, token, allDay, noEndTime, dietaryRestrictions])
 
 
   return (
@@ -480,20 +476,9 @@ export default function CreateNewActivity(props) {
                     Activity Name<span style={{ color: '#F83D34' }}>*</span>
                   </Label>
                   <Control>
-                    <Input
+                    <Input maxLength={120}
                       value={activityName}
                       onChange={(e) => setActivityName(e.target.value)}
-                    />
-                  </Control>
-                </Field>
-                <Field>
-                  <Label>
-                    Calendar Label<span style={{ color: '#F83D34' }}>*</span>
-                  </Label>
-                  <Control>
-                    <Input
-                      value={calendarLabel}
-                      onChange={(e) => setCalendarLabel(e.target.value)}
                     />
                   </Control>
                 </Field>
