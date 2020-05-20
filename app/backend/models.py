@@ -4,6 +4,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django_countries.fields import CountryField
 from django.contrib.auth.models import ( AbstractBaseUser, BaseUserManager, PermissionsMixin )
+from django.utils import timezone
 from phone_field import PhoneField
 from django.conf import settings
 
@@ -283,11 +284,10 @@ class Activity(models.Model):
     name = models.CharField(max_length=30)
     description = models.TextField(blank=True, default='')
 
-    # next two are year, month, date
-    start_date = models.DateField()
-    end_date = models.DateField()
+    start_time = models.DateTimeField(default=timezone.now)
+    end_time = models.DateTimeField(blank=True, null=True)
+    all_day = models.BooleanField(default=False)
 
-    is_recurring = models.BooleanField(default=False)
     # event(s) in an event batch will share a unique ID 
     # non-recurring events will be the only event in their batch
     # used to relate and manage recurring events
@@ -295,7 +295,7 @@ class Activity(models.Model):
 
     est_hours = models.IntegerField(blank=True, null=True)
     est_minutes = models.IntegerField(blank=True, null=True)
-    volunteers_needed = models.IntegerField(blank=True, null=True)
+    volunteers_needed = models.IntegerField(default=0)
     volunteers_signed_up = models.IntegerField(blank=True, null=True)
 
 
@@ -305,10 +305,6 @@ class RideActivity(models.Model):
         on_delete=models.CASCADE,
         primary_key=True,
     )
-    pickup_time = models.TimeField(blank=True, null=True)
-    # pickup_time_buffer will serve as the latest "pick up by" time
-    pickup_time_buffer  = models.TimeField(blank=True, null=True)
-    arrive_time = models.TimeField(blank=True, null=True)
     pickup_location = models.CharField(max_length=150, blank=True, default='')
     destination_location = models.CharField(max_length=150, blank=True, default='')
 
@@ -319,7 +315,6 @@ class MealActivity(models.Model):
         on_delete=models.CASCADE,
         primary_key=True,
     )
-    delivery_time = models.TimeField(blank=True, null=True)
     delivery_location = models.CharField(max_length=150, blank=True, default='')
     dietary_restrictions = models.CharField(max_length=500, blank=True, default='None')
 
@@ -336,6 +331,4 @@ class EventActivity(models.Model):
         on_delete=models.CASCADE,
         primary_key=True,
     )
-    start_time = models.TimeField(blank=True, null=True)
-    end_time = models.TimeField(blank=True, null=True)
     location = models.CharField(max_length=150, blank=True, default='')

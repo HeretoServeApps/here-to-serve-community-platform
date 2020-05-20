@@ -107,16 +107,16 @@ class RideActivitySerializer(serializers.ModelSerializer):
     activity_ptr = ActivitySerializer(required=True)
     class Meta:
         model = RideActivity
-        fields = ('activity_ptr', 'pickup_time', 'pickup_time_buffer', 'arrive_time', 'pickup_location', 'destination_location')
+        fields = ('activity_ptr', 'pickup_location', 'destination_location')
 
 class MealActivitySerializer(serializers.ModelSerializer):
     activity_ptr = ActivitySerializer(required=True)
     class Meta:
         model = MealActivity
-        fields = ('activity_ptr', 'delivery_time', 'delivery_location', 'dietary_restrictions')
+        fields = ('activity_ptr', 'delivery_location', 'dietary_restrictions')
 
 class EventActivitySerializer(serializers.ModelSerializer):
     activity_ptr = ActivitySerializer(required=True)
     class Meta:
         model = EventActivity
-        fields = ('activity_ptr', 'start_time', 'end_time', 'location')
+        fields = ('activity_ptr', 'location')
