@@ -15,6 +15,7 @@ export default function CommunityHome(props) {
   const [month, setMonth] = useState('')
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
+  const [customSections, setCustomSections] = useState([])
   const token = localStorage.getItem('token')
 
   var containerStyle = {
@@ -43,7 +44,28 @@ export default function CommunityHome(props) {
           console.log(error)
         }
       )
+      axios
+      .get('/community-custom-sections/', {
+        headers: {
+          Authorization: `JWT ${token}`,
+        },params: {
+          name: localStorage.getItem('community-name'),
+        },
+      })
+      .then(
+        (response) => {
+          setCustomSections(response.data)
+        },
+        (error) => {
+          console.log(error)
+        }
+      )
   }, [token])
+
+
+const sections = customSections.map((customSection) =>
+  <li>{customSection.name}</li>)
+
 
   return (
     <div>
@@ -61,6 +83,9 @@ export default function CommunityHome(props) {
                 Edit Community
               </Link>
             </Button>
+            <br />
+            <Heading size={6}>Custom Sections</Heading>
+            <p>{sections}</p>
           </Columns.Column>
           <Columns.Column size={6}>
             <Control>
