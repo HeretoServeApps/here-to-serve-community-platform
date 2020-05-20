@@ -1,4 +1,4 @@
-import json
+import json, uuid
 from datetime import datetime, time
 
 from django.shortcuts import render, get_object_or_404
@@ -190,7 +190,7 @@ class CommunityCoordinatorsList(generics.ListAPIView):
     permission_classes=(permissions.AllowAny,)
 
     def get(self, request, community_id):
-        user_ids = CommunityUserRole.objects.filter(community=community_id, role__in=['COORDINATOR', 'COMM_LEADER']).values_list('user', flat=True)
+        user_ids = CommunityUserRole.objects.filter(community=community_id, role__in=['COORDINATOR', 'COMM_LEADER', "COMM_MEMBER", "ADMIN"]).values_list('user', flat=True)
         users = User.objects.filter(id__in=user_ids).values("email", "first_name", "last_name")
         serializer = UserSerializer(users, many=True)
         return Response(serializer.data)
@@ -230,6 +230,7 @@ class ActivityViewSet(viewsets.ViewSet):
         destination_location = data.pop('destination_location')
         location = data.pop('location')
         dietary_restrictions = data.pop('dietary_restrictions')
+        data['event_batch'] = uuid.uuid4()
 
         activities = []
         for date in dates:
