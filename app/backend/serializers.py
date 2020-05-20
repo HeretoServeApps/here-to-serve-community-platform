@@ -104,19 +104,38 @@ class ActivitySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class RideActivitySerializer(serializers.ModelSerializer):
-    activity_ptr = ActivitySerializer(required=True)
+    activity = ActivitySerializer(required=True)
     class Meta:
         model = RideActivity
-        fields = ('activity_ptr', 'pickup_location', 'destination_location')
+        fields = ('activity', 'pickup_location', 'destination_location')
+
+    def create(self, validated_data):
+        activity_data = validated_data.pop('activity')
+        activity = Activity.objects.create(**activity_data)
+        return RideActivity.objects.create(activity=activity, **validated_data)
+
+
 
 class MealActivitySerializer(serializers.ModelSerializer):
-    activity_ptr = ActivitySerializer(required=True)
+    activity = ActivitySerializer(required=True)
     class Meta:
         model = MealActivity
-        fields = ('activity_ptr', 'delivery_location', 'dietary_restrictions')
+        fields = ('activity', 'delivery_location', 'dietary_restrictions')
+
+    def create(self, validated_data):
+        activity_data = validated_data.pop('activity')
+        activity = Activity.objects.create(**activity_data)
+        return MealActivity.objects.create(activity=activity, **validated_data)
+
 
 class EventActivitySerializer(serializers.ModelSerializer):
-    activity_ptr = ActivitySerializer(required=True)
+    activity = ActivitySerializer(required=True)
     class Meta:
         model = EventActivity
-        fields = ('activity_ptr', 'location')
+        fields = ('activity', 'location')
+
+    def create(self, validated_data):
+        activity_data = validated_data.pop('activity')
+        activity = Activity.objects.create(**activity_data)
+        return EventActivity.objects.create(activity=activity, **validated_data)
+

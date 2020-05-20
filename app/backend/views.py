@@ -1,3 +1,6 @@
+import json
+from datetime import datetime, time
+
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.mail import send_mail, send_mass_mail, EmailMultiAlternatives, BadHeaderError
@@ -16,7 +19,6 @@ from rest_framework import generics
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
-import json
 
 from .serializers import (
     CommunitySerializer, UserSerializer, CommunityUserRoleSerializer, UserSerializerWithToken, 
@@ -210,12 +212,42 @@ class ActivityViewSet(viewsets.ViewSet):
         return Response(serializer.data)
 
     def create(self, request):
-        if(request.POST['activity_type'] == 'Getting Rides'):
-            serializer = RideActivitySerializer(data=request.data)
-        elif(request.POST['activity_type'] == 'Preparing Meals'):
-            serializer = MealActivitySerializer(data=request.data)
+        data = request.data
+        dates = data.pop('dates')
+        start_time = datetime.strptime(data.pop('start_time'), '%I:%M %p').time()
+        end_time = datetime.strptime(data.pop('end_time'), '%I:%M %p').time()
+        pickup_location = data.pop('pickup_location')
+        destination_location = data.pop('destination_location')
+        location = data.pop('location')
+        dietary_restrictions = data.pop('dietary_restrictions')
+
+        activities = []
+        for date in dates:
+            date = datetime.strptime(date, '%Y-%m-%dT%H:%M:%S.%fZ')
+            start_datetime = datetime.combine(date, start_time).isoformat()
+            end_datetime = datetime.combine(date, end_time).isoformat()
+            data['start_time'] = start_datetime
+            data['end_time'] = end_datetime
+            new_activity = {}
+            new_activity['activity'] = data.copy()
+
+            if(data['activity_type'] == 'Giving Rides'):
+                new_activity['pickup_location'] = pickup_location
+                new_activity['destination_location'] = destination_location
+            elif(data['activity_type'] == 'Preparing Meals'):
+                new_activity['delivery_location'] = location
+                new_activity['dietary_restrictions'] = json.dumps(dietary_restrictions)
+            else:
+                new_activity['location'] = location
+
+            activities.append(new_activity)
+
+        if(request.data['activity_type'] == 'Giving Rides'):
+            serializer = RideActivitySerializer(data=activities, many=True)
+        elif(request.data['activity_type'] == 'Preparing Meals'):
+            serializer = MealActivitySerializer(data=activities, many=True)
         else:
-            serializer = EventSerializer(data=request.data)
+            serializer = EventActivitySerializer(data=activities, many=True)
 
         if serializer.is_valid():
             serializer.save()
