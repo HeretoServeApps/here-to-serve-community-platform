@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import DayPicker, { DateUtils } from 'react-day-picker'
 import 'react-day-picker/lib/style.css'
 import { Link } from 'react-router-dom'
@@ -46,6 +46,9 @@ export default function CreateNewActivity(props) {
     justifyContent: 'flex-start',
   }
 
+  const token = localStorage.getItem('token')
+
+
   const [activeTab, setActiveTab] = useState('What')
   const [validForm, setValidForm] = useState(false)
 
@@ -60,6 +63,7 @@ export default function CreateNewActivity(props) {
   const [startTime, setStartTime] = useState('12:00 PM')
   const [endTime, setEndTime] = useState('12:00 PM')
   const [noEndTime, setNoEndTime] = useState(false)
+  const [allDay, setAllDay] = useState(false)
   const [startMonth, setStartMonth] = useState('')
   const [startDay, setStartDay] = useState('')
   const [startYear, setStartYear] = useState('')
@@ -396,6 +400,43 @@ export default function CreateNewActivity(props) {
     numVolunteers,
   ])
 
+
+
+
+  const handleSubmit = useCallback(() => {
+    const param = JSON.stringify({
+      'name': activityName,
+      'calendar_label': calendarLabel,
+      'description': notes,
+      'activity_type': category,
+      'community': localStorage.getItem('community-id'),
+      "dates" : selectedDays,
+      'est_hours': estimatedHours,
+      'est_minutes': estimatedMinutes,
+      'volunteers_needed': numVolunteers,
+      'pickup_location': pickupLocation,
+      'destination_location': destination,
+      'location': location,
+      'dietary_restrictions': {vegetarian: vegetarian, kosher: kosher, nutfree: nutFree, lactoseFree: lactoseFree, wheatfree: wheatFree, glutenfree: glutenFree, wheatfree: wheatFree, glutenfree: glutenFree, soyfree: soyFree, sugarfree: sugarFree, lowfat: lowFat, lowcarb: lowCarb, lowsalt: lowSalt},
+      'start_time': startTime,
+      'end_time': endTime,
+      'all_day': allDay,
+      'no_end_time': noEndTime,
+    })
+    axios.post('/activity/', param, {
+        headers: {
+          'Authorization': `JWT ${token}`,
+          'Content-Type': 'application/json',
+        },
+      })
+      .then(
+        (response, err) => {
+          console.log(response)
+          console.log(err)
+      })
+  }, [activityName, calendarLabel, notes, category, selectedDays, estimatedHours, estimatedMinutes, numVolunteers, pickupLocation, destination, location, startTime, endTime, token, vegetarian, kosher, nutFree, lactoseFree, wheatFree, glutenFree, wheatFree, glutenFree, soyFree, sugarFree, lowFat, lowCarb, lowSalt])
+
+
   return (
     <div>
       <CommunityNavbar />
@@ -498,7 +539,7 @@ export default function CreateNewActivity(props) {
                               onClick={(e) => {
                                 setVegetarian(!vegetarian)
                               }}
-                              checked={!vegetarian}
+                              checked={vegetarian}
                             />
                             <p>Vegetarian</p>
                           </div>
@@ -508,7 +549,7 @@ export default function CreateNewActivity(props) {
                               onClick={(e) => {
                                 setKosher(!kosher)
                               }}
-                              checked={!kosher}
+                              checked={kosher}
                             />
                             <p>Kosher</p>
                           </div>
@@ -518,7 +559,7 @@ export default function CreateNewActivity(props) {
                               onClick={(e) => {
                                 setNutFree(!nutFree)
                               }}
-                              checked={!nutFree}
+                              checked={nutFree}
                             />
                             <p>Nut-Free</p>
                           </div>
@@ -528,7 +569,7 @@ export default function CreateNewActivity(props) {
                               onClick={(e) => {
                                 setLactoseFree(!lactoseFree)
                               }}
-                              checked={!lactoseFree}
+                              checked={lactoseFree}
                             />
                             <p>Lactose-Free</p>
                           </div>
@@ -538,7 +579,7 @@ export default function CreateNewActivity(props) {
                               onClick={(e) => {
                                 setWheatFree(!wheatFree)
                               }}
-                              checked={!wheatFree}
+                              checked={wheatFree}
                             />
                             <p>Wheat-Free</p>
                           </div>
@@ -548,7 +589,7 @@ export default function CreateNewActivity(props) {
                               onClick={(e) => {
                                 setGlutenFree(!glutenFree)
                               }}
-                              checked={!glutenFree}
+                              checked={glutenFree}
                             />
                             <p>Gluten-Free</p>
                           </div>
@@ -562,7 +603,7 @@ export default function CreateNewActivity(props) {
                               onClick={(e) => {
                                 setSoyFree(!soyFree)
                               }}
-                              checked={!soyFree}
+                              checked={soyFree}
                             />
                             <p>Soy-Free</p>
                           </div>
@@ -572,7 +613,7 @@ export default function CreateNewActivity(props) {
                               onClick={(e) => {
                                 setSugarFree(!sugarFree)
                               }}
-                              checked={!sugarFree}
+                              checked={sugarFree}
                             />
                             <p>Sugar-Free</p>
                           </div>
@@ -582,7 +623,7 @@ export default function CreateNewActivity(props) {
                               onClick={(e) => {
                                 setLowFat(!lowFat)
                               }}
-                              checked={!lowFat}
+                              checked={lowFat}
                             />
                             <p>Low Fat</p>
                           </div>
@@ -592,7 +633,7 @@ export default function CreateNewActivity(props) {
                               onClick={(e) => {
                                 setLowCarb(!lowCarb)
                               }}
-                              checked={!lowCarb}
+                              checked={lowCarb}
                             />
                             <p>Low Carb</p>
                           </div>
@@ -602,7 +643,7 @@ export default function CreateNewActivity(props) {
                               onClick={(e) => {
                                 setLowSalt(!lowSalt)
                               }}
-                              checked={!lowSalt}
+                              checked={lowSalt}
                             />
                             <p>Low Salt</p>
                           </div>
@@ -628,18 +669,42 @@ export default function CreateNewActivity(props) {
                 </Label>
                 <Columns>
                   <Columns.Column>
+
                     <Field style={{ marginRight: '10px' }}>
                       Start Time
                       <Control>
-                        <Select
-                          onChange={(e) => setStartTime(e.target.value)}
-                          name='startTime'
-                          value={startTime}
-                        >
-                          {times.map((t) => (
-                            <option>{t}</option>
-                          ))}
-                        </Select>
+                        {allDay ? (
+                          <Select
+                            onChange={(e) => setStartTime(e.target.value)}
+                            name='startTime'
+                            value={startTime}
+                            disabled
+                          >
+                            {times.map((t) => (
+                              <option>{t}</option>
+                            ))}
+                          </Select>
+                        ) : (
+                          <Select
+                            onChange={(e) => setStartTime(e.target.value)}
+                            name='startTime'
+                            value={startTime}
+                          >
+                            {times.map((t) => (
+                              <option>{t}</option>
+                            ))}
+                          </Select>
+                        )}
+                        <div style={checkboxStyle}>
+                            <Checkbox
+                              style={{ marginRight: '10px' }}
+                              onClick={() => {
+                                setAllDay(!allDay)
+                              }}
+                              checked={allDay}
+                            />
+                          <p>All Day</p>
+                        </div>
                       </Control>
                     </Field>
                   </Columns.Column>
@@ -669,24 +734,14 @@ export default function CreateNewActivity(props) {
                             ))}
                           </Select>
                         )}
-
                         <div style={checkboxStyle}>
-                          {noEndTime ? (
                             <Checkbox
                               style={{ marginRight: '10px' }}
                               onClick={() => {
                                 setNoEndTime(!noEndTime)
                               }}
-                              checked
+                              checked={noEndTime}
                             />
-                          ) : (
-                            <Checkbox
-                              style={{ marginRight: '10px' }}
-                              onClick={() => {
-                                setNoEndTime(!noEndTime)
-                              }}
-                            />
-                          )}
                           <p>None</p>
                         </div>
                       </Control>
@@ -1023,7 +1078,7 @@ export default function CreateNewActivity(props) {
               <Link to='#' style={{ color: 'white' }}>
                 <Button
                   color='primary'
-                  onClick={() =>
+                  onClick={() => activeTab === 'Who' ? handleSubmit() :
                     setActiveTab(
                       activeTab === 'What'
                         ? 'When'
