@@ -31,21 +31,21 @@ export default function CommunityOneMember(props) {
 
     const [isEditing, setIsEditing] = useState(false)
     const [isRemoving, setIsRemoving] = useState(false)
-    const [newFirstName, setNewFirstName] = useState(props.location.state.first_name)
-    const [newLastName, setNewLastName] = useState(props.location.state.last_name)
-    const [newEmail, setNewEmail] = useState(props.location.state.email)
-    const [newPhoneNumber1, setNewPhoneNumber1] = useState(props.location.state.phone_number_1)
-    const [newPhoneNumber1Type, setNewPhoneNumber1Type] = useState(props.location.state.phone_number_1_type)
-    const [newPhoneNumber2, setNewPhoneNumber2] = useState(props.location.state.phone_number_2)
-    const [newPhoneNumber2Type, setNewPhoneNumber2Type] = useState(props.location.state.phone_number_2_type)
-    const [newAddressLine1, setNewAddressLine1] = useState(props.location.state.address_line_1)
-    const [newAddressLine2, setNewAddressLine2] = useState(props.location.state.address_line_2)
-    const [newCity, setNewCity] = useState(props.location.state.city)
-    const [newState, setNewState] = useState(props.location.state.state)
-    const [newZipcode, setNewZipcode] = useState(props.location.state.zipcode)
-    const [newCountry, setNewCountry] = useState(props.location.state.country)
-    const [newRole, setNewRole] = useState(props.location.state.role)
-    const [pk, setUserPk] = useState(props.location.state.pk)
+    const [newFirstName, setNewFirstName] = useState(props.location.state ? props.location.state.first_name : '')
+    const [newLastName, setNewLastName] = useState(props.location.state ? props.location.state.last_name : '')
+    const [newEmail, setNewEmail] = useState(props.location.state ? props.location.state.email : '')
+    const [newPhoneNumber1, setNewPhoneNumber1] = useState(props.location.state ? props.location.state.phone_number_1 : '')
+    const [newPhoneNumber1Type, setNewPhoneNumber1Type] = useState(props.location.state ? props.location.state.phone_number_1_type : '')
+    const [newPhoneNumber2, setNewPhoneNumber2] = useState(props.location.state ? props.location.state.phone_number_2 : '')
+    const [newPhoneNumber2Type, setNewPhoneNumber2Type] = useState(props.location.state ? props.location.state.phone_number_2_type : '')
+    const [newAddressLine1, setNewAddressLine1] = useState(props.location.state ? props.location.state.address_line_1 : '')
+    const [newAddressLine2, setNewAddressLine2] = useState(props.location.state ? props.location.state.address_line_2 : '')
+    const [newCity, setNewCity] = useState(props.location.state ? props.location.state.city : '')
+    const [newState, setNewState] = useState(props.location.state ? props.location.state.state : '')
+    const [newZipcode, setNewZipcode] = useState(props.location.state ? props.location.state.zipcode : '')
+    const [newCountry, setNewCountry] = useState(props.location.state ? props.location.state.country : '')
+    const [newRole, setNewRole] = useState(props.location.state ? props.location.state.role : '')
+    const [pk, setUserPk] = useState(props.location.state ? props.location.state.pk : -1)
     const [validForm, setValidForm] = useState(false)
     let history = useHistory()
 
@@ -382,15 +382,15 @@ export default function CommunityOneMember(props) {
                 <Card.Content>
                     <Media>
                         <Media.Item>
-                            <Heading size={4}>{props.location.state.first_name} {props.location.state.last_name}</Heading>
-                            <Heading subtitle size={6}>{props.location.state.role}</Heading>
+                            <Heading size={4}>{newFirstName} {newLastName}</Heading>
+                            <Heading subtitle size={6}>{newRole}</Heading>
                         </Media.Item>
                     </Media>
                     <Content>
                         <p>
-                            Phone Number: {props.location.state.phone_number_1}
+                            Phone Number: {newPhoneNumber1}
                             <br />
-                            Email: {props.location.state.email}
+                            Email: {newEmail}
                         </p>
                     </Content>
                 </Card.Content>
@@ -430,20 +430,20 @@ export default function CommunityOneMember(props) {
 }
 
 CommunityOneMember.propTypes = {
-    first_name: PropTypes.string.isRequired,
-    last_name: PropTypes.string.isRequired,
-    email: PropTypes.string.isRequired,
-    phone_number_1: PropTypes.string.isRequired,
-    phone_number_1_type: PropTypes.string.isRequired,
-    phone_number_2: PropTypes.string.isRequired,
-    phone_number_2_type: PropTypes.string.isRequired,
-    address_line_1: PropTypes.string.isRequired,
-    address_line_2: PropTypes.string.isRequired,
-    city: PropTypes.string.isRequired,
-    state: PropTypes.string.isRequired,
-    zipcode: PropTypes.string.isRequired,
-    country: PropTypes.string.isRequired,
-    role: PropTypes.string.isRequired,
-    pk: PropTypes.number.isRequired,
+    first_name: PropTypes.string,
+    last_name: PropTypes.string,
+    email: PropTypes.string,
+    phone_number_1: PropTypes.string,
+    phone_number_1_type: PropTypes.string,
+    phone_number_2: PropTypes.string,
+    phone_number_2_type: PropTypes.string,
+    address_line_1: PropTypes.string,
+    address_line_2: PropTypes.string,
+    city: PropTypes.string,
+    state: PropTypes.string,
+    zipcode: PropTypes.string,
+    country: PropTypes.string,
+    role: PropTypes.string,
+    pk: PropTypes.number,
 }
 

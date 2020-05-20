@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import { Link } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 
 import { Input } from 'react-bulma-components/lib/components/form'
 import Container from 'react-bulma-components/lib/components/container'
@@ -31,6 +32,7 @@ export default function CommunityPeople() {
     const [userRole, setUserRole] = useState('')
     const [search, setSearch] = useState('')
 
+    let history = useHistory()
 
     useEffect(() => {
         axios
@@ -70,6 +72,7 @@ export default function CommunityPeople() {
                                 boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)',
                             }}
                             color='primary'
+                            onClick={() => history.push('/add-people')}
                         >
                             Add Members
                         </Button>
@@ -92,20 +95,20 @@ export default function CommunityPeople() {
                     <tbody>
                         {people.filter(
                         (p) =>
-                            search === '' || p.name.toLowerCase().includes(search.toLowerCase())
+                            search === '' || (p.first_name + p.last_name).toLowerCase().includes(search.toLowerCase())
                         ).length > 0 ? (
                             people.filter(
                                 (p) =>
                                     search === '' ||
-                                    p.name.toLowerCase().includes(search.toLowerCase())
+                                    (p.first_name + p.last_name).toLowerCase().includes(search.toLowerCase())
                             )
                             .map((p) => (
-                                <tr>
+                                <tr key={p.id}>
                                     <td>
                                         <strong>
                                             <Link 
                                                 to={{
-                                                    pathname: '/' + p.first_name + p.last_name,
+                                                    pathname: 'community/' + p.first_name + p.last_name,
                                                     state: {
                                                         first_name: p.first_name,
                                                         last_name: p.last_name,
