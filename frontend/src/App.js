@@ -22,6 +22,7 @@ import ResetPasswordConfirm from './pages/ResetPasswordConfirm.js'
 import CreateNewActivity from './pages/CreateNewActivity'
 import CommunityPeople from './pages/CommunityPeople'
 import OneCommunityMember from './pages/CommunityOneMember'
+import CommunityAddMembers from './pages/CommunityAddMember'
 
 export default function App() {
   const [loggedIn, setLoggedIn] = useState(
@@ -109,8 +110,10 @@ export default function App() {
         .then((res) => res.json())
         .then((json) => {
           localStorage.setItem('token', json.token)
-          JSON.stringify(json.token) ? setLoggedIn(true) : setLoggedIn(false)
-        })
+          localStorage.setItem('email', email)
+          localStorage.getItem('token') &&  localStorage.getItem('token') !== 'undefined' && localStorage.getItem('token') !== undefined  ? 
+            setLoggedIn(true) : setLoggedIn(false)
+        }).catch(error => console.log('error', error))
     },
     []
   )
@@ -178,7 +181,8 @@ export default function App() {
             exact component={CreateNewActivity}
           />
           <PrivateRoute path='/community-people' exact component={CommunityPeople}/>
-          <PrivateRoute path='/:member' exact component={OneCommunityMember}/>
+          <PrivateRoute path='/community/:member' exact component={OneCommunityMember}/>
+          <PrivateRoute path='/add-people' exact component={CommunityAddMembers}/>
         </Switch>
       </Router>
     </div>
