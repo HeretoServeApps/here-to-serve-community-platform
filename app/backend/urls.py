@@ -26,4 +26,5 @@ urlpatterns = [
     path('reset-password/confirm/',views.PasswordResetConfirmView.as_view(), name = 'password_reset_confirm'),
     path('community-people/', views.CommunityPeopleList.as_view()),
     re_path(r'^edit-user/(?P<pk>\d+)/$', views.UserViewUpdate.as_view()),
+    path('invite-members/', views.InviteUsers.as_view()),
 ]

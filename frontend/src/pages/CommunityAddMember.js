@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react'
+import { useHistory } from 'react-router-dom'
 
 import Container from 'react-bulma-components/lib/components/container'
 import Heading from 'react-bulma-components/lib/components/heading'
@@ -28,8 +29,9 @@ export default function CommunityAddMembers() {
 
     const [inputEmail, setInputEmail] = useState('')
     const [allEmails, setAllEmails] = useState([])
-    const [firstName, setFirstName] = useState('')
-    const [lastName, setLastName] = useState('')
+    const [firstName, setFirstName] = useState('') // User sending the email
+    const [lastName, setLastName] = useState('') // User sending the email
+    const [success, setSuccess] = useState(false)
 
     const addEmail = useCallback((email) => {
         setAllEmails(allEmails.concat(email))
@@ -50,6 +52,51 @@ export default function CommunityAddMembers() {
                 })
         }
     }, [])
+
+    let history = useHistory()
+    const sendEmail = useCallback((fromEmail, toEmails, community, sender) => {
+        setSuccess(true)
+        fetch('/invite-members/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `JWT ${localStorage.getItem('token')}`
+            },
+            body: JSON.stringify({ 
+                from_email: fromEmail,
+                to_emails: toEmails,
+                community: community,
+                sender: sender
+            }),
+        })
+            .then((res) => res.json())
+            .then((json) => { setSuccess(true) },
+            (error) => {
+                console.log(error)
+            }) 
+    }, [])
+
+    if(success) {
+        return (
+            <div>
+                <CommunityNavbar />
+                <Container style={containerStyle}>
+                    An email has been sent to the addresses you provided. 
+                    <br />
+                    <Button
+                        className='is-primary is-inverted'
+                        style={{
+                            marginTop: '3%',
+                            boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)',
+                        }}
+                        onClick={() => setSuccess(false)}
+                    >
+                        Back
+                    </Button> 
+                </Container>
+            </div>
+        )
+    }
 
     return (
         <div>
@@ -89,7 +136,7 @@ export default function CommunityAddMembers() {
                 </ul>
 
                 <br />
-                <strong>Subject:</strong> Join {localStorage.getItem('community-name')}'s Care Community.
+                <strong>Subject:</strong> [Here to Serve] Join {localStorage.getItem('community-name')}'s Care Community
                 <br />
                 <br />
                 <strong>Message:</strong> {firstName} {lastName} has invited you to join {localStorage.getItem('community-name')}'s Care Community.
@@ -118,6 +165,14 @@ export default function CommunityAddMembers() {
                                 boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)',
                             }}
                             fullwidth={true}
+                            onClick={() => 
+                                sendEmail(
+                                    localStorage.getItem('email'),
+                                    allEmails,
+                                    localStorage.getItem('community-name'),
+                                    firstName + ' ' + lastName,
+                                )
+                            }
                         >
                             Send Invite
                         </Button>

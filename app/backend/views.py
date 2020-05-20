@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
-from django.core.mail import send_mail, EmailMultiAlternatives, BadHeaderError
+from django.core.mail import send_mail, send_mass_mail, EmailMultiAlternatives, BadHeaderError
 from django.contrib.auth import get_user_model
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.sites.shortcuts import get_current_site
@@ -285,3 +285,37 @@ class CommunityPeopleList(APIView):
             status=status.HTTP_200_OK
         )
 
+
+class InviteUsers(APIView):
+    """
+    Let a commmunity leader or admin email invitations to a group of emails. 
+    """
+    permission_classes = (permissions.IsAuthenticated, )
+
+    def post(self, request, format=None):
+        data = request.data
+        from_email = data['from_email']
+        to_emails = list(data['to_emails'])
+        community = data['community']
+        sender_name = data['sender']
+
+        subject = '[Here to Serve] Join {community}\'s Care Community'.format(community=community)
+        message = '{sender} has invited you to join {community}\'s Care Community.' \
+                    ' Please go to {url} to access the volunteer platform.'.format(
+                        sender=sender_name, community=community, url='http://localhost:3000/'
+                    )
+
+        messages = []
+        for recipient in to_emails:
+            item = (subject, message, from_email, [recipient]) 
+            messages.append(item)
+
+        # send_mass_email prevent recipients from seeing other recipients' email addresses. 
+        try:
+            send_mass_mail(
+                tuple(messages),
+                fail_silently = False,
+            )
+        except BadHeaderError:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        return Response(status=status.HTTP_200_OK)
