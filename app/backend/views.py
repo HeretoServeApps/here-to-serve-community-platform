@@ -7,8 +7,8 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .serializers import CommunitySerializer, UserSerializer, UserSerializerWithToken, CommunityUserRoleSerializer, ActivitySerializer, RideActivitySerializer, MealActivitySerializer, EventActivitySerializer 
-from .models import Community, User, CommunityUserRole, Activity, EventActivity, MealActivity, RideActivity 
+from .serializers import CommunitySerializer, UserSerializer, UserSerializerWithToken, CommunityUserRoleSerializer, ActivitySerializer, RideActivitySerializer, CustomSectionSerializer, MealActivitySerializer, EventActivitySerializer
+from .models import Community, User, CommunityUserRole, Activity, EventActivity, MealActivity, RideActivity, CustomSection
 
 class CommunityViewSet(viewsets.ModelViewSet):
     queryset = Community.objects.all().order_by('name')
@@ -72,6 +72,17 @@ class CommunityList(APIView):
         communities = [community.name for community in Community.objects.all()]
         return Response(communities)
 
+class CommunityCustomSections(viewsets.ModelViewSet):
+    """
+        Gets all custom sections for a community
+        """
+    queryset = CustomSection.objects.all()
+    serializer_class = CustomSectionSerializer
+
+    def get_queryset(self):
+        community_name = self.request.query_params.get('name')
+        sections = CustomSection.objects.filter(community__name=community_name)
+        return sections
 
 class CommunityUserRoleRegister(APIView):
     """

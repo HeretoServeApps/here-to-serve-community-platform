@@ -1,13 +1,18 @@
 from rest_framework import serializers
 
 from rest_framework_jwt.settings import api_settings
-from .models import Community, User, CommunityUserRole, Activity, EventActivity, MealActivity, RideActivity
+from .models import Community, User, CommunityUserRole, Activity, EventActivity, MealActivity, RideActivity, CustomSection
 
 
 class CommunitySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Community
         fields = ('id', 'name', 'is_closed', 'description', 'zipcode', 'country')
+
+class CustomSectionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomSection
+        fields = ('name', 'type', 'link', 'title', 'description', 'community')
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -72,3 +77,4 @@ class EventActivitySerializer(serializers.ModelSerializer):
     class Meta:
         model = EventActivity
         fields = ('activity_ptr', 'start_time', 'end_time', 'location')
+
