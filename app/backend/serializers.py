@@ -11,6 +11,10 @@ class CommunitySerializer(serializers.HyperlinkedModelSerializer):
         model = Community
         fields = ('id', 'name', 'is_closed', 'description', 'zipcode', 'country')
 
+class UserSerializerWithID(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id', 'first_name', 'last_name')
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -99,12 +103,16 @@ class PasswordResetConfirmSerializer(serializers.Serializer):
 
         
 class ActivitySerializer(serializers.ModelSerializer):
+    coordinators = UserSerializer(many=True, read_only=True)
+    volunteers = UserSerializer(many=True, read_only=True)
+
     class Meta:
         model = Activity
         fields = '__all__'
 
 class RideActivitySerializer(serializers.ModelSerializer):
     activity = ActivitySerializer(required=True)
+
     class Meta:
         model = RideActivity
         fields = ('activity', 'pickup_location', 'destination_location')
