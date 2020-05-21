@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import DayPicker, { DateUtils } from 'react-day-picker'
 import 'react-day-picker/lib/style.css'
 import { Link } from 'react-router-dom'
@@ -8,7 +8,6 @@ import Columns from 'react-bulma-components/lib/components/columns'
 import Heading from 'react-bulma-components/lib/components/heading'
 import CommunityNavbar from '../components/communityNavbar'
 import Button from 'react-bulma-components/lib/components/button'
-import CheckboxField from '../components/checkboxfield'
 import Tabs from 'react-bulma-components/lib/components/tabs'
 import {
   Select,
@@ -20,6 +19,8 @@ import {
   Checkbox,
 } from 'react-bulma-components/lib/components/form'
 import axios from 'axios'
+import MultiSelect from "@khanacademy/react-multi-select";
+
 
 export default function CreateNewActivity(props) {
   //Styles
@@ -46,48 +47,7 @@ export default function CreateNewActivity(props) {
     justifyContent: 'flex-start',
   }
 
-  const [activeTab, setActiveTab] = useState('What')
-  const [validForm, setValidForm] = useState(false)
-
-  //What
-  const [category, setCategory] = useState('Giving Rides')
-  const [activityName, setActivityName] = useState('')
-  const [calendarLabel, setCalendarLabel] = useState('')
-  const [notes, setNotes] = useState('')
-  const [diet, setDiet] = useState('')
-
-  //When
-  const [startTime, setStartTime] = useState('12:00 PM')
-  const [endTime, setEndTime] = useState('12:00 PM')
-  const [noEndTime, setNoEndTime] = useState(false)
-  const [startMonth, setStartMonth] = useState('')
-  const [startDay, setStartDay] = useState('')
-  const [startYear, setStartYear] = useState('')
-  const [endMonth, setEndMonth] = useState('')
-  const [endDay, setEndDay] = useState('')
-  const [endYear, setEndYear] = useState('')
-  const [selectedDays, setSelectedDays] = useState([])
-  const [sunday, setSunday] = useState(true)
-  const [monday, setMonday] = useState(true)
-  const [tuesday, setTuesday] = useState(true)
-  const [wednesday, setWednesday] = useState(true)
-  const [thursday, setThursday] = useState(true)
-  const [friday, setFriday] = useState(true)
-  const [saturday, setSaturday] = useState(true)
-
-  //Where
-  const [pickupLocation, setPickupLocation] = useState('')
-  const [destination, setDestination] = useState('')
-  const [location, setLocation] = useState('')
-
-  //Who
-  const [activityCoordinator, setActivityCoordinator] = useState('')
-  const [estimatedHours, setEstimatedHours] = useState('')
-  const [estimatedMinutes, setEstimatedMinutes] = useState('')
-  const [numVolunteers, setNumVolunteers] = useState('')
-  const coordinators = ['Coordinator 1', 'Coordinator 2']
-
-  const years = [2017, 2018, 2019, 2020, 2021, 2022, 2023]
+  const years = Array.from(Array(5).keys()).map((y) => (y+(new Date().getFullYear())))
   const months = [
     'January',
     'February',
@@ -101,15 +61,6 @@ export default function CreateNewActivity(props) {
     'October',
     'November',
     'December',
-  ]
-  const daysOfWeek = [
-    'Sunday',
-    'Monday',
-    'Tuesday',
-    'Wednesday',
-    'Thursday',
-    'Friday',
-    'Saturday',
   ]
 
   const times = [
@@ -218,84 +169,84 @@ export default function CreateNewActivity(props) {
     '11:30 PM',
     '11:45 PM',
   ]
-  const count = [
-    1,
-    2,
-    3,
-    4,
-    5,
-    6,
-    7,
-    8,
-    9,
-    10,
-    11,
-    12,
-    13,
-    14,
-    15,
-    16,
-    17,
-    18,
-    19,
-    20,
-    21,
-    22,
-    23,
-    24,
-    25,
-    26,
-    27,
-    28,
-    29,
-    30,
-    31,
-    32,
-    33,
-    34,
-    35,
-    36,
-    37,
-    38,
-    39,
-    40,
-    41,
-    42,
-    43,
-    44,
-    45,
-    46,
-    47,
-    48,
-    49,
-    50,
-  ]
+  const count = Array.from(Array(51).keys()).slice(1,51)
 
-  //Dietary Restrictions (kept in case checkbox implementation is needed)
-  const [vegetarian, setVegetarian] = useState(false)
-  const [kosher, setKosher] = useState(false)
-  const [nutFree, setNutFree] = useState(false)
-  const [lactoseFree, setLactoseFree] = useState(false)
-  const [wheatFree, setWheatFree] = useState(false)
-  const [glutenFree, setGlutenFree] = useState(false)
-  const [soyFree, setSoyFree] = useState(false)
-  const [sugarFree, setSugarFree] = useState(false)
-  const [lowFat, setLowFat] = useState(false)
-  const [lowCarb, setLowCarb] = useState(false)
-  const [lowSalt, setLowSalt] = useState(false)
-  const dietaryRestrictions = [
-    'Vegetarian',
-    'Kosher',
-    'Nut-free',
-    'Lactose-free',
-    'Wheat-free',
-    'Gluten-free',
-    'Soy-free',
-    'Sugar-free',
-    'Low-fat',
-    'Low-carb',
-    'Low-salt',
+
+
+
+  const token = localStorage.getItem('token')
+
+  const [activeTab, setActiveTab] = useState('What')
+  const [validForm, setValidForm] = useState(false)
+
+  //What
+  const [category, setCategory] = useState('Giving Rides')
+  const [activityName, setActivityName] = useState('')
+  const [notes, setNotes] = useState('')
+
+  //When
+  const [startTime, setStartTime] = useState('12:00 PM')
+  const [endTime, setEndTime] = useState('12:00 PM')
+  const [noEndTime, setNoEndTime] = useState(false)
+  const [allDay, setAllDay] = useState(false)
+  const [startMonth, setStartMonth] = useState(months[new Date().getMonth()])
+  const [startDay, setStartDay] = useState(new Date().getDate())
+  const [startYear, setStartYear] = useState(new Date().getFullYear())
+  const [endMonth, setEndMonth] = useState(months[new Date().getMonth()])
+  const [endDay, setEndDay] = useState(new Date().getDate())
+  const [endYear, setEndYear] = useState(new Date().getFullYear())
+  const [selectedDays, setSelectedDays] = useState([])
+
+  //Where
+  const [pickupLocation, setPickupLocation] = useState('')
+  const [destination, setDestination] = useState('')
+  const [location, setLocation] = useState('')
+
+  //Who
+  const [estimatedHours, setEstimatedHours] = useState('')
+  const [estimatedMinutes, setEstimatedMinutes] = useState('')
+  const [numVolunteers, setNumVolunteers] = useState(0)
+  const [coordinators, setCoordinators] = useState([])
+  const [selectedCoordinators, setSelectedCoordinators] = useState([])
+
+
+  const categories = [
+    'Giving Rides',
+    'Preparing Meals',
+    'Shopping',
+    'Childcare',
+    'Visits',
+    'Coverage',
+    'Miscellaneous',
+    'Event'
   ]
+  
+  //Dietary Restrictions (kept in case checkbox implementation is needed)
+  const initDietaryRestrictions = [
+    {name: 'Vegetarian', isChecked: false},
+    {name: 'Kosher', isChecked: false},
+    {name: 'Nut-free', isChecked: false},
+    {name: 'Lactose-free', isChecked: false},
+    {name: 'Wheat-free', isChecked: false},
+    {name: 'Gluten-free', isChecked: false},
+    {name: 'Soy-free', isChecked: false},
+    {name: 'Sugar-free', isChecked: false},
+    {name: 'Low-fat', isChecked: false},
+    {name: 'Low-carb', isChecked: false},
+    {name: 'Low-salt', isChecked: false},
+  ]
+  const [dietaryRestrictions, setDietaryRestrictions] = useState(initDietaryRestrictions)
+
+  const initDaysOfWeek = [
+    {name: 'Sunday', isChecked: false},
+    {name: 'Monday', isChecked: false},
+    {name: 'Tuesday', isChecked: false},
+    {name: 'Wednesday', isChecked: false},
+    {name: 'Thursday', isChecked: false},
+    {name: 'Friday', isChecked: false},
+    {name: 'Saturday', isChecked: false}
+  ]
+  const [daysOfWeek, setDaysOfWeek] = useState(initDaysOfWeek)
 
   const monthDiff = (d1, d2) => {
     var months
@@ -312,23 +263,17 @@ export default function CreateNewActivity(props) {
     var current = new Date(start)
 
     while (current <= end) {
-      if (current.getDay() == day) {
-        result.push(current)
+      if (current.getDay() === day) {
+        result.push(new Date(current))
       }
-      current = new Date(current.getTime() + 1000 * 60 * 60 * 24)
+      current.setDate(current.getDate()+1)
     }
     console.log(result)
     return result
   }
 
   const containsDay = (array = [], day) => {
-    var contains = false
-    array.forEach((d) => {
-      if (DateUtils.isSameDay(d, day)) {
-        contains = true
-      }
-    })
-    return contains
+    return array.some((d) => (DateUtils.isSameDay(d, day)))
   }
 
   const handleDayClick = (day, modifiers = {}) => {
@@ -392,36 +337,12 @@ export default function CreateNewActivity(props) {
   }
 
   useEffect(() => {
-    setStartMonth(months[new Date().getMonth()])
-    setStartDay(new Date().getDate())
-    setStartYear(new Date().getFullYear())
-    setEndMonth(months[new Date().getMonth()])
-    setEndDay(new Date().getDate())
-    setEndYear(new Date().getFullYear())
-    setNumVolunteers(1)
-    setActivityCoordinator('Coordinator 1')
-  }, [])
-
-  useEffect(() => {
-    var newSelectedDays = selectedDays
-    var startDate = new Date(startYear, months.indexOf(startMonth), startDay)
-    var endDate = new Date(endYear, months.indexOf(endMonth), endDay)
-    setSelectedDays(
-      newSelectedDays.filter((d) =>
-        DateUtils.isDayInRange(d, { from: startDate, to: endDate })
-      )
-    )
-  }, [startDay, startMonth, startYear, endDay, endMonth, endYear])
-
-  useEffect(() => {
     const formValues = [
       activityName,
-      calendarLabel,
       startDay,
       startMonth,
       startYear,
       selectedDays,
-      activityCoordinator,
       estimatedHours,
       estimatedMinutes,
       numVolunteers,
@@ -441,16 +362,72 @@ export default function CreateNewActivity(props) {
     }
   }, [
     activityName,
-    calendarLabel,
     startDay,
     startMonth,
     startYear,
     selectedDays,
-    activityCoordinator,
     estimatedHours,
     estimatedMinutes,
     numVolunteers,
   ])
+
+  useEffect(() => {
+    axios
+      .get(`/community-users/${localStorage.getItem('community-id')}`, {
+        headers: {
+          Authorization: `JWT ${token}`,
+        },
+      })
+      .then(
+        (response) => {
+          console.log(response.data)
+          const options = response.data.map((item) => ({label:`${item['first_name']} ${item['last_name']}`, value: item['id']}))
+          setCoordinators(options)
+        },
+        (error) => {
+          console.log(error)
+        }
+      )
+  }, [token])
+
+
+  const handleSubmit = useCallback(() => {
+    const dietaryRestrictionStatus = {}
+    dietaryRestrictions.forEach((restriction) => dietaryRestrictionStatus[restriction.name] = restriction.isChecked)
+    console.log(selectedCoordinators)
+
+    const param = JSON.stringify({
+      'name': activityName,
+      'description': notes,
+      'activity_type': category,
+      'community': localStorage.getItem('community-id'),
+      "dates" : selectedDays,
+      'est_hours': estimatedHours,
+      'est_minutes': estimatedMinutes,
+      'volunteers_needed': numVolunteers,
+      'pickup_location': pickupLocation,
+      'destination_location': destination,
+      'location': location,
+      'dietary_restrictions': dietaryRestrictionStatus,
+      'start_time': startTime,
+      'end_time': endTime,
+      'all_day': allDay,
+      'no_end_time': noEndTime,
+      'coordinators': selectedCoordinators,
+    })
+    axios.post('/activity/', param, {
+        headers: {
+          'Authorization': `JWT ${token}`,
+          'Content-Type': 'application/json',
+        },
+      })
+      .then(
+        (response, err) => {
+          console.log(response)
+          console.log(err)
+      })
+  }, [selectedCoordinators, activityName, notes, category, selectedDays, estimatedHours, estimatedMinutes, numVolunteers, pickupLocation, destination, location, startTime, endTime, token, allDay, noEndTime, dietaryRestrictions])
+
 
   return (
     <div>
@@ -509,14 +486,7 @@ export default function CreateNewActivity(props) {
                       name='category'
                       value={category}
                     >
-                      <option>Giving Rides</option>
-                      <option>Preparing Meals</option>
-                      <option>Shopping</option>
-                      <option>Childcare</option>
-                      <option>Visits</option>
-                      <option>Coverage</option>
-                      <option>Miscellaneous</option>
-                      <option>Event</option>
+                    {categories.map((cat) => (<option>{cat}</option>))}
                     </Select>
                   </Control>
                 </Field>
@@ -525,37 +495,33 @@ export default function CreateNewActivity(props) {
                     Activity Name<span style={{ color: '#F83D34' }}>*</span>
                   </Label>
                   <Control>
-                    <Input
+                    <Input maxLength={120}
                       value={activityName}
                       onChange={(e) => setActivityName(e.target.value)}
-                    />
-                  </Control>
-                </Field>
-                <Field>
-                  <Label>
-                    Calendar Label<span style={{ color: '#F83D34' }}>*</span>
-                  </Label>
-                  <Control>
-                    <Input
-                      value={calendarLabel}
-                      onChange={(e) => setCalendarLabel(e.target.value)}
                     />
                   </Control>
                 </Field>
                 {category === 'Preparing Meals' && (
                   <Field>
                     <Label>Dietary Restrictions</Label>
-                    <p style={noteStyle}>
-                      e.g. Vegetarian, kosher, nut-free, lactose-free,
-                      wheat-free, gluten-free, soy-free, sugar-free, low-fat,
-                      low-carb, low-salt
-                    </p>
-                    <Control>
-                      <Input
-                        value={diet}
-                        onChange={(e) => setDiet(e.target.value)}
-                      />
-                    </Control>
+                    <Columns>
+                      <Columns.Column>
+                        <Control>
+                          { dietaryRestrictions.map((restriction, i) => (
+                            <div style={checkboxStyle}>
+                            <Checkbox
+                              style={{ marginRight: '10px' }}
+                              onChange={() => {setDietaryRestrictions((dietaryRestrictions) => {
+                                dietaryRestrictions[i].isChecked = !dietaryRestrictions[i].isChecked
+                                return dietaryRestrictions
+                              })}}
+                            />
+                            <p>{restriction.name}</p>
+                            </div>
+                          ))}
+                        </Control>
+                      </Columns.Column>
+                    </Columns>
                   </Field>
                 )}
                 <Field>
@@ -575,6 +541,7 @@ export default function CreateNewActivity(props) {
                 </Label>
                 <Columns>
                   <Columns.Column>
+
                     <Field style={{ marginRight: '10px' }}>
                       Start Time
                       <Control>
@@ -582,11 +549,19 @@ export default function CreateNewActivity(props) {
                           onChange={(e) => setStartTime(e.target.value)}
                           name='startTime'
                           value={startTime}
+                          disabled={allDay}
                         >
                           {times.map((t) => (
                             <option>{t}</option>
                           ))}
                         </Select>
+                        <div style={checkboxStyle}>
+                            <Checkbox
+                              style={{ marginRight: '10px' }}
+                              onChange={() => {setAllDay(!allDay)}}
+                            />
+                          <p>All Day</p>
+                        </div>
                       </Control>
                     </Field>
                   </Columns.Column>
@@ -594,46 +569,21 @@ export default function CreateNewActivity(props) {
                     <Field>
                       End Time {'(optional)'}
                       <Control>
-                        {noEndTime ? (
-                          <Select
-                            onChange={(e) => setEndTime(e.target.value)}
-                            name='endTime'
-                            value={endTime}
-                            disabled
-                          >
-                            {times.map((t) => (
-                              <option>{t}</option>
-                            ))}
-                          </Select>
-                        ) : (
-                          <Select
-                            onChange={(e) => setEndTime(e.target.value)}
-                            name='endTime'
-                            value={endTime}
-                          >
-                            {times.map((t) => (
-                              <option>{t}</option>
-                            ))}
-                          </Select>
-                        )}
-
+                        <Select
+                          onChange={(e) => setEndTime(e.target.value)}
+                          name='endTime'
+                          value={endTime}
+                          disabled={noEndTime}
+                        >
+                          {times.map((t) => (
+                            <option>{t}</option>
+                          ))}
+                        </Select>
                         <div style={checkboxStyle}>
-                          {noEndTime ? (
                             <Checkbox
                               style={{ marginRight: '10px' }}
-                              onClick={() => {
-                                setNoEndTime(!noEndTime)
-                              }}
-                              checked
+                              onChange={() => {setNoEndTime(!noEndTime)}}
                             />
-                          ) : (
-                            <Checkbox
-                              style={{ marginRight: '10px' }}
-                              onClick={() => {
-                                setNoEndTime(!noEndTime)
-                              }}
-                            />
-                          )}
                           <p>None</p>
                         </div>
                       </Control>
@@ -720,156 +670,24 @@ export default function CreateNewActivity(props) {
                   </Columns.Column>
                 </Columns>
                 <Field>
-                  <Control>
-                    <p style={noteStyle}>Repeats</p>
-                    <div className='sunday' style={checkboxStyle}>
-                      {sunday ? (
-                        <Checkbox
-                          style={{ marginRight: '10px' }}
-                          onClick={(e) => {
-                            handleWeekdayToggle('Sunday', sunday)
-                            setSunday(!sunday)
-                          }}
-                        />
-                      ) : (
-                        <Checkbox
-                          style={{ marginRight: '10px' }}
-                          onClick={(e) => {
-                            handleWeekdayToggle('Sunday', sunday)
-                            setSunday(!sunday)
-                          }}
-                          checked
-                        />
-                      )}
-                      <p>Sunday</p>
+                <Control>
+                  <p style={noteStyle}>Repeats</p>
+                  { daysOfWeek.map((day, i) => (
+                    <div style={checkboxStyle}>
+                      <Checkbox
+                        style={{ marginRight: '10px' }}
+                        onChange={() => {
+                          handleWeekdayToggle(day.name, !day.isChecked)
+                          setDaysOfWeek((daysOfWeek) => {
+                            day.isChecked = !day.isChecked
+                            return daysOfWeek
+                          })
+                        }}
+                      />
+                      <p>{day.name}</p>
                     </div>
-                    <div className='monday' style={checkboxStyle}>
-                      {monday ? (
-                        <Checkbox
-                          style={{ marginRight: '10px' }}
-                          onClick={(e) => {
-                            handleWeekdayToggle('Monday', monday)
-                            setMonday(!monday)
-                          }}
-                        />
-                      ) : (
-                        <Checkbox
-                          style={{ marginRight: '10px' }}
-                          onClick={(e) => {
-                            handleWeekdayToggle('Monday', monday)
-                            setMonday(!monday)
-                          }}
-                          checked
-                        />
-                      )}
-                      <p>Monday</p>
-                    </div>
-                    <div className='tuesday' style={checkboxStyle}>
-                      {tuesday ? (
-                        <Checkbox
-                          style={{ marginRight: '10px' }}
-                          onClick={(e) => {
-                            handleWeekdayToggle('Tuesday', tuesday)
-                            setTuesday(!tuesday)
-                          }}
-                        />
-                      ) : (
-                        <Checkbox
-                          style={{ marginRight: '10px' }}
-                          onClick={(e) => {
-                            handleWeekdayToggle('Tuesday', tuesday)
-                            setTuesday(!tuesday)
-                          }}
-                          checked
-                        />
-                      )}
-                      <p>Tuesday</p>
-                    </div>
-                    <div className='wednesday' style={checkboxStyle}>
-                      {wednesday ? (
-                        <Checkbox
-                          style={{ marginRight: '10px' }}
-                          onClick={(e) => {
-                            handleWeekdayToggle('Wednesday', wednesday)
-                            setWednesday(!wednesday)
-                          }}
-                        />
-                      ) : (
-                        <Checkbox
-                          style={{ marginRight: '10px' }}
-                          onClick={(e) => {
-                            handleWeekdayToggle('Wednesday', wednesday)
-                            setWednesday(!wednesday)
-                          }}
-                          checked
-                        />
-                      )}
-                      <p>Wednesday</p>
-                    </div>
-                    <div className='thursday' style={checkboxStyle}>
-                      {thursday ? (
-                        <Checkbox
-                          style={{ marginRight: '10px' }}
-                          onClick={(e) => {
-                            handleWeekdayToggle('Thursday', thursday)
-                            setThursday(!thursday)
-                          }}
-                        />
-                      ) : (
-                        <Checkbox
-                          style={{ marginRight: '10px' }}
-                          onClick={(e) => {
-                            handleWeekdayToggle('Thursday', thursday)
-                            setThursday(!thursday)
-                          }}
-                          checked
-                        />
-                      )}
-                      <p>Thursday</p>
-                    </div>
-                    <div className='friday' style={checkboxStyle}>
-                      {friday ? (
-                        <Checkbox
-                          style={{ marginRight: '10px' }}
-                          onClick={(e) => {
-                            handleWeekdayToggle('Friday', friday)
-                            setFriday(!friday)
-                          }}
-                        />
-                      ) : (
-                        <Checkbox
-                          style={{ marginRight: '10px' }}
-                          onClick={(e) => {
-                            handleWeekdayToggle('Friday', friday)
-                            setFriday(!friday)
-                          }}
-                          checked
-                        />
-                      )}
-                      <p>Friday</p>
-                    </div>
-                    <div className='saturday' style={checkboxStyle}>
-                      {saturday ? (
-                        <Checkbox
-                          style={{ marginRight: '10px' }}
-                          onClick={(e) => {
-                            handleWeekdayToggle('Saturday', saturday)
-                            setSaturday(!saturday)
-                          }}
-                        />
-                      ) : (
-                        <Checkbox
-                          style={{ marginRight: '10px' }}
-                          onClick={(e) => {
-                            handleWeekdayToggle('Saturday', saturday)
-                            setSaturday(!saturday)
-                          }}
-                          checked
-                        />
-                      )}
-                      <p>Saturday</p>
-                    </div>
-                  </Control>
+                  ))}
+                </Control>
                 </Field>
                 <p style={noteStyle}>
                   <b>Select all applicable dates on the calendar below.</b>
@@ -945,27 +763,17 @@ export default function CreateNewActivity(props) {
                     Activity Coordinator
                     <span style={{ color: '#F83D34' }}>*</span>
                   </Label>
-                  <Control>
-                    <Select
-                      onChange={(e) => setActivityCoordinator(e.target.value)}
-                      name='activityCoordinator'
-                      value={activityCoordinator}
-                    >
-                      {coordinators.map((c) => (
-                        <option>{c}</option>
-                      ))}
-                    </Select>
-                  </Control>
+                  <MultiSelect
+                    valueRenderer={(selectedCoordinators) => <span width='100%'>Selected {selectedCoordinators.length} users </span>}
+                    options={coordinators}
+                    selected={selectedCoordinators}
+                    onSelectedChanged={(selected) => setSelectedCoordinators(selected)}
+                  />
                 </Field>
-                <Field>
-                  <CheckboxField text='Select Other Coordinators' />
-                </Field>
-
                 <Label>
                   Estimated Average Task Time
                   <span style={{ color: '#F83D34' }}>*</span>
                 </Label>
-
                 <Columns>
                   <Columns.Column>
                     <Field>
@@ -1040,7 +848,7 @@ export default function CreateNewActivity(props) {
               <Link to='#' style={{ color: 'white' }}>
                 <Button
                   color='primary'
-                  onClick={() =>
+                  onClick={() => activeTab === 'Who' ? handleSubmit() :
                     setActiveTab(
                       activeTab === 'What'
                         ? 'When'

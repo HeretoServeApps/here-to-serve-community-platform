@@ -31,10 +31,11 @@ export default function MyCommunities() {
       )
   }, [token])
 
-  const setCommunityInfoInLocalStorage = useCallback((name, zipcode, is_closed) => {
+  const setCommunityInfoInLocalStorage = useCallback((name, zipcode, is_closed, id) => {
     localStorage.setItem('community-name', name)
     localStorage.setItem('community-zipcode', zipcode)
     localStorage.setItem('community-is-closed', is_closed)
+    localStorage.setItem('community-id', id)
   }, [])
 
 
@@ -94,7 +95,7 @@ export default function MyCommunities() {
                       is_closed: c.is_closed,
                     },
                   }}
-                  onClick={() => setCommunityInfoInLocalStorage(c.name, c.zipcode, c.is_closed)}
+                  onClick={() => setCommunityInfoInLocalStorage(c.name, c.zipcode, c.is_closed, c.id)}
                 >
                   <CommunityCard text={c.name} />
                 </Link>
