@@ -3,6 +3,7 @@ import { Calendar, momentLocalizer } from 'react-big-calendar'
 import moment from 'moment'
 import 'react-big-calendar/lib/sass/styles.scss'
 import { Link } from 'react-router-dom'
+import axios from 'axios'
 
 import Button from 'react-bulma-components/lib/components/button'
 import Container from 'react-bulma-components/lib/components/container'
@@ -15,7 +16,6 @@ import {
   Field,
   Checkbox
 } from 'react-bulma-components/lib/components/form'
-import Icon from 'react-bulma-components/lib/components/icon';
 
 import CheckboxField from '../components/checkboxfield'
 import CommunityNavbar from '../components/communityNavbar'
@@ -28,7 +28,7 @@ export default function CalendarPage(props) {
 
 
   var containerStyle = {
-    margin: '8% 8% 0% 0%',
+    margin: '8% 10% 0% 0%',
     maxWidth: '100%',
   }
 
@@ -70,6 +70,7 @@ export default function CalendarPage(props) {
 
   // filter parameters
   const [member, setMember] = useState('')
+  const [members, setMembers] = useState([])
   const [acivityType, setActivityType] = useState('')
   const [activityStatus, setActivityStatus] = useState('')
 
@@ -77,6 +78,27 @@ export default function CalendarPage(props) {
     setDate(moment(`${selectedMonth} ${selectedYear}`, "MMMM YYYY").toDate())
   }
 
+  useEffect(() => {
+    axios
+        .get('/community-people/', {
+            headers: {
+                'Authorization': `JWT ${localStorage.getItem('token')}`,
+                'Content-Type': 'application/json',
+            },
+            params: JSON.stringify({
+                user: localStorage.getItem('email'),
+                community: localStorage.getItem('community-name')
+            })
+        })
+        .then(
+            (response) => {
+                setMembers(Array.from(response.data.people))
+            },
+            (error) => {
+                console.log(error)
+            }
+        )
+  }, [])
 
   return (
     <div>
@@ -105,6 +127,9 @@ export default function CalendarPage(props) {
                     value={member}
                     fullwidth={true}
                   >
+                    {members.map((m) => (
+                      <option>{m.first_name} {m.last_name}</option>
+                    ))}
                   </Select>
                 </Control>
             </Field>
