@@ -20,13 +20,16 @@ import CalendarPage from './pages/CalendarPage'
 import ForgotPasswordConfirm from './pages/ForgotPasswordConfirm.js'
 import ResetPasswordConfirm from './pages/ResetPasswordConfirm.js'
 import CreateNewActivity from './pages/CreateNewActivity'
+import Announcements from './pages/Announcements'
+import CreateAnnouncement from './pages/CreateAnnouncement'
 
 export default function App() {
   const [loggedIn, setLoggedIn] = useState(
-    localStorage.getItem('token') && 
-    localStorage.getItem('token') !== 'undefined' &&
-    localStorage.getItem('token') !== undefined ? 
-      true : false
+    localStorage.getItem('token') &&
+      localStorage.getItem('token') !== 'undefined' &&
+      localStorage.getItem('token') !== undefined
+      ? true
+      : false
   )
 
   const handleLogin = useCallback((email, password, rememberMe) => {
@@ -40,20 +43,23 @@ export default function App() {
         password: password,
       }),
     })
-      .then(res => res.json())
-      .then(json => {
-        localStorage.setItem('token', json.token)
-        localStorage.setItem('rememberMe', rememberMe)
-        localStorage.setItem('email', email)
-        localStorage.getItem('token') &&  localStorage.getItem('token') !== 'undefined' && localStorage.getItem('token') !== undefined  ? 
-          setLoggedIn(true) : setLoggedIn(false)
-      },
+      .then((res) => res.json())
+      .then(
+        (json) => {
+          localStorage.setItem('token', json.token)
+          localStorage.setItem('rememberMe', rememberMe)
+          localStorage.setItem('email', email)
+          localStorage.getItem('token') &&
+          localStorage.getItem('token') !== 'undefined' &&
+          localStorage.getItem('token') !== undefined
+            ? setLoggedIn(true)
+            : setLoggedIn(false)
+        },
         (error) => {
           console.log(error)
         }
       )
   }, [])
-
 
   const handleSignup = useCallback(
     (
@@ -127,10 +133,12 @@ export default function App() {
       body: JSON.stringify({ email: email }),
     })
       .then((res) => res.json())
-      .then((json) => { },
-      (error) => {
-        console.log(error)
-      })
+      .then(
+        (json) => {},
+        (error) => {
+          console.log(error)
+        }
+      )
   }, [])
 
   return (
@@ -141,7 +149,9 @@ export default function App() {
           {/* Routes that are available without authentication */}
           <Route
             path='/register'
-            render={() => (<Register handle_signup={handleSignup} logged_in={loggedIn} />)}
+            render={() => (
+              <Register handle_signup={handleSignup} logged_in={loggedIn} />
+            )}
           />
           <Route
             path='/login'
@@ -151,29 +161,66 @@ export default function App() {
           />
           <Route path='/about' exact component={About} />
           <Route path='/' exact component={Welcome} />
-          <Route 
-            path='/forgot-password' 
-            render={() => (<ForgotPassword handle_forgot_password={handleForgotPassword} />)}
+          <Route
+            path='/forgot-password'
+            render={() => (
+              <ForgotPassword handle_forgot_password={handleForgotPassword} />
+            )}
           />
           <Route path='/reset-password' exact component={ResetPassword} />
-          <Route path='/forgot-password-confirmation' exact component={ForgotPasswordConfirm} />
-          <Route path='/reset-password-confirmation' exact component={ResetPasswordConfirm} />
-          
-          
+          <Route
+            path='/forgot-password-confirmation'
+            exact
+            component={ForgotPasswordConfirm}
+          />
+          <Route
+            path='/reset-password-confirmation'
+            exact
+            component={ResetPasswordConfirm}
+          />
+
           {/* Routes that are available only if user logs in */}
-          <PrivateRoute path='/my-communities' exact component={MyCommunities} />
+          <PrivateRoute
+            path='/my-communities'
+            exact
+            component={MyCommunities}
+          />
           <PrivateRoute
             path='/select-communities'
-            exact component={SelectCommunities}
+            exact
+            component={SelectCommunities}
           />
-          <PrivateRoute path='/create-community' exact component={CreateCommunity} />
-          <PrivateRoute path='/account-settings' exact component={AccountSettings} />
-          <PrivateRoute path='/email-settings' exact component={EmailSettings} />
-          <PrivateRoute path='/community-home' exact component={CommunityHome} />
+          <PrivateRoute
+            path='/create-community'
+            exact
+            component={CreateCommunity}
+          />
+          <PrivateRoute
+            path='/account-settings'
+            exact
+            component={AccountSettings}
+          />
+          <PrivateRoute
+            path='/email-settings'
+            exact
+            component={EmailSettings}
+          />
+          <PrivateRoute
+            path='/community-home'
+            exact
+            component={CommunityHome}
+          />
           <PrivateRoute path='/calendar' exact component={CalendarPage} />
           <PrivateRoute
             path='/create-new-activity'
-            exact component={CreateNewActivity}
+            exact
+            component={CreateNewActivity}
+          />
+          <PrivateRoute path='/announcements' exact component={Announcements} />
+          <PrivateRoute
+            path='/create-announcement'
+            exact
+            component={CreateAnnouncement}
           />
         </Switch>
       </Router>

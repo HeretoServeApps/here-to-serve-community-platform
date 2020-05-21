@@ -239,10 +239,12 @@ class Announcement(models.Model):
         (FALSE, 'false')
     ]
 
-    subject = models.CharField(max_length=30, blank=False)
-    message = models.CharField(max_length=120, blank=False)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=False, blank=False)
+    author_name = models.CharField(max_length=50, blank=True)
+    subject = models.CharField(max_length=100, blank=False)
+    message = models.TextField(blank=False)
     # making date/time and show strings for now
-    date_time = models.CharField(max_length=30, blank=False)
+    date_time = models.CharField(max_length=100, blank=False)
     show_on_page = models.CharField(
         max_length=5,
         choices=SHOW_CHOICES,
