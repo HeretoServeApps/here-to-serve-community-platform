@@ -8,7 +8,6 @@ import Columns from 'react-bulma-components/lib/components/columns'
 import Heading from 'react-bulma-components/lib/components/heading'
 import CommunityNavbar from '../components/communityNavbar'
 import Button from 'react-bulma-components/lib/components/button'
-import CheckboxField from '../components/checkboxfield'
 import Tabs from 'react-bulma-components/lib/components/tabs'
 import {
   Select,
@@ -764,14 +763,12 @@ export default function CreateNewActivity(props) {
                     Activity Coordinator
                     <span style={{ color: '#F83D34' }}>*</span>
                   </Label>
-                  <Control>
-                    <MultiSelect
-                      valueRenderer={(selectedCoordinators) => <span>Selected {selectedCoordinators.length} users </span>}
-                      options={coordinators}
-                      selected={selectedCoordinators}
-                      onSelectedChanged={(selected) => setSelectedCoordinators(selected)}
-                    />
-                  </Control>
+                  <MultiSelect
+                    valueRenderer={(selectedCoordinators) => <span width='100%'>Selected {selectedCoordinators.length} users </span>}
+                    options={coordinators}
+                    selected={selectedCoordinators}
+                    onSelectedChanged={(selected) => setSelectedCoordinators(selected)}
+                  />
                 </Field>
                 <Label>
                   Estimated Average Task Time
