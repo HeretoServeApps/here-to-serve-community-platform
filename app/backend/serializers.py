@@ -140,17 +140,16 @@ class EventActivitySerializer(serializers.ModelSerializer):
     activity = ActivitySerializer(required=True)
     class Meta:
         model = EventActivity
-        fields = ('activity_ptr', 'start_time', 'end_time', 'location')
-
-
-class AnnouncementSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Announcement
-        fields = ('subject', 'message', 'date_time', 'show_on_page', 'community', 'user', 'author_name')
         fields = ('activity', 'location')
 
     def create(self, validated_data):
         activity_data = validated_data.pop('activity')
         activity = Activity.objects.create(**activity_data)
         return EventActivity.objects.create(activity=activity, **validated_data)
+
+
+class AnnouncementSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Announcement
+        fields = ('subject', 'message', 'date_time', 'show_on_page', 'community', 'user', 'author_name')
 
