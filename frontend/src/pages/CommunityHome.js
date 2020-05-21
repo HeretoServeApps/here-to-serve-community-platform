@@ -48,7 +48,8 @@ export default function CommunityHome(props) {
       .get('/community-custom-sections/', {
         headers: {
           Authorization: `JWT ${token}`,
-        },params: {
+        },
+        params: {
           name: localStorage.getItem('community-name'),
         },
       })
