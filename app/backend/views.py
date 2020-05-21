@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
-from django.core.mail import send_mail, EmailMultiAlternatives, BadHeaderError
+from django.core.mail import send_mail, send_mass_mail, EmailMultiAlternatives, BadHeaderError
 from django.contrib.auth import get_user_model
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.sites.shortcuts import get_current_site
@@ -9,12 +9,14 @@ from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 from django.utils.decorators import method_decorator
 from django.views.decorators.debug import sensitive_post_parameters
+from django.conf import settings 
 
 from rest_framework import viewsets, permissions, status
 from rest_framework import generics
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
+import json
 
 from .serializers import (
     CommunitySerializer, UserSerializer, CommunityUserRoleSerializer, UserSerializerWithToken, 
@@ -24,7 +26,6 @@ from .serializers import (
 from .models import (
     Community, User, CommunityUserRole, Activity, EventActivity, MealActivity, RideActivity, Announcement 
 )
-from django.conf import settings 
 
 
 sensitive_post_parameters_m = method_decorator(sensitive_post_parameters())
@@ -36,6 +37,7 @@ class CommunityViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         comms = CommunityUserRole.objects.filter(user=self.request.user).values_list('community', flat=True)
         return Community.objects.filter(id__in=comms)
+
 
 class OneCommunityViewSet(viewsets.ModelViewSet):
     queryset = Community.objects.all().order_by('name')
@@ -52,6 +54,15 @@ class UsersViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all().order_by('last_name')
     serializer_class = UserSerializer
 
+    def get_queryset(self):
+        email = self.request.query_params.get('email')
+        return User.objects.filter(email=email)
+    
+
+class UserViewUpdate(generics.RetrieveUpdateDestroyAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
 
 class CommunityUserRoleViewSet(viewsets.ModelViewSet):
     queryset = CommunityUserRole.objects.all()
@@ -65,6 +76,7 @@ def current_user(request):
     """
     serializer = UserSerializer(request.user)
     return Response(serializer.data)
+
 
 class UserList(APIView):
     """
@@ -245,3 +257,95 @@ class AddAnnouncement(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
+class CommunityPeopleList(APIView):
+    """
+    Get names of people in the same community as the request's user.
+    """
+    permission_classes = (permissions.IsAuthenticated, )
+
+    def get(self, request, format=None):
+        request_dict = json.loads(list(request.query_params.values())[0])
+        community_name = request_dict['community']
+        user_email = request_dict['user']
+        community, user = None, None
+        try:
+            community = Community.objects.get(name=community_name).id
+        except Community.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        try:
+            user = User.objects.get(email=user_email).id
+        except User.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        # Get the role of the user in the community to determine viewing permission
+        user_role = CommunityUserRole.objects.get(user=user, community=community).role
+
+        # Get all the members' pk of the community
+        community_people = CommunityUserRole.objects.filter(community=community).values_list('user', 'role')
+        
+        community_roles_map = dict(CommunityUserRole.COMMUNITY_ROLE_CHOICES)
+
+        people_list = []
+        for pk, role in community_people:
+            member = User.objects.get(pk=pk)
+            people_list.append({
+                'first_name': member.first_name,
+                'last_name': member.last_name,
+                'email': member.email,
+                'phone_number_1': member.phone_number_1,
+                'phone_number_type_1': member.phone_number_1_type,
+                'role': community_roles_map[role],
+                'phone_number_2': member.phone_number_2,
+                'phone_number_2_type': member.phone_number_2_type,
+                'address_line_1': member.address_line_1,
+                'address_line_2': member.address_line_2,
+                'city': member.city,
+                'state': member.state,
+                'country': member.country,
+                'zipcode': member.zipcode,
+                'pk': member.id,
+            })
+
+        return Response({
+                'user_role' : community_roles_map[user_role],
+                'people': people_list,
+            }, 
+            status=status.HTTP_200_OK
+        )
+
+
+class InviteUsers(APIView):
+    """
+    Let a commmunity leader or admin email invitations to a group of emails. 
+    """
+    permission_classes = (permissions.IsAuthenticated, )
+
+    def post(self, request, format=None):
+        data = request.data
+        from_email = data['from_email']
+        to_emails = list(data['to_emails'])
+        community = data['community']
+        sender_name = data['sender']
+
+        subject = '[Here to Serve] Join {community}\'s Care Community'.format(community=community)
+        message = '{sender} has invited you to join {community}\'s Care Community.' \
+                    ' Please go to {url} to access the volunteer platform.'.format(
+                        sender=sender_name, community=community, url='http://localhost:3000/'
+                    )
+
+        messages = []
+        for recipient in to_emails:
+            item = (subject, message, from_email, [recipient]) 
+            messages.append(item)
+
+        # send_mass_email prevent recipients from seeing other recipients' email addresses. 
+        try:
+            send_mass_mail(
+                tuple(messages),
+                fail_silently = False,
+            )
+        except BadHeaderError:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        return Response(status=status.HTTP_200_OK)

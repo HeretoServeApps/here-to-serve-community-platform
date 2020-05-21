@@ -19,6 +19,24 @@ class UserSerializer(serializers.ModelSerializer):
                   'phone_number_2', 'phone_number_2_type', 'address_line_1', 'address_line_2', 
                   'city', 'zipcode', 'state', 'country')
 
+    def update(self, instance, validated_data):
+        instance.first_name = validated_data.get('first_name', instance.first_name)
+        instance.last_name = validated_data.get('last_name', instance.last_name)
+        instance.email = validated_data.get('email', instance.email)
+        instance.phone_number_1 = validated_data.get('phone_number_1', instance.phone_number_1)    
+        instance.phone_number_1_type = validated_data.get('phone_number_1_type', instance.phone_number_1_type)
+        instance.phone_number_2 = validated_data.get('phone_number_2', instance.phone_number_2)    
+        instance.phone_number_2_type = validated_data.get('phone_number_2_type', instance.phone_number_2_type)
+        instance.address_line_1 = validated_data.get('address_line_1', instance.address_line_1)
+        instance.address_line_2 = validated_data.get('address_line_2', instance.address_line_2)
+        instance.city = validated_data.get('city', instance.city)
+        instance.zipcode = validated_data.get('zipcode', instance.zipcode)
+        instance.state = validated_data.get('state', instance.state)
+        instance.country = validated_data.get('country', instance.country)
+
+        instance.save()
+        return instance
+
 
 class UserSerializerWithToken(serializers.ModelSerializer):
     token = serializers.SerializerMethodField()
