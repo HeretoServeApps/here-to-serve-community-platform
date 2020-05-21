@@ -20,6 +20,8 @@ import {
   Checkbox,
 } from 'react-bulma-components/lib/components/form'
 import axios from 'axios'
+import MultiSelect from "@khanacademy/react-multi-select";
+
 
 export default function CreateNewActivity(props) {
   //Styles
@@ -202,11 +204,11 @@ export default function CreateNewActivity(props) {
   const [location, setLocation] = useState('')
 
   //Who
-  const [activityCoordinator, setActivityCoordinator] = useState('Coordinator 1')
   const [estimatedHours, setEstimatedHours] = useState('')
   const [estimatedMinutes, setEstimatedMinutes] = useState('')
-  const [numVolunteers, setNumVolunteers] = useState(1)
-  const coordinators = ['Coordinator 1', 'Coordinator 2']
+  const [numVolunteers, setNumVolunteers] = useState(0)
+  const [coordinators, setCoordinators] = useState([])
+  const [selectedCoordinators, setSelectedCoordinators] = useState([])
 
 
   const categories = [
@@ -342,7 +344,6 @@ export default function CreateNewActivity(props) {
       startMonth,
       startYear,
       selectedDays,
-      activityCoordinator,
       estimatedHours,
       estimatedMinutes,
       numVolunteers,
@@ -366,17 +367,35 @@ export default function CreateNewActivity(props) {
     startMonth,
     startYear,
     selectedDays,
-    activityCoordinator,
     estimatedHours,
     estimatedMinutes,
     numVolunteers,
   ])
 
+  useEffect(() => {
+    axios
+      .get(`/community-coordinators/${localStorage.getItem('community-id')}`, {
+        headers: {
+          Authorization: `JWT ${token}`,
+        },
+      })
+      .then(
+        (response) => {
+          console.log(response.data)
+          const options = response.data.map((item) => ({label:`${item['first_name']} ${item['last_name']}`, value: item['id']}))
+          setCoordinators(options)
+        },
+        (error) => {
+          console.log(error)
+        }
+      )
+  }, [token])
+
 
   const handleSubmit = useCallback(() => {
     const dietaryRestrictionStatus = {}
     dietaryRestrictions.forEach((restriction) => dietaryRestrictionStatus[restriction.name] = restriction.isChecked)
-    console.log(dietaryRestrictionStatus)
+    console.log(selectedCoordinators)
 
     const param = JSON.stringify({
       'name': activityName,
@@ -395,6 +414,7 @@ export default function CreateNewActivity(props) {
       'end_time': endTime,
       'all_day': allDay,
       'no_end_time': noEndTime,
+      'coordinators': selectedCoordinators,
     })
     axios.post('/activity/', param, {
         headers: {
@@ -407,7 +427,7 @@ export default function CreateNewActivity(props) {
           console.log(response)
           console.log(err)
       })
-  }, [activityName, notes, category, selectedDays, estimatedHours, estimatedMinutes, numVolunteers, pickupLocation, destination, location, startTime, endTime, token, allDay, noEndTime, dietaryRestrictions])
+  }, [selectedCoordinators, activityName, notes, category, selectedDays, estimatedHours, estimatedMinutes, numVolunteers, pickupLocation, destination, location, startTime, endTime, token, allDay, noEndTime, dietaryRestrictions])
 
 
   return (
@@ -745,26 +765,18 @@ export default function CreateNewActivity(props) {
                     <span style={{ color: '#F83D34' }}>*</span>
                   </Label>
                   <Control>
-                    <Select
-                      onChange={(e) => setActivityCoordinator(e.target.value)}
-                      name='activityCoordinator'
-                      value={activityCoordinator}
-                    >
-                      {coordinators.map((c) => (
-                        <option>{c}</option>
-                      ))}
-                    </Select>
+                    <MultiSelect
+                      valueRenderer={(selectedCoordinators) => <span>Selected {selectedCoordinators.length} users </span>}
+                      options={coordinators}
+                      selected={selectedCoordinators}
+                      onSelectedChanged={(selected) => setSelectedCoordinators(selected)}
+                    />
                   </Control>
                 </Field>
-                <Field>
-                  <CheckboxField text='Select Other Coordinators' />
-                </Field>
-
                 <Label>
                   Estimated Average Task Time
                   <span style={{ color: '#F83D34' }}>*</span>
                 </Label>
-
                 <Columns>
                   <Columns.Column>
                     <Field>
