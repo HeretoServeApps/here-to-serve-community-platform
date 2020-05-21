@@ -374,7 +374,7 @@ export default function CreateNewActivity(props) {
 
   useEffect(() => {
     axios
-      .get(`/community-coordinators/${localStorage.getItem('community-id')}`, {
+      .get(`/community-users/${localStorage.getItem('community-id')}`, {
         headers: {
           Authorization: `JWT ${token}`,
         },
