@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from rest_framework_jwt.settings import api_settings
-from .models import Community, User, CommunityUserRole, Activity, EventActivity, MealActivity, RideActivity
+from .models import Community, User, CommunityUserRole, Activity, EventActivity, MealActivity, RideActivity, Announcement
 
 from django.contrib.auth.forms import SetPasswordForm
 from django.core.exceptions import ValidationError
@@ -110,6 +110,7 @@ class ActivitySerializer(serializers.ModelSerializer):
         model = Activity
         fields = '__all__'
 
+
 class RideActivitySerializer(serializers.ModelSerializer):
     activity = ActivitySerializer(required=True)
 
@@ -121,7 +122,6 @@ class RideActivitySerializer(serializers.ModelSerializer):
         activity_data = validated_data.pop('activity')
         activity = Activity.objects.create(**activity_data)
         return RideActivity.objects.create(activity=activity, **validated_data)
-
 
 
 class MealActivitySerializer(serializers.ModelSerializer):
@@ -140,6 +140,13 @@ class EventActivitySerializer(serializers.ModelSerializer):
     activity = ActivitySerializer(required=True)
     class Meta:
         model = EventActivity
+        fields = ('activity_ptr', 'start_time', 'end_time', 'location')
+
+
+class AnnouncementSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Announcement
+        fields = ('subject', 'message', 'date_time', 'show_on_page', 'community', 'user', 'author_name')
         fields = ('activity', 'location')
 
     def create(self, validated_data):

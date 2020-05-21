@@ -23,10 +23,10 @@ from rest_framework.views import APIView
 from .serializers import (
     CommunitySerializer, UserSerializer, CommunityUserRoleSerializer, UserSerializerWithToken, 
     PasswordResetConfirmSerializer, ActivitySerializer, RideActivitySerializer, MealActivitySerializer, UserSerializerWithID,
-    EventActivitySerializer 
+    EventActivitySerializer, AnnouncementSerializer
 )
 from .models import (
-    Community, User, CommunityUserRole, Activity, EventActivity, MealActivity, RideActivity 
+    Community, User, CommunityUserRole, Activity, EventActivity, MealActivity, RideActivity, Announcement 
 )
 
 
@@ -261,6 +261,36 @@ class ActivityViewSet(viewsets.ViewSet):
             # once the activities have been created in the database, add the selected coordinators for the coordinator ManyToMany field
             for specific_activity in created_instances:
                 specific_activity.activity.coordinators.add(*User.objects.filter(id__in=coordinators))
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class AnnouncementViewSet(viewsets.ModelViewSet):
+    queryset = Announcement.objects.all().order_by('name')
+    serializer_class = AnnouncementSerializer
+
+    def get_queryset(self):
+        name = self.request.query_params.get('name')
+        zipcode = self.request.query_params.get('zipcode')
+        is_closed = self.request.query_params.get('is_closed')
+        comm = Community.objects.filter(name=name, zipcode=zipcode, is_closed=is_closed).values_list('id')
+        anns = Announcement.objects.all().filter(community__in=comm).select_related('user')
+        for ann in anns:
+            ann.author_name = ann.user.first_name + ' ' + ann.user.last_name
+        return anns
+
+class AddAnnouncement(APIView):
+    permission_classes = (permissions.AllowAny,)
+
+    def post(self, request, format=None):
+        community_name = request.data['community']
+        user_email = request.data['user']
+        community = Community.objects.get(name=community_name).id
+        user = User.objects.get(email=user_email).id
+        request.data['community'] = community
+        request.data['user'] = user
+        serializer = AnnouncementSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
