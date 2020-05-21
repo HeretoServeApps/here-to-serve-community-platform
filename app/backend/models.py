@@ -295,9 +295,9 @@ class Activity(models.Model):
 
     est_hours = models.IntegerField(blank=True, null=True)
     est_minutes = models.IntegerField(blank=True, null=True)
-    volunteers_needed = models.IntegerField(default=0)
-    volunteers_signed_up = models.IntegerField(blank=True, null=True)
-
+    num_volunteers_needed = models.IntegerField(default=0)
+    coordinators = models.ManyToManyField(User, related_name="coordinators")
+    volunteers = models.ManyToManyField(User, related_name="volunteers")
 
 class RideActivity(models.Model):
     activity = models.OneToOneField(
