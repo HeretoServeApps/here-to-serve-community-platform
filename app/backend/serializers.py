@@ -11,6 +11,10 @@ class CommunitySerializer(serializers.HyperlinkedModelSerializer):
         model = Community
         fields = ('id', 'name', 'is_closed', 'description', 'zipcode', 'country')
 
+class UserSerializerWithID(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id', 'first_name', 'last_name')
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -99,24 +103,47 @@ class PasswordResetConfirmSerializer(serializers.Serializer):
 
         
 class ActivitySerializer(serializers.ModelSerializer):
+    coordinators = UserSerializer(many=True, read_only=True)
+    volunteers = UserSerializer(many=True, read_only=True)
+
     class Meta:
         model = Activity
         fields = '__all__'
 
 class RideActivitySerializer(serializers.ModelSerializer):
-    activity_ptr = ActivitySerializer(required=True)
+    activity = ActivitySerializer(required=True)
+
     class Meta:
         model = RideActivity
-        fields = ('activity_ptr', 'pickup_time', 'pickup_time_buffer', 'arrive_time', 'pickup_location', 'destination_location')
+        fields = ('activity', 'pickup_location', 'destination_location')
+
+    def create(self, validated_data):
+        activity_data = validated_data.pop('activity')
+        activity = Activity.objects.create(**activity_data)
+        return RideActivity.objects.create(activity=activity, **validated_data)
+
+
 
 class MealActivitySerializer(serializers.ModelSerializer):
-    activity_ptr = ActivitySerializer(required=True)
+    activity = ActivitySerializer(required=True)
     class Meta:
         model = MealActivity
-        fields = ('activity_ptr', 'delivery_time', 'delivery_location', 'dietary_restrictions')
+        fields = ('activity', 'delivery_location', 'dietary_restrictions')
+
+    def create(self, validated_data):
+        activity_data = validated_data.pop('activity')
+        activity = Activity.objects.create(**activity_data)
+        return MealActivity.objects.create(activity=activity, **validated_data)
+
 
 class EventActivitySerializer(serializers.ModelSerializer):
-    activity_ptr = ActivitySerializer(required=True)
+    activity = ActivitySerializer(required=True)
     class Meta:
         model = EventActivity
-        fields = ('activity_ptr', 'start_time', 'end_time', 'location')
+        fields = ('activity', 'location')
+
+    def create(self, validated_data):
+        activity_data = validated_data.pop('activity')
+        activity = Activity.objects.create(**activity_data)
+        return EventActivity.objects.create(activity=activity, **validated_data)
+
