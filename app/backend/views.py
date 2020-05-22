@@ -185,10 +185,10 @@ class PasswordResetConfirmView(generics.GenericAPIView):
        )
 
 
-class CommunityUsersList(generics.ListAPIView):
+class CommunityCoordinatorsList(generics.ListAPIView):
 
     def get(self, request, community_id):
-        user_ids = CommunityUserRole.objects.filter(community=community_id).exclude(role='ADMIN').values_list('user', flat=True)
+        user_ids = CommunityUserRole.objects.filter(community=community_id, role__in=['COORDINATOR', 'COMM_LEADER']).values_list('user', flat=True)
         users = User.objects.filter(id__in=user_ids).values("id", "first_name", "last_name")
         serializer = UserSerializerWithID(users, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
