@@ -127,13 +127,6 @@ export default function CreateCommunity() {
                   </option>
                 ))}
             </Select>
-            {/* <Field>
-              <Input
-                value={country}
-                onChange={e => setCountry(e.target.value)}
-                placeholder='Country'
-              />
-            </Field> */}
           </Columns.Column>
         </Columns>
       </Field>

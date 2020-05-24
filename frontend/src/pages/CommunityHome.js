@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import axios from 'axios'
 
 import Container from 'react-bulma-components/lib/components/container'
 import Columns from 'react-bulma-components/lib/components/columns'
@@ -7,15 +8,15 @@ import Heading from 'react-bulma-components/lib/components/heading'
 import CommunityHomeCard from '../components/communityHomeCard'
 import CommunityNavbar from '../components/communityNavbar'
 import Button from 'react-bulma-components/lib/components/button'
-import CheckboxField from '../components/checkboxfield'
 import { Select, Control } from 'react-bulma-components/lib/components/form'
-import axios from 'axios'
+
+import CheckboxField from '../components/checkboxfield'
+import CustomSections from '../components/customSections'
 
 export default function CommunityHome(props) {
   const [month, setMonth] = useState('')
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
-  const [customSections, setCustomSections] = useState([])
   const token = localStorage.getItem('token')
 
   var containerStyle = {
@@ -44,28 +45,7 @@ export default function CommunityHome(props) {
           console.log(error)
         }
       )
-      axios
-      .get('/community-custom-sections/', {
-        headers: {
-          Authorization: `JWT ${token}`,
-        },
-        params: {
-          name: localStorage.getItem('community-name'),
-        },
-      })
-      .then(
-        (response) => {
-          setCustomSections(response.data)
-        },
-        (error) => {
-          console.log(error)
-        }
-      )
   }, [token])
-
-
-const sections = customSections.map((customSection) =>
-  <li>{customSection.name}</li>)
 
 
   return (
@@ -84,9 +64,7 @@ const sections = customSections.map((customSection) =>
                 Edit Community
               </Link>
             </Button>
-            <br />
-            <Heading size={6}>Custom Sections</Heading>
-            <p>{sections}</p>
+            <CustomSections />
           </Columns.Column>
           <Columns.Column size={6}>
             <Control>
