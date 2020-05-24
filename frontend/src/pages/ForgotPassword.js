@@ -12,13 +12,11 @@ import Container from 'react-bulma-components/lib/components/container'
 import Heading from 'react-bulma-components/lib/components/heading'
 import Notification from 'react-bulma-components/lib/components/notification'
 
-import CheckboxField from '../components/checkboxfield'
-
-export default function Login(props) {
+export default function ForgotPassword(props) {
   // Non-bulma styles
   var containerStyle = {
     margin: '5% auto',
-    maxWidth: '450px',
+    maxWidth: '400px',
     padding: '4rem',
     border: '0.1rem solid #E5E5E5',
     borderRadius: '1rem',
@@ -26,41 +24,26 @@ export default function Login(props) {
   var notifStyle = {
     backgroundColor: 'white',
     padding: '.25rem .5rem .25rem .5rem',
+    textAlign: 'center',
   }
 
   const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [rememberMe, setRememberMe] = useState(false)
-  const [validForm, setValidForm] = useState(false)
 
   let history = useHistory()
+
   useEffect(() => {
-    if (localStorage.getItem('token') && 
-        localStorage.getItem('token') !== 'undefined' &&
-        localStorage.getItem('token') !== undefined) {
+    if (props.logged_in) {
       history.push('/my-communities')
     }
   })
-
-  function handleRememberMe() {
-    setRememberMe(!rememberMe)
-  }
-
-  useEffect(() => {
-    const formValues = [
-      email,
-      password
-    ]
-    const notValidForm =
-      formValues.some((formVal) => {
-        return formVal === ''
-      })
-    setValidForm(notValidForm)
-  }, [email, password])
-
+  
   return (
     <Container style={containerStyle}>
-      <Heading size={4}>Log in to Here to Serve</Heading>
+      <Heading size={4}>Forgot Password?</Heading>
+      <p className='has-text-grey-light'>
+        Enter your email address to be sent a password reset link.
+      </p>
+      <br />
       <Field>
         <Control>
           <Input
@@ -71,36 +54,23 @@ export default function Login(props) {
           />
         </Control>
       </Field>
-
-      <Field>
-        <Input
-          value={password}
-          type='password'
-          placeholder='Password'
-          onChange={(e) => setPassword(e.target.value)}
-        />
-      </Field>
-      <Field>
-        <CheckboxField text={'Remember me'} onChange={handleRememberMe} />
-      </Field>
       <Button
         style={{ marginBottom: '1rem' }}
         color='primary'
         fullwidth={true}
-        onClick={() => props.handle_login(email, password, rememberMe)}
-        disabled={validForm}
-      >
-        LOGIN
+        onClick={() => {
+          props.handle_forgot_password(email);
+          history.push('/forgot-password-confirmation');
+        }}>
+        SEND
       </Button>
       <Notification style={notifStyle}>
-        <a href='/forgot-password'>Forgot Password?</a> or{' '}
-        <Link to='/register'>Create Account</Link>
+        <Link to='/login'>Back to Login</Link>
       </Notification>
     </Container>
   )
 }
 
-Login.propTypes = {
-  handle_login: PropTypes.func.isRequired,
+ForgotPassword.propTypes = {
   logged_in: PropTypes.bool.isRequired,
 }

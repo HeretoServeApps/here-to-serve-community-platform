@@ -48,3 +48,57 @@ input.autocomplete {
 .suggestions li:not(:last-of-type) {
   border-bottom: 1px solid #999;
 }
+
+/*Scrollable table styles*/ 
+thead, tbody { display: block; }
+
+tbody {
+    height: 500px;       /* Just for the demo          */
+    overflow-y: auto;    /* Trigger vertical scroll    */
+    overflow-x: auto;  /* Hide the horizontal scroll */
+}
+
+table {
+    width: 100%;
+}
+
+tbody td, thead th {
+    width: 10%; 
+}
+/*End of scrollable table styles*/
+
+/*For coordinator dropdown in activity creation*/
+.dropdown {
+  min-width: 200px;
+}
+
+/*Icons*/
+.dot-green {
+  height: 15px;
+  width: 15px;
+  background-color: #56DF95;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 2%;
+  margin-top: 2%;
+}
+
+.dot-blue {
+  height: 15px;
+  width: 15px;
+  background-color: #71BAFD;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 2%;
+  margin-top: 2%;
+}
+
+.dot-orange {
+  height: 15px;
+  width: 15px;
+  background-color: #FDC571;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 2%;
+  margin-top: 2%;
+}
