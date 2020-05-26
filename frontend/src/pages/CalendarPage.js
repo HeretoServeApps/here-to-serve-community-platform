@@ -82,7 +82,7 @@ export default function CalendarPage(props) {
     setDate(moment(`${selectedMonth} ${selectedYear}`, "MMMM YYYY").toDate())
   }
 
-  function processData(data) {
+  function processEvents(data) {
     data.forEach(activity => {
       activity['start_time'] = new Date(activity['start_time'])
       activity['end_time'] = new Date(activity['end_time'])
@@ -212,7 +212,7 @@ export default function CalendarPage(props) {
               style={{ 'height': 500, 'margin-top': 15 }}
               date={date}
               onNavigate={date => setDate(date)}
-              events={processData(events)}
+              events={processEvents(events)}
               startAccessor="start_time"
               endAccessor="end_time"
               onSelectEvent={event => alert(event.title)}
