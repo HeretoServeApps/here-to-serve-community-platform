@@ -7,6 +7,7 @@ from django.contrib.auth.models import ( AbstractBaseUser, BaseUserManager, Perm
 from django.utils import timezone
 from phone_field import PhoneField
 from django.conf import settings
+from tinymce.models import HTMLField
 
 class CustomSection(models.Model):
     # Choices for type
@@ -243,7 +244,7 @@ class Announcement(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=False, blank=False)
     author_name = models.CharField(max_length=50, blank=True)
     subject = models.CharField(max_length=100, blank=False)
-    message = models.TextField(blank=False)
+    message = HTMLField()
     # making date/time and show strings for now
     date_time = models.CharField(max_length=100, blank=False)
     show_on_page = models.CharField(

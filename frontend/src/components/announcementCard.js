@@ -33,8 +33,8 @@ export default function Announcement({ subject, message, dateTime, user }) {
         </div>
       </div>
       <div style={contentStyle}>
-        <Heading size={6}>{subject}</Heading>
-        <div>{message}</div>
+        <Heading size={4}>{subject}</Heading>
+        <div dangerouslySetInnerHTML={{ __html: message }}></div>
       </div>
     </div>
   )
