@@ -287,7 +287,7 @@ class Activity(models.Model):
         choices=ACTIVITY_TYPE_CHOICES,
         default=OCCASSION
     )
-    name = models.CharField(max_length=120)
+    title = models.CharField(max_length=120)
     description = models.TextField(blank=True, default='')
 
     start_time = models.DateTimeField(default=timezone.now)

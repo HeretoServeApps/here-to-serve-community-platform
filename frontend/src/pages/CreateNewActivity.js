@@ -397,7 +397,7 @@ export default function CreateNewActivity(props) {
     console.log(selectedCoordinators)
 
     const param = JSON.stringify({
-      'name': activityName,
+      'title': activityName,
       'description': notes,
       'activity_type': category,
       'community': localStorage.getItem('community-id'),

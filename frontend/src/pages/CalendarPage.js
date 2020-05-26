@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { Calendar, momentLocalizer } from 'react-big-calendar'
 import moment from 'moment'
 import 'react-big-calendar/lib/sass/styles.scss'
@@ -21,12 +21,6 @@ import CheckboxField from '../components/checkboxfield'
 import CommunityNavbar from '../components/communityNavbar'
 
 export default function CalendarPage(props) {
-
-  const [selectedMonth, setSelectedMonth] = useState(moment().format("MMMM"))
-  const [selectedYear, setSelectedYear] = useState(moment().format("YYYY"))
-  const [date, setDate] = useState()
-
-
   var containerStyle = {
     margin: '8% 10% 0% 0%',
     maxWidth: '100%',
@@ -36,6 +30,10 @@ export default function CalendarPage(props) {
     margin: '20% 0% 0% 30%',
     maxWidth: '100%',
   }
+
+  const [selectedMonth, setSelectedMonth] = useState(moment().format("MMMM"))
+  const [selectedYear, setSelectedYear] = useState(moment().format("YYYY"))
+  const [date, setDate] = useState()
 
   const years = [...Array(15).keys()].map(i => i + 2020);
   const months = [
@@ -63,6 +61,11 @@ export default function CalendarPage(props) {
     'Miscellaneous',
     'Event'
   ]
+
+  // Events and event selection
+  const [events, setEvents] = useState([])
+  
+  const [selectedEvent, setSelectedEvent] = useState(-1) // primary key field
   
   // Setup the localizer by providing the moment (or globalize) Object
   // to the correct localizer.
@@ -71,12 +74,40 @@ export default function CalendarPage(props) {
   // filter parameters
   const [member, setMember] = useState('')
   const [members, setMembers] = useState([])
-  const [acivityType, setActivityType] = useState('')
-  const [activityStatus, setActivityStatus] = useState('')
+  
+
+  // FUNCTIONS ---------------------------------------------------------------------------------------------
 
   function updateDate() {
     setDate(moment(`${selectedMonth} ${selectedYear}`, "MMMM YYYY").toDate())
   }
+
+  function processEvents(data) {
+    data.forEach(activity => {
+      activity['start_time'] = new Date(activity['start_time'])
+      activity['end_time'] = new Date(activity['end_time'])
+    })
+    return data
+  }
+
+  // API CALLS ---------------------------------------------------------------------------------------------
+
+  useEffect(() => {
+    axios
+      .get('/activity', {
+        headers: {
+          Authorization: `JWT ${localStorage.getItem('token')}`,
+        }
+      })
+      .then(
+        (response) => {
+          setEvents(response.data)
+        },
+        (error) => {
+          console.log(error)
+        }
+      )
+  }, [])
 
   useEffect(() => {
     axios
@@ -175,13 +206,18 @@ export default function CalendarPage(props) {
               </Link>
             </Columns.Column>
           </Columns>
-          <Calendar
-            localizer={localizer}
-            events={[]}
-            style={{ 'height': 500, 'margin-top': 15 }}
-            date={date}
-            onNavigate={date => setDate(date)}
-          />
+          <div class='rbc-calendar'>
+            <Calendar
+              localizer={localizer}
+              style={{ 'height': 500, 'margin-top': 15 }}
+              date={date}
+              onNavigate={date => setDate(date)}
+              events={processEvents(events)}
+              startAccessor="start_time"
+              endAccessor="end_time"
+              onSelectEvent={event => alert(event.title)}
+            />
+          </div>
         </Container>
         </Columns.Column>             
       </Columns>             

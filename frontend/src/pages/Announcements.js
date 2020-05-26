@@ -74,27 +74,6 @@ export default function Announcements(props) {
       )
   }, [token])
 
-  /*useEffect(() => {
-    var newAnnouncements = announcements
-    newAnnouncements.forEach((a) => {
-      axios
-        .get('/all-users/' + a.user, {
-          headers: {
-            Authorization: `JWT ${token}`,
-          },
-        })
-        .then(
-          (response) => {
-            a.user = response.data.first_name + ' ' + response.data.last_name
-          },
-          (error) => {
-            console.log(error)
-          }
-        )
-    })
-    setAnnouncements([...newAnnouncemnts])
-    
-  }, [announcements])*/
 
   return (
     <div>
