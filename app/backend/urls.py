@@ -12,6 +12,7 @@ router.register(r'community-user-role', views.CommunityUserRoleViewSet)
 router.register(r'one-community', views.OneCommunityViewSet)
 router.register(r'activity', views.ActivityViewSet, basename='activity')
 router.register(r'announcement', views.AnnouncementViewSet)
+router.register(r'community-custom-sections', views.CommunityCustomSections)
 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.

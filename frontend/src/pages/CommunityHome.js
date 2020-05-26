@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import axios from 'axios'
 
 import Container from 'react-bulma-components/lib/components/container'
 import Columns from 'react-bulma-components/lib/components/columns'
@@ -7,9 +8,10 @@ import Heading from 'react-bulma-components/lib/components/heading'
 import CommunityHomeCard from '../components/communityHomeCard'
 import CommunityNavbar from '../components/communityNavbar'
 import Button from 'react-bulma-components/lib/components/button'
-import CheckboxField from '../components/checkboxfield'
 import { Select, Control } from 'react-bulma-components/lib/components/form'
-import axios from 'axios'
+
+import CheckboxField from '../components/checkboxfield'
+import CustomSections from '../components/customSections'
 
 export default function CommunityHome(props) {
   const [month, setMonth] = useState('')
@@ -45,6 +47,7 @@ export default function CommunityHome(props) {
       )
   }, [token])
 
+
   return (
     <div>
       <CommunityNavbar />
@@ -61,6 +64,7 @@ export default function CommunityHome(props) {
                 Edit Community
               </Link>
             </Button>
+            <CustomSections />
           </Columns.Column>
           <Columns.Column size={6}>
             <Control>

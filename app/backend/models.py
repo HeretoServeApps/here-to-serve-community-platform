@@ -8,6 +8,20 @@ from django.utils import timezone
 from phone_field import PhoneField
 from django.conf import settings
 
+
+
+
+class Community(models.Model):
+    # defaults were just for already existing rows, no real meaning
+    name = models.CharField(max_length=128, default='')
+    is_closed = models.CharField(default='false', max_length=5)
+    description = models.CharField(max_length=256, default='')
+    zipcode = models.CharField(max_length=10, default='')
+    country = models.CharField(max_length=128, default='US')
+
+    def __str__(self):
+        return self.name
+
 class CustomSection(models.Model):
     # Choices for type
     GALLERY = 'GALLERY'
@@ -30,18 +44,8 @@ class CustomSection(models.Model):
     # For resources and general types only
     title = models.CharField(max_length=64, blank=True)
     description = models.CharField(max_length=128, blank=True)
+    community = models.ForeignKey(Community, on_delete=models.CASCADE, null=False, blank=False)
 
-    def __str__(self):
-        return self.name
-
-
-class Community(models.Model):
-    # defaults were just for already existing rows, no real meaning
-    name = models.CharField(max_length=128, default='')
-    is_closed = models.CharField(default='false', max_length=5)
-    description = models.CharField(max_length=256, default='')
-    zipcode = models.CharField(max_length=10, default='')
-    country = models.CharField(max_length=128, default='US')
 
     def __str__(self):
         return self.name
