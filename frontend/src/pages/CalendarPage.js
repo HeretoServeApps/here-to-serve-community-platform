@@ -63,13 +63,7 @@ export default function CalendarPage(props) {
   ]
 
   // Events and event selection
-  const [events, setEvents] = useState([
-    // {
-    //   'title': 'Test event 1',
-    //   'start': new Date('May 21, 2020 8:13:00'),
-    //   'end': new Date('May 21, 2020 10:13:00'),
-    // },
-  ])
+  const [events, setEvents] = useState([])
   
   const [selectedEvent, setSelectedEvent] = useState(-1) // primary key field
   
@@ -80,23 +74,40 @@ export default function CalendarPage(props) {
   // filter parameters
   const [member, setMember] = useState('')
   const [members, setMembers] = useState([])
-  const [acivityType, setActivityType] = useState('')
-  const [activityStatus, setActivityStatus] = useState('')
   
+
+  // FUNCTIONS ---------------------------------------------------------------------------------------------
+
   function updateDate() {
     setDate(moment(`${selectedMonth} ${selectedYear}`, "MMMM YYYY").toDate())
   }
 
-  const handleSelect = ({ start, end }) => {
-    const title = window.prompt('New Event name')
-    if (title) {
-      setEvents(events.concat({
-        'start': start,
-        'end': end,
-        'title': title,
-      }))
-    }
+  function processData(data) {
+    data.forEach(activity => {
+      activity['start_time'] = new Date(activity['start_time'])
+      activity['end_time'] = new Date(activity['end_time'])
+    })
+    return data
   }
+
+  // API CALLS ---------------------------------------------------------------------------------------------
+
+  useEffect(() => {
+    axios
+      .get('/activity', {
+        headers: {
+          Authorization: `JWT ${localStorage.getItem('token')}`,
+        }
+      })
+      .then(
+        (response) => {
+          setEvents(response.data)
+        },
+        (error) => {
+          console.log(error)
+        }
+      )
+  }, [])
 
   useEffect(() => {
     axios
@@ -197,16 +208,14 @@ export default function CalendarPage(props) {
           </Columns>
           <div class='rbc-calendar'>
             <Calendar
-              selectable
               localizer={localizer}
               style={{ 'height': 500, 'margin-top': 15 }}
               date={date}
               onNavigate={date => setDate(date)}
-              events={events}
-              startAccessor="start"
-              endAccessor="end"
+              events={processData(events)}
+              startAccessor="start_time"
+              endAccessor="end_time"
               onSelectEvent={event => alert(event.title)}
-              onSelectSlot={handleSelect}
             />
           </div>
         </Container>
