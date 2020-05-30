@@ -74,7 +74,7 @@ export default function CommunityPeople() {
                             color='primary'
                             onClick={() => history.push('/add-people')}
                         >
-                            Add Members
+                            Invite Members
                         </Button>
                     </Columns.Column>
                 </Columns>
