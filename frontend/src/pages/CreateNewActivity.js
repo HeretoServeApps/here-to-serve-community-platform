@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react'
 import DayPicker, { DateUtils } from 'react-day-picker'
 import 'react-day-picker/lib/style.css'
 import { Link } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 
 import Container from 'react-bulma-components/lib/components/container'
 import Columns from 'react-bulma-components/lib/components/columns'
@@ -46,7 +47,8 @@ export default function CreateNewActivity(props) {
     display: 'flex',
     justifyContent: 'flex-start',
   }
-
+  
+  let history = useHistory()
   const years = Array.from(Array(5).keys()).map((y) => (y+(new Date().getFullYear())))
   const months = [
     'January',
@@ -423,8 +425,8 @@ export default function CreateNewActivity(props) {
       })
       .then(
         (response, err) => {
-          console.log(response)
           console.log(err)
+          history.push('/calendar')
       })
   }, [selectedCoordinators, activityName, notes, category, selectedDays, estimatedHours, estimatedMinutes, numVolunteers, pickupLocation, destination, location, startTime, endTime, token, allDay, noEndTime, dietaryRestrictions])
 

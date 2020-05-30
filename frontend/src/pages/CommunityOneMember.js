@@ -14,7 +14,6 @@ import {
   Control,
   Input,
   Select,
-  Textarea,
   Label
 } from 'react-bulma-components/lib/components/form'
 
