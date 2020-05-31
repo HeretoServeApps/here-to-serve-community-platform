@@ -76,7 +76,7 @@ tbody td, thead th {
 .dot-green {
   height: 15px;
   width: 15px;
-  background-color: #56DF95;
+  background-color: #46b378;
   border-radius: 50%;
   display: inline-block;
   margin-right: 2%;
@@ -86,7 +86,7 @@ tbody td, thead th {
 .dot-blue {
   height: 15px;
   width: 15px;
-  background-color: #71BAFD;
+  background-color: #60a1db;
   border-radius: 50%;
   display: inline-block;
   margin-right: 2%;
@@ -96,7 +96,7 @@ tbody td, thead th {
 .dot-orange {
   height: 15px;
   width: 15px;
-  background-color: #FDC571;
+  background-color: #e6a940;
   border-radius: 50%;
   display: inline-block;
   margin-right: 2%;

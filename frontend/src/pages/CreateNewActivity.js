@@ -220,7 +220,7 @@ export default function CreateNewActivity(props) {
     'Visits',
     'Coverage',
     'Miscellaneous',
-    'Event'
+    'Occasion'
   ]
   
   //Dietary Restrictions (kept in case checkbox implementation is needed)
@@ -396,7 +396,6 @@ export default function CreateNewActivity(props) {
   const handleSubmit = useCallback(() => {
     const dietaryRestrictionStatus = {}
     dietaryRestrictions.forEach((restriction) => dietaryRestrictionStatus[restriction.name] = restriction.isChecked)
-    console.log(selectedCoordinators)
 
     const param = JSON.stringify({
       'title': activityName,
@@ -406,7 +405,7 @@ export default function CreateNewActivity(props) {
       "dates" : selectedDays,
       'est_hours': estimatedHours,
       'est_minutes': estimatedMinutes,
-      'volunteers_needed': numVolunteers,
+      'num_volunteers_needed': numVolunteers,
       'pickup_location': pickupLocation,
       'destination_location': destination,
       'location': location,

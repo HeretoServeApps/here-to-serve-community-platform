@@ -331,6 +331,11 @@ export default function CalendarPage(props) {
                 allDayAccessor='all_day'
                 popup={true}
                 onSelectEvent={event => getEventInfo(event)}
+                eventPropGetter={event => ({
+                  style: {
+                    backgroundColor: event.color,
+                  },
+                })}
               />
             </div>
           </Container>
