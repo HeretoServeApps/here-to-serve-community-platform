@@ -12,6 +12,7 @@ router.register(r'community-user-role', views.CommunityUserRoleViewSet)
 router.register(r'one-community', views.OneCommunityViewSet)
 router.register(r'activity', views.ActivityViewSet, basename='activity')
 router.register(r'announcement', views.AnnouncementViewSet)
+router.register(r'community-custom-sections', views.CommunityCustomSections)
 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
@@ -29,5 +30,5 @@ urlpatterns = [
     path('community-people/', views.CommunityPeopleList.as_view()),
     re_path(r'^edit-user/(?P<pk>\d+)/$', views.UserViewUpdate.as_view()),
     path('invite-members/', views.InviteUsers.as_view()),
-    path(r'community-users/<int:community_id>/', views.CommunityUsersList.as_view())
+    path(r'community-coordinators/<int:community_id>/', views.CommunityCoordinatorsList.as_view())
 ]

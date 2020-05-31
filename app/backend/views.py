@@ -23,10 +23,10 @@ from rest_framework.views import APIView
 from .serializers import (
     CommunitySerializer, UserSerializer, CommunityUserRoleSerializer, UserSerializerWithToken, 
     PasswordResetConfirmSerializer, ActivitySerializer, RideActivitySerializer, MealActivitySerializer, UserSerializerWithID,
-    EventActivitySerializer, AnnouncementSerializer
+    EventActivitySerializer, AnnouncementSerializer, CustomSectionSerializer
 )
 from .models import (
-    Community, User, CommunityUserRole, Activity, EventActivity, MealActivity, RideActivity, Announcement 
+    Community, User, CommunityUserRole, Activity, EventActivity, MealActivity, RideActivity, Announcement, CustomSection
 )
 
 
@@ -104,6 +104,19 @@ class CommunityList(APIView):
     def get(self, request, format=None):
         communities = [community.name for community in Community.objects.all()]
         return Response(communities)
+
+
+class CommunityCustomSections(viewsets.ModelViewSet):
+    """
+        Gets all custom sections for a community
+        """
+    queryset = CustomSection.objects.all()
+    serializer_class = CustomSectionSerializer
+
+    def get_queryset(self):
+        community_name = self.request.query_params.get('name')
+        sections = CustomSection.objects.filter(community__name=community_name)
+        return sections
 
 
 class CommunityUserRoleRegister(APIView):
@@ -185,10 +198,10 @@ class PasswordResetConfirmView(generics.GenericAPIView):
        )
 
 
-class CommunityUsersList(generics.ListAPIView):
+class CommunityCoordinatorsList(generics.ListAPIView):
 
     def get(self, request, community_id):
-        user_ids = CommunityUserRole.objects.filter(community=community_id).exclude(role='ADMIN').values_list('user', flat=True)
+        user_ids = CommunityUserRole.objects.filter(community=community_id, role__in=['COORDINATOR', 'COMM_LEADER']).values_list('user', flat=True)
         users = User.objects.filter(id__in=user_ids).values("id", "first_name", "last_name")
         serializer = UserSerializerWithID(users, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)

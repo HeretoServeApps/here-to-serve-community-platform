@@ -102,7 +102,7 @@ export default function CommunityAddMembers() {
         <div>
             <CommunityNavbar />
             <Container style={containerStyle}>
-                <Heading size={4}>Add Members</Heading>
+                <Heading size={4}>Invite Members</Heading>
                 <strong>Send from:</strong> {localStorage.getItem('email')}
 
                 <Field>

@@ -1,6 +1,8 @@
 from rest_framework import serializers
 from rest_framework_jwt.settings import api_settings
-from .models import Community, User, CommunityUserRole, Activity, EventActivity, MealActivity, RideActivity, Announcement
+from .models import (
+    Community, User, CommunityUserRole, Activity, EventActivity, MealActivity, RideActivity, Announcement, CustomSection
+) 
 
 from django.contrib.auth.forms import SetPasswordForm
 from django.core.exceptions import ValidationError
@@ -10,6 +12,11 @@ class CommunitySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Community
         fields = ('id', 'name', 'is_closed', 'description', 'zipcode', 'country')
+
+class CustomSectionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomSection
+        fields = ('name', 'type', 'link', 'title', 'description', 'community')
 
 class UserSerializerWithID(serializers.ModelSerializer):
     class Meta:
@@ -152,4 +159,3 @@ class AnnouncementSerializer(serializers.ModelSerializer):
     class Meta:
         model = Announcement
         fields = ('subject', 'message', 'date_time', 'show_on_page', 'community', 'user', 'author_name')
-

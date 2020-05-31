@@ -102,3 +102,8 @@ tbody td, thead th {
   margin-right: 2%;
   margin-top: 2%;
 }
+
+/*Calendar*/
+.rbc-calendar {
+  min-height: 600px ;
+}

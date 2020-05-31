@@ -373,7 +373,7 @@ export default function CreateNewActivity(props) {
 
   useEffect(() => {
     axios
-      .get(`/community-users/${localStorage.getItem('community-id')}`, {
+      .get(`/community-coordinators/${localStorage.getItem('community-id')}`, {
         headers: {
           Authorization: `JWT ${token}`,
         },
@@ -397,7 +397,7 @@ export default function CreateNewActivity(props) {
     console.log(selectedCoordinators)
 
     const param = JSON.stringify({
-      'name': activityName,
+      'title': activityName,
       'description': notes,
       'activity_type': category,
       'community': localStorage.getItem('community-id'),
