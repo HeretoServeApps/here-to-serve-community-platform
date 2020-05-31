@@ -215,8 +215,8 @@ class ActivityViewSet(viewsets.ViewSet):
         queryset = Activity.objects.filter(community__in=user_comms)
         serializer = ActivitySerializer(queryset, many=True)
 
-        # Depending on the type of activity, we add necessary fields to the result
         for activity in serializer.data:
+            # Depending on the type of activity, we add necessary fields to the result
             if activity['activity_type'] == 'Giving Rides':
                 ride_activity_obj = get_object_or_404(RideActivity.objects.all(), pk=activity['id'])
                 ride_activity_serializer = RideActivitySerializer(ride_activity_obj)
@@ -244,7 +244,17 @@ class ActivityViewSet(viewsets.ViewSet):
                 all_other_activity_serializer = EventActivitySerializer(all_other_activity_obj)
                 for item in all_other_activity_serializer.data:
                     activity[item] = all_other_activity_serializer.data[item]
-
+            
+            # Activity with type 'Occassion' has a differet color 
+            if activity['activity_type'] == 'Occasion':
+                activity['color'] = '#e6a940'
+            # Depending on the outcome of [volunteers needed - volunteers signed up], we change the color of the activity
+            else:
+                # If all volunteer spots have been filled, color this activity blue
+                if int(activity['num_volunteers_needed']) - len(activity['volunteers']) == 0:
+                    activity['color'] = '#60a1db'
+                else: # Otherwise color it green
+                    activity['color'] = '#46b378'
 
         return Response(serializer.data)
 
