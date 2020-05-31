@@ -18,10 +18,15 @@ export default function CommunityHome(props) {
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
   const token = localStorage.getItem('token')
+  const [coordinators, setCoordinators] = useState([])
 
   var containerStyle = {
     margin: '5% auto',
     maxWidth: '80%',
+  }
+
+  var linkStyle = {
+    fontSize: '0.8em',
   }
 
   useEffect(() => {
@@ -47,6 +52,29 @@ export default function CommunityHome(props) {
       )
   }, [token])
 
+  useEffect(() => {
+    axios
+      .get(`/community-coordinators/${localStorage.getItem('community-id')}`, {
+        headers: {
+          Authorization: `JWT ${token}`,
+        },
+      })
+      .then(
+        (response) => {
+          console.log(response.data)
+          const options = response.data.map((item) => ({
+            label: `${item['first_name']} ${item['last_name']}`,
+            value: item['id'],
+            email: item['email'],
+            phone: item['phone_number_1'],
+          }))
+          setCoordinators(options)
+        },
+        (error) => {
+          console.log(error)
+        }
+      )
+  }, [token])
 
   return (
     <div>
@@ -59,6 +87,21 @@ export default function CommunityHome(props) {
             <p>{description}</p>
             <br />
             <Heading size={6}>Community Leaders</Heading>
+            {coordinators.map((c) => (
+              <div style={{ marginBottom: '10px' }}>
+                <p style={{ fontWeight: 'bold' }}>{c.label}</p>
+                <p style={linkStyle}>
+                  <a
+                    href={'mailto:' + c.email}
+                    style={{ color: '#2C8595', fontWeight: '500' }}
+                  >
+                    {c.email}
+                  </a>
+                </p>
+                <p style={{ fontSize: '0.8em' }}>{c.phone}</p>
+              </div>
+            ))}
+            <br />
             <Button color='primary'>
               <Link to='#' style={{ color: 'white' }}>
                 Edit Community

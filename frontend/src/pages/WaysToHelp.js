@@ -57,7 +57,18 @@ export default function WaysToHelp(props) {
         <Columns isMultiline={true}>
           <Columns.Column size={3}></Columns.Column>
           <Columns.Column size={9}>
-            <Heading size={4}>Ways to Help</Heading>
+            <Columns>
+              <Columns.Column size={10}>
+                <Heading size={4}>Ways to Help</Heading>
+              </Columns.Column>
+              <Columns.Column size={2}>
+                <Link to='#' style={{ marginRight: '10px' }}>
+                  <Button color='primary' className='is-fullwidth'>
+                    Edit
+                  </Button>
+                </Link>
+              </Columns.Column>
+            </Columns>
             <div>
               <p style={noteStyle}>No content has been posted for this page.</p>
             </div>

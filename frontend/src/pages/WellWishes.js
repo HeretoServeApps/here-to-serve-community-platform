@@ -95,11 +95,11 @@ export default function WellWishes(props) {
               </p>
             </div>
             <br />
-            <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
               <Button
                 onClick={() => setShowForm(!showForm)}
                 color='primary'
-                className='is-outlined is-small'
+                className='is-outlined'
               >
                 {showForm ? 'Hide Message Form' : 'Leave a Message'}
               </Button>
@@ -144,9 +144,9 @@ export default function WellWishes(props) {
                       />
                     </Control>
                   </Field>
-                  <Button color='primary' className='is-small'>
-                    Finish
-                  </Button>
+                  <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                    <Button color='primary'>Finish</Button>
+                  </div>
                 </div>
               </div>
             )}
