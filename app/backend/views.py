@@ -215,6 +215,47 @@ class ActivityViewSet(viewsets.ViewSet):
         queryset = Activity.objects.filter(community__in=user_comms)
         serializer = ActivitySerializer(queryset, many=True)
 
+        for activity in serializer.data:
+            # Depending on the type of activity, we add necessary fields to the result
+            if activity['activity_type'] == 'Giving Rides':
+                ride_activity_obj = get_object_or_404(RideActivity.objects.all(), pk=activity['id'])
+                ride_activity_serializer = RideActivitySerializer(ride_activity_obj)
+                for item in ride_activity_serializer.data:
+                    activity[item] = ride_activity_serializer.data[item]
+            elif activity['activity_type'] == 'Preparing Meals':
+                preparing_meal_obj = get_object_or_404(MealActivity.objects.all(), pk=activity['id'])
+                preparing_meal_serializer = MealActivitySerializer(preparing_meal_obj)
+                for item in preparing_meal_serializer.data:
+                    if(item == 'dietary_restrictions'):
+                        # Since dietary restrictions is a string, we want to convert it to a map and process it
+                        restrictions_string = preparing_meal_serializer.data[item]
+                        json_acceptable_string = restrictions_string.replace("'", "\"")
+                        restrictions_map = json.loads(json_acceptable_string) # START HERE
+                        true_restrictions = []
+                        for restriction in restrictions_map:
+                            if restrictions_map[restriction]:
+                                restriction = restriction.split('-')[0]
+                                true_restrictions.append(restriction)
+                        activity[item] = true_restrictions
+                    else:
+                        activity[item] = preparing_meal_serializer.data[item]
+            else:
+                all_other_activity_obj = get_object_or_404(EventActivity.objects.all(), pk=activity['id'])
+                all_other_activity_serializer = EventActivitySerializer(all_other_activity_obj)
+                for item in all_other_activity_serializer.data:
+                    activity[item] = all_other_activity_serializer.data[item]
+            
+            # Activity with type 'Occassion' has a differet color 
+            if activity['activity_type'] == 'Occasion':
+                activity['color'] = '#e6a940'
+            # Depending on the outcome of [volunteers needed - volunteers signed up], we change the color of the activity
+            else:
+                # If all volunteer spots have been filled, color this activity blue
+                if int(activity['num_volunteers_needed']) - len(activity['volunteers']) == 0:
+                    activity['color'] = '#60a1db'
+                else: # Otherwise color it green
+                    activity['color'] = '#46b378'
+
         return Response(serializer.data)
 
     def retrieve(self, request, pk=None):

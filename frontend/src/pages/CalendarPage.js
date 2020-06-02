@@ -31,6 +31,15 @@ export default function CalendarPage(props) {
     maxWidth: '100%',
   }
 
+  var eventContainerStyle = {
+    margin: '5% auto',
+    maxWidth: '870px',
+    maxHeight: '1000px',
+    padding: '4rem',
+    border: '0.1rem solid #E5E5E5',
+    borderRadius: '1rem',
+  }
+
   const [selectedMonth, setSelectedMonth] = useState(moment().format('MMMM'))
   const [selectedYear, setSelectedYear] = useState(moment().format('YYYY'))
   const [date, setDate] = useState()
@@ -65,15 +74,15 @@ export default function CalendarPage(props) {
   // Events and event selection
   const [events, setEvents] = useState([])
 
-  const [selectedEvent, setSelectedEvent] = useState(-1) // primary key field
-
+  const [selectedEvent, setSelectedEvent] = useState(null)
+  const [isSelectingEvent, setIsSelectingEvent] = useState(false)
   // Setup the localizer by providing the moment (or globalize) Object
   // to the correct localizer.
   const localizer = momentLocalizer(moment)
 
   // filter parameters
   const [member, setMember] = useState('')
-  const [members, setMembers] = useState([])
+  const [members, setMembers] = useState([{ first_name: 'All', last_name: '' }])
 
   // FUNCTIONS ---------------------------------------------------------------------------------------------
 
@@ -83,11 +92,24 @@ export default function CalendarPage(props) {
 
   function processEvents(data) {
     data.forEach((activity) => {
-      activity['start_time'] = new Date(activity['start_time'])
-      activity['end_time'] = new Date(activity['end_time'])
+      if (typeof activity['start_time'] === 'string') {
+        activity['start_time'] = new Date(activity['start_time'])
+        activity['end_time'] = new Date(activity['end_time'])
+        activity['title'] = activity['activity_type'] + ': ' + activity['title']
+      }
     })
     return data
   }
+
+  const getEventInfo = useCallback((event) => {
+    setSelectedEvent(event)
+    setIsSelectingEvent(true)
+  })
+
+  const goBackToCalendar = useCallback(() => {
+    setSelectedEvent(null)
+    setIsSelectingEvent(false)
+  })
 
   // API CALLS ---------------------------------------------------------------------------------------------
 
@@ -122,7 +144,7 @@ export default function CalendarPage(props) {
       })
       .then(
         (response) => {
-          setMembers(Array.from(response.data.people))
+          setMembers(members.concat(Array.from(response.data.people)))
         },
         (error) => {
           console.log(error)
@@ -130,10 +152,154 @@ export default function CalendarPage(props) {
       )
   }, [])
 
+  // RENDERS ---------------------------------------------------------------------------------------------
+
+  // Users will see this if they are selecting an event
+  if (isSelectingEvent) {
+    const isRideActivity = selectedEvent.activity_type === 'Giving Rides'
+    const isMealActivity = selectedEvent.activity_type === 'Preparing Meals'
+    return (
+      <div>
+        <CommunityNavbar />
+        <Container style={eventContainerStyle}>
+          <Columns>
+            <Columns.Column size={6}>
+              <Heading size={4}>{selectedEvent.title}</Heading>
+            </Columns.Column>
+            <Columns.Column>
+              <Button
+                style={{
+                  boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)',
+                }}
+                fullwidth={true}
+                color='primary'
+              >
+                Edit Activity
+              </Button>
+            </Columns.Column>
+            <Columns.Column>
+              <Button
+                style={{
+                  boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)',
+                }}
+                fullwidth={true}
+                color='danger'
+              >
+                Remove Activity
+              </Button>
+            </Columns.Column>
+          </Columns>
+          <Heading size={6}>Details:</Heading>
+          <i>Date:</i> {moment(selectedEvent.start_time).format('LL')}
+          <br />
+          <i>Time:</i> Between {moment(selectedEvent.start_time).format('LT')}{' '}
+          and {moment(selectedEvent.end_time).format('LT')}
+          <br />
+          {isRideActivity ? (
+            <div>
+              <i>Pickup Location: </i>{' '}
+              <a
+                target='_blank'
+                href={
+                  'https://maps.google.com/?q=' + selectedEvent.pickup_location
+                }
+              >
+                {selectedEvent.pickup_location}
+              </a>
+              <br />
+              <i>Destination: </i>{' '}
+              <a
+                target='_blank'
+                href={
+                  'https://maps.google.com/?q=' +
+                  selectedEvent.destination_location
+                }
+              >
+                {selectedEvent.destination_location}
+              </a>
+            </div>
+          ) : isMealActivity ? (
+            <div>
+              <i>Delivery Location: </i>{' '}
+              <a
+                target='_blank'
+                href={
+                  'https://maps.google.com/?q=' +
+                  selectedEvent.delivery_location
+                }
+              >
+                {selectedEvent.delivery_location}
+              </a>
+            </div>
+          ) : (
+            <div>
+              <i>Location: </i>
+              <a
+                target='_blank'
+                href={'https://maps.google.com/?q=' + selectedEvent.location}
+              >
+                {selectedEvent.location}
+              </a>{' '}
+            </div>
+          )}
+          {isMealActivity ? (
+            <div>
+              <i>Dietary Restrictions: </i>{' '}
+              <ul>
+                {selectedEvent.dietary_restrictions.map((r) => (
+                  <li>{r}</li>
+                ))}
+              </ul>
+            </div>
+          ) : (
+            ''
+          )}
+          <i>Volunteers Needed:</i> {selectedEvent.num_volunteers_needed}
+          <br />
+          <i>Notes:</i> {selectedEvent.description}
+          <br />
+          <Heading size={6} style={{ marginTop: '5%' }}>
+            People:{' '}
+          </Heading>
+          <i>Volunteers:</i>{' '}
+          {selectedEvent.volunteers.length === 0 ? (
+            'No volunteers has signed up.'
+          ) : (
+            <ul>
+              {selectedEvent.volunteers.map((person) => (
+                <li>
+                  {person.first_name}: {person.email}
+                </li>
+              ))}
+            </ul>
+          )}
+          <br />
+          <i>Coordinators:</i>
+          <ul>
+            {selectedEvent.coordinators.map((person) => (
+              <li>
+                {person.first_name}: {person.phone_number_1}
+              </li>
+            ))}
+          </ul>
+          <br />
+          <Button
+            className='is-primary is-inverted'
+            onClick={() => goBackToCalendar()}
+            style={{ display: 'block', marginTop: '3%' }}
+          >
+            Back
+          </Button>
+        </Container>
+      </div>
+    )
+  }
+
+  // Otherwise they will see the entire calendar
   return (
     <div>
       <CommunityNavbar />
-      <Columns>
+      <Columns style={{ marginBottom: '5%' }}>
         <Columns.Column size={3}>
           <Container style={statusContainerStyle}>
             <Heading size={6}>Status</Heading>
@@ -150,11 +316,16 @@ export default function CalendarPage(props) {
               <span class='dot-orange'></span>Event
             </div>
             <Heading size={6} style={{ marginTop: '10%' }}>
-              Members
+              Member
             </Heading>
             <Field>
               <Control>
-                <Select name='member' value={member} fullwidth={true}>
+                <Select
+                  name='member'
+                  value={member}
+                  fullwidth={true}
+                  onChange={(e) => setMember(e.target.value)}
+                >
                   {members.map((m) => (
                     <option>
                       {m.first_name} {m.last_name}
@@ -213,9 +384,7 @@ export default function CalendarPage(props) {
               </Columns.Column>
               <Columns.Column>
                 <Link to='/create-new-activity' style={{ color: 'white' }}>
-                  <Button color='primary' className='is-fullwidth'>
-                    Create a New Activity
-                  </Button>
+                  <Button color='primary'>Create a New Activity</Button>
                 </Link>
               </Columns.Column>
             </Columns>
@@ -228,7 +397,14 @@ export default function CalendarPage(props) {
                 events={processEvents(events)}
                 startAccessor='start_time'
                 endAccessor='end_time'
-                onSelectEvent={(event) => alert(event.title)}
+                allDayAccessor='all_day'
+                popup={true}
+                onSelectEvent={(event) => getEventInfo(event)}
+                eventPropGetter={(event) => ({
+                  style: {
+                    backgroundColor: event.color,
+                  },
+                })}
               />
             </div>
           </Container>

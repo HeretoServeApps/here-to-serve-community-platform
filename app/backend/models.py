@@ -287,7 +287,7 @@ class Activity(models.Model):
     VISITS = "Visits"
     COVERAGE = "Coverage"
     MISCELLANEOUS = "Miscellaneous"
-    OCCASSION = "Occassion"
+    OCCASSION = "Occasion"
 
     ACTIVITY_TYPE_CHOICES = [
         (GIVING_RIDES, "Giving Rides"),
@@ -297,7 +297,7 @@ class Activity(models.Model):
         (VISITS, "Visits"),
         (COVERAGE, "Coverage"),
         (MISCELLANEOUS, "Miscellaneous"),
-        (OCCASSION, "Occassion")
+        (OCCASSION, "Occasion")
     ]
 
     community = models.ForeignKey(Community, on_delete=models.CASCADE)
