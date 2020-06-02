@@ -14,14 +14,6 @@ export default function AccountSettings() {
     padding: '4rem',
   }
 
-  var checkboxStyle = {
-    fontSize: '0.75rem',
-    fontStyle: 'italic',
-    margin: '5px 0',
-    display: 'flex',
-    justifyContent: 'flex-start',
-  }
-
   const [infoAboutH2S, setInfoAboutH2S] = useState(false)
   const [newsletter, setNewsLetter]     = useState(false)
   
@@ -30,7 +22,7 @@ export default function AccountSettings() {
   })
 
   const handleOnCheckNewsLetter = useCallback(() => {
-    setInfoAboutH2S(!newsletter)
+    setNewsLetter(!newsletter)
   })
 
   return (
