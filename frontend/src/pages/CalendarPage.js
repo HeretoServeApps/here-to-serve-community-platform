@@ -82,7 +82,7 @@ export default function CalendarPage(props) {
 
   // filter parameters
   const [member, setMember] = useState('')
-  const [members, setMembers] = useState([])
+  const [members, setMembers] = useState([{'first_name': 'All', 'last_name': ''}])
 
 
   // FUNCTIONS ---------------------------------------------------------------------------------------------
@@ -145,7 +145,7 @@ export default function CalendarPage(props) {
       })
       .then(
         (response) => {
-          setMembers(Array.from(response.data.people))
+          setMembers(members.concat(Array.from(response.data.people)));
         },
         (error) => {
           console.log(error)
@@ -263,13 +263,14 @@ export default function CalendarPage(props) {
               <Checkbox style={{ marginRight: '10px' }} />
               <span class="dot-orange"></span>Event
             </div>
-            <Heading size={6} style={{ marginTop: '10%' }}>Members</Heading>
+            <Heading size={6} style={{ marginTop: '10%' }}>Member</Heading>
             <Field>
               <Control>
                 <Select
                   name='member'
                   value={member}
                   fullwidth={true}
+                  onChange={(e) => setMember(e.target.value)}
                 >
                   {members.map((m) => (
                     <option>{m.first_name} {m.last_name}</option>
