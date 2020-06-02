@@ -79,11 +79,16 @@ export default function Register(props) {
       password,
       confirmEmail,
       confirmPassword,
+      howLearn
     ]
     const notValidForm =
       formValues.some((formVal) => {
         return formVal === ''
       }) ||
+      formValues.some((formVal) => {
+        return formVal === 'Please select an option'
+      })
+      ||
       email !== confirmEmail ||
       password !== confirmPassword
     setValidForm(notValidForm)
@@ -103,6 +108,7 @@ export default function Register(props) {
     password,
     confirmEmail,
     confirmPassword,
+    howLearn
   ])
 
   // If token is verified, logs the user in and add them to the community they chose to join
@@ -386,11 +392,20 @@ export default function Register(props) {
         </Columns.Column>
       </Columns>
       <Field>
-        <Textarea
-          value={howLearn}
-          onChange={(e) => setHowLearn(e.target.value)}
-          placeholder='How did you hear about us?'
-        />
+        <Label>How did you learn about us?*</Label>
+        <Select
+            name='How Learn'
+            value={howLearn}
+            onChange={(e) => setHowLearn(e.target.value)}
+          >
+            <option>Please select an option</option>
+            <option>Social Media</option>
+            <option>Friend or Family</option>
+            <option>Here to Serve Website</option>
+            <option>Employer</option>
+            <option>Google Search</option>
+            <option>Other</option>
+          </Select>
       </Field>
       <CheckboxTermofUse />
       <Button
