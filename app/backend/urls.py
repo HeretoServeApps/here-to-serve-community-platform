@@ -12,6 +12,7 @@ router.register(r'community-user-role', views.CommunityUserRoleViewSet)
 router.register(r'one-community', views.OneCommunityViewSet)
 router.register(r'activity', views.ActivityViewSet, basename='activity')
 router.register(r'announcement', views.AnnouncementViewSet)
+router.register(r'well-wishes', views.WellWishViewSet)
 router.register(r'community-custom-sections', views.CommunityCustomSections)
 
 # Wire up our API using automatic URL routing.
@@ -32,5 +33,9 @@ urlpatterns = [
     path('invite-members/', views.InviteUsers.as_view()),
     path(r'community-coordinators/<int:community_id>/', views.CommunityCoordinatorsList.as_view()),
     path('delete-announcement/', views.DeleteAnnouncement.as_view()),
-    path('edit-announcement/', views.EditAnnouncement.as_view())
+    path('edit-announcement/', views.EditAnnouncement.as_view()),
+    path('add-well-wish/', views.AddWellWish.as_view()),
+     path('delete-well-wish/', views.DeleteWellWish.as_view()),
+    path('edit-well-wish/', views.EditWellWish.as_view()),
+     path('edit-ways-to-help/', views.EditWaysToHelp.as_view()),
 ]

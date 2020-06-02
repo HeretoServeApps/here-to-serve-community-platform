@@ -23,10 +23,10 @@ from rest_framework.views import APIView
 from .serializers import (
     CommunitySerializer, UserSerializer, CommunityUserRoleSerializer, UserSerializerWithToken, 
     PasswordResetConfirmSerializer, ActivitySerializer, RideActivitySerializer, MealActivitySerializer, UserSerializerWithID,
-    EventActivitySerializer, AnnouncementSerializer, CustomSectionSerializer
+    EventActivitySerializer, AnnouncementSerializer, CustomSectionSerializer, WellWishSerializer
 )
 from .models import (
-    Community, User, CommunityUserRole, Activity, EventActivity, MealActivity, RideActivity, Announcement, CustomSection
+    Community, User, CommunityUserRole, Activity, EventActivity, MealActivity, RideActivity, Announcement, CustomSection, WellWish
 )
 
 
@@ -419,3 +419,66 @@ class InviteUsers(APIView):
         except BadHeaderError:
             return Response(status=status.HTTP_400_BAD_REQUEST)
         return Response(status=status.HTTP_200_OK)
+
+class WellWishViewSet(viewsets.ModelViewSet):
+    queryset = WellWish.objects.all().order_by('name')
+    serializer_class = WellWishSerializer
+
+    def get_queryset(self):
+        name = self.request.query_params.get('name')
+        zipcode = self.request.query_params.get('zipcode')
+        is_closed = self.request.query_params.get('is_closed')
+        comm = Community.objects.filter(name=name, zipcode=zipcode, is_closed=is_closed).values_list('id')
+        anns = WellWish.objects.all().filter(community__in=comm).select_related('user')
+        for ann in anns:
+            ann.author_name = ann.user.first_name + ' ' + ann.user.last_name
+        return anns
+
+class AddWellWish(APIView):
+    permission_classes = (permissions.AllowAny,)
+
+    def post(self, request, format=None):
+        community_name = request.data['community']
+        user_email = request.data['user']
+        community = Community.objects.get(name=community_name).id
+        user = User.objects.get(email=user_email).id
+        request.data['community'] = community
+        request.data['user'] = user
+        serializer = WellWishSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class DeleteWellWish(APIView):
+    permission_classes = (permissions.AllowAny,)
+
+    def delete(self, request, format=None):
+        id = request.data['id']
+        WellWish.objects.get(id=id).delete()
+        return Response('Deleted well wish')
+
+class EditWellWish(APIView):
+    permission_classes = (permissions.AllowAny,)
+
+    def post(self, request, format=None):
+        id = request.data['id']
+        subject = request.data['subject']
+        message = request.data['message']
+        wellwish = WellWish.objects.get(id=id)
+        wellwish.subject = subject
+        wellwish.message = message
+        wellwish.save()
+        return Response('Edited well wish')
+
+class EditWaysToHelp(APIView):
+    permission_classes = (permissions.AllowAny,)
+
+    def post(self, request, format=None):
+        name = request.data['name']
+        zipcode = request.data['zipcode']
+        is_closed = request.data['is_closed']
+        community = Community.objects.get(name=name, zipcode=zipcode, is_closed=is_closed)
+        community.ways_to_help = request.data['ways_to_help']
+        community.save()
+        return Response('Edited ways to help')

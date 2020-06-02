@@ -9,7 +9,7 @@ import {
   Input,
   Select,
   Textarea,
-  Checkbox
+  Checkbox,
 } from 'react-bulma-components/lib/components/form'
 import Button from 'react-bulma-components/lib/components/button'
 import Container from 'react-bulma-components/lib/components/container'
@@ -27,12 +27,12 @@ export default function CreateCommunity() {
     maxWidth: '700px',
     padding: '4rem',
     border: '0.1rem solid #E5E5E5',
-    borderRadius: '1rem'
+    borderRadius: '1rem',
   }
   var noteStyle = {
     color: '#E5E5E5',
     fontSize: '0.75rem',
-    fontStyle: 'italic'
+    fontStyle: 'italic',
   }
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
@@ -45,36 +45,37 @@ export default function CreateCommunity() {
   const handleSubmit = useCallback(() => {
     // First add the new community to the database
     const param = JSON.stringify({
-      'name': name,
-      'description': description,
-      'zipcode': zipcode,
-      'country': country,
-      'is_closed': isClosed.toString()
+      name: name,
+      description: description,
+      zipcode: zipcode,
+      country: country,
+      is_closed: isClosed.toString(),
     })
-    axios.post('/community/', param, {
+    axios
+      .post('/community/', param, {
         headers: {
-          'Authorization': `JWT ${token}`,
+          Authorization: `JWT ${token}`,
           'Content-Type': 'application/json',
         },
       })
       .then(
         (response) => {
           // After user creates the community, they are added as a community leader
-          var formdata = new FormData();
-          formdata.append("community", name);
-          formdata.append("user", localStorage.getItem('email'));
-          formdata.append("role", "COMM_LEADER");
-    
+          var formdata = new FormData()
+          formdata.append('community', name)
+          formdata.append('user', localStorage.getItem('email'))
+          formdata.append('role', 'COMM_LEADER')
+
           var requestOptions = {
             method: 'POST',
             body: formdata,
-            redirect: 'follow'
-          };
-    
-          fetch("/community-role-register/", requestOptions)
-            .then(response => response.text())
-            .then(result => history.push('/my-communities'))
-            .catch(error => console.log('error', error));
+            redirect: 'follow',
+          }
+
+          fetch('/community-role-register/', requestOptions)
+            .then((response) => response.text())
+            .then((result) => history.push('/my-communities'))
+            .catch((error) => console.log('error', error))
         },
         (error) => {
           console.log(error)
@@ -90,7 +91,7 @@ export default function CreateCommunity() {
         <Control>
           <Input
             value={name}
-            onChange={e => setName(e.target.value)}
+            onChange={(e) => setName(e.target.value)}
             placeholder='Community Name'
           />
         </Control>
@@ -98,7 +99,7 @@ export default function CreateCommunity() {
       <Field>
         <Textarea
           value={description}
-          onChange={e => setDescription(e.target.value)}
+          onChange={(e) => setDescription(e.target.value)}
           placeholder='Community Description'
         />
       </Field>
@@ -108,7 +109,7 @@ export default function CreateCommunity() {
             <Field>
               <Input
                 value={zipcode}
-                onChange={e => setZipcode(e.target.value)}
+                onChange={(e) => setZipcode(e.target.value)}
                 placeholder='Zip Code'
               />
             </Field>
@@ -117,11 +118,11 @@ export default function CreateCommunity() {
             <Select
               name='country'
               value={country}
-              onChange={e => setCountry(e.target.value)}
+              onChange={(e) => setCountry(e.target.value)}
             >
               {countryList()
                 .getLabels()
-                .map(c => (
+                .map((c) => (
                   <option style={{ position: 'static' }} value={c}>
                     {c}
                   </option>
@@ -137,13 +138,24 @@ export default function CreateCommunity() {
       <br />
       <Field className='has-text-grey'>
         <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
-          <Checkbox style={{ marginRight: '10px' }} onChange={e => setIsClosed(!e.target.checked)}/>
-          <p>Allow friends and family to find this community by name and/or postal code.</p>
+          <Checkbox
+            style={{ marginRight: '10px' }}
+            onChange={(e) => setIsClosed(!e.target.checked)}
+          />
+          <p>
+            Allow friends and family to find this community by name and/or
+            postal code.
+          </p>
         </div>
         <CheckboxField text={'Allow all members to send invitations.'} />
         <CheckboxTermofUse />
       </Field>
-      <Button onClick={() => handleSubmit()} style={{ marginTop: '1rem', marginBottom: '1rem' }} color='primary' fullwidth={true}>
+      <Button
+        onClick={() => handleSubmit()}
+        style={{ marginTop: '1rem', marginBottom: '1rem' }}
+        color='primary'
+        fullwidth={true}
+      >
         CREATE COMMUNITY
       </Button>
       <Notification className='has-text-grey'>

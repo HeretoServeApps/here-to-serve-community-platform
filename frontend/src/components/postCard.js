@@ -16,7 +16,14 @@ import {
 } from 'react-bulma-components/lib/components/form'
 import { Editor } from '@tinymce/tinymce-react'
 
-export default function Announcement({ id, subject, message, dateTime, user }) {
+export default function PostCard({
+  id,
+  subject,
+  message,
+  dateTime,
+  user,
+  type,
+}) {
   const [showMenu, setShowMenu] = useState(false)
   const [showModal, setShowModal] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
@@ -25,8 +32,8 @@ export default function Announcement({ id, subject, message, dateTime, user }) {
   const [newMessage, setNewMessage] = useState(message ? message : '')
   let history = useHistory()
 
-  const deleteAnnouncement = useCallback(() => {
-    var url = '/delete-announcement/'
+  const deletePost = useCallback(() => {
+    var url = '/delete-' + type + '/'
     var myHeaders = new Headers()
     myHeaders.append('Authorization', `JWT ${localStorage.getItem('token')}`)
     myHeaders.append('id', id)
@@ -47,8 +54,8 @@ export default function Announcement({ id, subject, message, dateTime, user }) {
       .catch((error) => console.log('error', error))
   })
 
-  const editAnnouncement = useCallback(() => {
-    var url = '/edit-announcement/'
+  const editPost = useCallback(() => {
+    var url = '/edit-' + type + '/'
     var myHeaders = new Headers()
     myHeaders.append('Authorization', `JWT ${localStorage.getItem('token')}`)
     myHeaders.append('id', id)
@@ -140,7 +147,7 @@ export default function Announcement({ id, subject, message, dateTime, user }) {
           </Field>
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
             <Button onClick={() => setIsEditing(false)}>Cancel</Button>
-            <Button color='primary' onClick={() => editAnnouncement()}>
+            <Button color='primary' onClick={() => editPost()}>
               Finish
             </Button>
           </div>
@@ -200,10 +207,7 @@ export default function Announcement({ id, subject, message, dateTime, user }) {
                     }}
                   >
                     <Button onClick={() => setShowModal(false)}>Cancel</Button>
-                    <Button
-                      color='primary'
-                      onClick={() => deleteAnnouncement()}
-                    >
+                    <Button color='primary' onClick={() => deletePost()}>
                       Delete Post
                     </Button>
                   </Modal.Card.Foot>

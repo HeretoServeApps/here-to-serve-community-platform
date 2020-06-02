@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useState, useEffect, useCallback } from 'react'
+import { Link, useHistory } from 'react-router-dom'
 
 import Container from 'react-bulma-components/lib/components/container'
 import Columns from 'react-bulma-components/lib/components/columns'
@@ -8,7 +8,7 @@ import CommunityHomeCard from '../components/communityHomeCard'
 import CommunityNavbar from '../components/communityNavbar'
 import Button from 'react-bulma-components/lib/components/button'
 import CheckboxField from '../components/checkboxfield'
-import AnnouncementCard from '../components/announcementCard'
+import PostCard from '../components/postCard'
 import { Editor } from '@tinymce/tinymce-react'
 import axios from 'axios'
 
@@ -26,17 +26,12 @@ import {
 export default function WellWishes(props) {
   const token = localStorage.getItem('token')
   const [showForm, setShowForm] = useState(false)
+  const [wellwishes, setWellWishes] = useState([])
 
   const [subject, setSubject] = useState('')
   const [message, setMessage] = useState('')
-  const [whenPost, setWhenPost] = useState('')
-  const [month, setMonth] = useState('')
-  const [day, setDay] = useState('')
-  const [year, setYear] = useState('')
-  const [time, setTime] = useState('')
-  const [showHome, setShowHome] = useState(false)
-  const [sendEmail, setSendEmail] = useState(false)
   const [validForm, setValidForm] = useState(false)
+  let history = useHistory()
 
   var containerStyle = {
     margin: '5% auto',
@@ -73,6 +68,73 @@ export default function WellWishes(props) {
       })
       .then(
         (response) => {},
+        (error) => {
+          console.log(error)
+        }
+      )
+  }, [token])
+
+  useEffect(() => {
+    const formValues = [subject, message]
+    const notValidForm = formValues.some((formVal) => {
+      return formVal === ''
+    })
+    setValidForm(notValidForm)
+  }, [subject, message])
+
+  const handleSubmit = useCallback(() => {
+    let dateTime =
+      new Date().toLocaleDateString() +
+      ' at ' +
+      new Date().toLocaleTimeString([], {
+        hour: 'numeric',
+        minute: '2-digit',
+        hour12: true,
+      })
+
+    const param = JSON.stringify({
+      subject: subject,
+      message: message,
+      date_time: dateTime,
+      user: localStorage.getItem('email'),
+      community: localStorage.getItem('community-name'),
+      author_name: '',
+    })
+
+    axios
+      .post('/add-well-wish/', param, {
+        headers: {
+          Authorization: `JWT ${token}`,
+          'Content-Type': 'application/json',
+        },
+      })
+      .then(
+        (response) => {
+          window.location.reload()
+        },
+        (error) => {
+          console.log(error)
+        }
+      )
+  }, [subject, message])
+
+  useEffect(() => {
+    axios
+      .get('/well-wishes', {
+        headers: {
+          Authorization: `JWT ${token}`,
+        },
+        params: {
+          name: localStorage.getItem('community-name'),
+          zipcode: localStorage.getItem('community-zipcode'),
+          is_closed: localStorage.getItem('community-is-closed'),
+        },
+      })
+      .then(
+        (response) => {
+          console.log(response.data)
+          setWellWishes(response.data)
+        },
         (error) => {
           console.log(error)
         }
@@ -151,14 +213,39 @@ export default function WellWishes(props) {
                 </div>
                 <br />
                 <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                  <Button color='primary'>Finish</Button>
+                  <Button
+                    color='primary'
+                    disabled={validForm}
+                    onClick={() => handleSubmit()}
+                  >
+                    Finish
+                  </Button>
                 </div>
               </div>
             )}
 
             <br />
             <div>
-              <p style={noteStyle}>No well wishes have been posted yet.</p>
+              {wellwishes.length > 0 ? (
+                wellwishes
+                  .slice()
+                  .reverse()
+                  .map((a, index) => {
+                    return (
+                      <PostCard
+                        key={index}
+                        subject={a.subject}
+                        message={a.message}
+                        dateTime={a.date_time}
+                        user={a.author_name}
+                        id={a.id}
+                        type='well-wish'
+                      />
+                    )
+                  })
+              ) : (
+                <p style={noteStyle}>No well wishes have been posted yet.</p>
+              )}
             </div>
           </Columns.Column>
         </Columns>

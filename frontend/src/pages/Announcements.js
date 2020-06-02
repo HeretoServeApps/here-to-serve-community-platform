@@ -9,7 +9,7 @@ import CommunityNavbar from '../components/communityNavbar'
 import Button from 'react-bulma-components/lib/components/button'
 import CheckboxField from '../components/checkboxfield'
 import { Select, Control } from 'react-bulma-components/lib/components/form'
-import AnnouncementCard from '../components/announcementCard'
+import PostCard from '../components/postCard'
 import axios from 'axios'
 
 export default function Announcements(props) {
@@ -96,18 +96,22 @@ export default function Announcements(props) {
             </Columns>
             <div>
               {announcements.length > 0 ? (
-                announcements.reverse().map((a, index) => {
-                  return (
-                    <AnnouncementCard
-                      key={index}
-                      subject={a.subject}
-                      message={a.message}
-                      dateTime={a.date_time}
-                      user={a.author_name}
-                      id={a.id}
-                    />
-                  )
-                })
+                announcements
+                  .slice()
+                  .reverse()
+                  .map((a, index) => {
+                    return (
+                      <PostCard
+                        key={index}
+                        subject={a.subject}
+                        message={a.message}
+                        dateTime={a.date_time}
+                        user={a.author_name}
+                        id={a.id}
+                        type='announcement'
+                      />
+                    )
+                  })
               ) : (
                 <p style={noteStyle}>No announcements have been created.</p>
               )}
