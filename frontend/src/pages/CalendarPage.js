@@ -7,14 +7,14 @@ import axios from 'axios'
 
 import Button from 'react-bulma-components/lib/components/button'
 import Container from 'react-bulma-components/lib/components/container'
-import Dropdown from 'react-bulma-components/lib/components/dropdown';
+import Dropdown from 'react-bulma-components/lib/components/dropdown'
 import Columns from 'react-bulma-components/lib/components/columns'
 import Heading from 'react-bulma-components/lib/components/heading'
 import {
   Select,
   Control,
   Field,
-  Checkbox
+  Checkbox,
 } from 'react-bulma-components/lib/components/form'
 
 import CheckboxField from '../components/checkboxfield'
@@ -31,11 +31,11 @@ export default function CalendarPage(props) {
     maxWidth: '100%',
   }
 
-  const [selectedMonth, setSelectedMonth] = useState(moment().format("MMMM"))
-  const [selectedYear, setSelectedYear] = useState(moment().format("YYYY"))
+  const [selectedMonth, setSelectedMonth] = useState(moment().format('MMMM'))
+  const [selectedYear, setSelectedYear] = useState(moment().format('YYYY'))
   const [date, setDate] = useState()
 
-  const years = [...Array(15).keys()].map(i => i + 2020);
+  const years = [...Array(15).keys()].map((i) => i + 2020)
   const months = [
     'January',
     'February',
@@ -48,7 +48,7 @@ export default function CalendarPage(props) {
     'September',
     'October',
     'November',
-    'December'
+    'December',
   ]
 
   const categories = [
@@ -59,14 +59,14 @@ export default function CalendarPage(props) {
     'Visits',
     'Coverage',
     'Miscellaneous',
-    'Event'
+    'Event',
   ]
 
   // Events and event selection
   const [events, setEvents] = useState([])
-  
+
   const [selectedEvent, setSelectedEvent] = useState(-1) // primary key field
-  
+
   // Setup the localizer by providing the moment (or globalize) Object
   // to the correct localizer.
   const localizer = momentLocalizer(moment)
@@ -74,16 +74,15 @@ export default function CalendarPage(props) {
   // filter parameters
   const [member, setMember] = useState('')
   const [members, setMembers] = useState([])
-  
 
   // FUNCTIONS ---------------------------------------------------------------------------------------------
 
   function updateDate() {
-    setDate(moment(`${selectedMonth} ${selectedYear}`, "MMMM YYYY").toDate())
+    setDate(moment(`${selectedMonth} ${selectedYear}`, 'MMMM YYYY').toDate())
   }
 
   function processEvents(data) {
-    data.forEach(activity => {
+    data.forEach((activity) => {
       activity['start_time'] = new Date(activity['start_time'])
       activity['end_time'] = new Date(activity['end_time'])
     })
@@ -97,7 +96,7 @@ export default function CalendarPage(props) {
       .get('/activity', {
         headers: {
           Authorization: `JWT ${localStorage.getItem('token')}`,
-        }
+        },
       })
       .then(
         (response) => {
@@ -111,116 +110,130 @@ export default function CalendarPage(props) {
 
   useEffect(() => {
     axios
-        .get('/community-people/', {
-            headers: {
-                'Authorization': `JWT ${localStorage.getItem('token')}`,
-                'Content-Type': 'application/json',
-            },
-            params: JSON.stringify({
-                user: localStorage.getItem('email'),
-                community: localStorage.getItem('community-name')
-            })
-        })
-        .then(
-            (response) => {
-                setMembers(Array.from(response.data.people))
-            },
-            (error) => {
-                console.log(error)
-            }
-        )
+      .get('/community-people/', {
+        headers: {
+          Authorization: `JWT ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json',
+        },
+        params: JSON.stringify({
+          user: localStorage.getItem('email'),
+          community: localStorage.getItem('community-name'),
+        }),
+      })
+      .then(
+        (response) => {
+          setMembers(Array.from(response.data.people))
+        },
+        (error) => {
+          console.log(error)
+        }
+      )
   }, [])
 
   return (
     <div>
-      <CommunityNavbar /> 
+      <CommunityNavbar />
       <Columns>
         <Columns.Column size={3}>
           <Container style={statusContainerStyle}>
             <Heading size={6}>Status</Heading>
             <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
-              <Checkbox style={{ marginRight: '10px' }}/>
-              <span class="dot-green"></span>Help needed
+              <Checkbox style={{ marginRight: '10px' }} />
+              <span class='dot-green'></span>Help needed
             </div>
             <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
-              <Checkbox style={{ marginRight: '10px' }}/>
-              <span class="dot-blue"></span>Needs met
-            </div>            
-            <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
-              <Checkbox style={{ marginRight: '10px' }}/>
-              <span class="dot-orange"></span>Event
+              <Checkbox style={{ marginRight: '10px' }} />
+              <span class='dot-blue'></span>Needs met
             </div>
-            <Heading size={6} style={{marginTop: '10%'}}>Members</Heading>
+            <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
+              <Checkbox style={{ marginRight: '10px' }} />
+              <span class='dot-orange'></span>Event
+            </div>
+            <Heading size={6} style={{ marginTop: '10%' }}>
+              Members
+            </Heading>
             <Field>
-                <Control>
-                  <Select
-                    name='member'
-                    value={member}
-                    fullwidth={true}
-                  >
-                    {members.map((m) => (
-                      <option>{m.first_name} {m.last_name}</option>
-                    ))}
-                  </Select>
-                </Control>
+              <Control>
+                <Select name='member' value={member} fullwidth={true}>
+                  {members.map((m) => (
+                    <option>
+                      {m.first_name} {m.last_name}
+                    </option>
+                  ))}
+                </Select>
+              </Control>
             </Field>
-            <Heading size={6} style={{marginTop: '10%'}}>Event Type</Heading>
+            <Heading size={6} style={{ marginTop: '10%' }}>
+              Event Type
+            </Heading>
             {categories.map((t) => (
-              <CheckboxField text={t}/>
+              <CheckboxField text={t} />
             ))}
           </Container>
-        </Columns.Column> 
+        </Columns.Column>
         <Columns.Column size={9}>
           <Container style={containerStyle}>
-          <Columns>
-            <Columns.Column size={8} style={{marginRight: '6%'}}>
-              <Columns variableGap={{ mobile: 0, tablet: 0, desktop: 0, widescreen: 0, fullhd: 0 }}>
-                <Columns.Column size={1} style={{marginRight: '4%'}}>
-                  <Dropdown label={selectedMonth} onChange={(m) => setSelectedMonth(m)}>
-                    {months.map((month) => (
-                      <Dropdown.Item value={month} >
-                        {month}
-                      </Dropdown.Item>
-                    ))}
-                  </Dropdown>
-                </Columns.Column>
-                <Columns.Column size={1} style={{marginRight: '5%'}}>      
-                  <Dropdown label={selectedYear} onChange={(y) => setSelectedYear(y)}>
-                    {years.map((year) => (
-                      <Dropdown.Item value={year} >
-                        {year}
-                      </Dropdown.Item>
-                    ))}
-                  </Dropdown>
-                </Columns.Column>
-                <Columns.Column size={1}>
-                  <Button onClick={updateDate} color="info">Go</Button>
-                </Columns.Column>
-              </Columns>
-            </Columns.Column>
-            <Columns.Column>
-              <Link to='/create-new-activity' style={{ color: 'white' }}>
-                <Button color='primary'>
-                  Create a New Activity
-              </Button>
-              </Link>
-            </Columns.Column>
-          </Columns>
-          <div class='rbc-calendar'>
-            <Calendar
-              localizer={localizer}
-              style={{ 'height': 500, 'margin-top': 15 }}
-              date={date}
-              onNavigate={date => setDate(date)}
-              events={processEvents(events)}
-              startAccessor="start_time"
-              endAccessor="end_time"
-              onSelectEvent={event => alert(event.title)}
-            />
-          </div>
-        </Container>
-        </Columns.Column>             
-      </Columns>             
+            <Columns>
+              <Columns.Column size={8} style={{ marginRight: '6%' }}>
+                <Columns
+                  variableGap={{
+                    mobile: 0,
+                    tablet: 0,
+                    desktop: 0,
+                    widescreen: 0,
+                    fullhd: 0,
+                  }}
+                >
+                  <Columns.Column size={1} style={{ marginRight: '4%' }}>
+                    <Dropdown
+                      label={selectedMonth}
+                      onChange={(m) => setSelectedMonth(m)}
+                    >
+                      {months.map((month) => (
+                        <Dropdown.Item value={month}>{month}</Dropdown.Item>
+                      ))}
+                    </Dropdown>
+                  </Columns.Column>
+                  <Columns.Column size={1} style={{ marginRight: '5%' }}>
+                    <Dropdown
+                      label={selectedYear}
+                      onChange={(y) => setSelectedYear(y)}
+                    >
+                      {years.map((year) => (
+                        <Dropdown.Item value={year}>{year}</Dropdown.Item>
+                      ))}
+                    </Dropdown>
+                  </Columns.Column>
+                  <Columns.Column size={1}>
+                    <Button onClick={updateDate} color='info'>
+                      Go
+                    </Button>
+                  </Columns.Column>
+                </Columns>
+              </Columns.Column>
+              <Columns.Column>
+                <Link to='/create-new-activity' style={{ color: 'white' }}>
+                  <Button color='primary' className='is-fullwidth'>
+                    Create a New Activity
+                  </Button>
+                </Link>
+              </Columns.Column>
+            </Columns>
+            <div class='rbc-calendar'>
+              <Calendar
+                localizer={localizer}
+                style={{ height: 500, 'margin-top': 15 }}
+                date={date}
+                onNavigate={(date) => setDate(date)}
+                events={processEvents(events)}
+                startAccessor='start_time'
+                endAccessor='end_time'
+                onSelectEvent={(event) => alert(event.title)}
+              />
+            </div>
+          </Container>
+        </Columns.Column>
+      </Columns>
     </div>
   )
 }

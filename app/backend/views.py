@@ -307,6 +307,26 @@ class AddAnnouncement(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class DeleteAnnouncement(APIView):
+    permission_classes = (permissions.AllowAny,)
+
+    def delete(self, request, format=None):
+        id = request.data['id']
+        Announcement.objects.get(id=id).delete()
+        return Response('Deleted announcement')
+
+class EditAnnouncement(APIView):
+    permission_classes = (permissions.AllowAny,)
+
+    def post(self, request, format=None):
+        id = request.data['id']
+        subject = request.data['subject']
+        message = request.data['message']
+        announcement = Announcement.objects.get(id=id)
+        announcement.subject = subject
+        announcement.message = message
+        announcement.save()
+        return Response('Edited announcement')
 
 class CommunityPeopleList(APIView):
     """

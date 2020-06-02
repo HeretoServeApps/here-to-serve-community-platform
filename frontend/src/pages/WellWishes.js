@@ -86,7 +86,20 @@ export default function WellWishes(props) {
         <Columns isMultiline={true}>
           <Columns.Column size={3}></Columns.Column>
           <Columns.Column size={9}>
-            <Heading size={4}>Well Wishes</Heading>
+            <Columns>
+              <Columns.Column size={8}>
+                <Heading size={4}>Well Wishes</Heading>
+              </Columns.Column>
+              <Columns.Column size={4}>
+                <Button
+                  onClick={() => setShowForm(!showForm)}
+                  color='primary'
+                  className='is-fullwidth'
+                >
+                  {showForm ? 'Hide Message Form' : 'Leave a Message'}
+                </Button>
+              </Columns.Column>
+            </Columns>
             <div>
               <p>
                 Well Wishes is the place to drop a line to say hello, post a
@@ -94,19 +107,10 @@ export default function WellWishes(props) {
                 thinking about them.
               </p>
             </div>
-            <br />
-            <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
-              <Button
-                onClick={() => setShowForm(!showForm)}
-                color='primary'
-                className='is-outlined'
-              >
-                {showForm ? 'Hide Message Form' : 'Leave a Message'}
-              </Button>
-            </div>
+
             {showForm && (
-              <div style={formContainerStyle}>
-                <div>
+              <div>
+                <div style={formContainerStyle}>
                   <Field>
                     <Label>
                       Subject<span style={{ color: '#F83D34' }}>*</span>
@@ -144,9 +148,10 @@ export default function WellWishes(props) {
                       />
                     </Control>
                   </Field>
-                  <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                    <Button color='primary'>Finish</Button>
-                  </div>
+                </div>
+                <br />
+                <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                  <Button color='primary'>Finish</Button>
                 </div>
               </div>
             )}

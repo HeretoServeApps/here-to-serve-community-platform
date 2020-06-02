@@ -15,8 +15,7 @@ import axios from 'axios'
 export default function Announcements(props) {
   const token = localStorage.getItem('token')
   const [announcements, setAnnouncements] = useState([])
-  const [loaded, setLoaded] = useState(false)
-  const [pk, setPk] = useState('')
+
   let history = useHistory()
 
   var containerStyle = {
@@ -32,55 +31,6 @@ export default function Announcements(props) {
     backgroundColor: 'hsl(0, 0%, 96%)',
     borderRadius: '10px',
   }
-
-  const removeAnnouncement = useCallback(() => {
-    var url = '/edit-announcement/' + pk + '/'
-    var myHeaders = new Headers()
-    myHeaders.append('Authorization', `JWT ${localStorage.getItem('token')}`)
-    myHeaders.append('id', pk)
-
-    var formdata = new FormData()
-    formdata.append('first_name', '')
-
-    var requestOptions = {
-      method: 'DELETE',
-      headers: myHeaders,
-      body: formdata,
-      redirect: 'follow',
-    }
-
-    fetch(url, requestOptions)
-      .then((response) => response.text())
-      .then((result) => history.push('/announcements'))
-      .catch((error) => console.log('error', error))
-  })
-
-  const editMember = useCallback(() => {
-    // Edit user's information. First_name, last_name, and email are required.
-    var url = '/edit-announcement/' + pk + '/'
-    var myHeaders = new Headers()
-    myHeaders.append('Authorization', `JWT ${localStorage.getItem('token')}`)
-    myHeaders.append('id', pk)
-
-    var formdata = new FormData()
-    formdata.append('email', '')
-
-    // Edit user's role in the community
-    // formdata.append('role', newRole)
-    // formdata.append('community', localStorage.getItem('community-name'))
-
-    var requestOptions = {
-      method: 'PUT',
-      headers: myHeaders,
-      body: formdata,
-      redirect: 'follow',
-    }
-
-    fetch(url, requestOptions)
-      .then((response) => response.text())
-      .then((result) => history.push('/announcements'))
-      .catch((error) => console.log('error', error))
-  })
 
   useEffect(() => {
     axios
@@ -154,6 +104,7 @@ export default function Announcements(props) {
                       message={a.message}
                       dateTime={a.date_time}
                       user={a.author_name}
+                      id={a.id}
                     />
                   )
                 })

@@ -158,4 +158,4 @@ class EventActivitySerializer(serializers.ModelSerializer):
 class AnnouncementSerializer(serializers.ModelSerializer):
     class Meta:
         model = Announcement
-        fields = ('subject', 'message', 'date_time', 'show_on_page', 'community', 'user', 'author_name')
+        fields = ('id', 'subject', 'message', 'date_time', 'show_on_page', 'community', 'user', 'author_name')
