@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import DayPicker, { DateUtils } from 'react-day-picker'
 import 'react-day-picker/lib/style.css'
 import { Link, useHistory } from 'react-router-dom'
 import { Editor } from '@tinymce/tinymce-react'
@@ -8,21 +7,18 @@ import Container from 'react-bulma-components/lib/components/container'
 import Columns from 'react-bulma-components/lib/components/columns'
 import Heading from 'react-bulma-components/lib/components/heading'
 import CommunityNavbar from '../components/communityNavbar'
+import SideBar from '../components/sidebar'
 import Button from 'react-bulma-components/lib/components/button'
-import CheckboxField from '../components/checkboxfield'
-import Tabs from 'react-bulma-components/lib/components/tabs'
 import {
   Select,
   Control,
   Label,
   Field,
   Input,
-  Textarea,
   Checkbox,
   Radio,
 } from 'react-bulma-components/lib/components/form'
 import axios from 'axios'
-import moment from 'moment'
 
 export default function CreateAnnouncement(props) {
   const token = localStorage.getItem('token')
@@ -311,8 +307,10 @@ export default function CreateAnnouncement(props) {
       <CommunityNavbar />
       <Container style={containerStyle}>
         <Columns isMultiline={true}>
-          <Columns.Column size={3}></Columns.Column>
-          <Columns.Column size={9}>
+          <Columns.Column size={4}>
+            <SideBar />
+          </Columns.Column>
+          <Columns.Column size={8}>
             <Heading size={4}>Create Announcement</Heading>
             <div style={formContainerStyle}>
               <Field>

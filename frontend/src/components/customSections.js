@@ -38,7 +38,7 @@ export default function CustomSections() {
 
 
     return (
-        <div style={{marginTop: '10%'}}>
+        <div style={{margin: '10% 0'}}>
             <strong>Custom Sections</strong>
             <Container style={containerStyle}>
                 <ul>

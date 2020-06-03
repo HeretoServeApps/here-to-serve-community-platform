@@ -438,7 +438,7 @@ export default function CreateNewActivity(props) {
         <Columns isMultiline={true}>
           
           <Columns.Column size={4}>
-          <SideBar></SideBar>
+            <SideBar />
           </Columns.Column>
 
           <Columns.Column size={8}>
