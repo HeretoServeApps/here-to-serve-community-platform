@@ -7,14 +7,14 @@ import axios from 'axios'
 
 import Button from 'react-bulma-components/lib/components/button'
 import Container from 'react-bulma-components/lib/components/container'
-import Dropdown from 'react-bulma-components/lib/components/dropdown';
+import Dropdown from 'react-bulma-components/lib/components/dropdown'
 import Columns from 'react-bulma-components/lib/components/columns'
 import Heading from 'react-bulma-components/lib/components/heading'
 import {
   Select,
   Control,
   Field,
-  Checkbox
+  Checkbox,
 } from 'react-bulma-components/lib/components/form'
 
 import CheckboxField from '../components/checkboxfield'
@@ -37,14 +37,14 @@ export default function CalendarPage(props) {
     maxHeight: '1000px',
     padding: '4rem',
     border: '0.1rem solid #E5E5E5',
-    borderRadius: '1rem'
+    borderRadius: '1rem',
   }
 
-  const [selectedMonth, setSelectedMonth] = useState(moment().format("MMMM"))
-  const [selectedYear, setSelectedYear] = useState(moment().format("YYYY"))
+  const [selectedMonth, setSelectedMonth] = useState(moment().format('MMMM'))
+  const [selectedYear, setSelectedYear] = useState(moment().format('YYYY'))
   const [date, setDate] = useState()
 
-  const years = [...Array(15).keys()].map(i => i + 2020);
+  const years = [...Array(15).keys()].map((i) => i + 2020)
   const months = [
     'January',
     'February',
@@ -57,7 +57,7 @@ export default function CalendarPage(props) {
     'September',
     'October',
     'November',
-    'December'
+    'December',
   ]
 
   const categories = [
@@ -68,7 +68,7 @@ export default function CalendarPage(props) {
     'Visits',
     'Coverage',
     'Miscellaneous',
-    'Event'
+    'Event',
   ]
 
   // Events and event selection
@@ -82,17 +82,16 @@ export default function CalendarPage(props) {
 
   // filter parameters
   const [member, setMember] = useState('')
-  const [members, setMembers] = useState([{'first_name': 'All', 'last_name': ''}])
-
+  const [members, setMembers] = useState([{ first_name: 'All', last_name: '' }])
 
   // FUNCTIONS ---------------------------------------------------------------------------------------------
 
   function updateDate() {
-    setDate(moment(`${selectedMonth} ${selectedYear}`, "MMMM YYYY").toDate())
+    setDate(moment(`${selectedMonth} ${selectedYear}`, 'MMMM YYYY').toDate())
   }
 
   function processEvents(data) {
-    data.forEach(activity => {
+    data.forEach((activity) => {
       if (typeof activity['start_time'] === 'string') {
         activity['start_time'] = new Date(activity['start_time'])
         activity['end_time'] = new Date(activity['end_time'])
@@ -119,7 +118,7 @@ export default function CalendarPage(props) {
       .get('/activity', {
         headers: {
           Authorization: `JWT ${localStorage.getItem('token')}`,
-        }
+        },
       })
       .then(
         (response) => {
@@ -135,24 +134,23 @@ export default function CalendarPage(props) {
     axios
       .get('/community-people/', {
         headers: {
-          'Authorization': `JWT ${localStorage.getItem('token')}`,
+          Authorization: `JWT ${localStorage.getItem('token')}`,
           'Content-Type': 'application/json',
         },
         params: JSON.stringify({
           user: localStorage.getItem('email'),
-          community: localStorage.getItem('community-name')
-        })
+          community: localStorage.getItem('community-name'),
+        }),
       })
       .then(
         (response) => {
-          setMembers(members.concat(Array.from(response.data.people)));
+          setMembers(members.concat(Array.from(response.data.people)))
         },
         (error) => {
           console.log(error)
         }
       )
   }, [])
-
 
   // RENDERS ---------------------------------------------------------------------------------------------
 
@@ -192,42 +190,96 @@ export default function CalendarPage(props) {
             </Columns.Column>
           </Columns>
           <Heading size={6}>Details:</Heading>
-          <i>Date:</i> {moment(selectedEvent.start_time).format('LL')} 
+          <i>Date:</i> {moment(selectedEvent.start_time).format('LL')}
           <br />
-          <i>Time:</i> Between {moment(selectedEvent.start_time).format('LT')} and {moment(selectedEvent.end_time).format('LT')}
+          <i>Time:</i> Between {moment(selectedEvent.start_time).format('LT')}{' '}
+          and {moment(selectedEvent.end_time).format('LT')}
           <br />
-            {isRideActivity ? 
-              <div>
-                <i>Pickup Location: </i> <a target='_blank' href={'https://maps.google.com/?q=' + selectedEvent.pickup_location}>{selectedEvent.pickup_location}</a>
-                <br />
-                <i>Destination: </i> <a target='_blank' href={'https://maps.google.com/?q=' + selectedEvent.destination_location}>{selectedEvent.destination_location}</a>
-              </div>
-            : 
-             isMealActivity ? 
-              <div><i>Delivery Location: </i> <a target='_blank' href={'https://maps.google.com/?q=' + selectedEvent.delivery_location}>{selectedEvent.delivery_location}</a></div>
-            : 
-              <div><i>Location: </i><a target='_blank' href={'https://maps.google.com/?q=' + selectedEvent.location}>{selectedEvent.location}</a> </div>
-            }
-          {isMealActivity ? 
-            (<div><i>Dietary Restrictions: </i> <ul>{selectedEvent.dietary_restrictions.map((r) => <li>{r}</li>)}</ul></div>) 
-            : 
-            ('')}
-          <i>Volunteers Needed:</i> {selectedEvent.num_volunteers_needed} 
-          <br />            
-          <i>Notes:</i> {selectedEvent.description} 
+          {isRideActivity ? (
+            <div>
+              <i>Pickup Location: </i>{' '}
+              <a
+                target='_blank'
+                href={
+                  'https://maps.google.com/?q=' + selectedEvent.pickup_location
+                }
+              >
+                {selectedEvent.pickup_location}
+              </a>
+              <br />
+              <i>Destination: </i>{' '}
+              <a
+                target='_blank'
+                href={
+                  'https://maps.google.com/?q=' +
+                  selectedEvent.destination_location
+                }
+              >
+                {selectedEvent.destination_location}
+              </a>
+            </div>
+          ) : isMealActivity ? (
+            <div>
+              <i>Delivery Location: </i>{' '}
+              <a
+                target='_blank'
+                href={
+                  'https://maps.google.com/?q=' +
+                  selectedEvent.delivery_location
+                }
+              >
+                {selectedEvent.delivery_location}
+              </a>
+            </div>
+          ) : (
+            <div>
+              <i>Location: </i>
+              <a
+                target='_blank'
+                href={'https://maps.google.com/?q=' + selectedEvent.location}
+              >
+                {selectedEvent.location}
+              </a>{' '}
+            </div>
+          )}
+          {isMealActivity ? (
+            <div>
+              <i>Dietary Restrictions: </i>{' '}
+              <ul>
+                {selectedEvent.dietary_restrictions.map((r) => (
+                  <li>{r}</li>
+                ))}
+              </ul>
+            </div>
+          ) : (
+            ''
+          )}
+          <i>Volunteers Needed:</i> {selectedEvent.num_volunteers_needed}
           <br />
-          <Heading size={6} style={{ marginTop: '5%' }}>People: </Heading>
-          <i>Volunteers:</i> {selectedEvent.volunteers.length === 0 ? 'No volunteers has signed up.' : 
-          <ul>
-            {selectedEvent.volunteers.map((person) => (
-              <li>{person.first_name}: {person.email}</li>
-            ))}
-          </ul>}
+          <i>Notes:</i> {selectedEvent.description}
+          <br />
+          <Heading size={6} style={{ marginTop: '5%' }}>
+            People:{' '}
+          </Heading>
+          <i>Volunteers:</i>{' '}
+          {selectedEvent.volunteers.length === 0 ? (
+            'No volunteers has signed up.'
+          ) : (
+            <ul>
+              {selectedEvent.volunteers.map((person) => (
+                <li>
+                  {person.first_name}: {person.email}
+                </li>
+              ))}
+            </ul>
+          )}
           <br />
           <i>Coordinators:</i>
           <ul>
             {selectedEvent.coordinators.map((person) => (
-              <li>{person.first_name}: {person.phone_number_1}</li>
+              <li>
+                {person.first_name}: {person.phone_number_1}
+              </li>
             ))}
           </ul>
           <br />
@@ -237,7 +289,7 @@ export default function CalendarPage(props) {
             style={{ display: 'block', marginTop: '3%' }}
           >
             Back
-        </Button>
+          </Button>
         </Container>
       </div>
     )
@@ -253,17 +305,19 @@ export default function CalendarPage(props) {
             <Heading size={6}>Status</Heading>
             <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
               <Checkbox style={{ marginRight: '10px' }} />
-              <span class="dot-green"></span>Help needed
+              <span class='dot-green'></span>Help needed
             </div>
             <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
               <Checkbox style={{ marginRight: '10px' }} />
-              <span class="dot-blue"></span>Needs met
+              <span class='dot-blue'></span>Needs met
             </div>
             <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
               <Checkbox style={{ marginRight: '10px' }} />
-              <span class="dot-orange"></span>Event
+              <span class='dot-orange'></span>Event
             </div>
-            <Heading size={6} style={{ marginTop: '10%' }}>Member</Heading>
+            <Heading size={6} style={{ marginTop: '10%' }}>
+              Member
+            </Heading>
             <Field>
               <Control>
                 <Select
@@ -273,12 +327,16 @@ export default function CalendarPage(props) {
                   onChange={(e) => setMember(e.target.value)}
                 >
                   {members.map((m) => (
-                    <option>{m.first_name} {m.last_name}</option>
+                    <option>
+                      {m.first_name} {m.last_name}
+                    </option>
                   ))}
                 </Select>
               </Control>
             </Field>
-            <Heading size={6} style={{ marginTop: '10%' }}>Event Type</Heading>
+            <Heading size={6} style={{ marginTop: '10%' }}>
+              Event Type
+            </Heading>
             {categories.map((t) => (
               <CheckboxField text={t} />
             ))}
@@ -288,51 +346,61 @@ export default function CalendarPage(props) {
           <Container style={containerStyle}>
             <Columns>
               <Columns.Column size={8} style={{ marginRight: '6%' }}>
-                <Columns variableGap={{ mobile: 0, tablet: 0, desktop: 0, widescreen: 0, fullhd: 0 }}>
+                <Columns
+                  variableGap={{
+                    mobile: 0,
+                    tablet: 0,
+                    desktop: 0,
+                    widescreen: 0,
+                    fullhd: 0,
+                  }}
+                >
                   <Columns.Column size={1} style={{ marginRight: '4%' }}>
-                    <Dropdown label={selectedMonth} onChange={(m) => setSelectedMonth(m)}>
+                    <Dropdown
+                      label={selectedMonth}
+                      onChange={(m) => setSelectedMonth(m)}
+                    >
                       {months.map((month) => (
-                        <Dropdown.Item value={month} >
-                          {month}
-                        </Dropdown.Item>
+                        <Dropdown.Item value={month}>{month}</Dropdown.Item>
                       ))}
                     </Dropdown>
                   </Columns.Column>
                   <Columns.Column size={1} style={{ marginRight: '5%' }}>
-                    <Dropdown label={selectedYear} onChange={(y) => setSelectedYear(y)}>
+                    <Dropdown
+                      label={selectedYear}
+                      onChange={(y) => setSelectedYear(y)}
+                    >
                       {years.map((year) => (
-                        <Dropdown.Item value={year} >
-                          {year}
-                        </Dropdown.Item>
+                        <Dropdown.Item value={year}>{year}</Dropdown.Item>
                       ))}
                     </Dropdown>
                   </Columns.Column>
                   <Columns.Column size={1}>
-                    <Button onClick={updateDate} color="info">Go</Button>
+                    <Button onClick={updateDate} color='info'>
+                      Go
+                    </Button>
                   </Columns.Column>
                 </Columns>
               </Columns.Column>
               <Columns.Column>
                 <Link to='/create-new-activity' style={{ color: 'white' }}>
-                  <Button color='primary'>
-                    Create a New Activity
-              </Button>
+                  <Button color='primary'>Create a New Activity</Button>
                 </Link>
               </Columns.Column>
             </Columns>
             <div class='rbc-calendar'>
               <Calendar
                 localizer={localizer}
-                style={{ 'height': 500, 'margin-top': 15 }}
+                style={{ height: 500, 'margin-top': 15 }}
                 date={date}
-                onNavigate={date => setDate(date)}
+                onNavigate={(date) => setDate(date)}
                 events={processEvents(events)}
                 startAccessor='start_time'
                 endAccessor='end_time'
                 allDayAccessor='all_day'
                 popup={true}
-                onSelectEvent={event => getEventInfo(event)}
-                eventPropGetter={event => ({
+                onSelectEvent={(event) => getEventInfo(event)}
+                eventPropGetter={(event) => ({
                   style: {
                     backgroundColor: event.color,
                   },

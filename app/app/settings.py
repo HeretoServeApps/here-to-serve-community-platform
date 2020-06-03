@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'django_countries',
     'phone_field',
+    'tinymce'
 ]
 
 MIDDLEWARE = [

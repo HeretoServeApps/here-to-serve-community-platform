@@ -7,6 +7,7 @@ from django.contrib.auth.models import ( AbstractBaseUser, BaseUserManager, Perm
 from django.utils import timezone
 from phone_field import PhoneField
 from django.conf import settings
+from tinymce.models import HTMLField
 
 
 
@@ -18,6 +19,7 @@ class Community(models.Model):
     description = models.CharField(max_length=256, default='')
     zipcode = models.CharField(max_length=10, default='')
     country = models.CharField(max_length=128, default='US')
+    ways_to_help = HTMLField(default='')
 
     def __str__(self):
         return self.name
@@ -247,7 +249,7 @@ class Announcement(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=False, blank=False)
     author_name = models.CharField(max_length=50, blank=True)
     subject = models.CharField(max_length=100, blank=False)
-    message = models.TextField(blank=False)
+    message = HTMLField()
     # making date/time and show strings for now
     date_time = models.CharField(max_length=100, blank=False)
     show_on_page = models.CharField(
@@ -256,6 +258,23 @@ class Announcement(models.Model):
         default=TRUE,
         blank=False,
     )
+    community = models.ForeignKey(Community, on_delete=models.CASCADE, null=False, blank=False)
+
+class WellWish(models.Model):
+    TRUE = 'true'
+    FALSE = 'false'
+
+    SHOW_CHOICES = [
+        (TRUE, 'true'),
+        (FALSE, 'false')
+    ]
+
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=False, blank=False)
+    author_name = models.CharField(max_length=50, blank=True)
+    subject = models.CharField(max_length=100, blank=False)
+    message = HTMLField()
+    # making date/time and show strings for now
+    date_time = models.CharField(max_length=100, blank=False)
     community = models.ForeignKey(Community, on_delete=models.CASCADE, null=False, blank=False)
 
     

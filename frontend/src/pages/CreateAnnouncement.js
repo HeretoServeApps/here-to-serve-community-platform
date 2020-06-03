@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react'
 import DayPicker, { DateUtils } from 'react-day-picker'
 import 'react-day-picker/lib/style.css'
 import { Link, useHistory } from 'react-router-dom'
+import { Editor } from '@tinymce/tinymce-react'
 
 import Container from 'react-bulma-components/lib/components/container'
 import Columns from 'react-bulma-components/lib/components/columns'
@@ -398,12 +399,26 @@ export default function CreateAnnouncement(props) {
                   Message<span style={{ color: '#F83D34' }}>*</span>
                 </Label>
                 <Control>
-                  <Textarea
-                    value={message}
-                    onChange={(e) => setMessage(e.target.value)}
+                  <Editor
+                    initialValue={message}
+                    init={{
+                      height: 300,
+                      menubar: false,
+                      plugins: [
+                        'advlist autolink lists link image charmap print preview anchor',
+                        'searchreplace visualblocks code fullscreen',
+                        'insertdatetime media table paste code help wordcount',
+                      ],
+                      toolbar:
+                        'undo redo | formatselect | image | bold italic backcolor | \
+                      alignleft aligncenter alignright alignjustify | \
+                      bullist numlist outdent indent | removeformat | help',
+                    }}
+                    onEditorChange={(content, editor) => setMessage(content)}
                   />
                 </Control>
               </Field>
+              <Field></Field>
               <div className='thursday' style={checkboxStyle}>
                 <Checkbox
                   style={{ marginRight: '10px' }}

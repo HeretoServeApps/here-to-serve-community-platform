@@ -15,10 +15,10 @@ const links = [
   ['Calendar', '/calendar'],
   ['Announcements', '/announcements'],
   ['Ways to Help', '/ways-to-help'],
-  ['Message Board','/message-board'],
+  ['Message Board', '/message-board'],
   ['Photo Gallery', '/photo-gallery'],
   ['Well Wishes', '/well-wishes'],
-  ['People', '/community-people']
+  ['People', '/community-people'],
 ]
 
 const activeLink = 'Home'
@@ -27,7 +27,7 @@ const CommunityNavbar = (props) => {
   return (
     <Bar>
       <Columns isMultiline={true}>
-        <Columns.Column isMultiline={true} size={11}>
+        <Columns.Column isMultiline={true}>
           <Columns>
             {links.map((title) => (
               <Columns.Column>
@@ -45,11 +45,6 @@ const CommunityNavbar = (props) => {
               </Columns.Column>
             ))}
           </Columns>
-        </Columns.Column>
-        <Columns.Column size={1}>
-          <Button className='is-small is-primary is-inverted'>
-            <b>+ Add Section</b>
-          </Button>
         </Columns.Column>
       </Columns>
     </Bar>

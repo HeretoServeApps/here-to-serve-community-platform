@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useState, useEffect, useCallback } from 'react'
+import { Link, useHistory } from 'react-router-dom'
 
 import Container from 'react-bulma-components/lib/components/container'
 import Columns from 'react-bulma-components/lib/components/columns'
@@ -9,13 +9,14 @@ import CommunityNavbar from '../components/communityNavbar'
 import Button from 'react-bulma-components/lib/components/button'
 import CheckboxField from '../components/checkboxfield'
 import { Select, Control } from 'react-bulma-components/lib/components/form'
-import AnnouncementCard from '../components/announcementCard'
+import PostCard from '../components/postCard'
 import axios from 'axios'
 
 export default function Announcements(props) {
   const token = localStorage.getItem('token')
   const [announcements, setAnnouncements] = useState([])
-  const [loaded, setLoaded] = useState(false)
+
+  let history = useHistory()
 
   var containerStyle = {
     margin: '5% auto',
@@ -74,7 +75,6 @@ export default function Announcements(props) {
       )
   }, [token])
 
-
   return (
     <div>
       <CommunityNavbar />
@@ -83,41 +83,35 @@ export default function Announcements(props) {
           <Columns.Column size={3}></Columns.Column>
           <Columns.Column size={9}>
             <Columns>
-              <Columns.Column size={4}>
+              <Columns.Column size={8}>
                 <Heading size={4}>Announcements</Heading>
               </Columns.Column>
               <Columns.Column size={4}>
                 <Link to='/create-announcement' style={{ marginRight: '10px' }}>
-                  <Button color='primary' className='is-fullwidth' size='small'>
+                  <Button color='primary' className='is-fullwidth'>
                     Create Announcement
-                  </Button>
-                </Link>
-              </Columns.Column>
-              <Columns.Column size={4}>
-                <Link to='#'>
-                  <Button
-                    color='primary'
-                    className='is-fullwidth is-outlined'
-                    size='small'
-                  >
-                    Manage Announcements
                   </Button>
                 </Link>
               </Columns.Column>
             </Columns>
             <div>
               {announcements.length > 0 ? (
-                announcements.reverse().map((a, index) => {
-                  return (
-                    <AnnouncementCard
-                      key={index}
-                      subject={a.subject}
-                      message={a.message}
-                      dateTime={a.date_time}
-                      user={a.author_name}
-                    />
-                  )
-                })
+                announcements
+                  .slice()
+                  .reverse()
+                  .map((a, index) => {
+                    return (
+                      <PostCard
+                        key={index}
+                        subject={a.subject}
+                        message={a.message}
+                        dateTime={a.date_time}
+                        user={a.author_name}
+                        id={a.id}
+                        type='announcement'
+                      />
+                    )
+                  })
               ) : (
                 <p style={noteStyle}>No announcements have been created.</p>
               )}
