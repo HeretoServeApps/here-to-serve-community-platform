@@ -21,7 +21,7 @@ import {
 } from 'react-bulma-components/lib/components/form'
 import axios from 'axios'
 import MultiSelect from "@khanacademy/react-multi-select";
-
+import SideBar from '../components/sidebar'
 
 export default function CreateNewActivity(props) {
   //Styles
@@ -433,10 +433,15 @@ export default function CreateNewActivity(props) {
   return (
     <div>
       <CommunityNavbar />
+
       <Container style={containerStyle}>
         <Columns isMultiline={true}>
-          <Columns.Column size={3}></Columns.Column>
-          <Columns.Column size={9}>
+          
+          <Columns.Column size={4}>
+          <SideBar></SideBar>
+          </Columns.Column>
+
+          <Columns.Column size={8}>
             <Heading size={4}>Create a New Activity</Heading>
 
             {activeTab === 'What' ? (

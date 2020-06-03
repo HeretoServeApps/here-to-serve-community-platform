@@ -107,3 +107,7 @@ tbody td, thead th {
 .rbc-calendar {
   min-height: 600px ;
 }
+.sidebar {
+  font-size: 14px;
+  font-weight:bold;
+}
