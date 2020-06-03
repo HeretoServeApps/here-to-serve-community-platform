@@ -21,7 +21,7 @@ export default function CommunityHome(props) {
   const [coordinators, setCoordinators] = useState([])
 
   var containerStyle = {
-    margin: '5% auto',
+    margin: '3% auto',
     maxWidth: '80%',
   }
 
@@ -80,9 +80,11 @@ export default function CommunityHome(props) {
     <div>
       <CommunityNavbar />
       <Container style={containerStyle}>
+      <Container style={{margin: '5% auto', textAlign: 'center'}}>
+        <Heading size={2}>{name}</Heading>
+      </Container>
         <Columns isMultiline={true}>
           <Columns.Column size={3}>
-            <Heading size={4}>{name}</Heading>
             <Heading size={6}>About</Heading>
             <p>{description}</p>
             <br />
@@ -107,7 +109,6 @@ export default function CommunityHome(props) {
                 Edit Community
               </Link>
             </Button>
-            <CustomSections />
           </Columns.Column>
           <Columns.Column size={6}>
             <Control>
@@ -133,9 +134,7 @@ export default function CommunityHome(props) {
               </Button>
             </Link>
             <br />
-            <Heading size={6}>Upcoming Tasks</Heading>
-            <CommunityHomeCard link='#' />
-            <br />
+            <CustomSections />
             <Heading size={6}>Filter Activity</Heading>
             <CheckboxField text='Well Wishes' />
             <CheckboxField text='Announcements' />

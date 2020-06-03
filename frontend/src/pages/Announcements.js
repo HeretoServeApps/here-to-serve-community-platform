@@ -1,22 +1,19 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import { Link, useHistory } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 import Container from 'react-bulma-components/lib/components/container'
 import Columns from 'react-bulma-components/lib/components/columns'
 import Heading from 'react-bulma-components/lib/components/heading'
-import CommunityHomeCard from '../components/communityHomeCard'
 import CommunityNavbar from '../components/communityNavbar'
 import Button from 'react-bulma-components/lib/components/button'
-import CheckboxField from '../components/checkboxfield'
-import { Select, Control } from 'react-bulma-components/lib/components/form'
 import PostCard from '../components/postCard'
+import SideBar from '../components/sidebar'
+
 import axios from 'axios'
 
 export default function Announcements(props) {
   const token = localStorage.getItem('token')
   const [announcements, setAnnouncements] = useState([])
-
-  let history = useHistory()
 
   var containerStyle = {
     margin: '5% auto',
@@ -80,8 +77,10 @@ export default function Announcements(props) {
       <CommunityNavbar />
       <Container style={containerStyle}>
         <Columns isMultiline={true}>
-          <Columns.Column size={3}></Columns.Column>
-          <Columns.Column size={9}>
+          <Columns.Column size={4}>
+            <SideBar />
+          </Columns.Column>
+          <Columns.Column size={8}>
             <Columns>
               <Columns.Column size={8}>
                 <Heading size={4}>Announcements</Heading>

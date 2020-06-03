@@ -1,24 +1,14 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import { Link } from 'react-router-dom'
+import axios from 'axios'
+import { Editor } from '@tinymce/tinymce-react'
 
 import Container from 'react-bulma-components/lib/components/container'
 import Columns from 'react-bulma-components/lib/components/columns'
 import Heading from 'react-bulma-components/lib/components/heading'
-import CommunityHomeCard from '../components/communityHomeCard'
 import CommunityNavbar from '../components/communityNavbar'
 import Button from 'react-bulma-components/lib/components/button'
-import CheckboxField from '../components/checkboxfield'
-import AnnouncementCard from '../components/postCard'
-import axios from 'axios'
-import {
-  Field,
-  Control,
-  Input,
-  Select,
-  Textarea,
-  Label,
-} from 'react-bulma-components/lib/components/form'
-import { Editor } from '@tinymce/tinymce-react'
+import SideBar from '../components/sidebar'
+
 
 export default function WaysToHelp(props) {
   const token = localStorage.getItem('token')
@@ -93,8 +83,10 @@ export default function WaysToHelp(props) {
         <CommunityNavbar />
         <Container style={containerStyle}>
           <Columns isMultiline={true}>
-            <Columns.Column size={3}></Columns.Column>
-            <Columns.Column size={9}>
+            <Columns.Column size={4}>
+              <SideBar />
+            </Columns.Column>
+            <Columns.Column size={8}>
               <Columns>
                 <Columns.Column size={10}>
                   <Heading size={4}>Ways to Help</Heading>
@@ -145,8 +137,10 @@ export default function WaysToHelp(props) {
       <CommunityNavbar />
       <Container style={containerStyle}>
         <Columns isMultiline={true}>
-          <Columns.Column size={3}></Columns.Column>
-          <Columns.Column size={9}>
+          <Columns.Column size={4}>
+            <SideBar />
+          </Columns.Column>
+          <Columns.Column size={8}>
             <Columns>
               <Columns.Column size={10}>
                 <Heading size={4}>Ways to Help</Heading>
