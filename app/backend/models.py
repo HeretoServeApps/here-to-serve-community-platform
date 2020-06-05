@@ -284,27 +284,33 @@ class Activity(models.Model):
     PREPARING_MEALS = "Preparing Meals"
     SHOPPING = "Shopping"
     CHILDCARE = "Childcare"
+    LAUNDRY = "Laundry"
+    HOUSE_CLEANING = "House Cleaning"
+    PET_CARE = "Pet Care"
     VISITS = "Visits"
     COVERAGE = "Coverage"
     MISCELLANEOUS = "Miscellaneous"
-    OCCASSION = "Occasion"
+    OCCASION = "Occasion"
 
     ACTIVITY_TYPE_CHOICES = [
         (GIVING_RIDES, "Giving Rides"),
         (PREPARING_MEALS, "Preparing Meals"),
         (SHOPPING, "Shopping"),
         (CHILDCARE, "Childcare"),
+        (LAUNDRY, "Laundry"),
+        (HOUSE_CLEANING, "House Cleaning"),
+        (PET_CARE, "Pet Care"),
         (VISITS, "Visits"),
         (COVERAGE, "Coverage"),
         (MISCELLANEOUS, "Miscellaneous"),
-        (OCCASSION, "Occasion")
+        (OCCASION, "Occasion")
     ]
 
     community = models.ForeignKey(Community, on_delete=models.CASCADE)
     activity_type = models.CharField(
         max_length=20,
         choices=ACTIVITY_TYPE_CHOICES,
-        default=OCCASSION
+        default=OCCASION
     )
     title = models.CharField(max_length=120)
     description = models.TextField(blank=True, default='')
