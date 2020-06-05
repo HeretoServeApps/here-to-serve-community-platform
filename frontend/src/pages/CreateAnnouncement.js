@@ -311,7 +311,7 @@ export default function CreateAnnouncement(props) {
             <SideBar />
           </Columns.Column>
           <Columns.Column size={8}>
-            <Heading size={4}>Create Announcement</Heading>
+            <Heading size={4}>Create Update</Heading>
             <div style={formContainerStyle}>
               <Field>
                 <Label>
@@ -423,7 +423,7 @@ export default function CreateAnnouncement(props) {
                   onClick={() => setShowHome(!showHome)}
                   checked={showHome}
                 />
-                <p> Show this announcement on the home page</p>
+                <p> Show this update on the home page</p>
               </div>
               <div className='thursday' style={checkboxStyle}>
                 <Checkbox
@@ -431,7 +431,7 @@ export default function CreateAnnouncement(props) {
                   onClick={() => setSendEmail(!sendEmail)}
                   checked={sendEmail}
                 />
-                <p> Send announcement to all community members via email</p>
+                <p> Send update to all community members via email</p>
               </div>
             </div>
             <br />
