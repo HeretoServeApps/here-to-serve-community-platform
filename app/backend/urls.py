@@ -35,7 +35,8 @@ urlpatterns = [
     path('delete-announcement/', views.DeleteAnnouncement.as_view()),
     path('edit-announcement/', views.EditAnnouncement.as_view()),
     path('add-well-wish/', views.AddWellWish.as_view()),
-     path('delete-well-wish/', views.DeleteWellWish.as_view()),
+    path('delete-well-wish/', views.DeleteWellWish.as_view()),
     path('edit-well-wish/', views.EditWellWish.as_view()),
-     path('edit-ways-to-help/', views.EditWaysToHelp.as_view()),
+    path('edit-ways-to-help/', views.EditWaysToHelp.as_view()),
+    path('add-custom-section/', views.AddCustomSection.as_view()),
 ]

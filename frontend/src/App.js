@@ -27,6 +27,7 @@ import OneCommunityMember from './pages/CommunityOneMember'
 import CommunityAddMembers from './pages/CommunityAddMember'
 import WaysToHelp from './pages/WaysToHelp'
 import WellWishes from './pages/WellWishes'
+import CreateCustomSection from './pages/CreateCustomSection'
 
 export default function App() {
   const [loggedIn, setLoggedIn] = useState(
@@ -250,6 +251,11 @@ export default function App() {
           />
           <PrivateRoute path='/ways-to-help' exact component={WaysToHelp} />
           <PrivateRoute path='/well-wishes' exact component={WellWishes} />
+          <PrivateRoute
+            path='/create-custom-section'
+            exact
+            component={CreateCustomSection}
+          />
         </Switch>
       </Router>
     </div>

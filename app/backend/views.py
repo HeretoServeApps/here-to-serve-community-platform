@@ -523,3 +523,16 @@ class EditWaysToHelp(APIView):
         community.ways_to_help = request.data['ways_to_help']
         community.save()
         return Response('Edited ways to help')
+
+class AddCustomSection(APIView):
+    permission_classes = (permissions.AllowAny,)
+
+    def post(self, request, format=None):
+        community_name = request.data['community']
+        community = Community.objects.get(name=community_name).id
+        request.data['community'] = community
+        serializer = CustomSectionSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

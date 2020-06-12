@@ -9,7 +9,6 @@ import CommunityNavbar from '../components/communityNavbar'
 import Button from 'react-bulma-components/lib/components/button'
 import SideBar from '../components/sidebar'
 
-
 export default function WaysToHelp(props) {
   const token = localStorage.getItem('token')
   const [isEditing, setIsEditing] = useState(false)
@@ -83,10 +82,10 @@ export default function WaysToHelp(props) {
         <CommunityNavbar />
         <Container style={containerStyle}>
           <Columns isMultiline={true}>
-            <Columns.Column size={4}>
+            <Columns.Column size={3}>
               <SideBar />
             </Columns.Column>
-            <Columns.Column size={8}>
+            <Columns.Column size={9}>
               <Columns>
                 <Columns.Column size={10}>
                   <Heading size={4}>Ways to Help</Heading>
@@ -137,10 +136,10 @@ export default function WaysToHelp(props) {
       <CommunityNavbar />
       <Container style={containerStyle}>
         <Columns isMultiline={true}>
-          <Columns.Column size={4}>
+          <Columns.Column size={3}>
             <SideBar />
           </Columns.Column>
-          <Columns.Column size={8}>
+          <Columns.Column size={9}>
             <Columns>
               <Columns.Column size={10}>
                 <Heading size={4}>Ways to Help</Heading>

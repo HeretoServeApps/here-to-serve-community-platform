@@ -146,10 +146,10 @@ export default function WellWishes(props) {
       <CommunityNavbar />
       <Container style={containerStyle}>
         <Columns isMultiline={true}>
-          <Columns.Column size={4}>
+          <Columns.Column size={3}>
             <SideBar />
           </Columns.Column>
-          <Columns.Column size={8}>
+          <Columns.Column size={9}>
             <Columns>
               <Columns.Column size={8}>
                 <Heading size={4}>Well Wishes</Heading>

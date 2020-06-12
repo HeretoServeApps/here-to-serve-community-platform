@@ -19,11 +19,12 @@ import {
 
 import CheckboxField from '../components/checkboxfield'
 import CommunityNavbar from '../components/communityNavbar'
+import CustomSections from '../components/customSections'
 
 export default function CalendarPage(props) {
   var containerStyle = {
-    margin: '8% 10% 0% 0%',
-    maxWidth: '100%',
+    margin: '5% auto',
+    maxWidth: '80%',
   }
 
   var statusContainerStyle = {
@@ -299,9 +300,11 @@ export default function CalendarPage(props) {
   return (
     <div>
       <CommunityNavbar />
-      <Columns style={{ marginBottom: '5%' }}>
-        <Columns.Column size={3}>
-          <Container style={statusContainerStyle}>
+      <Container style={containerStyle}>
+        <Columns style={{ marginBottom: '5%' }}>
+          <Columns.Column size={3}>
+            <CustomSections />
+
             <Heading size={6}>Status</Heading>
             <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
               <Checkbox style={{ marginRight: '10px' }} />
@@ -340,51 +343,37 @@ export default function CalendarPage(props) {
             {categories.map((t) => (
               <CheckboxField text={t} />
             ))}
-          </Container>
-        </Columns.Column>
-        <Columns.Column size={9}>
-          <Container style={containerStyle}>
+          </Columns.Column>
+          <Columns.Column size={9}>
             <Columns>
               <Columns.Column size={8} style={{ marginRight: '6%' }}>
-                <Columns
-                  variableGap={{
-                    mobile: 0,
-                    tablet: 0,
-                    desktop: 0,
-                    widescreen: 0,
-                    fullhd: 0,
-                  }}
+                <Select
+                  value={selectedMonth}
+                  onChange={(e) => setSelectedMonth(e.target.value)}
+                  style={{ marginRight: '10px' }}
                 >
-                  <Columns.Column size={1} style={{ marginRight: '4%' }}>
-                    <Dropdown
-                      label={selectedMonth}
-                      onChange={(m) => setSelectedMonth(m)}
-                    >
-                      {months.map((month) => (
-                        <Dropdown.Item value={month}>{month}</Dropdown.Item>
-                      ))}
-                    </Dropdown>
-                  </Columns.Column>
-                  <Columns.Column size={1} style={{ marginRight: '5%' }}>
-                    <Dropdown
-                      label={selectedYear}
-                      onChange={(y) => setSelectedYear(y)}
-                    >
-                      {years.map((year) => (
-                        <Dropdown.Item value={year}>{year}</Dropdown.Item>
-                      ))}
-                    </Dropdown>
-                  </Columns.Column>
-                  <Columns.Column size={1}>
-                    <Button onClick={updateDate} color='info'>
-                      Go
-                    </Button>
-                  </Columns.Column>
-                </Columns>
+                  {months.map((month) => (
+                    <option value={month}>{month}</option>
+                  ))}
+                </Select>
+                <Select
+                  value={selectedYear}
+                  onChange={(e) => setSelectedYear(e.target.value)}
+                  style={{ marginRight: '10px' }}
+                >
+                  {years.map((year) => (
+                    <option value={year}>{year}</option>
+                  ))}
+                </Select>
+                <Button onClick={updateDate} color='info'>
+                  Go
+                </Button>
               </Columns.Column>
               <Columns.Column>
                 <Link to='/create-new-activity' style={{ color: 'white' }}>
-                  <Button color='primary'>Create a New Activity</Button>
+                  <Button color='primary' className='is-fullwidth'>
+                    Create a New Activity
+                  </Button>
                 </Link>
               </Columns.Column>
             </Columns>
@@ -407,9 +396,9 @@ export default function CalendarPage(props) {
                 })}
               />
             </div>
-          </Container>
-        </Columns.Column>
-      </Columns>
+          </Columns.Column>
+        </Columns>
+      </Container>
     </div>
   )
 }
