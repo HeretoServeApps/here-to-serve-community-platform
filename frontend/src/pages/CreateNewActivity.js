@@ -208,7 +208,7 @@ export default function CreateNewActivity(props) {
   //Who
   const [estimatedHours, setEstimatedHours] = useState('')
   const [estimatedMinutes, setEstimatedMinutes] = useState('')
-  const [numVolunteers, setNumVolunteers] = useState(0)
+  const [numVolunteers, setNumVolunteers] = useState(1)
   const [coordinators, setCoordinators] = useState([])
   const [selectedCoordinators, setSelectedCoordinators] = useState([])
 
