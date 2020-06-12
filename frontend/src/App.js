@@ -9,7 +9,7 @@ import MyCommunities from './pages/MyCommunities'
 import SelectCommunities from './pages/SelectCommunities'
 import CreateCommunity from './pages/CreateCommunity'
 import Login from './pages/Login'
-import About from './pages/About'
+import CommunityAbout from './pages/CommunityAbout'
 import Welcome from './pages/Welcome'
 import ForgotPassword from './pages/ForgotPassword'
 import ResetPassword from './pages/ResetPassword'
@@ -171,7 +171,6 @@ export default function App() {
               <Login handle_login={handleLogin} logged_in={loggedIn} />
             )}
           />
-          <Route path='/about' exact component={About} />
           <Route path='/' exact component={Welcome} />
           <Route
             path='/forgot-password'
@@ -256,6 +255,7 @@ export default function App() {
             exact
             component={CreateCustomSection}
           />
+          <PrivateRoute path='/about' exact component={CommunityAbout} />
         </Switch>
       </Router>
     </div>

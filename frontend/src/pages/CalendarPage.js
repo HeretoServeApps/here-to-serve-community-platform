@@ -66,10 +66,12 @@ export default function CalendarPage(props) {
     'Preparing Meals',
     'Shopping',
     'Childcare',
+    'Pet Care',
+    'House Cleaning',
+    'Laundry',
     'Visits',
-    'Coverage',
     'Miscellaneous',
-    'Event',
+    'Occasion',
   ]
 
   // Events and event selection
@@ -338,7 +340,7 @@ export default function CalendarPage(props) {
               </Control>
             </Field>
             <Heading size={6} style={{ marginTop: '10%' }}>
-              Event Type
+              Activity Type
             </Heading>
             {categories.map((t) => (
               <CheckboxField text={t} />

@@ -47,9 +47,10 @@ export default function CreateNewActivity(props) {
     display: 'flex',
     justifyContent: 'flex-start',
   }
-  
+  const footNoteColor = '#7E7E7E'
+
   let history = useHistory()
-  const years = Array.from(Array(5).keys()).map((y) => (y+(new Date().getFullYear())))
+  const years = Array.from(Array(5).keys()).map((y) => (y + (new Date().getFullYear())))
   const months = [
     'January',
     'February',
@@ -171,7 +172,7 @@ export default function CreateNewActivity(props) {
     '11:30 PM',
     '11:45 PM',
   ]
-  const count = Array.from(Array(51).keys()).slice(1,51)
+  const count = Array.from(Array(51).keys()).slice(1, 51)
 
 
 
@@ -207,7 +208,7 @@ export default function CreateNewActivity(props) {
   //Who
   const [estimatedHours, setEstimatedHours] = useState('')
   const [estimatedMinutes, setEstimatedMinutes] = useState('')
-  const [numVolunteers, setNumVolunteers] = useState(0)
+  const [numVolunteers, setNumVolunteers] = useState(1)
   const [coordinators, setCoordinators] = useState([])
   const [selectedCoordinators, setSelectedCoordinators] = useState([])
 
@@ -217,36 +218,38 @@ export default function CreateNewActivity(props) {
     'Preparing Meals',
     'Shopping',
     'Childcare',
+    'Pet Care',
+    'House Cleaning',
+    'Laundry',
     'Visits',
-    'Coverage',
     'Miscellaneous',
-    'Occasion'
+    'Occasion',
   ]
-  
+
   //Dietary Restrictions (kept in case checkbox implementation is needed)
   const initDietaryRestrictions = [
-    {name: 'Vegetarian', isChecked: false},
-    {name: 'Kosher', isChecked: false},
-    {name: 'Nut-free', isChecked: false},
-    {name: 'Lactose-free', isChecked: false},
-    {name: 'Wheat-free', isChecked: false},
-    {name: 'Gluten-free', isChecked: false},
-    {name: 'Soy-free', isChecked: false},
-    {name: 'Sugar-free', isChecked: false},
-    {name: 'Low-fat', isChecked: false},
-    {name: 'Low-carb', isChecked: false},
-    {name: 'Low-salt', isChecked: false},
+    { name: 'Vegetarian', isChecked: false },
+    { name: 'Kosher', isChecked: false },
+    { name: 'Nut-free', isChecked: false },
+    { name: 'Lactose-free', isChecked: false },
+    { name: 'Wheat-free', isChecked: false },
+    { name: 'Gluten-free', isChecked: false },
+    { name: 'Soy-free', isChecked: false },
+    { name: 'Sugar-free', isChecked: false },
+    { name: 'Low-fat', isChecked: false },
+    { name: 'Low-carb', isChecked: false },
+    { name: 'Low-salt', isChecked: false },
   ]
   const [dietaryRestrictions, setDietaryRestrictions] = useState(initDietaryRestrictions)
 
   const initDaysOfWeek = [
-    {name: 'Sunday', isChecked: false},
-    {name: 'Monday', isChecked: false},
-    {name: 'Tuesday', isChecked: false},
-    {name: 'Wednesday', isChecked: false},
-    {name: 'Thursday', isChecked: false},
-    {name: 'Friday', isChecked: false},
-    {name: 'Saturday', isChecked: false}
+    { name: 'Sunday', isChecked: false },
+    { name: 'Monday', isChecked: false },
+    { name: 'Tuesday', isChecked: false },
+    { name: 'Wednesday', isChecked: false },
+    { name: 'Thursday', isChecked: false },
+    { name: 'Friday', isChecked: false },
+    { name: 'Saturday', isChecked: false }
   ]
   const [daysOfWeek, setDaysOfWeek] = useState(initDaysOfWeek)
 
@@ -268,7 +271,7 @@ export default function CreateNewActivity(props) {
       if (current.getDay() === day) {
         result.push(new Date(current))
       }
-      current.setDate(current.getDate()+1)
+      current.setDate(current.getDate() + 1)
     }
     console.log(result)
     return result
@@ -383,7 +386,7 @@ export default function CreateNewActivity(props) {
       .then(
         (response) => {
           console.log(response.data)
-          const options = response.data.map((item) => ({label:`${item['first_name']} ${item['last_name']}`, value: item['id']}))
+          const options = response.data.map((item) => ({ label: `${item['first_name']} ${item['last_name']}`, value: item['id'] }))
           setCoordinators(options)
         },
         (error) => {
@@ -402,7 +405,7 @@ export default function CreateNewActivity(props) {
       'description': notes,
       'activity_type': category,
       'community': localStorage.getItem('community-id'),
-      "dates" : selectedDays,
+      "dates": selectedDays,
       'est_hours': estimatedHours,
       'est_minutes': estimatedMinutes,
       'num_volunteers_needed': numVolunteers,
@@ -417,18 +420,17 @@ export default function CreateNewActivity(props) {
       'coordinators': selectedCoordinators,
     })
     axios.post('/activity/', param, {
-        headers: {
-          'Authorization': `JWT ${token}`,
-          'Content-Type': 'application/json',
-        },
-      })
+      headers: {
+        'Authorization': `JWT ${token}`,
+        'Content-Type': 'application/json',
+      },
+    })
       .then(
         (response, err) => {
           console.log(err)
           history.push('/calendar')
-      })
+        })
   }, [selectedCoordinators, activityName, notes, category, selectedDays, estimatedHours, estimatedMinutes, numVolunteers, pickupLocation, destination, location, startTime, endTime, token, allDay, noEndTime, dietaryRestrictions])
-
 
   return (
     <div>
@@ -436,7 +438,7 @@ export default function CreateNewActivity(props) {
 
       <Container style={containerStyle}>
         <Columns isMultiline={true}>
-          
+
           <Columns.Column size={4}>
             <SideBar />
           </Columns.Column>
@@ -472,15 +474,15 @@ export default function CreateNewActivity(props) {
                 <Tabs.Tab onClick={() => setActiveTab('Who')}>Who</Tabs.Tab>
               </Tabs>
             ) : (
-              <Tabs type='boxed' size='small' style={{ marginBottom: '0' }}>
-                <Tabs.Tab onClick={() => setActiveTab('What')}>What</Tabs.Tab>
-                <Tabs.Tab onClick={() => setActiveTab('When')}>When</Tabs.Tab>
-                <Tabs.Tab onClick={() => setActiveTab('Where')}>Where</Tabs.Tab>
-                <Tabs.Tab active onClick={() => setActiveTab('Who')}>
-                  Who
+                    <Tabs type='boxed' size='small' style={{ marginBottom: '0' }}>
+                      <Tabs.Tab onClick={() => setActiveTab('What')}>What</Tabs.Tab>
+                      <Tabs.Tab onClick={() => setActiveTab('When')}>When</Tabs.Tab>
+                      <Tabs.Tab onClick={() => setActiveTab('Where')}>Where</Tabs.Tab>
+                      <Tabs.Tab active onClick={() => setActiveTab('Who')}>
+                        Who
                 </Tabs.Tab>
-              </Tabs>
-            )}
+                    </Tabs>
+                  )}
 
             {activeTab === 'What' ? (
               <div className='what' style={formContainerStyle}>
@@ -492,7 +494,7 @@ export default function CreateNewActivity(props) {
                       name='category'
                       value={category}
                     >
-                    {categories.map((cat) => (<option>{cat}</option>))}
+                      {categories.map((cat) => (<option>{cat}</option>))}
                     </Select>
                   </Control>
                 </Field>
@@ -506,6 +508,16 @@ export default function CreateNewActivity(props) {
                       onChange={(e) => setActivityName(e.target.value)}
                     />
                   </Control>
+                  {category === 'Giving Rides' ? (<p style={{ fontSize: '80%', color: footNoteColor }}>example: "Rides to medical appointment, Social Event, Soccer practice, Carpool."</p>) : (<></>)}
+                  {category === 'Preparing Meals' ? (<p style={{ fontSize: '80%', color: footNoteColor }}>example: "Weekday Dinners, Sunday Brunch."</p>) : (<></>)}
+                  {category === 'Shopping' ? (<p style={{ fontSize: '80%', color: footNoteColor }}>example: "Grocery shopping, Pharmacy pick-up."</p>) : (<></>)}
+                  {category === 'Childcare' ? (<p style={{ fontSize: '80%', color: footNoteColor }}>example: "Weekday a.m. childcare, Weekend eve babysitting."</p>) : (<></>)}
+                  {category === 'Pet Care' ? (<p style={{ fontSize: '80%', color: footNoteColor }}>example: "Weekday a.m. pet care, Weekend eve pet care."</p>) : (<></>)}
+                  {category === 'Laundry' ? (<p style={{ fontSize: '80%', color: footNoteColor }}>example: "Weekly laundry load."</p>) : (<></>)}
+                  {category === 'House Cleaning' ? (<p style={{ fontSize: '80%', color: footNoteColor }}>example: "Bathroom cleaning, Tidying bed."</p>) : (<></>)}
+                  {category === 'Visits' ? (<p style={{ fontSize: '80%', color: footNoteColor }}>example: "Afternoon reading, Weekend visits."</p>) : (<></>)}
+                  {category === 'Miscellaneous' ? (<p style={{ fontSize: '80%', color: footNoteColor }}>examples: "House cleaning, Lawn care, or other general errands."</p>) : (<></>)}
+                  {category === 'Occasion' ? (<p style={{ fontSize: '80%', color: footNoteColor }}>Need to keep track of important dates or milestones? Add important occasions such as birthdays, anniversaries, and more.</p>) : (<></>)}
                 </Field>
                 {category === 'Preparing Meals' && (
                   <Field>
@@ -513,16 +525,18 @@ export default function CreateNewActivity(props) {
                     <Columns>
                       <Columns.Column>
                         <Control>
-                          { dietaryRestrictions.map((restriction, i) => (
+                          {dietaryRestrictions.map((restriction, i) => (
                             <div style={checkboxStyle}>
-                            <Checkbox
-                              style={{ marginRight: '10px' }}
-                              onChange={() => {setDietaryRestrictions((dietaryRestrictions) => {
-                                dietaryRestrictions[i].isChecked = !dietaryRestrictions[i].isChecked
-                                return dietaryRestrictions
-                              })}}
-                            />
-                            <p>{restriction.name}</p>
+                              <Checkbox
+                                style={{ marginRight: '10px' }}
+                                onChange={() => {
+                                  setDietaryRestrictions((dietaryRestrictions) => {
+                                    dietaryRestrictions[i].isChecked = !dietaryRestrictions[i].isChecked
+                                    return dietaryRestrictions
+                                  })
+                                }}
+                              />
+                              <p>{restriction.name}</p>
                             </div>
                           ))}
                         </Control>
@@ -538,6 +552,15 @@ export default function CreateNewActivity(props) {
                       onChange={(e) => setNotes(e.target.value)}
                     />
                   </Control>
+                  {category === 'Giving Rides' ? (<p style={{ fontSize: '80%', color: footNoteColor }}>examples: <br />- travel time <br />- other stops</p>) : (<></>)}
+                  {category === 'Preparing Meals' ? (<p style={{ fontSize: '80%', color: footNoteColor }}>examples: <br />- allergies <br />- no. people <br />- delivery instr.</p>) : (<></>)}
+                  {category === 'Shopping' ? (<p style={{ fontSize: '80%', color: footNoteColor }}>example: <br />- items needed</p>) : (<></>)}
+                  {category === 'Childcare' ? (<p style={{ fontSize: '80%', color: footNoteColor }}>example: <br />- feeding instructions<br />- kids favorites</p>) : (<></>)}
+                  {category === 'Pet Care' ? (<p style={{ fontSize: '80%', color: footNoteColor }}>example: <br />- feeding insrtuctions<br />- favorite pet toys</p>) : (<></>)}
+                  {category === 'Laundry' ? (<p style={{ fontSize: '80%', color: footNoteColor }}>example: <br />- washing machine settings</p>) : (<></>)}
+                  {category === 'House Cleaning' ? (<p style={{ fontSize: '80%', color: footNoteColor }}>example: <br />- rooms to clean</p>) : (<></>)}                  
+                  {category === 'Visits' ? (<p style={{ fontSize: '80%', color: footNoteColor }}>examples: <br />- additional instructions <br />- favorites <br />- activity ideas</p>) : (<></>)}
+                  {category === 'Occasion' ? (<p style={{ fontSize: '80%', color: footNoteColor }}>Share important information with members of your Community about this occasion.</p>) : (<></>)}
                 </Field>
               </div>
             ) : activeTab === 'When' ? (
@@ -547,9 +570,8 @@ export default function CreateNewActivity(props) {
                 </Label>
                 <Columns>
                   <Columns.Column>
-
                     <Field style={{ marginRight: '10px' }}>
-                      Start Time
+                      {category === 'Giving Rides' ? (<p>Pick-up Time</p>) : (<p>Start Time</p>)}
                       <Control>
                         <Select
                           onChange={(e) => setStartTime(e.target.value)}
@@ -562,10 +584,10 @@ export default function CreateNewActivity(props) {
                           ))}
                         </Select>
                         <div style={checkboxStyle}>
-                            <Checkbox
-                              style={{ marginRight: '10px' }}
-                              onChange={() => {setAllDay(!allDay)}}
-                            />
+                          <Checkbox
+                            style={{ marginRight: '10px' }}
+                            onChange={() => { setAllDay(!allDay) }}
+                          />
                           <p>All Day</p>
                         </div>
                       </Control>
@@ -573,7 +595,7 @@ export default function CreateNewActivity(props) {
                   </Columns.Column>
                   <Columns.Column>
                     <Field>
-                      End Time {'(optional)'}
+                    {category === 'Giving Rides' ? (<p>Drop-off Time {'(optional)'}</p>) : (<p>End Time {'(optional)'}</p>)}
                       <Control>
                         <Select
                           onChange={(e) => setEndTime(e.target.value)}
@@ -586,10 +608,10 @@ export default function CreateNewActivity(props) {
                           ))}
                         </Select>
                         <div style={checkboxStyle}>
-                            <Checkbox
-                              style={{ marginRight: '10px' }}
-                              onChange={() => {setNoEndTime(!noEndTime)}}
-                            />
+                          <Checkbox
+                            style={{ marginRight: '10px' }}
+                            onChange={() => { setNoEndTime(!noEndTime) }}
+                          />
                           <p>None</p>
                         </div>
                       </Control>
@@ -676,24 +698,24 @@ export default function CreateNewActivity(props) {
                   </Columns.Column>
                 </Columns>
                 <Field>
-                <Control>
-                  <p style={noteStyle}>Repeats</p>
-                  { daysOfWeek.map((day, i) => (
-                    <div style={checkboxStyle}>
-                      <Checkbox
-                        style={{ marginRight: '10px' }}
-                        onChange={() => {
-                          handleWeekdayToggle(day.name, !day.isChecked)
-                          setDaysOfWeek((daysOfWeek) => {
-                            day.isChecked = !day.isChecked
-                            return daysOfWeek
-                          })
-                        }}
-                      />
-                      <p>{day.name}</p>
-                    </div>
-                  ))}
-                </Control>
+                  <Control>
+                    <p style={noteStyle}>Repeats</p>
+                    {daysOfWeek.map((day, i) => (
+                      <div style={checkboxStyle}>
+                        <Checkbox
+                          style={{ marginRight: '10px' }}
+                          onChange={() => {
+                            handleWeekdayToggle(day.name, !day.isChecked)
+                            setDaysOfWeek((daysOfWeek) => {
+                              day.isChecked = !day.isChecked
+                              return daysOfWeek
+                            })
+                          }}
+                        />
+                        <p>{day.name}</p>
+                      </div>
+                    ))}
+                  </Control>
                 </Field>
                 <p style={noteStyle}>
                   <b>Select all applicable dates on the calendar below.</b>
@@ -730,103 +752,116 @@ export default function CreateNewActivity(props) {
                 {category === 'Giving Rides' ? (
                   <div style={{ marginBottom: '10px' }}>
                     <Field>
+                      Pick-up Location
                       <Control>
                         <Textarea
                           value={pickupLocation}
                           onChange={(e) => setPickupLocation(e.target.value)}
-                          placeholder='Pick-up Location'
+                          placeholder='Example: 123 Main Street, New York, NY'
                         />
                       </Control>
                     </Field>
                     <Field>
+                      Destination
                       <Control>
                         <Textarea
                           value={destination}
                           onChange={(e) => setDestination(e.target.value)}
-                          placeholder='Destination'
+                          placeholder='Example: 456 Walnut Ave, New York, NY'
                         />
                       </Control>
+                      <p style={{ fontSize: '80%', color: footNoteColor }}>
+                        The system will try to automatically display directions to the specified address(es) specified.
+                        For best results, please use this format: Address, City, State all on one line.
+                      </p>
                     </Field>
                   </div>
                 ) : (
-                  <Field>
-                    <Control>
-                      <Textarea
-                        value={location}
-                        onChange={(e) => setLocation(e.target.value)}
-                        placeholder={
-                          category === 'Preparing Meals' && 'Delivery Location'
-                        }
-                      />
-                    </Control>
-                  </Field>
-                )}
+                    <Field>
+                      <Control>
+                        <Textarea
+                          value={location}
+                          onChange={(e) => setLocation(e.target.value)}
+                          placeholder={
+                            category === 'Preparing Meals' && 'Delivery Location'
+                          }
+                        />
+                      </Control>
+                      <p style={{ fontSize: '80%', color: footNoteColor }}>
+                        The system will try to automatically display directions to the specified address(es) specified.
+                        For best results, please use this format: Address, City, State all on one line.
+                      </p>
+                    </Field>
+                  )}
               </div>
             ) : (
-              <div className='who' style={formContainerStyle}>
-                <Field>
-                  <Label>
-                    Activity Coordinator
+                    <div className='who' style={formContainerStyle}>
+                      <Field>
+                        <Label>
+                          Activity Coordinator
                     <span style={{ color: '#F83D34' }}>*</span>
-                  </Label>
-                  <MultiSelect
-                    valueRenderer={(selectedCoordinators) => <span width='100%'>Selected {selectedCoordinators.length} users </span>}
-                    options={coordinators}
-                    selected={selectedCoordinators}
-                    onSelectedChanged={(selected) => setSelectedCoordinators(selected)}
-                  />
-                </Field>
-                <Label>
-                  Estimated Average Task Time
-                  <span style={{ color: '#F83D34' }}>*</span>
-                </Label>
-                <Columns>
-                  <Columns.Column>
-                    <Field>
-                      <Control>
-                        <Input
-                          value={estimatedHours}
-                          onChange={(e) => setEstimatedHours(e.target.value)}
-                          placeholder='Hours'
+                        </Label>
+                        <MultiSelect
+                          valueRenderer={(selectedCoordinators) => <span width='100%'>Selected {selectedCoordinators.length} users </span>}
+                          options={coordinators}
+                          selected={selectedCoordinators}
+                          onSelectedChanged={(selected) => setSelectedCoordinators(selected)}
                         />
-                      </Control>
-                    </Field>
-                    <Field>
-                      <Control>
-                        <Input
-                          value={estimatedMinutes}
-                          onChange={(e) => setEstimatedMinutes(e.target.value)}
-                          placeholder='Minutes'
-                        />
-                      </Control>
-                    </Field>
-                  </Columns.Column>
-                  <Columns.Column></Columns.Column>
-                </Columns>
+                      </Field>
+                      <Label>
+                        Estimated Average Task Time
+                    <span style={{ color: '#F83D34' }}>*</span>
+                      </Label>
+                      <Columns>
+                        <Columns.Column>
+                          <Field>
+                            <Control>
+                              <Input
+                                value={estimatedHours}
+                                onChange={(e) => setEstimatedHours(e.target.value)}
+                                placeholder='Hours'
+                              />
+                            </Control>
+                          </Field>
+                          <Field>
+                            <Control>
+                              <Input
+                                value={estimatedMinutes}
+                                onChange={(e) => setEstimatedMinutes(e.target.value)}
+                                placeholder='Minutes'
+                              />
+                            </Control>
+                          </Field>
+                          <p style={{ fontSize: '80%', color: footNoteColor }}>
+                            Optional. The estimated time for a Volunteer to complete this task. This information is used for Activity Status Reports.
+                          </p>
+                        </Columns.Column>
+                        <Columns.Column></Columns.Column>
+                      </Columns>
 
-                <Field>
-                  <Label>
-                    Volunteers
+                      <Field>
+                        <Label>
+                          Volunteers
                     <span style={{ color: '#F83D34' }}>*</span>
-                  </Label>
-                  <Control>
-                    <div style={{ display: 'flex', alignItems: 'center' }}>
-                      <Select
-                        onChange={(e) => setNumVolunteers(e.target.value)}
-                        name='numVolunteers'
-                        value={numVolunteers}
-                        style={{ marginRight: '10px' }}
-                      >
-                        {count.map((c) => (
-                          <option>{c}</option>
-                        ))}
-                      </Select>
+                        </Label>
+                        <Control>
+                          <div style={{ display: 'flex', alignItems: 'center' }}>
+                            <Select
+                              onChange={(e) => setNumVolunteers(e.target.value)}
+                              name='numVolunteers'
+                              value={numVolunteers}
+                              style={{ marginRight: '10px' }}
+                            >
+                              {count.map((c) => (
+                                <option>{c}</option>
+                              ))}
+                            </Select>
                       Volunteers per task/time
                     </div>
-                  </Control>
-                </Field>
-              </div>
-            )}
+                        </Control>
+                      </Field>
+                    </div>
+                  )}
             <div
               style={{
                 display: 'flex',
@@ -842,8 +877,8 @@ export default function CreateNewActivity(props) {
                       activeTab === 'When'
                         ? 'What'
                         : activeTab === 'Where'
-                        ? 'When'
-                        : 'Where'
+                          ? 'When'
+                          : 'Where'
                     )
                   }
                   style={{ display: activeTab === 'What' ? 'none' : 'block' }}
@@ -859,8 +894,8 @@ export default function CreateNewActivity(props) {
                       activeTab === 'What'
                         ? 'When'
                         : activeTab === 'When'
-                        ? 'Where'
-                        : 'Who'
+                          ? 'Where'
+                          : 'Who'
                     )
                   }
                   disabled={activeTab === 'Who' ? !validForm : false}
