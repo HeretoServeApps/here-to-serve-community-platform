@@ -83,12 +83,12 @@ export default function Announcements(props) {
           <Columns.Column size={8}>
             <Columns>
               <Columns.Column size={8}>
-                <Heading size={4}>Announcements</Heading>
+                <Heading size={4}>Family Updates</Heading>
               </Columns.Column>
               <Columns.Column size={4}>
                 <Link to='/create-announcement' style={{ marginRight: '10px' }}>
                   <Button color='primary' className='is-fullwidth'>
-                    Create Announcement
+                    Create Update
                   </Button>
                 </Link>
               </Columns.Column>
@@ -112,7 +112,7 @@ export default function Announcements(props) {
                     )
                   })
               ) : (
-                <p style={noteStyle}>No announcements have been created.</p>
+                <p style={noteStyle}>No updates have been created.</p>
               )}
             </div>
           </Columns.Column>

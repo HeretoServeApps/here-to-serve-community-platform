@@ -288,7 +288,6 @@ class Activity(models.Model):
     HOUSE_CLEANING = "House Cleaning"
     PET_CARE = "Pet Care"
     VISITS = "Visits"
-    COVERAGE = "Coverage"
     MISCELLANEOUS = "Miscellaneous"
     OCCASION = "Occasion"
 
@@ -301,7 +300,6 @@ class Activity(models.Model):
         (HOUSE_CLEANING, "House Cleaning"),
         (PET_CARE, "Pet Care"),
         (VISITS, "Visits"),
-        (COVERAGE, "Coverage"),
         (MISCELLANEOUS, "Miscellaneous"),
         (OCCASION, "Occasion")
     ]
