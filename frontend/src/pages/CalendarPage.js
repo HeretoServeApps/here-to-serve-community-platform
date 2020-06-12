@@ -95,8 +95,9 @@ export default function CalendarPage(props) {
   function processEvents(data) {
     data.forEach((activity) => {
       if (typeof activity['start_time'] === 'string') {
-        activity['start_time'] = new Date(activity['start_time'])
-        activity['end_time'] = new Date(activity['end_time'])
+        var timezone_offset = new Date(activity['start_time']).getTimezoneOffset()
+        activity['start_time'] = moment(activity['start_time']).add(timezone_offset, 'm').toDate()
+        activity['end_time'] = moment(activity['end_time']).add(timezone_offset, 'm').toDate()
         activity['title'] = activity['activity_type'] + ': ' + activity['title']
       }
     })
