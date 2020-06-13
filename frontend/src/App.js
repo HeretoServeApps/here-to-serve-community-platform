@@ -27,6 +27,7 @@ import OneCommunityMember from './pages/CommunityOneMember'
 import CommunityAddMembers from './pages/CommunityAddMember'
 import WaysToHelp from './pages/WaysToHelp'
 import WellWishes from './pages/WellWishes'
+import ActivityReport from './pages/ActivityReport'
 
 export default function App() {
   const [loggedIn, setLoggedIn] = useState(
@@ -250,6 +251,7 @@ export default function App() {
           <PrivateRoute path='/ways-to-help' exact component={WaysToHelp} />
           <PrivateRoute path='/well-wishes' exact component={WellWishes} />
           <PrivateRoute path='/about' exact component={CommunityAbout} />
+          <PrivateRoute path='/activity-report' exact component={ActivityReport} />
         </Switch>
       </Router>
     </div>

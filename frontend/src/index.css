@@ -65,6 +65,13 @@ table {
 tbody td, thead th {
     width: 10%; 
 }
+
+#center-table th
+{
+    text-align: center; 
+    vertical-align: middle;
+}
+
 /*End of scrollable table styles*/
 
 /*For coordinator dropdown in activity creation*/

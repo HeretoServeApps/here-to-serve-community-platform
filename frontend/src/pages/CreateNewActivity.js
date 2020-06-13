@@ -26,8 +26,8 @@ import SideBar from '../components/sidebar'
 export default function CreateNewActivity(props) {
   //Styles
   var containerStyle = {
-    margin: '5% auto',
-    maxWidth: '80%',
+    margin: '5% 5%',
+    maxWidth: '100%',
   }
   var formContainerStyle = {
     padding: '5%',
@@ -439,11 +439,11 @@ export default function CreateNewActivity(props) {
       <Container style={containerStyle}>
         <Columns isMultiline={true}>
 
-          <Columns.Column size={4}>
+          <Columns.Column size={3}>
             <SideBar />
           </Columns.Column>
 
-          <Columns.Column size={8}>
+          <Columns.Column size={9}>
             <Heading size={4}>Create a New Activity</Heading>
 
             {activeTab === 'What' ? (

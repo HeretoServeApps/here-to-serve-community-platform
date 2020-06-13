@@ -11,6 +11,7 @@
     "@tinymce/tinymce-react": "^3.6.0",
     "axios": "^0.19.2",
     "bulma-react-components": "^1.0.2",
+    "moment-range": "^4.0.2",
     "node-sass": "^4.13.1",
     "qs": "^6.9.3",
     "react": "^16.13.0",

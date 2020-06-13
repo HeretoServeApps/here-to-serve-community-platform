@@ -230,7 +230,7 @@ class ActivityViewSet(viewsets.ViewSet):
                         # Since dietary restrictions is a string, we want to convert it to a map and process it
                         restrictions_string = preparing_meal_serializer.data[item]
                         json_acceptable_string = restrictions_string.replace("'", "\"")
-                        restrictions_map = json.loads(json_acceptable_string) # START HERE
+                        restrictions_map = json.loads(json_acceptable_string)
                         true_restrictions = []
                         for restriction in restrictions_map:
                             if restrictions_map[restriction]:
@@ -245,7 +245,7 @@ class ActivityViewSet(viewsets.ViewSet):
                 for item in all_other_activity_serializer.data:
                     activity[item] = all_other_activity_serializer.data[item]
             
-            # Activity with type 'Occassion' has a differet color 
+            # Activity with type 'Occasion' has a different color 
             if activity['activity_type'] == 'Occasion':
                 activity['color'] = '#e6a940'
             # Depending on the outcome of [volunteers needed - volunteers signed up], we change the color of the activity
@@ -255,6 +255,19 @@ class ActivityViewSet(viewsets.ViewSet):
                     activity['color'] = '#60a1db'
                 else: # Otherwise color it green
                     activity['color'] = '#46b378'
+                
+                # Data for the activity report page
+                minutes_per_volunteer = float((activity['est_hours']*60 + activity['est_minutes']))/float(activity['num_volunteers_needed'])
+                activity['est_hours_per_volunteer'] = minutes_per_volunteer//60
+                activity['est_minutes_per_volunteer'] = minutes_per_volunteer - activity['est_hours_per_volunteer']*60
+
+                if len(activity['volunteers']) > 0:
+                    minutes_per_volunteer_actual = float((activity['est_hours']*60 + activity['est_minutes']))/float(len(activity['volunteers']))
+                    activity['actual_hours_per_volunteer'] = minutes_per_volunteer_actual//60
+                    activity['actual_minutes_per_volunteer'] = minutes_per_volunteer_actual - activity['actual_hours_per_volunteer']*60
+                else:
+                    activity['actual_hours_per_volunteer'] = 0
+                    activity['actual_minutes_per_volunteer'] = 0
 
         return Response(serializer.data)
 

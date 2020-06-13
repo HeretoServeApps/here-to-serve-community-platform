@@ -19,15 +19,11 @@ const SideBar = (props) => {
                 </Menu.List.Item>
 
                 <Menu.List.Item className={'navbar-item'}>
-                    <Link to='#'><p className="sidebar">Edit Existing Activity</p></Link>
+                    <Link to='#'><p className="sidebar">Manage Existing Activities</p></Link>
                 </Menu.List.Item>
 
                 <Menu.List.Item className={'navbar-item'}>
-                    <Link to='#'><p className="sidebar">Manage Events</p></Link>
-                </Menu.List.Item>
-
-                <Menu.List.Item className={'navbar-item'}>
-                    <Link to='#'><p className="sidebar">Activity Report</p></Link>
+                    <Link to='/activity-report'><p className="sidebar">Activity Report</p></Link>
                 </Menu.List.Item>
                 </Box>
 

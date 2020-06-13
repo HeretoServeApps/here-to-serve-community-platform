@@ -235,16 +235,16 @@ export default function CalendarPage(props) {
               </a>
             </div>
           ) : (
-            <div>
-              <i>Location: </i>
-              <a
-                target='_blank'
-                href={'https://maps.google.com/?q=' + selectedEvent.location}
-              >
-                {selectedEvent.location}
-              </a>{' '}
-            </div>
-          )}
+                <div>
+                  <i>Location: </i>
+                  <a
+                    target='_blank'
+                    href={'https://maps.google.com/?q=' + selectedEvent.location}
+                  >
+                    {selectedEvent.location}
+                  </a>{' '}
+                </div>
+              )}
           {isMealActivity ? (
             <div>
               <i>Dietary Restrictions: </i>{' '}
@@ -255,8 +255,8 @@ export default function CalendarPage(props) {
               </ul>
             </div>
           ) : (
-            ''
-          )}
+              ''
+            )}
           <i>Volunteers Needed:</i> {selectedEvent.num_volunteers_needed}
           <br />
           <i>Notes:</i> {selectedEvent.description}
@@ -268,14 +268,14 @@ export default function CalendarPage(props) {
           {selectedEvent.volunteers.length === 0 ? (
             'No volunteers has signed up.'
           ) : (
-            <ul>
-              {selectedEvent.volunteers.map((person) => (
-                <li>
-                  {person.first_name}: {person.email}
-                </li>
-              ))}
-            </ul>
-          )}
+              <ul>
+                {selectedEvent.volunteers.map((person) => (
+                  <li>
+                    {person.first_name}: {person.email}
+                  </li>
+                ))}
+              </ul>
+            )}
           <br />
           <i>Coordinators:</i>
           <ul>
@@ -368,7 +368,7 @@ export default function CalendarPage(props) {
                       ))}
                     </Dropdown>
                   </Columns.Column>
-                  <Columns.Column size={1} style={{ marginRight: '5%' }}>
+                  <Columns.Column size={1} style={{ marginRight: '5%'}}>
                     <Dropdown
                       label={selectedYear}
                       onChange={(y) => setSelectedYear(y)}
@@ -387,7 +387,19 @@ export default function CalendarPage(props) {
               </Columns.Column>
               <Columns.Column>
                 <Link to='/create-new-activity' style={{ color: 'white' }}>
-                  <Button color='primary'>Create a New Activity</Button>
+                  <Button color='primary' fullwidth={true}>Create a New Activity</Button>
+                </Link>
+                <Link to='/activity-report' style={{ color: 'white' }}>
+                  <Button
+                    className='is-primary is-inverted'
+                    style={{
+                      marginTop: '1rem',
+                      boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)',
+                    }}
+                    fullwidth={true}
+                  >
+                    View Activity Report
+                  </Button>
                 </Link>
               </Columns.Column>
             </Columns>
