@@ -15,8 +15,7 @@ import CommunityNavbar from '../components/communityNavbar'
 export default function CommunityPeople() {
     var containerStyle = {
         margin: '5% auto',
-        maxWidth: '870px',
-        maxHeight: '1000px',
+        maxWidth: '1050px',
         padding: '4rem',
         border: '0.1rem solid #E5E5E5',
         borderRadius: '1rem'
@@ -73,6 +72,7 @@ export default function CommunityPeople() {
                             }}
                             color='primary'
                             onClick={() => history.push('/add-people')}
+                            fullwidth={true}
                         >
                             Invite Members
                         </Button>
@@ -81,7 +81,7 @@ export default function CommunityPeople() {
                 <Input
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
-                    placeholder='Search members by name.'
+                    placeholder='Search members by name'
                     style={{marginBottom: '3%'}}
                 />
                 <Table>

@@ -292,14 +292,14 @@ export default function Register(props) {
 
       <Heading size={6} style={{ marginTop: '5%' }}>Community Information</Heading>
       <Field>
-        <p><strong>Who would you like to help?*</strong></p>
+        <p><strong>Who would you like to help?<span style={{ color: '#F83D34' }}>*</span></strong></p>
         <Autocomplete
           suggestions={communities}
           set_who={setWho}
         />
       </Field>
       <Field>
-        <Label>How did you know this person?*</Label>
+        <Label>How did you know this person?<span style={{ color: '#F83D34' }}>*</span></Label>
         <Control>
           <Select onChange={(e) => setHowKnow(e.target.value)} name="howKnow" value={howKnow}>
             <option>Please select an option</option>
@@ -392,7 +392,7 @@ export default function Register(props) {
         </Columns.Column>
       </Columns>
       <Field>
-        <Label>How did you learn about us?*</Label>
+        <Label>How did you learn about us?<span style={{ color: '#F83D34' }}>*</span></Label>
         <Select
             name='How Learn'
             value={howLearn}

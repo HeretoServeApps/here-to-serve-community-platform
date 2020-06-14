@@ -96,8 +96,9 @@ export default function CalendarPage(props) {
   function processEvents(data) {
     data.forEach((activity) => {
       if (typeof activity['start_time'] === 'string') {
-        activity['start_time'] = new Date(activity['start_time'])
-        activity['end_time'] = new Date(activity['end_time'])
+        var timezone_offset = new Date(activity['start_time']).getTimezoneOffset()
+        activity['start_time'] = moment(activity['start_time']).add(timezone_offset, 'm').toDate()
+        activity['end_time'] = moment(activity['end_time']).add(timezone_offset, 'm').toDate()
         activity['title'] = activity['activity_type'] + ': ' + activity['title']
       }
     })
@@ -235,16 +236,16 @@ export default function CalendarPage(props) {
               </a>
             </div>
           ) : (
-            <div>
-              <i>Location: </i>
-              <a
-                target='_blank'
-                href={'https://maps.google.com/?q=' + selectedEvent.location}
-              >
-                {selectedEvent.location}
-              </a>{' '}
-            </div>
-          )}
+                <div>
+                  <i>Location: </i>
+                  <a
+                    target='_blank'
+                    href={'https://maps.google.com/?q=' + selectedEvent.location}
+                  >
+                    {selectedEvent.location}
+                  </a>{' '}
+                </div>
+              )}
           {isMealActivity ? (
             <div>
               <i>Dietary Restrictions: </i>{' '}
@@ -255,8 +256,8 @@ export default function CalendarPage(props) {
               </ul>
             </div>
           ) : (
-            ''
-          )}
+              ''
+            )}
           <i>Volunteers Needed:</i> {selectedEvent.num_volunteers_needed}
           <br />
           <i>Notes:</i> {selectedEvent.description}
@@ -268,14 +269,14 @@ export default function CalendarPage(props) {
           {selectedEvent.volunteers.length === 0 ? (
             'No volunteers has signed up.'
           ) : (
-            <ul>
-              {selectedEvent.volunteers.map((person) => (
-                <li>
-                  {person.first_name}: {person.email}
-                </li>
-              ))}
-            </ul>
-          )}
+              <ul>
+                {selectedEvent.volunteers.map((person) => (
+                  <li>
+                    {person.first_name}: {person.email}
+                  </li>
+                ))}
+              </ul>
+            )}
           <br />
           <i>Coordinators:</i>
           <ul>
@@ -363,18 +364,47 @@ export default function CalendarPage(props) {
                   onChange={(e) => setSelectedYear(e.target.value)}
                   style={{ marginRight: '10px' }}
                 >
-                  {years.map((year) => (
-                    <option value={year}>{year}</option>
-                  ))}
-                </Select>
-                <Button onClick={updateDate} color='info'>
-                  Go
-                </Button>
+                <Columns.Column size={1} style={{ marginRight: '4%' }}>
+                    <Dropdown
+                      label={selectedMonth}
+                      onChange={(m) => setSelectedMonth(m)}
+                    >
+                      {months.map((month) => (
+                        <Dropdown.Item value={month}>{month}</Dropdown.Item>
+                      ))}
+                    </Dropdown>
+                </Columns.Column>
+                <Columns.Column size={1} style={{ marginRight: '5%'}}>
+                  <Dropdown
+                    label={selectedYear}
+                    onChange={(y) => setSelectedYear(y)}
+                  >
+                    {years.map((year) => (
+                      <Dropdown.Item value={year}>{year}</Dropdown.Item>
+                    ))}
+                  </Dropdown>
+                </Columns.Column>
+                <Columns.Column size={1}>
+                  <Button onClick={updateDate} color='info'>
+                    Go
+                  </Button>
+                </Columns.Column>
+              </Columns>
               </Columns.Column>
               <Columns.Column>
                 <Link to='/create-new-activity' style={{ color: 'white' }}>
-                  <Button color='primary' className='is-fullwidth'>
-                    Create a New Activity
+                  <Button color='primary' fullwidth={true}>Create a New Activity</Button>
+                </Link>
+                <Link to='/activity-report' style={{ color: 'white' }}>
+                  <Button
+                    className='is-primary is-inverted'
+                    style={{
+                      marginTop: '1rem',
+                      boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)',
+                    }}
+                    fullwidth={true}
+                  >
+                    View Activity Report
                   </Button>
                 </Link>
               </Columns.Column>

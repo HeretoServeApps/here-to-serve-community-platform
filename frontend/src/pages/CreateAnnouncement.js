@@ -30,8 +30,8 @@ export default function CreateAnnouncement(props) {
   }
 
   var containerStyle = {
-    margin: '5% auto',
-    maxWidth: '80%',
+    margin: '5% 5%',
+    maxWidth: '100%',
   }
 
   var checkboxStyle = {
@@ -307,10 +307,10 @@ export default function CreateAnnouncement(props) {
       <CommunityNavbar />
       <Container style={containerStyle}>
         <Columns isMultiline={true}>
-          <Columns.Column size={4}>
+          <Columns.Column size={3}>
             <SideBar />
           </Columns.Column>
-          <Columns.Column size={8}>
+          <Columns.Column size={9}>
             <Heading size={4}>Create Update</Heading>
             <div style={formContainerStyle}>
               <Field>

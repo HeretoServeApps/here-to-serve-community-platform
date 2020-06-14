@@ -16,8 +16,8 @@ export default function WaysToHelp(props) {
   const [newContent, setNewContent] = useState('')
 
   var containerStyle = {
-    margin: '5% auto',
-    maxWidth: '80%',
+    margin: '5% 5%',
+    maxWidth: '100%',
   }
 
   var noteStyle = {

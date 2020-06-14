@@ -28,6 +28,7 @@ import CommunityAddMembers from './pages/CommunityAddMember'
 import WaysToHelp from './pages/WaysToHelp'
 import WellWishes from './pages/WellWishes'
 import CreateCustomSection from './pages/CreateCustomSection'
+import ActivityReport from './pages/ActivityReport'
 
 export default function App() {
   const [loggedIn, setLoggedIn] = useState(
@@ -256,6 +257,7 @@ export default function App() {
             component={CreateCustomSection}
           />
           <PrivateRoute path='/about' exact component={CommunityAbout} />
+          <PrivateRoute path='/activity-report' exact component={ActivityReport} />
         </Switch>
       </Router>
     </div>

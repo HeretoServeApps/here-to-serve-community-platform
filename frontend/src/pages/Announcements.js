@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 
 import Container from 'react-bulma-components/lib/components/container'
@@ -16,8 +16,8 @@ export default function Announcements(props) {
   const [announcements, setAnnouncements] = useState([])
 
   var containerStyle = {
-    margin: '5% auto',
-    maxWidth: '80%',
+    margin: '5% 5%',
+    maxWidth: '100%',
   }
 
   var noteStyle = {

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import { Link, useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 
 import Container from 'react-bulma-components/lib/components/container'
 import Columns from 'react-bulma-components/lib/components/columns'
@@ -13,14 +13,10 @@ import SideBar from '../components/sidebar'
 import axios from 'axios'
 
 import {
-  Select,
   Control,
   Label,
   Field,
   Input,
-  Textarea,
-  Checkbox,
-  Radio,
 } from 'react-bulma-components/lib/components/form'
 
 export default function WellWishes(props) {
@@ -34,8 +30,8 @@ export default function WellWishes(props) {
   let history = useHistory()
 
   var containerStyle = {
-    margin: '5% auto',
-    maxWidth: '80%',
+    margin: '5% 5%',
+    maxWidth: '100%',
   }
 
   var formContainerStyle = {
