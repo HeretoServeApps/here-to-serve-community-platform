@@ -12,6 +12,7 @@ const Bar = styled.div`
 
 const links = [
   ['Home', '/community-home'],
+  ['About', '/about'],
   ['Calendar', '/calendar'],
   ['Family Updates', '/announcements'],
   ['Ways to Help', '/ways-to-help'],
@@ -19,7 +20,6 @@ const links = [
   ['Photo Gallery', '/photo-gallery'],
   ['Well Wishes', '/well-wishes'],
   ['People', '/community-people'],
-  ['About', '/about']
 ]
 
 const activeLink = 'Home'

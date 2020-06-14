@@ -9,7 +9,6 @@ import CommunityNavbar from '../components/communityNavbar'
 import Button from 'react-bulma-components/lib/components/button'
 import SideBar from '../components/sidebar'
 
-
 export default function WaysToHelp(props) {
   const token = localStorage.getItem('token')
   const [isEditing, setIsEditing] = useState(false)
