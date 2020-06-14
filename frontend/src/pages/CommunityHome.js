@@ -51,8 +51,8 @@ export default function CommunityHome(props) {
   }
 
   var containerStyle = {
-    margin: '5% auto',
-    maxWidth: '80%',
+    margin: '5% 5%',
+    maxWidth: '100%',
   }
 
   function updateDate() {
@@ -168,7 +168,7 @@ export default function CommunityHome(props) {
               </Link>
             </Button>
           </Columns.Column>
-          <Columns.Column size={6}>
+          <Columns.Column size={7}>
             <Control>
               <Select
                 value={selectedMonth}
@@ -216,7 +216,7 @@ export default function CommunityHome(props) {
             <br />
             <Heading size={6}>Activity Feed</Heading>
           </Columns.Column>
-          <Columns.Column size={3}>
+          <Columns.Column size={2}>
             <Link to='/create-new-activity' style={{ color: 'white' }}>
               <Button color='primary' className='is-fullwidth'>
                 Create a New Activity
