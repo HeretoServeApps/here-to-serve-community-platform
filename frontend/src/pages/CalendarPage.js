@@ -19,10 +19,11 @@ import {
 
 import CheckboxField from '../components/checkboxfield'
 import CommunityNavbar from '../components/communityNavbar'
+import CustomSections from '../components/customSections'
 
 export default function CalendarPage(props) {
   var containerStyle = {
-    margin: '8% 10% 0% 0%',
+    margin: '5% 10% 0% 0%',
     maxWidth: '100%',
   }
 
@@ -305,6 +306,7 @@ export default function CalendarPage(props) {
       <Columns style={{ marginBottom: '5%' }}>
         <Columns.Column size={3}>
           <Container style={statusContainerStyle}>
+            <CustomSections />
             <Heading size={6}>Status</Heading>
             <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
               <Checkbox style={{ marginRight: '10px' }} />

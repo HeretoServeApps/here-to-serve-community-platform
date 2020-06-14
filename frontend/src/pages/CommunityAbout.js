@@ -9,7 +9,7 @@ import CommunityNavbar from '../components/communityNavbar'
 export default function CommunityAbout() {
     var containerStyle = {
         margin: '5% auto',
-        maxWidth: '1000px',
+        maxWidth: '1050px',
         maxHeight: '1000px',
         padding: '4rem',
         border: '0.1rem solid #E5E5E5',

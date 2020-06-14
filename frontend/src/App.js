@@ -27,6 +27,7 @@ import OneCommunityMember from './pages/CommunityOneMember'
 import CommunityAddMembers from './pages/CommunityAddMember'
 import WaysToHelp from './pages/WaysToHelp'
 import WellWishes from './pages/WellWishes'
+import CreateCustomSection from './pages/CreateCustomSection'
 import ActivityReport from './pages/ActivityReport'
 
 export default function App() {
@@ -250,6 +251,11 @@ export default function App() {
           />
           <PrivateRoute path='/ways-to-help' exact component={WaysToHelp} />
           <PrivateRoute path='/well-wishes' exact component={WellWishes} />
+          <PrivateRoute
+            path='/create-custom-section'
+            exact
+            component={CreateCustomSection}
+          />
           <PrivateRoute path='/about' exact component={CommunityAbout} />
           <PrivateRoute path='/activity-report' exact component={ActivityReport} />
         </Switch>
