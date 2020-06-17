@@ -257,6 +257,7 @@ export default function ActivityReport() {
                                             end_day       = {endDay}
                                             end_month     = {endMonth}
                                             end_year      = {endYear}
+                                            search        = {search}
                                         />
                                     } 
                                     fileName="report.pdf"
