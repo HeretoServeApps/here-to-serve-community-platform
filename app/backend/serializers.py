@@ -16,7 +16,7 @@ class CommunitySerializer(serializers.HyperlinkedModelSerializer):
 class CustomSectionSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomSection
-        fields = ('name', 'type', 'link', 'title', 'description', 'community')
+        fields = ('id', 'name', 'type', 'link', 'title', 'description', 'community', 'general_content', 'resources', 'discussion_posts')
 
 class UserSerializerWithID(serializers.ModelSerializer):
     class Meta:

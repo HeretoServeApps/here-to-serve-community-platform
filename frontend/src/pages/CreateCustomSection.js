@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { useHistory } from 'react-router-dom'
-import { Editor } from '@tinymce/tinymce-react'
 
 import Container from 'react-bulma-components/lib/components/container'
 import Columns from 'react-bulma-components/lib/components/columns'
@@ -84,6 +83,9 @@ export default function CreateCustomSection(props) {
       description: description,
       link: link,
       community: localStorage.getItem('community-name'),
+      general_content: '',
+      resources: [],
+      discussion_posts: [],
     })
 
     axios

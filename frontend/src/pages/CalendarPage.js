@@ -96,9 +96,15 @@ export default function CalendarPage(props) {
   function processEvents(data) {
     data.forEach((activity) => {
       if (typeof activity['start_time'] === 'string') {
-        var timezone_offset = new Date(activity['start_time']).getTimezoneOffset()
-        activity['start_time'] = moment(activity['start_time']).add(timezone_offset, 'm').toDate()
-        activity['end_time'] = moment(activity['end_time']).add(timezone_offset, 'm').toDate()
+        var timezone_offset = new Date(
+          activity['start_time']
+        ).getTimezoneOffset()
+        activity['start_time'] = moment(activity['start_time'])
+          .add(timezone_offset, 'm')
+          .toDate()
+        activity['end_time'] = moment(activity['end_time'])
+          .add(timezone_offset, 'm')
+          .toDate()
         activity['title'] = activity['activity_type'] + ': ' + activity['title']
       }
     })
@@ -236,16 +242,16 @@ export default function CalendarPage(props) {
               </a>
             </div>
           ) : (
-                <div>
-                  <i>Location: </i>
-                  <a
-                    target='_blank'
-                    href={'https://maps.google.com/?q=' + selectedEvent.location}
-                  >
-                    {selectedEvent.location}
-                  </a>{' '}
-                </div>
-              )}
+            <div>
+              <i>Location: </i>
+              <a
+                target='_blank'
+                href={'https://maps.google.com/?q=' + selectedEvent.location}
+              >
+                {selectedEvent.location}
+              </a>{' '}
+            </div>
+          )}
           {isMealActivity ? (
             <div>
               <i>Dietary Restrictions: </i>{' '}
@@ -256,8 +262,8 @@ export default function CalendarPage(props) {
               </ul>
             </div>
           ) : (
-              ''
-            )}
+            ''
+          )}
           <i>Volunteers Needed:</i> {selectedEvent.num_volunteers_needed}
           <br />
           <i>Notes:</i> {selectedEvent.description}
@@ -269,14 +275,14 @@ export default function CalendarPage(props) {
           {selectedEvent.volunteers.length === 0 ? (
             'No volunteers has signed up.'
           ) : (
-              <ul>
-                {selectedEvent.volunteers.map((person) => (
-                  <li>
-                    {person.first_name}: {person.email}
-                  </li>
-                ))}
-              </ul>
-            )}
+            <ul>
+              {selectedEvent.volunteers.map((person) => (
+                <li>
+                  {person.first_name}: {person.email}
+                </li>
+              ))}
+            </ul>
+          )}
           <br />
           <i>Coordinators:</i>
           <ul>
@@ -351,45 +357,33 @@ export default function CalendarPage(props) {
           <Container style={containerStyle}>
             <Columns>
               <Columns.Column size={8} style={{ marginRight: '6%' }}>
-                <Columns
-                  variableGap={{
-                    mobile: 0,
-                    tablet: 0,
-                    desktop: 0,
-                    widescreen: 0,
-                    fullhd: 0,
-                  }}
+                <Select
+                  value={selectedMonth}
+                  onChange={(e) => setSelectedMonth(e.target.value)}
+                  style={{ marginRight: '10px' }}
                 >
-                  <Columns.Column size={1} style={{ marginRight: '4%' }}>
-                    <Dropdown
-                      label={selectedMonth}
-                      onChange={(m) => setSelectedMonth(m)}
-                    >
-                      {months.map((month) => (
-                        <Dropdown.Item value={month}>{month}</Dropdown.Item>
-                      ))}
-                    </Dropdown>
-                  </Columns.Column>
-                  <Columns.Column size={1} style={{ marginRight: '5%'}}>
-                    <Dropdown
-                      label={selectedYear}
-                      onChange={(y) => setSelectedYear(y)}
-                    >
-                      {years.map((year) => (
-                        <Dropdown.Item value={year}>{year}</Dropdown.Item>
-                      ))}
-                    </Dropdown>
-                  </Columns.Column>
-                  <Columns.Column size={1}>
-                    <Button onClick={updateDate} color='info'>
-                      Go
-                    </Button>
-                  </Columns.Column>
-                </Columns>
+                  {months.map((month) => (
+                    <option value={month}>{month}</option>
+                  ))}
+                </Select>
+                <Select
+                  value={selectedYear}
+                  onChange={(e) => setSelectedYear(e.target.value)}
+                  style={{ marginRight: '10px' }}
+                >
+                  {years.map((year) => (
+                    <option value={year}>{year}</option>
+                  ))}
+                </Select>
+                <Button onClick={updateDate} color='info'>
+                  Go
+                </Button>
               </Columns.Column>
               <Columns.Column>
                 <Link to='/create-new-activity' style={{ color: 'white' }}>
-                  <Button color='primary' fullwidth={true}>Create a New Activity</Button>
+                  <Button color='primary' fullwidth={true}>
+                    Create a New Activity
+                  </Button>
                 </Link>
                 <Link to='/activity-report' style={{ color: 'white' }}>
                   <Button

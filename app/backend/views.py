@@ -118,6 +118,14 @@ class CommunityCustomSections(viewsets.ModelViewSet):
         sections = CustomSection.objects.filter(community__name=community_name)
         return sections
 
+class OneCustomSectionViewSet(viewsets.ModelViewSet):
+    queryset = CustomSection.objects.all().order_by('name')
+    serializer_class = CustomSectionSerializer
+
+    def get_queryset(self):
+        section_id = self.request.query_params.get('section_id')
+        section = CustomSection.objects.filter(id=section_id)
+        return section
 
 class CommunityUserRoleRegister(APIView):
     """
@@ -549,3 +557,15 @@ class AddCustomSection(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class EditCustomSection(APIView):
+    permission_classes = (permissions.AllowAny,)
+
+    def post(self, request, format=None):
+        section_id = request.data['section_id']
+        custom_section = CustomSection.objects.get(id=section_id)
+        custom_section.title = request.data['title']
+        custom_section.description = request.data['description']
+        custom_section.general_content = request.data['general_content']
+        custom_section.save()
+        return Response('Edited custom section')

@@ -14,6 +14,7 @@ router.register(r'activity', views.ActivityViewSet, basename='activity')
 router.register(r'announcement', views.AnnouncementViewSet)
 router.register(r'well-wishes', views.WellWishViewSet)
 router.register(r'community-custom-sections', views.CommunityCustomSections)
+router.register(r'one-custom-section', views.OneCustomSectionViewSet)
 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
@@ -39,4 +40,5 @@ urlpatterns = [
     path('edit-well-wish/', views.EditWellWish.as_view()),
     path('edit-ways-to-help/', views.EditWaysToHelp.as_view()),
     path('add-custom-section/', views.AddCustomSection.as_view()),
+    path('edit-custom-section/', views.EditCustomSection.as_view())
 ]

@@ -24,6 +24,20 @@ class Community(models.Model):
     def __str__(self):
         return self.name
 
+class Resource(models.Model):
+    name = models.CharField(max_length=128, blank=False)
+    link = models.URLField(blank=False)
+    description = models.CharField(max_length=128, blank=True)
+
+class DiscussionPost(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=False, blank=False)
+    author_name = models.CharField(max_length=50, blank=True)
+    subject = models.CharField(max_length=100, blank=False)
+    message = HTMLField()
+    # making date/time and show strings for now
+    date_time = models.CharField(max_length=100, blank=False)
+    community = models.ForeignKey(Community, on_delete=models.CASCADE, null=False, blank=False)
+
 class CustomSection(models.Model):
     # Choices for type
     GALLERY = 'GALLERY'
@@ -47,7 +61,9 @@ class CustomSection(models.Model):
     title = models.CharField(max_length=64, blank=True)
     description = models.CharField(max_length=128, blank=True)
     community = models.ForeignKey(Community, on_delete=models.CASCADE, null=False, blank=False)
-
+    general_content = HTMLField(blank=True)
+    resources = models.ManyToManyField(Resource, blank=True)
+    discussion_posts = models.ManyToManyField(DiscussionPost, blank=True)
 
     def __str__(self):
         return self.name
@@ -261,14 +277,6 @@ class Announcement(models.Model):
     community = models.ForeignKey(Community, on_delete=models.CASCADE, null=False, blank=False)
 
 class WellWish(models.Model):
-    TRUE = 'true'
-    FALSE = 'false'
-
-    SHOW_CHOICES = [
-        (TRUE, 'true'),
-        (FALSE, 'false')
-    ]
-
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=False, blank=False)
     author_name = models.CharField(max_length=50, blank=True)
     subject = models.CharField(max_length=100, blank=False)
@@ -361,3 +369,4 @@ class EventActivity(models.Model):
         primary_key=True,
     )
     location = models.CharField(max_length=150, blank=True, default='')
+

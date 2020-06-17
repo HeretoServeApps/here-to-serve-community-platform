@@ -198,7 +198,7 @@ export default function WellWishes(props) {
                             'insertdatetime media table paste code help wordcount',
                           ],
                           toolbar:
-                            'undo redo | formatselect | image | bold italic backcolor | \
+                            'undo redo | formatselect | link image | bold italic backcolor | \
                       alignleft aligncenter alignright alignjustify | \
                       bullist numlist outdent indent | removeformat | help',
                         }}
