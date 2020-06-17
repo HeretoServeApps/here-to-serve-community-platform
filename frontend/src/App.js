@@ -2,7 +2,7 @@ import React, { useState, useCallback } from 'react'
 import { Route, Switch, BrowserRouter as Router } from 'react-router-dom'
 
 import Header from './components/header'
-import PrivateRoute from './components/privateroute.js'
+import PrivateRoute from './components/privateroute'
 
 import Register from './pages/Register'
 import MyCommunities from './pages/MyCommunities'

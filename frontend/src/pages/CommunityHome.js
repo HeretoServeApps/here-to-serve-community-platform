@@ -102,8 +102,7 @@ export default function CommunityHome(props) {
       })
       .then(
         (response) => {
-          console.log(response.data)
-          const options = response.data.map((item) => ({
+            const options = response.data.map((item) => ({
             label: `${item['first_name']} ${item['last_name']}`,
             value: item['id'],
             email: item['email'],

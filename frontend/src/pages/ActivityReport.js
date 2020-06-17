@@ -3,6 +3,7 @@ import axios from 'axios'
 import { Link } from 'react-router-dom'
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
+import { PDFDownloadLink } from '@react-pdf/renderer'
 
 import { Input, Select, Field, Label, Control } from 'react-bulma-components/lib/components/form'
 import Container from 'react-bulma-components/lib/components/container'
@@ -11,12 +12,12 @@ import Table from 'react-bulma-components/lib/components/table'
 import Columns from 'react-bulma-components/lib/components/columns'
 import Button from 'react-bulma-components/lib/components/button'
 
+import PDF from '../components/activityPDF'
 import CommunityNavbar from '../components/communityNavbar'
 
 
 export default function ActivityReport() {
-    const moment = extendMoment(Moment);
-
+    // Create styles
     var containerStyle = {
         margin: '5% auto',
         maxWidth: '1050px',
@@ -179,6 +180,7 @@ export default function ActivityReport() {
     const [activities, setActivities] = useState([])
     const [search, setSearch] = useState('')
     const [selectedActivityType, setSelectedActivityType] = useState('Filter by Activity Type')
+    const moment = extendMoment(Moment);
 
     const monthMap = new Map()
     monthMap['January'] = 1
@@ -245,7 +247,21 @@ export default function ActivityReport() {
                                 </Link>
                             </Columns.Column>
                             <Columns.Column>
-                                <Link to='#' style={{ color: 'white' }}>
+                                <PDFDownloadLink 
+                                    document={
+                                        <PDF
+                                            activity_type = {selectedActivityType}
+                                            start_day     = {startDay}
+                                            start_month   = {startMonth}
+                                            start_year    = {startYear}
+                                            end_day       = {endDay}
+                                            end_month     = {endMonth}
+                                            end_year      = {endYear}
+                                            search        = {search}
+                                        />
+                                    } 
+                                    fileName="report.pdf"
+                                >
                                     <Button
                                         className='is-primary is-inverted'
                                         style={{
@@ -255,7 +271,7 @@ export default function ActivityReport() {
                                     >
                                         Export Report
                                     </Button>
-                                </Link>
+                                </PDFDownloadLink>
                             </Columns.Column>
                         </Columns>
                     </Columns.Column>
