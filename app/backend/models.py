@@ -324,7 +324,7 @@ class Activity(models.Model):
 
     est_hours = models.IntegerField(blank=True, null=True)
     est_minutes = models.IntegerField(blank=True, null=True)
-    num_volunteers_needed = models.IntegerField(default=0)
+    num_volunteers_needed = models.IntegerField(default=1)
     coordinators = models.ManyToManyField(User, related_name="coordinators")
     volunteers = models.ManyToManyField(User, related_name="volunteers")
 
