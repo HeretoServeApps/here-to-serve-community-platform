@@ -55,6 +55,7 @@ export default function CustomGeneral(props) {
         (response) => {
           setTitle(response.data[0].title)
           setNewTitle(response.data[0].title)
+          setType(response.data[0].type)
           setDescription(response.data[0].description)
           setNewDescription(response.data[0].description)
           setContent(response.data[0].general_content)
