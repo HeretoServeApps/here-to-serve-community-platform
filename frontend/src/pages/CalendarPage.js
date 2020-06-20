@@ -86,6 +86,10 @@ export default function CalendarPage(props) {
   // filter parameters
   const [member, setMember] = useState('')
   const [members, setMembers] = useState([{ first_name: 'All', last_name: '' }])
+  const [selectedCategories, setSelectedCategories] = useState([])
+  const [originalEvents, setOriginalEvents] = useState([])
+  const [selectedStatuses, setSelectedStatuses] = useState([])
+
 
   // FUNCTIONS ---------------------------------------------------------------------------------------------
 
@@ -102,9 +106,10 @@ export default function CalendarPage(props) {
         activity['title'] = activity['activity_type'] + ': ' + activity['title']
       }
     })
-    return data
+    setEvents(data)
+    setOriginalEvents(data)
   }
-
+ 
   const getEventInfo = useCallback((event) => {
     setSelectedEvent(event)
     setIsSelectingEvent(true)
@@ -114,6 +119,48 @@ export default function CalendarPage(props) {
     setSelectedEvent(null)
     setIsSelectingEvent(false)
   })
+
+  function addSelectedCategories(category, isChecked) {
+    if(isChecked) {
+      var newSelectedCategories = selectedCategories.concat(category)
+      setSelectedCategories(newSelectedCategories)
+    } else {
+      var newSelectedCategories = selectedCategories
+      var index = newSelectedCategories.indexOf(category)
+      if(index !== -1) {
+        newSelectedCategories.splice(index, 1)
+        setSelectedCategories(newSelectedCategories)
+      }
+    }
+    var filteredEvents = []
+    originalEvents.forEach((activity) => {
+      if(newSelectedCategories.includes(activity['activity_type']) || newSelectedCategories.length === 0) {
+        filteredEvents.push(activity)
+      }
+    })
+    setEvents(filteredEvents)
+  }
+
+  function addSelectedStatus(status, isChecked) {
+    if(isChecked) {
+      var newSelectedStatuses = selectedStatuses.concat(status)
+      setSelectedStatuses(newSelectedStatuses)
+    } else {
+      var newSelectedStatuses = selectedStatuses
+      var index = newSelectedStatuses.indexOf(status)
+      if(index !== -1) {
+        newSelectedStatuses.splice(index, 1)
+        setSelectedStatuses(newSelectedStatuses)
+      }
+    }
+    // var filteredEvents = []
+    // originalEvents.forEach((activity) => {
+    //   if(newSelectedStatuses.includes(activity['activity_type']) || newSelectedCategories.length === 0) {
+    //     filteredEvents.push(activity)
+    //   }
+    // })
+    // setEvents(filteredEvents)
+  }
 
   // API CALLS ---------------------------------------------------------------------------------------------
 
@@ -126,7 +173,7 @@ export default function CalendarPage(props) {
       })
       .then(
         (response) => {
-          setEvents(response.data)
+          processEvents(response.data)
         },
         (error) => {
           console.log(error)
@@ -204,6 +251,7 @@ export default function CalendarPage(props) {
               <i>Pickup Location: </i>{' '}
               <a
                 target='_blank'
+                rel="noopener noreferrer"
                 href={
                   'https://maps.google.com/?q=' + selectedEvent.pickup_location
                 }
@@ -214,6 +262,7 @@ export default function CalendarPage(props) {
               <i>Destination: </i>{' '}
               <a
                 target='_blank'
+                rel="noopener noreferrer"
                 href={
                   'https://maps.google.com/?q=' +
                   selectedEvent.destination_location
@@ -227,6 +276,7 @@ export default function CalendarPage(props) {
               <i>Delivery Location: </i>{' '}
               <a
                 target='_blank'
+                rel="noopener noreferrer"
                 href={
                   'https://maps.google.com/?q=' +
                   selectedEvent.delivery_location
@@ -240,6 +290,7 @@ export default function CalendarPage(props) {
                   <i>Location: </i>
                   <a
                     target='_blank'
+                    rel="noopener noreferrer"
                     href={'https://maps.google.com/?q=' + selectedEvent.location}
                   >
                     {selectedEvent.location}
@@ -309,15 +360,15 @@ export default function CalendarPage(props) {
             <CustomSections />
             <Heading size={6}>Status</Heading>
             <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
-              <Checkbox style={{ marginRight: '10px' }} />
+              <Checkbox style={{ marginRight: '10px' }} onClick={(e) => addSelectedStatus('Help needed', e.target.checked)}/>
               <span class='dot-green'></span>Help needed
             </div>
             <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
-              <Checkbox style={{ marginRight: '10px' }} />
+              <Checkbox style={{ marginRight: '10px' }} onClick={(e) => addSelectedStatus('Needs met', e.target.checked)}/>
               <span class='dot-blue'></span>Needs met
             </div>
             <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
-              <Checkbox style={{ marginRight: '10px' }} />
+              <Checkbox style={{ marginRight: '10px' }} onClick={(e) => addSelectedStatus('Event', e.target.checked)}/>
               <span class='dot-orange'></span>Event
             </div>
             <Heading size={6} style={{ marginTop: '10%' }}>
@@ -343,7 +394,7 @@ export default function CalendarPage(props) {
               Activity Type
             </Heading>
             {categories.map((t) => (
-              <CheckboxField text={t} />
+              <CheckboxField text={t} onChange={(e) => addSelectedCategories(t, e.target.checked)}/>
             ))}
           </Container>
         </Columns.Column>
@@ -411,7 +462,7 @@ export default function CalendarPage(props) {
                 style={{ height: 500, 'margin-top': 15 }}
                 date={date}
                 onNavigate={(date) => setDate(date)}
-                events={processEvents(events)}
+                events={events}
                 startAccessor='start_time'
                 endAccessor='end_time'
                 allDayAccessor='all_day'
