@@ -53,6 +53,7 @@ export default function App() {
       .then((res) => res.json())
       .then(
         (json) => {
+          localStorage.setItem('is-staff', json.user.is_staff)
           localStorage.setItem('token', json.token)
           localStorage.setItem('rememberMe', rememberMe)
           localStorage.setItem('email', email)
@@ -119,6 +120,7 @@ export default function App() {
       })
         .then((res) => res.json())
         .then((json) => {
+          localStorage.setItem('is-staff', json.user.is_staff)
           localStorage.setItem('token', json.token)
           localStorage.setItem('email', email)
           localStorage.getItem('token') &&
