@@ -179,9 +179,6 @@ export default function PDF(props) {
               <Text style={styles.tableCell}>Time</Text>
             </View>
             <View style={styles.tableCol}>
-              <Text style={styles.tableCell}>Status</Text>
-            </View>
-            <View style={styles.tableCol}>
               <Text style={styles.tableCell}>Avg. Volunteer Time/Person (Requested)</Text>
             </View>
             <View style={styles.tableCol}>

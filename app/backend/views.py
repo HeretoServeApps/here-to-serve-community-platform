@@ -248,13 +248,16 @@ class ActivityViewSet(viewsets.ViewSet):
             # Activity with type 'Occasion' has a different color 
             if activity['activity_type'] == 'Occasion':
                 activity['color'] = '#e6a940'
+                activity['activity_status'] = 'Occasion'
             # Depending on the outcome of [volunteers needed - volunteers signed up], we change the color of the activity
             else:
                 # If all volunteer spots have been filled, color this activity blue
                 if int(activity['num_volunteers_needed']) - len(activity['volunteers']) == 0:
                     activity['color'] = '#60a1db'
+                    activity['activity_status'] = "Needs met"
                 else: # Otherwise color it green
                     activity['color'] = '#46b378'
+                    activity['activity_status'] = "Help needed"
                 
                 # Data for the activity report page
                 minutes_per_volunteer = float((activity['est_hours']*60 + activity['est_minutes']))/float(activity['num_volunteers_needed'])
@@ -268,8 +271,8 @@ class ActivityViewSet(viewsets.ViewSet):
                 else:
                     activity['actual_hours_per_volunteer'] = 0
                     activity['actual_minutes_per_volunteer'] = 0
-
         return Response(serializer.data)
+
 
     def retrieve(self, request, pk=None):
         queryset = Activity.objects.all()
