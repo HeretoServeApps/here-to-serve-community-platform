@@ -84,7 +84,7 @@ export default function CalendarPage(props) {
   const localizer = momentLocalizer(moment)
 
   // filter parameters
-  const [member, setMember] = useState('')
+  const [selectedMember, setSelectedMember] = useState('')
   const [members, setMembers] = useState([{ first_name: 'All', last_name: '' }])
   const [selectedCategories, setSelectedCategories] = useState([])
   const [originalEvents, setOriginalEvents] = useState([])
@@ -120,6 +120,7 @@ export default function CalendarPage(props) {
     setIsSelectingEvent(false)
   })
 
+  // Filter by category function
   function addSelectedCategories(category, isChecked) {
     if(isChecked) {
       var newSelectedCategories = selectedCategories.concat(category)
@@ -133,14 +134,22 @@ export default function CalendarPage(props) {
       }
     }
     var filteredEvents = []
+    const splitNames = selectedMember.split(' ')
+    var member_object = {
+      first_name: splitNames[0],
+      last_name: splitNames[1]
+    }
     originalEvents.forEach((activity) => {
-      if(newSelectedCategories.includes(activity['activity_type']) || newSelectedCategories.length === 0) {
+      if((newSelectedCategories.includes(activity['activity_type']) || newSelectedCategories.length === 0) &&
+         (selectedStatuses.includes(activity['activity_status']) || selectedStatuses.length === 0) &&
+         selectedMember === "All" || activity['volunteers'].includes(member_object)) {
         filteredEvents.push(activity)
       }
     })
     setEvents(filteredEvents)
   }
 
+  // Filter by status function
   function addSelectedStatus(status, isChecked) {
     if(isChecked) {
       var newSelectedStatuses = selectedStatuses.concat(status)
@@ -153,13 +162,39 @@ export default function CalendarPage(props) {
         setSelectedStatuses(newSelectedStatuses)
       }
     }
-    // var filteredEvents = []
-    // originalEvents.forEach((activity) => {
-    //   if(newSelectedStatuses.includes(activity['activity_type']) || newSelectedCategories.length === 0) {
-    //     filteredEvents.push(activity)
-    //   }
-    // })
-    // setEvents(filteredEvents)
+    var filteredEvents = []
+    const splitNames = selectedMember.split(' ')
+    var member_object = {
+      first_name: splitNames[0],
+      last_name: splitNames[1]
+    }
+    originalEvents.forEach((activity) => {
+      if((selectedCategories.includes(activity['activity_type']) || selectedCategories.length === 0) &&
+         (newSelectedStatuses.includes(activity['activity_status']) || newSelectedStatuses.length === 0) &&
+          selectedMember === "All" || activity['volunteers'].includes(member_object)) {
+        filteredEvents.push(activity)
+      }
+    })
+    setEvents(filteredEvents)
+  }
+
+  // Filter by member function
+  function filterMember(member) {
+    setSelectedMember(member)
+    var filteredEvents = []
+    const splitNames = member.split(' ')
+    var member_object = {
+      first_name: splitNames[0],
+      last_name: splitNames[1]
+    }
+    originalEvents.forEach((activity) => {
+      if((selectedCategories.includes(activity['activity_type']) || selectedCategories.length === 0) &&
+         (selectedStatuses.includes(activity['activity_status']) || selectedStatuses.length === 0) &&
+          member === "All" || activity['volunteers'].includes(member_object)) {
+        filteredEvents.push(activity)
+      }
+    })
+    setEvents(filteredEvents)
   }
 
   // API CALLS ---------------------------------------------------------------------------------------------
@@ -368,8 +403,8 @@ export default function CalendarPage(props) {
               <span class='dot-blue'></span>Needs met
             </div>
             <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
-              <Checkbox style={{ marginRight: '10px' }} onClick={(e) => addSelectedStatus('Event', e.target.checked)}/>
-              <span class='dot-orange'></span>Event
+              <Checkbox style={{ marginRight: '10px' }} onClick={(e) => addSelectedStatus('Occasion', e.target.checked)}/>
+              <span class='dot-orange'></span>Occasion
             </div>
             <Heading size={6} style={{ marginTop: '10%' }}>
               Member
@@ -378,9 +413,11 @@ export default function CalendarPage(props) {
               <Control>
                 <Select
                   name='member'
-                  value={member}
+                  value={selectedMember}
                   fullwidth={true}
-                  onChange={(e) => setMember(e.target.value)}
+                  onChange={(e) => 
+                    filterMember(e.target.value)
+                  }
                 >
                   {members.map((m) => (
                     <option>
