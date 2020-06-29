@@ -26,7 +26,7 @@ const BackgroundWrapper = styled.div`
   z-index: -1;
 `
 
-const HighLight = styled.h1`
+const HighLight = styled.p`
   color: #2c8595;
   font-weight: 600;
 `

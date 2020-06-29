@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from 'react'
 import { Route, Switch, BrowserRouter as Router } from 'react-router-dom'
+import axios from 'axios'
 
 import Header from './components/header'
 import PrivateRoute from './components/privateroute'
@@ -58,8 +59,8 @@ export default function App() {
           localStorage.setItem('rememberMe', rememberMe)
           localStorage.setItem('email', email)
           localStorage.getItem('token') &&
-          localStorage.getItem('token') !== 'undefined' &&
-          localStorage.getItem('token') !== undefined
+            localStorage.getItem('token') !== 'undefined' &&
+            localStorage.getItem('token') !== undefined
             ? setLoggedIn(true)
             : setLoggedIn(false)
         },
@@ -91,37 +92,41 @@ export default function App() {
       howKnow,
       skillsToOffer
     ) => {
-      fetch('/users/', {
-        method: 'POST',
+      var FormData = require('form-data');
+      var data = new FormData();
+      data.append('email', email);
+      data.append('password', password);
+      data.append('first_name', firstName);
+      data.append('last_name', lastName);
+      data.append('address_line_1', addressLine1);
+      data.append('address_line_2', addressLine2);
+      data.append('city', city);
+      data.append('country', country);
+      data.append('state', state);
+      data.append('zipcode', zipcode);
+      data.append('phone_number_1', phoneNumber1);
+      data.append('phone_number_1_type', phoneNumber1Type);
+      data.append('phone_number_2', phoneNumber2);
+      data.append('phone_number_2_type', phoneNumber2Type);
+      data.append('how_learn', howLearn);
+      data.append('how_help', howHelp);
+      data.append('how_know', howKnow);
+      data.append('skills_to_offer', skillsToOffer);
+      data.append('who', who);
+
+      var config = {
+        method: 'post',
+        url: process.env.REACT_APP_API_URL + '/users/',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          email: email,
-          password: password,
-          first_name: firstName,
-          last_name: lastName,
-          address_line_1: addressLine1,
-          addressLine2: addressLine2,
-          city: city,
-          country: country,
-          state: state,
-          zipcode: zipcode,
-          phone_number_1: phoneNumber1,
-          phone_number_1_type: phoneNumber1Type,
-          phone_number_2: phoneNumber2,
-          phone_number_2_type: phoneNumber2Type,
-          how_learn: howLearn,
-          who_help: who,
-          how_help: howHelp,
-          how_know: howKnow,
-          skills_to_offer: skillsToOffer,
-        }),
-      })
-        .then((res) => res.json())
-        .then((json) => {
-          localStorage.setItem('is-staff', json.user.is_staff)
-          localStorage.setItem('token', json.token)
+        data: data
+      };
+
+      axios(config)
+        .then(function (response) {
+          localStorage.setItem('is-staff', response.data.is_staff)
+          localStorage.setItem('token', response.data.token)
           localStorage.setItem('email', email)
           localStorage.getItem('token') &&
           localStorage.getItem('token') !== 'undefined' &&
@@ -129,7 +134,9 @@ export default function App() {
             ? setLoggedIn(true)
             : setLoggedIn(false)
         })
-        .catch((error) => console.log('error', error))
+        .catch(function (error) {
+          console.log(error);
+        });
     },
     []
   )
@@ -149,7 +156,7 @@ export default function App() {
     })
       .then((res) => res.json())
       .then(
-        (json) => {},
+        (json) => { },
         (error) => {
           console.log(error)
         }
