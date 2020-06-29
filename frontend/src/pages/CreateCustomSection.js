@@ -62,9 +62,13 @@ export default function CreateCustomSection(props) {
   }, [token])
 
   useEffect(() => {
-    const formValues = [name, title, type]
+    const formValues = [name, type]
     const notValidForm = formValues.some((formVal) => {
-      return formVal === '' || (type === 'BUTTON' && link === '')
+      return (
+        formVal === '' ||
+        (type === 'BUTTON' && link === '') ||
+        (type !== 'BUTTON' && title === '')
+      )
     })
     setValidForm(notValidForm)
   }, [name, title, type, link])
@@ -78,14 +82,12 @@ export default function CreateCustomSection(props) {
   const handleSubmit = useCallback(() => {
     const param = JSON.stringify({
       name: name,
-      title: title,
+      title: type === 'BUTTON' ? name : title,
       type: type,
       description: description,
       link: link,
       community: localStorage.getItem('community-name'),
       general_content: '',
-      resources: [],
-      discussion_posts: [],
     })
 
     axios
@@ -131,44 +133,28 @@ export default function CreateCustomSection(props) {
                   />
                 </Control>
               </Field>
-              <Field>
-                <Label>
-                  Title
-                  <span style={{ color: '#F83D34' }}>*</span>
-                </Label>
-                <span style={noteStyle}>
-                  This will be displayed as the title of the page.
-                </span>
-                <Control>
-                  <Input
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                  />
-                </Control>
-              </Field>
+              {type !== 'BUTTON' && (
+                <Field>
+                  <Label>
+                    Title
+                    <span style={{ color: '#F83D34' }}>*</span>
+                  </Label>
+                  <span style={noteStyle}>
+                    This will be displayed as the title of the page.
+                  </span>
+                  <Control>
+                    <Input
+                      value={title}
+                      onChange={(e) => setTitle(e.target.value)}
+                    />
+                  </Control>
+                </Field>
+              )}
               <Field>
                 <Label>
                   Type<span style={{ color: '#F83D34' }}>*</span>
                 </Label>
                 <Control style={{ marginBottom: '10px' }}>
-                  <Radio
-                    onChange={(e) => setType(e.target.value)}
-                    checked={type === 'GALLERY'}
-                    value='GALLERY'
-                  >
-                    {' '}
-                    Gallery
-                  </Radio>
-                  <br />
-                  <Radio
-                    onChange={(e) => setType(e.target.value)}
-                    checked={type === 'RESOURCES'}
-                    value='RESOURCES'
-                  >
-                    {' '}
-                    Resources
-                  </Radio>
-                  <br />
                   <Radio
                     onChange={(e) => setType(e.target.value)}
                     checked={type === 'DP'}

@@ -60,24 +60,20 @@ export default function CustomSections() {
           <Box>
             {sections.map((section) =>
               section.type !== 'BUTTON' ? (
-                <Menu.List.Item className={'navbar-item'}>
-                  <Link
-                    to={{
-                      pathname: '/custom/' + section.name,
-                      state: {
-                        section: section.id,
-                      },
-                    }}
-                  >
-                    <p className='sidebar'>{section.name}</p>
-                  </Link>
-                </Menu.List.Item>
+                <Link
+                  to={{
+                    pathname: '/custom/' + section.name,
+                    state: {
+                      section: section.id,
+                    },
+                  }}
+                >
+                  <p className='sidebar'>{section.name}</p>
+                </Link>
               ) : (
-                <Menu.List.Item className={'navbar-item'}>
-                  <a href={section.link} target='_blank'>
-                    <p className='sidebar'>{section.name}</p>
-                  </a>
-                </Menu.List.Item>
+                <a href={section.link} target='_blank'>
+                  <p className='sidebar'>{section.name}</p>
+                </a>
               )
             )}
           </Box>

@@ -16,23 +16,17 @@ const SideBar = (props) => {
           </h1>
           <br />
           <Box>
-            <Menu.List.Item className={'navbar-item'}>
-              <Link to='/create-new-activity'>
-                <p className='sidebar'>Create New Activity</p>
-              </Link>
-            </Menu.List.Item>
+            <Link to='/create-new-activity'>
+              <p className='sidebar'>Create New Activity</p>
+            </Link>
 
-            <Menu.List.Item className={'navbar-item'}>
-              <Link to='#'>
-                <p className='sidebar'>Manage Existing Activities</p>
-              </Link>
-            </Menu.List.Item>
+            <Link to='#'>
+              <p className='sidebar'>Manage Existing Activities</p>
+            </Link>
 
-            <Menu.List.Item className={'navbar-item'}>
-              <Link to='/activity-report'>
-                <p className='sidebar'>Activity Report</p>
-              </Link>
-            </Menu.List.Item>
+            <Link to='/activity-report'>
+              <p className='sidebar'>Activity Report</p>
+            </Link>
           </Box>
 
           <h1>
@@ -40,23 +34,17 @@ const SideBar = (props) => {
           </h1>
           <br />
           <Box>
-            <Menu.List.Item className={'navbar-item'}>
-              <Link to='/community-people'>
-                <p className='sidebar'>View & Update Member Information</p>
-              </Link>
-            </Menu.List.Item>
+            <Link to='/community-people'>
+              <p className='sidebar'>View & Update Member Information</p>
+            </Link>
 
-            <Menu.List.Item className={'navbar-item'}>
-              <Link to='#'>
-                <p className='sidebar'>Invite Added Members to Sign in</p>
-              </Link>
-            </Menu.List.Item>
+            <Link to='#'>
+              <p className='sidebar'>Invite Added Members to Sign in</p>
+            </Link>
 
-            <Menu.List.Item className={'navbar-item'}>
-              <Link to='#'>
-                <p className='sidebar'>Review Join Requests</p>
-              </Link>
-            </Menu.List.Item>
+            <Link to='#'>
+              <p className='sidebar'>Review Join Requests</p>
+            </Link>
           </Box>
 
           <h1>
@@ -64,29 +52,21 @@ const SideBar = (props) => {
           </h1>
           <br />
           <Box>
-            <Menu.List.Item className={'navbar-item'}>
-              <Link to='/announcements'>
-                <p className='sidebar'>Manage Announcements & Emails</p>
-              </Link>
-            </Menu.List.Item>
+            <Link to='/announcements'>
+              <p className='sidebar'>Manage Announcements & Emails</p>
+            </Link>
 
-            <Menu.List.Item className={'navbar-item'}>
-              <Link to='/create-announcement'>
-                <p className='sidebar'>Add Announcement</p>
-              </Link>
-            </Menu.List.Item>
+            <Link to='/create-announcement'>
+              <p className='sidebar'>Add Announcement</p>
+            </Link>
 
-            <Menu.List.Item className={'navbar-item'}>
-              <Link to='#'>
-                <p className='sidebar'>Email Members</p>
-              </Link>
-            </Menu.List.Item>
+            <Link to='#'>
+              <p className='sidebar'>Email Members</p>
+            </Link>
 
-            <Menu.List.Item className={'navbar-item'}>
-              <Link to='#'>
-                <p className='sidebar'>Edit Community Information</p>
-              </Link>
-            </Menu.List.Item>
+            <Link to='#'>
+              <p className='sidebar'>Edit Community Information</p>
+            </Link>
           </Box>
         </Menu.List>
       </Menu>

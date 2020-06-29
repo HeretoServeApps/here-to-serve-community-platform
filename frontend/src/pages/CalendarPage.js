@@ -402,7 +402,7 @@ export default function CalendarPage(props) {
             <div class='rbc-calendar'>
               <Calendar
                 localizer={localizer}
-                style={{ height: 500, 'margin-top': 15 }}
+                style={{ height: 600, 'margin-top': 15 }}
                 date={date}
                 onNavigate={(date) => setDate(date)}
                 events={processEvents(events)}
