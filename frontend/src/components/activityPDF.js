@@ -48,61 +48,61 @@ export default function PDF(props) {
       color: 'grey',
       fontFamily: 'Times-Roman'
     },
-    table: { 
-      display: "table", 
-      width: "auto", 
-      borderStyle: BORDER_STYLE, 
+    table: {
+      display: "table",
+      width: "auto",
+      borderStyle: BORDER_STYLE,
       borderColor: BORDER_COLOR,
-      borderWidth: 1, 
-      borderRightWidth: 0, 
-      borderBottomWidth: 0 
-    }, 
-    tableRow: { 
-      margin: "auto", 
-      flexDirection: "row" 
-    }, 
-    tableCol1Header: { 
-      width: COL1_WIDTH + '%', 
-      borderStyle: BORDER_STYLE, 
-      borderColor: BORDER_COLOR,
-      borderBottomColor: '#000',
-      borderWidth: 1, 
-      borderLeftWidth: 0, 
-      borderTopWidth: 0
-    },     
-    tableColHeader: { 
-      width: COLN_WIDTH + "%", 
-      borderStyle: BORDER_STYLE, 
+      borderWidth: 1,
+      borderRightWidth: 0,
+      borderBottomWidth: 0
+    },
+    tableRow: {
+      margin: "auto",
+      flexDirection: "row"
+    },
+    tableCol1Header: {
+      width: COL1_WIDTH + '%',
+      borderStyle: BORDER_STYLE,
       borderColor: BORDER_COLOR,
       borderBottomColor: '#000',
-      borderWidth: 1, 
-      borderLeftWidth: 0, 
+      borderWidth: 1,
+      borderLeftWidth: 0,
       borderTopWidth: 0
-    },   
-    tableCol1: { 
-      width: COL1_WIDTH + '%', 
-      borderStyle: BORDER_STYLE, 
+    },
+    tableColHeader: {
+      width: COLN_WIDTH + "%",
+      borderStyle: BORDER_STYLE,
       borderColor: BORDER_COLOR,
-      borderWidth: 1, 
-      borderLeftWidth: 0, 
-      borderTopWidth: 0 
-    },   
-    tableCol: { 
-      width: COLN_WIDTH + "%", 
-      borderStyle: BORDER_STYLE, 
+      borderBottomColor: '#000',
+      borderWidth: 1,
+      borderLeftWidth: 0,
+      borderTopWidth: 0
+    },
+    tableCol1: {
+      width: COL1_WIDTH + '%',
+      borderStyle: BORDER_STYLE,
       borderColor: BORDER_COLOR,
-      borderWidth: 1, 
-      borderLeftWidth: 0, 
-      borderTopWidth: 0 
-    }, 
+      borderWidth: 1,
+      borderLeftWidth: 0,
+      borderTopWidth: 0
+    },
+    tableCol: {
+      width: COLN_WIDTH + "%",
+      borderStyle: BORDER_STYLE,
+      borderColor: BORDER_COLOR,
+      borderWidth: 1,
+      borderLeftWidth: 0,
+      borderTopWidth: 0
+    },
     tableCellHeader: {
-      margin: 5, 
+      margin: 5,
       fontSize: 12,
       fontWeight: 500
-    },  
-    tableCell: { 
-      margin: 5, 
-      fontSize: 10 
+    },
+    tableCell: {
+      margin: 5,
+      fontSize: 10
     }
   });
 
@@ -156,7 +156,7 @@ export default function PDF(props) {
         </Text>
         {props.search !== '' ?
           (<Text style={styles.text}>
-          Search term: {props.search}
+            Search term: {props.search}
           </Text>)
           :
           (<></>)
@@ -192,11 +192,11 @@ export default function PDF(props) {
               (props.activity_type === 'Filter by Activity Type' || a.activity_type === props.activity_type)
               &&
               (moment().range(
-                moment(props.start_year + '-' + monthMap[props.start_month] + '-' + props.start_day, 'YYYY-MM-DD'), 
+                moment(props.start_year + '-' + monthMap[props.start_month] + '-' + props.start_day, 'YYYY-MM-DD'),
                 moment(props.end_year + '-' + monthMap[props.end_month] + '-' + props.end_day, 'YYYY-MM-DD'))
                 .contains(moment(a.start_time.substr(0, 10), 'YYYY-MM-DD'))
               )
-            ).length > 0 ? (
+          ).length > 0 ? (
               activities.filter(
                 (a) =>
                   (props.search === '' || (a.title).toLowerCase().includes(props.search.toLowerCase()))
@@ -204,10 +204,10 @@ export default function PDF(props) {
                   (props.activity_type === 'Filter by Activity Type' || a.activity_type === props.activity_type)
                   &&
                   (moment().range(
-                    moment(props.start_year + '-' + monthMap[props.start_month] + '-' + props.start_day, 'YYYY-MM-DD'), 
+                    moment(props.start_year + '-' + monthMap[props.start_month] + '-' + props.start_day, 'YYYY-MM-DD'),
                     moment(props.end_year + '-' + monthMap[props.end_month] + '-' + props.end_day, 'YYYY-MM-DD'))
                     .contains(moment(a.start_time.substr(0, 10), 'YYYY-MM-DD'))
-                  )              )
+                  ))
                 .map((a) => (
                   <View style={styles.tableRow} key={a.id}>
                     <View style={styles.tableCol}>
@@ -220,18 +220,34 @@ export default function PDF(props) {
                         and {moment(a.end_time).add(new Date(a.start_time).getTimezoneOffset(), 'm').format('LT')}
                       </Text>
                     </View>
-                    <View style={styles.tableCol}>
-                      <Text style={styles.tableCell}>
-                        {a.est_hours_per_volunteer} hours <br />{Math.round(a.est_minutes_per_volunteer)} minutes
-                      </Text>
-                    </View>
-                    <View style={styles.tableCol}>
-                        {a.actual_hours_per_volunteer !== 0 && a.actual_minutes_per_volunteer !== 0  ?
-                          <Text style={styles.tableCell}>{a.actual_hours_per_volunteer} hours {Math.round(a.actual_minutes_per_volunteer)} minutes</Text>
-                          :
+                    {a.activity_type !== 'Occasion' ?
+                      <View style={styles.tableCol}>
+                        <Text style={styles.tableCell}>
+                          {a.est_hours_per_volunteer} hours <br />{Math.round(a.est_minutes_per_volunteer)} minutes
+                        </Text>
+                      </View>
+                      :
+                      <View style={styles.tableCol}>
+                        <Text style={styles.tableCell}>
+                          N/A
+                        </Text>
+                      </View>
+                    }
+
+                    {a.activity_type !== 'Occasion' && a.actual_hours_per_volunteer !== 0 && a.actual_minutes_per_volunteer !== 0 ?
+                      <View style={styles.tableCol}>
+                        <Text style={styles.tableCell}>{a.actual_hours_per_volunteer} hours {Math.round(a.actual_minutes_per_volunteer)} minutes</Text>
+                      </View>
+                      :
+                      a.activity_type !== 'Occasion' ?
+                        (<View style={styles.tableCol}>
                           <Text style={styles.tableCell}>No volunteers have signed-up</Text>
-                        }
-                    </View>
+                        </View>)
+                        :
+                        (<View style={styles.tableCol}>
+                          <Text style={styles.tableCell}>Occasions do not have volunteers</Text>
+                        </View>)
+                    }
                   </View>
                 ))
             ) : (

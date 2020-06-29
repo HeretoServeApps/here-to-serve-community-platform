@@ -142,7 +142,7 @@ export default function CalendarPage(props) {
     originalEvents.forEach((activity) => {
       if((newSelectedCategories.includes(activity['activity_type']) || newSelectedCategories.length === 0) &&
          (selectedStatuses.includes(activity['activity_status']) || selectedStatuses.length === 0) &&
-         selectedMember === "All" || activity['volunteers'].includes(member_object)) {
+         (selectedMember === "All" || activity['volunteers'].includes(member_object))) {
         filteredEvents.push(activity)
       }
     })
@@ -171,7 +171,7 @@ export default function CalendarPage(props) {
     originalEvents.forEach((activity) => {
       if((selectedCategories.includes(activity['activity_type']) || selectedCategories.length === 0) &&
          (newSelectedStatuses.includes(activity['activity_status']) || newSelectedStatuses.length === 0) &&
-          selectedMember === "All" || activity['volunteers'].includes(member_object)) {
+         (selectedMember === "All" || activity['volunteers'].includes(member_object))) {
         filteredEvents.push(activity)
       }
     })
@@ -190,7 +190,7 @@ export default function CalendarPage(props) {
     originalEvents.forEach((activity) => {
       if((selectedCategories.includes(activity['activity_type']) || selectedCategories.length === 0) &&
          (selectedStatuses.includes(activity['activity_status']) || selectedStatuses.length === 0) &&
-          member === "All" || activity['volunteers'].includes(member_object)) {
+         (member === "All" || activity['volunteers'].includes(member_object))) {
         filteredEvents.push(activity)
       }
     })
