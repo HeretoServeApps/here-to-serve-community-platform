@@ -133,6 +133,30 @@ export default function CommunityHome(props) {
       )
   }, [])
 
+
+  useEffect(() => {
+    axios
+        .get('/community-people/', {
+            headers: {
+                'Authorization': `JWT ${localStorage.getItem('token')}`,
+                'Content-Type': 'application/json',
+            },
+            params: JSON.stringify({
+                user: localStorage.getItem('email'),
+                community: localStorage.getItem('community-name')
+            })
+        })
+        .then(
+            (response) => {
+                localStorage.setItem('user-role', response.data.user_role) 
+            },
+            (error) => {
+                console.log(error)
+            }
+        )
+  }, [])
+  
+
   return (
     <div>
       <CommunityNavbar />

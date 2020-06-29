@@ -30,6 +30,7 @@ export default function MyCommunities() {
         }
       )
   }, [token])
+  
 
   const setCommunityInfoInLocalStorage = useCallback((name, zipcode, is_closed, id) => {
     localStorage.setItem('community-name', name)

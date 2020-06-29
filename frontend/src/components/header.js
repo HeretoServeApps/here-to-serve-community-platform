@@ -28,9 +28,14 @@ const Header = (props) => {
       <Link className={'navbar-item'} to='/my-communities'>
         <Heading size={6}>My Communities</Heading>
       </Link>
-      <Link className={'navbar-item'} to='/create-community'>
-        <Heading size={6}>Create Community</Heading>
-      </Link>
+      {/* Only admin can create new communities */}
+      {localStorage.getItem('is-staff') === 'true' ? 
+        (<Link className={'navbar-item'} to='/create-community'>
+          <Heading size={6}>Create Community</Heading>
+        </Link>)
+        :
+        (<></>)
+      }
       <Link className={'navbar-item'} to='/account-settings'>
         <Heading size={6}>My Account</Heading>
       </Link>

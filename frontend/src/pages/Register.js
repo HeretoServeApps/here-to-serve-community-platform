@@ -14,7 +14,6 @@ import {
   Control,
   Input,
   Select,
-  Textarea,
   Label
 } from 'react-bulma-components/lib/components/form'
 import Autocomplete from '../components/autocomplete'
@@ -117,9 +116,9 @@ export default function Register(props) {
         localStorage.getItem('token') !== 'undefined' &&
         localStorage.getItem('token') !== undefined) {
       var formdata = new FormData();
-      formdata.append("community", who);
-      formdata.append("user", email);
-      formdata.append("role", "COMM_MEMBER");
+      formdata.append('community', who);
+      formdata.append('user', email);
+      formdata.append("role", 'COMM_MEMBER');
 
       var requestOptions = {
         method: 'POST',
@@ -127,7 +126,7 @@ export default function Register(props) {
         redirect: 'follow'
       };
 
-      fetch("/community-role-register/", requestOptions)
+      fetch(process.env.REACT_APP_API_URL + '/community-role-register/', requestOptions)
         .then(response => response.text())
         .then(result => history.push('/my-communities'))
         .catch(error => console.log('error', error));
@@ -394,18 +393,18 @@ export default function Register(props) {
       <Field>
         <Label>How did you learn about us?<span style={{ color: '#F83D34' }}>*</span></Label>
         <Select
-            name='How Learn'
-            value={howLearn}
-            onChange={(e) => setHowLearn(e.target.value)}
-          >
-            <option>Please select an option</option>
-            <option>Social Media</option>
-            <option>Friend or Family</option>
-            <option>Here to Serve Website</option>
-            <option>Employer</option>
-            <option>Google Search</option>
-            <option>Other</option>
-          </Select>
+          name='How Learn'
+          value={howLearn}
+          onChange={(e) => setHowLearn(e.target.value)}
+        >
+          <option>Please select an option</option>
+          <option>Social Media</option>
+          <option>Friend or Family</option>
+          <option>Here to Serve Website</option>
+          <option>Employer</option>
+          <option>Google Search</option>
+          <option>Other</option>
+        </Select>
       </Field>
       <CheckboxTermofUse />
       <Button

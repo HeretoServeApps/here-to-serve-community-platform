@@ -71,7 +71,8 @@ class DiscussionPost(models.Model):
 class UserManager(BaseUserManager):
     def create_user(self, email, first_name, last_name, phone_number_1, address_line_1='', address_line_2='', 
                     city='', state='', zipcode='', country='US', phone_number_1_type='mobile', phone_number_2='',
-                    phone_number_2_type='', who_help='', how_learn='', how_help='', how_know='', skills_to_offer='', password=None, commit=True):
+                    phone_number_2_type='', who_help='', how_learn='', how_help='', how_know='', skills_to_offer='', 
+                    password=None, commit=True):
 
         if not first_name:
             raise ValueError(_('Users must have a first name'))
@@ -100,7 +101,7 @@ class UserManager(BaseUserManager):
                 who_help=who_help,
                 how_help=how_help,
                 how_know=how_know,
-                skills_to_offer=skills_to_offer
+                skills_to_offer=skills_to_offer,
         )
         user.set_password(password)
         if commit:

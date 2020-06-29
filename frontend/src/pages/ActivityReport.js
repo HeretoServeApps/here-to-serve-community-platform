@@ -43,6 +43,7 @@ export default function ActivityReport() {
         'Laundry',
         'Visits',
         'Miscellaneous',
+        'Occasion'
     ]
 
     const years = Array.from(Array(5).keys()).map((y) => (y + (new Date().getFullYear())))
@@ -174,7 +175,7 @@ export default function ActivityReport() {
     const [startDay, setStartDay] = useState(new Date().getDate())
     const [startYear, setStartYear] = useState(new Date().getFullYear())
     const [endMonth, setEndMonth] = useState(months[new Date().getMonth()])
-    const [endDay, setEndDay] = useState(new Date().getDate() + 10)
+    const [endDay, setEndDay] = useState(new Date().getDate())
     const [endYear, setEndYear] = useState(new Date().getFullYear())
 
     const [activities, setActivities] = useState([])
@@ -414,17 +415,24 @@ export default function ActivityReport() {
                                         <td>
                                             {a.volunteers.length}/{a.num_volunteers_needed} volunteers
                                         </td>
-                                        <td>
-                                            {a.est_hours_per_volunteer} hours <br />{Math.round(a.est_minutes_per_volunteer)} minutes
-                                        </td>
-                                        {a.actual_hours_per_volunteer !== 0 && a.actual_minutes_per_volunteer !== 0 ?
+                                        {a.activity_type !== 'Occasion' ? 
+                                        (<td>{a.est_hours_per_volunteer} hours <br />{Math.round(a.est_minutes_per_volunteer)} minutes</td>) :
+                                        (<td>N/A</td>) }                                       
+                                        
+                                        {a.activity_type !== 'Occasion' && a.actual_hours_per_volunteer !== 0 && a.actual_minutes_per_volunteer !== 0 ?
                                             <td>
                                                 {a.actual_hours_per_volunteer} hours <br />{Math.round(a.actual_minutes_per_volunteer)} minutes
                                             </td>
                                             :
-                                            <td style={{ textAlign: 'center' }}>
-                                            No volunteers have signed-up
-                                        </td>}
+                                            a.activity_type !== 'Occasion' ?
+                                            (<td>
+                                                No volunteers have signed-up
+                                            </td>)
+                                            :
+                                            (<td>
+                                                Occasions do not have volunteers
+                                            </td>)
+                                        }
                                     </tr>
                                 ))
 

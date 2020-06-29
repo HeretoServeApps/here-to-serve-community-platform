@@ -64,7 +64,7 @@ export default function CreateCommunity() {
           var formdata = new FormData()
           formdata.append('community', name)
           formdata.append('user', localStorage.getItem('email'))
-          formdata.append('role', 'COMM_LEADER')
+          formdata.append('role', 'ADMIN')
 
           var requestOptions = {
             method: 'POST',
@@ -72,7 +72,7 @@ export default function CreateCommunity() {
             redirect: 'follow',
           }
 
-          fetch('/community-role-register/', requestOptions)
+          fetch(process.env.REACT_APP_API_URL + '/community-role-register/', requestOptions)
             .then((response) => response.text())
             .then((result) => history.push('/my-communities'))
             .catch((error) => console.log('error', error))

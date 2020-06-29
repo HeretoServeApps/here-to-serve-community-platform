@@ -28,7 +28,7 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ('email', 'first_name', 'last_name', 'phone_number_1', 'phone_number_1_type',
                   'phone_number_2', 'phone_number_2_type', 'address_line_1', 'address_line_2', 
-                  'city', 'zipcode', 'state', 'country')
+                  'city', 'zipcode', 'state', 'country', 'is_staff')
 
     def update(self, instance, validated_data):
         instance.first_name = validated_data.get('first_name', instance.first_name)
@@ -72,7 +72,7 @@ class UserSerializerWithToken(serializers.ModelSerializer):
         model = User
         fields = ('token', 'email', 'password', 'first_name', 'last_name', 'address_line_1', 'address_line_2',
                   'city', 'state', 'zipcode', 'country', 'phone_number_1', 'phone_number_1_type', 'phone_number_2',
-                  'phone_number_2_type', 'who_help', 'how_learn', 'how_help', 'how_know', 'skills_to_offer')
+                  'phone_number_2_type', 'who_help', 'how_learn', 'how_help', 'how_know', 'skills_to_offer', 'is_staff')
 
 
 class CommunityUserRoleSerializer(serializers.ModelSerializer):
