@@ -32,11 +32,16 @@ from .models import (
 
 sensitive_post_parameters_m = method_decorator(sensitive_post_parameters())
 
+
 class CommunityViewSet(viewsets.ModelViewSet):
     queryset = Community.objects.all().order_by('name')
     serializer_class = CommunitySerializer
 
     def get_queryset(self):
+        # if current user is an admin then get all communities on the platform
+        if(self.request.user.is_staff):
+            return Community.objects.all()
+        
         comms = CommunityUserRole.objects.filter(user=self.request.user).values_list('community', flat=True)
         return Community.objects.filter(id__in=comms)
 
@@ -50,6 +55,7 @@ class OneCommunityViewSet(viewsets.ModelViewSet):
         zipcode = self.request.query_params.get('zipcode')
         is_closed = self.request.query_params.get('is_closed')
         return Community.objects.filter(name=name, zipcode=zipcode, is_closed=is_closed)
+
 
 class UsersViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all().order_by('last_name')

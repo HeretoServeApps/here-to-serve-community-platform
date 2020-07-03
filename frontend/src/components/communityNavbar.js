@@ -30,6 +30,7 @@ const CommunityNavbar = (props) => {
       <Columns isMultiline={true}>
         <Columns.Column isMultiline={true}>
           <Columns>
+            <Columns.Column size={2} style={{color: "white"}}>{localStorage.getItem('community-name')}</Columns.Column>
             {links.map((title) => (
               <Columns.Column>
                 <Link to={title[1]}>

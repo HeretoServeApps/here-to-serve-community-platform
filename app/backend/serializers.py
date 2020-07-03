@@ -8,20 +8,24 @@ from django.contrib.auth.forms import SetPasswordForm
 from django.core.exceptions import ValidationError
 from django.utils.http import urlsafe_base64_decode
 
+
 class CommunitySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Community
         fields = ('id', 'name', 'is_closed', 'description', 'zipcode', 'country', 'ways_to_help')
+
 
 class CustomSectionSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomSection
         fields = ('id', 'name', 'type', 'link', 'title', 'description', 'community', 'general_content')
 
+
 class UserSerializerWithID(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('id', 'first_name', 'last_name', 'email', 'phone_number_1')
+
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
