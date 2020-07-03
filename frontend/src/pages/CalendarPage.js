@@ -84,7 +84,7 @@ export default function CalendarPage(props) {
   const localizer = momentLocalizer(moment)
 
   // filter parameters
-  const [selectedMember, setSelectedMember] = useState('')
+  const [selectedMember, setSelectedMember] = useState('All')
   const [members, setMembers] = useState([{ first_name: 'All', last_name: '' }])
   const [selectedCategories, setSelectedCategories] = useState([])
   const [originalEvents, setOriginalEvents] = useState([])
@@ -125,7 +125,7 @@ export default function CalendarPage(props) {
     setIsSelectingEvent(false)
   })
 
-  // Filter by category function
+  // Filter by activity function
   function addSelectedCategories(category, isChecked) {
     if (isChecked) {
       var newSelectedCategories = selectedCategories.concat(category)

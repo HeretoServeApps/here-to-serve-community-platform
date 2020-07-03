@@ -8,11 +8,9 @@ import 'react-big-calendar/lib/sass/styles.scss'
 import Container from 'react-bulma-components/lib/components/container'
 import Columns from 'react-bulma-components/lib/components/columns'
 import Heading from 'react-bulma-components/lib/components/heading'
-import CommunityHomeCard from '../components/communityHomeCard'
 import CommunityNavbar from '../components/communityNavbar'
 import Button from 'react-bulma-components/lib/components/button'
 import { Select, Control } from 'react-bulma-components/lib/components/form'
-import Dropdown from 'react-bulma-components/lib/components/dropdown'
 
 import CheckboxField from '../components/checkboxfield'
 import CustomSections from '../components/customSections'
@@ -186,7 +184,7 @@ export default function CommunityHome(props) {
             ))}
             <br />
             <Button color='primary'>
-              <Link to='#' style={{ color: 'white' }}>
+              <Link to='/edit-community' style={{ color: 'white' }}>
                 Edit Community
               </Link>
             </Button>
@@ -244,13 +242,24 @@ export default function CommunityHome(props) {
                 Create Activity
               </Button>
             </Link>
+            <a href='https://www.heretoserve.org/'
+               target='_blank'
+               rel='noopener noreferrer'
+            >
+              <Button color='primary' className='is-fullwidth' style={{marginTop: '3%'}}>
+                Here to Serve Website
+              </Button>
+            </a>
+            <a href='https://heretoserve.salsalabs.org/secureonlinedonationform/index.html' 
+               target='_blank'
+               rel='noopener noreferrer'
+            >
+              <Button color='primary' className='is-fullwidth' style={{marginTop: '3%', marginBottom: '3%'}}>
+                Donate Now!
+              </Button>
+            </a>
             <br />
             <CustomSections />
-            <Heading size={6}>Filter Activity</Heading>
-            <CheckboxField text='Well Wishes' />
-            <CheckboxField text='Announcements' />
-            <CheckboxField text='Message Board' />
-            <CheckboxField text='Photos' />
           </Columns.Column>
         </Columns>
       </Container>
