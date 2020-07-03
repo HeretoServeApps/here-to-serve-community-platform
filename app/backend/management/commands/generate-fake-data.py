@@ -70,4 +70,14 @@ class Command(BaseCommand):
                     user=User.objects.get(id=user_ids[i]),
                     role=role  
                     ))
+            
+            for user in User.objects.all():
+                if user.is_staff:
+                    comm_member_roles.append(CommunityUserRole(
+                        community=community,
+                        user=user,
+                        role="ADMIN"
+                    ))
+                    self.stdout.write(self.style.SUCCESS(f'Added user {user.first_name} as admin to {community.name}\'s community'))
+
             CommunityUserRole.objects.bulk_create(comm_member_roles)
