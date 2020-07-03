@@ -23,10 +23,10 @@ from rest_framework.views import APIView
 from .serializers import (
     CommunitySerializer, UserSerializer, CommunityUserRoleSerializer, UserSerializerWithToken, 
     PasswordResetConfirmSerializer, ActivitySerializer, RideActivitySerializer, MealActivitySerializer, UserSerializerWithID,
-    EventActivitySerializer, AnnouncementSerializer, CustomSectionSerializer, WellWishSerializer
+    EventActivitySerializer, AnnouncementSerializer, CustomSectionSerializer, WellWishSerializer, DiscussionPostSerializer, ResourceSerializer
 )
 from .models import (
-    Community, User, CommunityUserRole, Activity, EventActivity, MealActivity, RideActivity, Announcement, CustomSection, WellWish
+    Community, User, CommunityUserRole, Activity, EventActivity, MealActivity, RideActivity, Announcement, CustomSection, WellWish, Resource, DiscussionPost
 )
 
 
@@ -118,6 +118,14 @@ class CommunityCustomSections(viewsets.ModelViewSet):
         sections = CustomSection.objects.filter(community__name=community_name)
         return sections
 
+class OneCustomSectionViewSet(viewsets.ModelViewSet):
+    queryset = CustomSection.objects.all().order_by('name')
+    serializer_class = CustomSectionSerializer
+
+    def get_queryset(self):
+        section_id = self.request.query_params.get('section_id')
+        section = CustomSection.objects.filter(id=section_id)
+        return section
 
 class CommunityUserRoleRegister(APIView):
     """
@@ -552,3 +560,72 @@ class AddCustomSection(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class EditCustomSection(APIView):
+    permission_classes = (permissions.AllowAny,)
+
+    def post(self, request, format=None):
+        section_id = request.data['section_id']
+        custom_section = CustomSection.objects.get(id=section_id)
+        custom_section.title = request.data['title']
+        custom_section.description = request.data['description']
+        custom_section.general_content = request.data['general_content']
+        custom_section.save()
+        return Response('Edited custom section')
+
+
+class DiscussionPostViewSet(viewsets.ModelViewSet):
+    queryset = DiscussionPost.objects.all().order_by('name')
+    serializer_class = DiscussionPostSerializer
+
+    def get_queryset(self):
+        section_id = self.request.query_params.get('section_id')
+        section = CustomSection.objects.filter(id=section_id)
+        posts = DiscussionPost.objects.all().filter(section__in=section).select_related('user')
+        for post in posts:
+            post.author_name = post.user.first_name + ' ' + post.user.last_name
+        return posts
+
+class AddDiscussionPost(APIView):
+    permission_classes = (permissions.AllowAny,)
+
+    def post(self, request, format=None):
+        section_id = request.data['section']
+        community_name = request.data['community']
+        user_email = request.data['user']
+
+        section = CustomSection.objects.get(id=section_id).id
+        community = Community.objects.get(name=community_name).id
+        user = User.objects.get(email=user_email).id
+        
+        request.data['section'] = section
+        request.data['community'] = community
+        request.data['user'] = user
+        serializer = DiscussionPostSerializer(data=request.data)
+        print(request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class DeleteDiscussionPost(APIView):
+    permission_classes = (permissions.AllowAny,)
+
+    def delete(self, request, format=None):
+        id = request.data['id']
+        DiscussionPost.objects.get(id=id).delete()
+        return Response('Deleted discussion post')
+
+class EditDiscussionPost(APIView):
+    permission_classes = (permissions.AllowAny,)
+
+    def post(self, request, format=None):
+        id = request.data['id']
+        subject = request.data['subject']
+        message = request.data['message']
+        post = DiscussionPost.objects.get(id=id)
+        post.subject = subject
+        post.message = message
+        post.save()
+        return Response('Edited discussion post')

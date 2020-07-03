@@ -90,7 +90,6 @@ export default function CalendarPage(props) {
   const [originalEvents, setOriginalEvents] = useState([])
   const [selectedStatuses, setSelectedStatuses] = useState([])
 
-
   // FUNCTIONS ---------------------------------------------------------------------------------------------
 
   function updateDate() {
@@ -100,16 +99,22 @@ export default function CalendarPage(props) {
   function processEvents(data) {
     data.forEach((activity) => {
       if (typeof activity['start_time'] === 'string') {
-        var timezone_offset = new Date(activity['start_time']).getTimezoneOffset()
-        activity['start_time'] = moment(activity['start_time']).add(timezone_offset, 'm').toDate()
-        activity['end_time'] = moment(activity['end_time']).add(timezone_offset, 'm').toDate()
+        var timezone_offset = new Date(
+          activity['start_time']
+        ).getTimezoneOffset()
+        activity['start_time'] = moment(activity['start_time'])
+          .add(timezone_offset, 'm')
+          .toDate()
+        activity['end_time'] = moment(activity['end_time'])
+          .add(timezone_offset, 'm')
+          .toDate()
         activity['title'] = activity['activity_type'] + ': ' + activity['title']
       }
     })
     setEvents(data)
     setOriginalEvents(data)
   }
- 
+
   const getEventInfo = useCallback((event) => {
     setSelectedEvent(event)
     setIsSelectingEvent(true)
@@ -122,13 +127,13 @@ export default function CalendarPage(props) {
 
   // Filter by category function
   function addSelectedCategories(category, isChecked) {
-    if(isChecked) {
+    if (isChecked) {
       var newSelectedCategories = selectedCategories.concat(category)
       setSelectedCategories(newSelectedCategories)
     } else {
       var newSelectedCategories = selectedCategories
       var index = newSelectedCategories.indexOf(category)
-      if(index !== -1) {
+      if (index !== -1) {
         newSelectedCategories.splice(index, 1)
         setSelectedCategories(newSelectedCategories)
       }
@@ -137,12 +142,17 @@ export default function CalendarPage(props) {
     const splitNames = selectedMember.split(' ')
     var member_object = {
       first_name: splitNames[0],
-      last_name: splitNames[1]
+      last_name: splitNames[1],
     }
     originalEvents.forEach((activity) => {
-      if((newSelectedCategories.includes(activity['activity_type']) || newSelectedCategories.length === 0) &&
-         (selectedStatuses.includes(activity['activity_status']) || selectedStatuses.length === 0) &&
-         (selectedMember === "All" || activity['volunteers'].includes(member_object))) {
+      if (
+        (newSelectedCategories.includes(activity['activity_type']) ||
+          newSelectedCategories.length === 0) &&
+        (selectedStatuses.includes(activity['activity_status']) ||
+          selectedStatuses.length === 0) &&
+        (selectedMember === 'All' ||
+          activity['volunteers'].includes(member_object))
+      ) {
         filteredEvents.push(activity)
       }
     })
@@ -151,13 +161,13 @@ export default function CalendarPage(props) {
 
   // Filter by status function
   function addSelectedStatus(status, isChecked) {
-    if(isChecked) {
+    if (isChecked) {
       var newSelectedStatuses = selectedStatuses.concat(status)
       setSelectedStatuses(newSelectedStatuses)
     } else {
       var newSelectedStatuses = selectedStatuses
       var index = newSelectedStatuses.indexOf(status)
-      if(index !== -1) {
+      if (index !== -1) {
         newSelectedStatuses.splice(index, 1)
         setSelectedStatuses(newSelectedStatuses)
       }
@@ -166,12 +176,17 @@ export default function CalendarPage(props) {
     const splitNames = selectedMember.split(' ')
     var member_object = {
       first_name: splitNames[0],
-      last_name: splitNames[1]
+      last_name: splitNames[1],
     }
     originalEvents.forEach((activity) => {
-      if((selectedCategories.includes(activity['activity_type']) || selectedCategories.length === 0) &&
-         (newSelectedStatuses.includes(activity['activity_status']) || newSelectedStatuses.length === 0) &&
-         (selectedMember === "All" || activity['volunteers'].includes(member_object))) {
+      if (
+        (selectedCategories.includes(activity['activity_type']) ||
+          selectedCategories.length === 0) &&
+        (newSelectedStatuses.includes(activity['activity_status']) ||
+          newSelectedStatuses.length === 0) &&
+        (selectedMember === 'All' ||
+          activity['volunteers'].includes(member_object))
+      ) {
         filteredEvents.push(activity)
       }
     })
@@ -185,12 +200,16 @@ export default function CalendarPage(props) {
     const splitNames = member.split(' ')
     var member_object = {
       first_name: splitNames[0],
-      last_name: splitNames[1]
+      last_name: splitNames[1],
     }
     originalEvents.forEach((activity) => {
-      if((selectedCategories.includes(activity['activity_type']) || selectedCategories.length === 0) &&
-         (selectedStatuses.includes(activity['activity_status']) || selectedStatuses.length === 0) &&
-         (member === "All" || activity['volunteers'].includes(member_object))) {
+      if (
+        (selectedCategories.includes(activity['activity_type']) ||
+          selectedCategories.length === 0) &&
+        (selectedStatuses.includes(activity['activity_status']) ||
+          selectedStatuses.length === 0) &&
+        (member === 'All' || activity['volunteers'].includes(member_object))
+      ) {
         filteredEvents.push(activity)
       }
     })
@@ -286,7 +305,7 @@ export default function CalendarPage(props) {
               <i>Pickup Location: </i>{' '}
               <a
                 target='_blank'
-                rel="noopener noreferrer"
+                rel='noopener noreferrer'
                 href={
                   'https://maps.google.com/?q=' + selectedEvent.pickup_location
                 }
@@ -297,7 +316,7 @@ export default function CalendarPage(props) {
               <i>Destination: </i>{' '}
               <a
                 target='_blank'
-                rel="noopener noreferrer"
+                rel='noopener noreferrer'
                 href={
                   'https://maps.google.com/?q=' +
                   selectedEvent.destination_location
@@ -311,7 +330,7 @@ export default function CalendarPage(props) {
               <i>Delivery Location: </i>{' '}
               <a
                 target='_blank'
-                rel="noopener noreferrer"
+                rel='noopener noreferrer'
                 href={
                   'https://maps.google.com/?q=' +
                   selectedEvent.delivery_location
@@ -321,17 +340,17 @@ export default function CalendarPage(props) {
               </a>
             </div>
           ) : (
-                <div>
-                  <i>Location: </i>
-                  <a
-                    target='_blank'
-                    rel="noopener noreferrer"
-                    href={'https://maps.google.com/?q=' + selectedEvent.location}
-                  >
-                    {selectedEvent.location}
-                  </a>{' '}
-                </div>
-              )}
+            <div>
+              <i>Location: </i>
+              <a
+                target='_blank'
+                rel='noopener noreferrer'
+                href={'https://maps.google.com/?q=' + selectedEvent.location}
+              >
+                {selectedEvent.location}
+              </a>{' '}
+            </div>
+          )}
           {isMealActivity ? (
             <div>
               <i>Dietary Restrictions: </i>{' '}
@@ -342,8 +361,8 @@ export default function CalendarPage(props) {
               </ul>
             </div>
           ) : (
-              ''
-            )}
+            ''
+          )}
           <i>Volunteers Needed:</i> {selectedEvent.num_volunteers_needed}
           <br />
           <i>Notes:</i> {selectedEvent.description}
@@ -355,14 +374,14 @@ export default function CalendarPage(props) {
           {selectedEvent.volunteers.length === 0 ? (
             'No volunteers has signed up.'
           ) : (
-              <ul>
-                {selectedEvent.volunteers.map((person) => (
-                  <li>
-                    {person.first_name}: {person.email}
-                  </li>
-                ))}
-              </ul>
-            )}
+            <ul>
+              {selectedEvent.volunteers.map((person) => (
+                <li>
+                  {person.first_name}: {person.email}
+                </li>
+              ))}
+            </ul>
+          )}
           <br />
           <i>Coordinators:</i>
           <ul>
@@ -395,15 +414,28 @@ export default function CalendarPage(props) {
             <CustomSections />
             <Heading size={6}>Status</Heading>
             <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
-              <Checkbox style={{ marginRight: '10px' }} onClick={(e) => addSelectedStatus('Help needed', e.target.checked)}/>
+              <Checkbox
+                style={{ marginRight: '10px' }}
+                onClick={(e) =>
+                  addSelectedStatus('Help needed', e.target.checked)
+                }
+              />
               <span class='dot-green'></span>Help needed
             </div>
             <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
-              <Checkbox style={{ marginRight: '10px' }} onClick={(e) => addSelectedStatus('Needs met', e.target.checked)}/>
+              <Checkbox
+                style={{ marginRight: '10px' }}
+                onClick={(e) =>
+                  addSelectedStatus('Needs met', e.target.checked)
+                }
+              />
               <span class='dot-blue'></span>Needs met
             </div>
             <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
-              <Checkbox style={{ marginRight: '10px' }} onClick={(e) => addSelectedStatus('Occasion', e.target.checked)}/>
+              <Checkbox
+                style={{ marginRight: '10px' }}
+                onClick={(e) => addSelectedStatus('Occasion', e.target.checked)}
+              />
               <span class='dot-orange'></span>Occasion
             </div>
             <Heading size={6} style={{ marginTop: '10%' }}>
@@ -415,9 +447,7 @@ export default function CalendarPage(props) {
                   name='member'
                   value={selectedMember}
                   fullwidth={true}
-                  onChange={(e) => 
-                    filterMember(e.target.value)
-                  }
+                  onChange={(e) => filterMember(e.target.value)}
                 >
                   {members.map((m) => (
                     <option>
@@ -431,7 +461,10 @@ export default function CalendarPage(props) {
               Activity Type
             </Heading>
             {categories.map((t) => (
-              <CheckboxField text={t} onChange={(e) => addSelectedCategories(t, e.target.checked)}/>
+              <CheckboxField
+                text={t}
+                onChange={(e) => addSelectedCategories(t, e.target.checked)}
+              />
             ))}
           </Container>
         </Columns.Column>
@@ -439,45 +472,33 @@ export default function CalendarPage(props) {
           <Container style={containerStyle}>
             <Columns>
               <Columns.Column size={8} style={{ marginRight: '6%' }}>
-                <Columns
-                  variableGap={{
-                    mobile: 0,
-                    tablet: 0,
-                    desktop: 0,
-                    widescreen: 0,
-                    fullhd: 0,
-                  }}
+                <Select
+                  value={selectedMonth}
+                  onChange={(e) => setSelectedMonth(e.target.value)}
+                  style={{ marginRight: '10px' }}
                 >
-                  <Columns.Column size={1} style={{ marginRight: '4%' }}>
-                    <Dropdown
-                      label={selectedMonth}
-                      onChange={(m) => setSelectedMonth(m)}
-                    >
-                      {months.map((month) => (
-                        <Dropdown.Item value={month}>{month}</Dropdown.Item>
-                      ))}
-                    </Dropdown>
-                  </Columns.Column>
-                  <Columns.Column size={1} style={{ marginRight: '5%'}}>
-                    <Dropdown
-                      label={selectedYear}
-                      onChange={(y) => setSelectedYear(y)}
-                    >
-                      {years.map((year) => (
-                        <Dropdown.Item value={year}>{year}</Dropdown.Item>
-                      ))}
-                    </Dropdown>
-                  </Columns.Column>
-                  <Columns.Column size={1}>
-                    <Button onClick={updateDate} color='info'>
-                      Go
-                    </Button>
-                  </Columns.Column>
-                </Columns>
+                  {months.map((month) => (
+                    <option value={month}>{month}</option>
+                  ))}
+                </Select>
+                <Select
+                  value={selectedYear}
+                  onChange={(e) => setSelectedYear(e.target.value)}
+                  style={{ marginRight: '10px' }}
+                >
+                  {years.map((year) => (
+                    <option value={year}>{year}</option>
+                  ))}
+                </Select>
+                <Button onClick={updateDate} color='info'>
+                  Go
+                </Button>
               </Columns.Column>
               <Columns.Column>
                 <Link to='/create-new-activity' style={{ color: 'white' }}>
-                  <Button color='primary' fullwidth={true}>Create a New Activity</Button>
+                  <Button color='primary' fullwidth={true}>
+                    Create a New Activity
+                  </Button>
                 </Link>
                 <Link to='/activity-report' style={{ color: 'white' }}>
                   <Button
@@ -496,7 +517,7 @@ export default function CalendarPage(props) {
             <div class='rbc-calendar'>
               <Calendar
                 localizer={localizer}
-                style={{ height: 500, 'margin-top': 15 }}
+                style={{ height: 600, 'margin-top': 15 }}
                 date={date}
                 onNavigate={(date) => setDate(date)}
                 events={events}

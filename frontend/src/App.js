@@ -30,6 +30,7 @@ import WaysToHelp from './pages/WaysToHelp'
 import WellWishes from './pages/WellWishes'
 import CreateCustomSection from './pages/CreateCustomSection'
 import ActivityReport from './pages/ActivityReport'
+import CustomGeneral from './pages/CustomGeneral'
 
 export default function App() {
   const [loggedIn, setLoggedIn] = useState(
@@ -266,7 +267,16 @@ export default function App() {
             component={CreateCustomSection}
           />
           <PrivateRoute path='/about' exact component={CommunityAbout} />
-          <PrivateRoute path='/activity-report' exact component={ActivityReport} />
+          <PrivateRoute
+            path='/activity-report'
+            exact
+            component={ActivityReport}
+          />
+          <PrivateRoute
+            path='/custom/:section'
+            exact
+            component={CustomGeneral}
+          />
         </Switch>
       </Router>
     </div>

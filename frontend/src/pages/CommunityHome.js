@@ -102,7 +102,7 @@ export default function CommunityHome(props) {
       })
       .then(
         (response) => {
-            const options = response.data.map((item) => ({
+          const options = response.data.map((item) => ({
             label: `${item['first_name']} ${item['last_name']}`,
             value: item['id'],
             email: item['email'],
@@ -222,6 +222,7 @@ export default function CommunityHome(props) {
                 localizer={localizer}
                 toolbar={false}
                 date={date}
+                style={{ height: '400px' }}
                 onNavigate={(date) => setDate(date)}
                 events={processEvents(events)}
                 startAccessor='start_time'
@@ -235,14 +236,12 @@ export default function CommunityHome(props) {
                 })}
               />
             </div>
-
-            <br />
             <Heading size={6}>Activity Feed</Heading>
           </Columns.Column>
           <Columns.Column size={2}>
             <Link to='/create-new-activity' style={{ color: 'white' }}>
               <Button color='primary' className='is-fullwidth'>
-                Create a New Activity
+                Create Activity
               </Button>
             </Link>
             <br />
