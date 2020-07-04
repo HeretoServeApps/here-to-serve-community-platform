@@ -67,7 +67,7 @@ export default function CommunityEdit() {
                         <Field>
                             <Control>
                                 <Label>
-                                    Community Name<span className='has-text-danger'>*</span>
+                                    Community Name
                                 </Label>
                                 <Input
                                     name='Community Name'
@@ -83,7 +83,7 @@ export default function CommunityEdit() {
                         <Field>
                             <Control>
                                 <Label>
-                                    About Our Community<span className='has-text-danger'>*</span>
+                                    About Our Community
                                 </Label>
                                 <Textarea
                                     name='Community Description'
@@ -110,7 +110,7 @@ export default function CommunityEdit() {
                         <Field style={{ maxWidth: '30%' }}>
                             <Control>
                                 <Label>
-                                    ZIP/Postal Code<span className='has-text-danger'>*</span>
+                                    ZIP/Postal Code
                                 </Label>
                                 <Input
                                     name='Community Zipcode'
@@ -121,8 +121,16 @@ export default function CommunityEdit() {
                             </Control>
                         </Field>
                         <Field>
+                            <Label>Community Time Zone</Label>
+                            <Control>
+                                <Select name='Timezone' value='Calendar'>
+                                    <option>Calendar</option>
+                                </Select>
+                            </Control>
+                        </Field>
+                        <Field>
                             <Label>
-                                Community Visibility<span className='has-text-danger'>*</span>
+                                Community Visibility
                             </Label>
                             <CheckboxField text={'Allow friends and family to find this community by name and/or postal code.'} />
                             <p style={{ fontSize: '80%' }} className='has-text-grey'>
@@ -132,7 +140,7 @@ export default function CommunityEdit() {
 
                         <Heading size={4} style={{ marginTop: '5%' }}>Community Home Page</Heading>
                         <Field>
-                            <Label>Home Page Highlight<span style={{ color: '#F83D34' }}>*</span></Label>
+                            <Label>Home Page Highlight</Label>
                             <Control>
                                 <Select name='Home Page Highlight' value='Calendar'>
                                     <option>Calendar</option>
@@ -143,6 +151,15 @@ export default function CommunityEdit() {
                                     <option>Well Wishes</option>
                                 </Select>
                             </Control>
+                        </Field>
+                        <Field>
+                            <Label>
+                                Show Coordinators on Home Page
+                            </Label>
+                            <CheckboxField text={'Display Coordinator list on home page.'} />
+                            <p style={{ fontSize: '80%' }} className='has-text-grey'>
+                                If checked, Members will see the list of Coordinators under the sections list on your Community home page                            
+                            </p>
                         </Field>
                     </Columns.Column>
                 </Columns>

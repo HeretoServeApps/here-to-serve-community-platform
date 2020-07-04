@@ -233,7 +233,6 @@ export default function CommunityHome(props) {
                 })}
               />
             </div>
-            <Heading size={6}>Activity Feed</Heading>
           </Columns.Column>
           <Columns.Column size={2}>
             <Link to='/create-new-activity' style={{ color: 'white' }}>
