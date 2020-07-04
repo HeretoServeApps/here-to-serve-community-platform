@@ -10,8 +10,6 @@ from django.conf import settings
 from tinymce.models import HTMLField
 
 
-
-
 class Community(models.Model):
     # defaults were just for already existing rows, no real meaning
     name = models.CharField(max_length=128, default='')

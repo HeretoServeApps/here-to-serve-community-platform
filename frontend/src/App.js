@@ -3,6 +3,7 @@ import { Route, Switch, BrowserRouter as Router } from 'react-router-dom'
 import axios from 'axios'
 
 import Header from './components/header'
+import AppFooter from './components/footer'
 import PrivateRoute from './components/privateroute'
 
 import Register from './pages/Register'
@@ -284,6 +285,7 @@ export default function App() {
             component={CommunityEdit}
           />
         </Switch>
+        <AppFooter/>
       </Router>
     </div>
   )

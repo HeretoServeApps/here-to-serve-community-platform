@@ -47,7 +47,6 @@ export default function CreateNewActivity(props) {
     display: 'flex',
     justifyContent: 'flex-start',
   }
-  const footNoteColor = '#7E7E7E'
 
   let history = useHistory()
   const years = Array.from(Array(5).keys()).map((y) => (y + (new Date().getFullYear())))
@@ -508,16 +507,16 @@ export default function CreateNewActivity(props) {
                       onChange={(e) => setActivityName(e.target.value)}
                     />
                   </Control>
-                  {category === 'Giving Rides' ? (<p style={{ fontSize: '80%', color: footNoteColor }}>example: "Rides to medical appointment, Social Event, Soccer practice, Carpool."</p>) : (<></>)}
-                  {category === 'Preparing Meals' ? (<p style={{ fontSize: '80%', color: footNoteColor }}>example: "Weekday Dinners, Sunday Brunch."</p>) : (<></>)}
-                  {category === 'Shopping' ? (<p style={{ fontSize: '80%', color: footNoteColor }}>example: "Grocery shopping, Pharmacy pick-up."</p>) : (<></>)}
-                  {category === 'Childcare' ? (<p style={{ fontSize: '80%', color: footNoteColor }}>example: "Weekday a.m. childcare, Weekend eve babysitting."</p>) : (<></>)}
-                  {category === 'Pet Care' ? (<p style={{ fontSize: '80%', color: footNoteColor }}>example: "Weekday a.m. pet care, Weekend eve pet care."</p>) : (<></>)}
-                  {category === 'Laundry' ? (<p style={{ fontSize: '80%', color: footNoteColor }}>example: "Weekly laundry load."</p>) : (<></>)}
-                  {category === 'House Cleaning' ? (<p style={{ fontSize: '80%', color: footNoteColor }}>example: "Bathroom cleaning, Tidying bed."</p>) : (<></>)}
-                  {category === 'Visits' ? (<p style={{ fontSize: '80%', color: footNoteColor }}>example: "Afternoon reading, Weekend visits."</p>) : (<></>)}
-                  {category === 'Miscellaneous' ? (<p style={{ fontSize: '80%', color: footNoteColor }}>examples: "House cleaning, Lawn care, or other general errands."</p>) : (<></>)}
-                  {category === 'Occasion' ? (<p style={{ fontSize: '80%', color: footNoteColor }}>Need to keep track of important dates or milestones? Add important occasions such as birthdays, anniversaries, and more.</p>) : (<></>)}
+                  {category === 'Giving Rides' ? (<p style={{ fontSize: '80%'}} className='has-text-grey'>example: "Rides to medical appointment, Social Event, Soccer practice, Carpool."</p>) : (<></>)}
+                  {category === 'Preparing Meals' ? (<p style={{ fontSize: '80%'}} className='has-text-grey'>example: "Weekday Dinners, Sunday Brunch."</p>) : (<></>)}
+                  {category === 'Shopping' ? (<p style={{ fontSize: '80%'}} className='has-text-grey'>example: "Grocery shopping, Pharmacy pick-up."</p>) : (<></>)}
+                  {category === 'Childcare' ? (<p style={{ fontSize: '80%'}} className='has-text-grey'>example: "Weekday a.m. childcare, Weekend eve babysitting."</p>) : (<></>)}
+                  {category === 'Pet Care' ? (<p style={{ fontSize: '80%'}} className='has-text-grey'>example: "Weekday a.m. pet care, Weekend eve pet care."</p>) : (<></>)}
+                  {category === 'Laundry' ? (<p style={{ fontSize: '80%'}} className='has-text-grey'>example: "Weekly laundry load."</p>) : (<></>)}
+                  {category === 'House Cleaning' ? (<p style={{ fontSize: '80%'}} className='has-text-grey'>example: "Bathroom cleaning, Tidying bed."</p>) : (<></>)}
+                  {category === 'Visits' ? (<p style={{ fontSize: '80%'}} className='has-text-grey'>example: "Afternoon reading, Weekend visits."</p>) : (<></>)}
+                  {category === 'Miscellaneous' ? (<p style={{ fontSize: '80%'}} className='has-text-grey'>examples: "House cleaning, Lawn care, or other general errands."</p>) : (<></>)}
+                  {category === 'Occasion' ? (<p style={{ fontSize: '80%'}} className='has-text-grey'>Need to keep track of important dates or milestones? Add important occasions such as birthdays, anniversaries, and more.</p>) : (<></>)}
                 </Field>
                 {category === 'Preparing Meals' && (
                   <Field>
@@ -552,15 +551,15 @@ export default function CreateNewActivity(props) {
                       onChange={(e) => setNotes(e.target.value)}
                     />
                   </Control>
-                  {category === 'Giving Rides' ? (<p style={{ fontSize: '80%', color: footNoteColor }}>examples: <br />- travel time <br />- other stops</p>) : (<></>)}
-                  {category === 'Preparing Meals' ? (<p style={{ fontSize: '80%', color: footNoteColor }}>examples: <br />- allergies <br />- no. people <br />- delivery instr.</p>) : (<></>)}
-                  {category === 'Shopping' ? (<p style={{ fontSize: '80%', color: footNoteColor }}>example: <br />- items needed</p>) : (<></>)}
-                  {category === 'Childcare' ? (<p style={{ fontSize: '80%', color: footNoteColor }}>example: <br />- feeding instructions<br />- kids favorites</p>) : (<></>)}
-                  {category === 'Pet Care' ? (<p style={{ fontSize: '80%', color: footNoteColor }}>example: <br />- feeding insrtuctions<br />- favorite pet toys</p>) : (<></>)}
-                  {category === 'Laundry' ? (<p style={{ fontSize: '80%', color: footNoteColor }}>example: <br />- washing machine settings</p>) : (<></>)}
-                  {category === 'House Cleaning' ? (<p style={{ fontSize: '80%', color: footNoteColor }}>example: <br />- rooms to clean</p>) : (<></>)}                  
-                  {category === 'Visits' ? (<p style={{ fontSize: '80%', color: footNoteColor }}>examples: <br />- additional instructions <br />- favorites <br />- activity ideas</p>) : (<></>)}
-                  {category === 'Occasion' ? (<p style={{ fontSize: '80%', color: footNoteColor }}>Share important information with members of your Community about this occasion.</p>) : (<></>)}
+                  {category === 'Giving Rides' ? (<p style={{ fontSize: '80%'}} className='has-text-grey'>examples: <br />- travel time <br />- other stops</p>) : (<></>)}
+                  {category === 'Preparing Meals' ? (<p style={{ fontSize: '80%'}} className='has-text-grey'>examples: <br />- allergies <br />- no. people <br />- delivery instr.</p>) : (<></>)}
+                  {category === 'Shopping' ? (<p style={{ fontSize: '80%'}} className='has-text-grey'>example: <br />- items needed</p>) : (<></>)}
+                  {category === 'Childcare' ? (<p style={{ fontSize: '80%'}} className='has-text-grey'>example: <br />- feeding instructions<br />- kids favorites</p>) : (<></>)}
+                  {category === 'Pet Care' ? (<p style={{ fontSize: '80%'}} className='has-text-grey'>example: <br />- feeding insrtuctions<br />- favorite pet toys</p>) : (<></>)}
+                  {category === 'Laundry' ? (<p style={{ fontSize: '80%'}} className='has-text-grey'>example: <br />- washing machine settings</p>) : (<></>)}
+                  {category === 'House Cleaning' ? (<p style={{ fontSize: '80%'}} className='has-text-grey'>example: <br />- rooms to clean</p>) : (<></>)}                  
+                  {category === 'Visits' ? (<p style={{ fontSize: '80%'}} className='has-text-grey'>examples: <br />- additional instructions <br />- favorites <br />- activity ideas</p>) : (<></>)}
+                  {category === 'Occasion' ? (<p style={{ fontSize: '80%'}} className='has-text-grey'>Share important information with members of your Community about this occasion.</p>) : (<></>)}
                 </Field>
               </div>
             ) : activeTab === 'When' ? (
@@ -770,7 +769,7 @@ export default function CreateNewActivity(props) {
                           placeholder='Example: 456 Walnut Ave, New York, NY'
                         />
                       </Control>
-                      <p style={{ fontSize: '80%', color: footNoteColor }}>
+                      <p style={{ fontSize: '80%'}} className='has-text-grey'>
                         The system will try to automatically display directions to the specified address(es) specified.
                         For best results, please use this format: Address, City, State all on one line.
                       </p>
@@ -787,7 +786,7 @@ export default function CreateNewActivity(props) {
                           }
                         />
                       </Control>
-                      <p style={{ fontSize: '80%', color: footNoteColor }}>
+                      <p style={{ fontSize: '80%'}} className='has-text-grey'>
                         The system will try to automatically display directions to the specified address(es) specified.
                         For best results, please use this format: Address, City, State all on one line.
                       </p>
@@ -832,7 +831,7 @@ export default function CreateNewActivity(props) {
                               />
                             </Control>
                           </Field>
-                          <p style={{ fontSize: '80%', color: footNoteColor }}>
+                          <p style={{ fontSize: '80%'}} className='has-text-grey'>
                             Optional. The estimated time for a Volunteer to complete this task. This information is used for Activity Status Reports.
                           </p>
                         </Columns.Column>

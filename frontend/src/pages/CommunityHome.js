@@ -11,8 +11,8 @@ import Heading from 'react-bulma-components/lib/components/heading'
 import CommunityNavbar from '../components/communityNavbar'
 import Button from 'react-bulma-components/lib/components/button'
 import { Select, Control } from 'react-bulma-components/lib/components/form'
+import Image from 'react-bulma-components/lib/components/image';
 
-import CheckboxField from '../components/checkboxfield'
 import CustomSections from '../components/customSections'
 
 export default function CommunityHome(props) {
@@ -134,42 +134,43 @@ export default function CommunityHome(props) {
 
   useEffect(() => {
     axios
-        .get('/community-people/', {
-            headers: {
-                'Authorization': `JWT ${localStorage.getItem('token')}`,
-                'Content-Type': 'application/json',
-            },
-            params: JSON.stringify({
-                user: localStorage.getItem('email'),
-                community: localStorage.getItem('community-name')
-            })
+      .get('/community-people/', {
+        headers: {
+          'Authorization': `JWT ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json',
+        },
+        params: JSON.stringify({
+          user: localStorage.getItem('email'),
+          community: localStorage.getItem('community-name')
         })
-        .then(
-            (response) => {
-                localStorage.setItem('user-role', response.data.user_role) 
-            },
-            (error) => {
-                console.log(error)
-            }
-        )
+      })
+      .then(
+        (response) => {
+          localStorage.setItem('user-role', response.data.user_role)
+        },
+        (error) => {
+          console.log(error)
+        }
+      )
   }, [])
-  
+
 
   return (
     <div>
       <CommunityNavbar />
       <Container style={containerStyle}>
-        <Container style={{ margin: '5% auto', textAlign: 'center' }}>
-          <Heading size={2}>{name}</Heading>
-        </Container>
         <Columns isMultiline={true}>
           <Columns.Column size={3}>
+            <Image
+              src="https://vignette.wikia.nocookie.net/project-pokemon/images/4/47/Placeholder.png/revision/latest?cb=20170330235552&format=original" size='3by2'
+              style={{ marginBottom: '7%' }}
+            />
             <Heading size={6}>About</Heading>
             <p>{description}</p>
             <br />
             <Heading size={6}>Community Leaders</Heading>
             {coordinators.map((c) => (
-              <div style={{ marginBottom: '10px' }}>
+              <div style={{ marginBottom: '1%' }}>
                 <p style={{ fontWeight: 'bold' }}>{c.label}</p>
                 <p style={linkStyle}>
                   <a
@@ -214,13 +215,11 @@ export default function CommunityHome(props) {
               </Button>
             </Control>
             <br />
-
-            <div class='rbc-calendar'>
+            <div class='rbc-calendar' style={{ height: '50%', marginBottom: '3%' }}>
               <Calendar
                 localizer={localizer}
                 toolbar={false}
                 date={date}
-                style={{ height: '400px' }}
                 onNavigate={(date) => setDate(date)}
                 events={processEvents(events)}
                 startAccessor='start_time'
@@ -243,18 +242,32 @@ export default function CommunityHome(props) {
               </Button>
             </Link>
             <a href='https://www.heretoserve.org/'
-               target='_blank'
-               rel='noopener noreferrer'
+              target='_blank'
+              rel='noopener noreferrer'
             >
-              <Button color='primary' className='is-fullwidth' style={{marginTop: '3%'}}>
+              <Button
+                className='is-primary is-inverted'
+                style={{
+                  marginTop: '1rem',
+                  boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)',
+                }}
+                fullwidth={true}
+              >
                 Here to Serve Website
               </Button>
             </a>
-            <a href='https://heretoserve.salsalabs.org/secureonlinedonationform/index.html' 
-               target='_blank'
-               rel='noopener noreferrer'
+            <a href='https://heretoserve.salsalabs.org/secureonlinedonationform/index.html'
+              target='_blank'
+              rel='noopener noreferrer'
             >
-              <Button color='primary' className='is-fullwidth' style={{marginTop: '3%', marginBottom: '3%'}}>
+              <Button
+                className='is-primary is-inverted'
+                style={{
+                  marginTop: '1rem',
+                  boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)',
+                }}
+                fullwidth={true}
+              >
                 Donate Now!
               </Button>
             </a>

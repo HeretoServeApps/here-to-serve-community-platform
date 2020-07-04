@@ -7,7 +7,6 @@ import axios from 'axios'
 
 import Button from 'react-bulma-components/lib/components/button'
 import Container from 'react-bulma-components/lib/components/container'
-import Dropdown from 'react-bulma-components/lib/components/dropdown'
 import Columns from 'react-bulma-components/lib/components/columns'
 import Heading from 'react-bulma-components/lib/components/heading'
 import {
@@ -21,7 +20,7 @@ import CheckboxField from '../components/checkboxfield'
 import CommunityNavbar from '../components/communityNavbar'
 import CustomSections from '../components/customSections'
 
-export default function CalendarPage(props) {
+export default function CalendarPage() {
   var containerStyle = {
     margin: '5% 10% 0% 0%',
     maxWidth: '100%',
