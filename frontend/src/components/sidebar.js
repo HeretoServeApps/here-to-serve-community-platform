@@ -64,7 +64,7 @@ const SideBar = (props) => {
               <p className='sidebar'>Email Members</p>
             </Link>
 
-            <Link to='#'>
+            <Link to='/edit-community'>
               <p className='sidebar'>Edit Community Information</p>
             </Link>
           </Box>
