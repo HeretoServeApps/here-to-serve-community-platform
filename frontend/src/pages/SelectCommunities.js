@@ -20,26 +20,15 @@ export default function SelectCommunities() {
         borderRadius: '1rem'
     }
 
-    const [communities, setCommunities] = useState([])
+    const [newCommunities, setNewCommunities] = useState([])
     const token = localStorage.getItem('token')
 
     useEffect(() => {
-        axios
-            .get('/community', {
-                headers: {
-                    Authorization: `JWT ${token}`,
-                },
-            })
-            .then(
-                (response) => {
-                    console.log(response.data)
-                    setCommunities(response.data)
-                },
-                (error) => {
-                    console.log(error)
-                }
-            )
-    }, [token])
+        axios.get('/communities/')
+          .then((response) => {
+            setNewCommunities(response.data)
+          })
+      }, [])    
 
     return(
         <Container style={containerStyle}>
@@ -48,13 +37,13 @@ export default function SelectCommunities() {
                 <thead>
                     <tr>
                         <th>Name</th>
-                        <th>Join</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
-                    {communities.map((c) => (
+                    {newCommunities.map((c) => (
                         <tr>
-                            <td>{c.name}</td>
+                            <td>{c}</td>
                              <td><CheckboxField text={''}/></td>
                         </tr>
                     ))}
@@ -62,7 +51,7 @@ export default function SelectCommunities() {
             </Table>
             <Link to='/my-communities'>
                 <Button style={{ marginTop: '1rem', marginBottom: '1rem' }} color='primary' fullwidth={true}>
-                    DONE
+                    JOIN SELECTED COMMUNITIES
                 </Button>
             </Link>
         </Container>

@@ -7,7 +7,6 @@ import axios from 'axios'
 
 import Button from 'react-bulma-components/lib/components/button'
 import Container from 'react-bulma-components/lib/components/container'
-import Dropdown from 'react-bulma-components/lib/components/dropdown'
 import Columns from 'react-bulma-components/lib/components/columns'
 import Heading from 'react-bulma-components/lib/components/heading'
 import {
@@ -21,7 +20,7 @@ import CheckboxField from '../components/checkboxfield'
 import CommunityNavbar from '../components/communityNavbar'
 import CustomSections from '../components/customSections'
 
-export default function CalendarPage(props) {
+export default function CalendarPage() {
   var containerStyle = {
     margin: '5% 10% 0% 0%',
     maxWidth: '100%',
@@ -84,7 +83,7 @@ export default function CalendarPage(props) {
   const localizer = momentLocalizer(moment)
 
   // filter parameters
-  const [selectedMember, setSelectedMember] = useState('')
+  const [selectedMember, setSelectedMember] = useState('All')
   const [members, setMembers] = useState([{ first_name: 'All', last_name: '' }])
   const [selectedCategories, setSelectedCategories] = useState([])
   const [originalEvents, setOriginalEvents] = useState([])
@@ -125,7 +124,7 @@ export default function CalendarPage(props) {
     setIsSelectingEvent(false)
   })
 
-  // Filter by category function
+  // Filter by activity function
   function addSelectedCategories(category, isChecked) {
     if (isChecked) {
       var newSelectedCategories = selectedCategories.concat(category)

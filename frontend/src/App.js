@@ -3,6 +3,7 @@ import { Route, Switch, BrowserRouter as Router } from 'react-router-dom'
 import axios from 'axios'
 
 import Header from './components/header'
+import AppFooter from './components/footer'
 import PrivateRoute from './components/privateroute'
 
 import Register from './pages/Register'
@@ -16,16 +17,17 @@ import ForgotPassword from './pages/ForgotPassword'
 import ResetPassword from './pages/ResetPassword'
 import AccountSettings from './pages/AccountSettings'
 import EmailSettings from './pages/EmailSettings'
-import CommunityHome from './pages/CommunityHome'
 import CalendarPage from './pages/CalendarPage'
 import ForgotPasswordConfirm from './pages/ForgotPasswordConfirm.js'
 import ResetPasswordConfirm from './pages/ResetPasswordConfirm.js'
 import CreateNewActivity from './pages/CreateNewActivity'
 import Announcements from './pages/Announcements'
 import CreateAnnouncement from './pages/CreateAnnouncement'
-import CommunityPeople from './pages/CommunityPeople'
 import OneCommunityMember from './pages/CommunityOneMember'
 import CommunityAddMembers from './pages/CommunityAddMember'
+import CommunityEdit from './pages/CommunityEdit'
+import CommunityPeople from './pages/CommunityPeople'
+import CommunityHome from './pages/CommunityHome'
 import WaysToHelp from './pages/WaysToHelp'
 import WellWishes from './pages/WellWishes'
 import CreateCustomSection from './pages/CreateCustomSection'
@@ -279,7 +281,13 @@ export default function App() {
             component={CustomGeneral}
           />
           <PrivateRoute path='/photo-gallery' exact component={PhotoGallery} />
+          <PrivateRoute
+            path='/edit-community'
+            exact
+            component={CommunityEdit}
+          />
         </Switch>
+        <AppFooter />
       </Router>
     </div>
   )
