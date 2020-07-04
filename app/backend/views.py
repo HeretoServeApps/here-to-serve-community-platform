@@ -213,7 +213,6 @@ class PasswordResetConfirmView(generics.GenericAPIView):
 
 
 class CommunityCoordinatorsList(generics.ListAPIView):
-
     def get(self, request, community_id):
         user_ids = CommunityUserRole.objects.filter(community=community_id, role__in=['COORDINATOR', 'COMM_LEADER']).values_list('user', flat=True)
         users = User.objects.filter(id__in=user_ids).values("id", "first_name", "last_name", "email", "phone_number_1")
@@ -222,12 +221,60 @@ class CommunityCoordinatorsList(generics.ListAPIView):
 
 
 class ActivityViewSet(viewsets.ViewSet):
+    permission_classes = (permissions.IsAuthenticated, )
+
+    def create(self, request):
+        data = request.data
+        dates = data.pop('dates')
+        start_time = datetime.strptime(data.pop('start_time'), '%I:%M %p').time()
+        end_time = datetime.strptime(data.pop('end_time'), '%I:%M %p').time()
+        pickup_location = data.pop('pickup_location')
+        destination_location = data.pop('destination_location')
+        location = data.pop('location')
+        dietary_restrictions = data.pop('dietary_restrictions')
+        coordinators = data.pop('coordinators')
+        data['event_batch'] = uuid.uuid4()
+
+        # creating a new <Type>Activity object for each date selected
+        activities = []
+        for date in dates:
+            date = datetime.strptime(date, '%Y-%m-%dT%H:%M:%S.%fZ')
+            data['start_time'] = datetime.combine(date, start_time).isoformat()
+            data['end_time'] = datetime.combine(date, end_time).isoformat()
+            new_activity = {'activity': data.copy()}
+            # adding the type-specific fields based on activity_type
+            if(data['activity_type'] == 'Giving Rides'):
+                new_activity['pickup_location'] = pickup_location
+                new_activity['destination_location'] = destination_location
+            elif(data['activity_type'] == 'Preparing Meals'):
+                new_activity['delivery_location'] = location
+                new_activity['dietary_restrictions'] = json.dumps(dietary_restrictions)
+            else:
+                new_activity['location'] = location
+            activities.append(new_activity)
+
+        if(request.data['activity_type'] == 'Giving Rides'):
+            serializer = RideActivitySerializer(data=activities, many=True)
+        elif(request.data['activity_type'] == 'Preparing Meals'):
+            serializer = MealActivitySerializer(data=activities, many=True)
+        else:
+            serializer = EventActivitySerializer(data=activities, many=True)
+
+        if serializer.is_valid():
+            created_instances = serializer.save()
+            # once the activities have been created in the database, add the selected coordinators for the coordinator ManyToMany field
+            for specific_activity in created_instances:
+                specific_activity.activity.coordinators.add(*User.objects.filter(id__in=coordinators))
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ActivityList(APIView):
     permission_classes = (permissions.IsAuthenticated,)
 
-    def list(self, request):
-        user_comms = request.user.communityuserrole_set.values_list("community", flat=True)
-        queryset = Activity.objects.filter(community__in=user_comms)
-        serializer = ActivitySerializer(queryset, many=True)
+    def get(self, request, community_id):
+        activities = Activity.objects.filter(community=community_id)
+        serializer = ActivitySerializer(activities, many=True)
 
         for activity in serializer.data:
             # Depending on the type of activity, we add necessary fields to the result
@@ -285,68 +332,8 @@ class ActivityViewSet(viewsets.ViewSet):
                 else:
                     activity['actual_hours_per_volunteer'] = 0
                     activity['actual_minutes_per_volunteer'] = 0
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
-
-    def retrieve(self, request, pk=None):
-        queryset = Activity.objects.all()
-        activity = get_object_or_404(queryset, pk=pk)
-        if(activity.activity_type == 'Giving Rides'):
-            activity = get_object_or_404(RideActivity.objects.all(), pk=pk)
-            serializer = RideActivitySerializer(activity)
-        elif(activity.activity_type == 'Preparing Meals'):
-            activity = get_object_or_404(MealActivity.objects.all(), pk=pk)
-            serializer = MealActivitySerializer(activity)
-        else:
-            activity = get_object_or_404(EventActivity.objects.all(), pk=pk)
-            serializer = EventActivitySerializer(activity)
-
-        return Response(serializer.data)
-
-    def create(self, request):
-        data = request.data
-        dates = data.pop('dates')
-        start_time = datetime.strptime(data.pop('start_time'), '%I:%M %p').time()
-        end_time = datetime.strptime(data.pop('end_time'), '%I:%M %p').time()
-        pickup_location = data.pop('pickup_location')
-        destination_location = data.pop('destination_location')
-        location = data.pop('location')
-        dietary_restrictions = data.pop('dietary_restrictions')
-        coordinators = data.pop('coordinators')
-        data['event_batch'] = uuid.uuid4()
-
-        # creating a new <Type>Activity object for each date selected
-        activities = []
-        for date in dates:
-            date = datetime.strptime(date, '%Y-%m-%dT%H:%M:%S.%fZ')
-            data['start_time'] = datetime.combine(date, start_time).isoformat()
-            data['end_time'] = datetime.combine(date, end_time).isoformat()
-            new_activity = {'activity': data.copy()}
-            # adding the type-specific fields based on activity_type
-            if(data['activity_type'] == 'Giving Rides'):
-                new_activity['pickup_location'] = pickup_location
-                new_activity['destination_location'] = destination_location
-            elif(data['activity_type'] == 'Preparing Meals'):
-                new_activity['delivery_location'] = location
-                new_activity['dietary_restrictions'] = json.dumps(dietary_restrictions)
-            else:
-                new_activity['location'] = location
-            activities.append(new_activity)
-
-        if(request.data['activity_type'] == 'Giving Rides'):
-            serializer = RideActivitySerializer(data=activities, many=True)
-        elif(request.data['activity_type'] == 'Preparing Meals'):
-            serializer = MealActivitySerializer(data=activities, many=True)
-        else:
-            serializer = EventActivitySerializer(data=activities, many=True)
-
-        if serializer.is_valid():
-            created_instances = serializer.save()
-            # once the activities have been created in the database, add the selected coordinators for the coordinator ManyToMany field
-            for specific_activity in created_instances:
-                specific_activity.activity.coordinators.add(*User.objects.filter(id__in=coordinators))
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class AnnouncementViewSet(viewsets.ModelViewSet):
     queryset = Announcement.objects.all().order_by('name')

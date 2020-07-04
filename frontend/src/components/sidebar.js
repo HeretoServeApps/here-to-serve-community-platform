@@ -9,7 +9,7 @@ const SideBar = (props) => {
   return (
     <div>
       <CustomSections />
-      <Menu color='white' maxWidth='20%'>
+      <Menu color='white'>
         <Menu.List>
           <h1>
             <strong>Manage Calendar</strong>

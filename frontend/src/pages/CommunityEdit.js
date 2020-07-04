@@ -29,6 +29,7 @@ export default function CommunityEdit() {
     const [communityName, setCommunityName] = useState()
     const [communityDescription, setCommunityDescription] = useState()
     const [communityZipcode, setCommunityZipcode] = useState()
+    const [homePageHighlight, setHomePageHighlight] = useState()
 
     useEffect(() => {
         axios
@@ -142,7 +143,7 @@ export default function CommunityEdit() {
                         <Field>
                             <Label>Home Page Highlight</Label>
                             <Control>
-                                <Select name='Home Page Highlight' value='Calendar'>
+                                <Select name='Home Page Highlight' value='Calendar' onChange={(e) => setHomePageHighlight(e.target.value)}>
                                     <option>Calendar</option>
                                     <option>Family Updates</option>
                                     <option>Ways to Help</option>

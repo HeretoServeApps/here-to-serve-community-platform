@@ -12,11 +12,11 @@ import CommunityNavbar from '../components/communityNavbar'
 import Button from 'react-bulma-components/lib/components/button'
 import { Select, Control } from 'react-bulma-components/lib/components/form'
 import Image from 'react-bulma-components/lib/components/image';
+import Message from 'react-bulma-components/lib/components/message';
 
 import CustomSections from '../components/customSections'
 
 export default function CommunityHome(props) {
-  const [name, setName] = useState('')
   const [description, setDescription] = useState('')
   const token = localStorage.getItem('token')
   const [coordinators, setCoordinators] = useState([])
@@ -27,6 +27,8 @@ export default function CommunityHome(props) {
   const localizer = momentLocalizer(moment)
 
   const [events, setEvents] = useState([])
+
+  const [showWelcomeCard, setShowWelcomeCard] = useState(true)
 
   const years = [...Array(15).keys()].map((i) => i + 2020)
   const months = [
@@ -82,7 +84,6 @@ export default function CommunityHome(props) {
       })
       .then(
         (response) => {
-          setName(response.data[0].name)
           setDescription(response.data[0].description)
         },
         (error) => {
@@ -116,7 +117,7 @@ export default function CommunityHome(props) {
 
   useEffect(() => {
     axios
-      .get('/activity', {
+      .get(`/activities/${localStorage.getItem('community-id')}`, {
         headers: {
           Authorization: `JWT ${localStorage.getItem('token')}`,
         },
@@ -155,6 +156,36 @@ export default function CommunityHome(props) {
   }, [])
 
 
+  const WelcomeCardStaff = (
+    <Message color='primary'>
+      <Message.Header>
+        Welcome!
+        <Button remove onClick={() => setShowWelcomeCard(false)}/>
+      </Message.Header>
+      <Message.Body>
+        Here are our top <b>3 tips</b> for getting started:<br />
+        1. <Link to='/add-people'>Invite</Link> members to join this community<br />
+        2. Create a <Link to='/create-new-activity'>Calendar Activity</Link> to let members volunteer<br />
+        3. Add an <Link to='/create-announcement'>Update</Link> to keep friends and family in the loop
+      </Message.Body>
+    </Message>
+  )
+
+  const WelcomeCardMember = (
+    <Message color='primary'>
+      <Message.Header>
+        Welcome!
+        <Button remove onClick={() => setShowWelcomeCard(false)}/>
+      </Message.Header>
+      <Message.Body>
+        Here are our top <strong>3 tips</strong> for getting started:<br />
+        1. <Link to='/add-people'>Tell your friends</Link> to join this community<br />
+        2. View your <Link to='/calendar'>calendar</Link> activities<br />
+        3. View <Link to='/announcements'>updates</Link> recently made to this care community
+      </Message.Body>
+    </Message>
+  )
+
   return (
     <div>
       <CommunityNavbar />
@@ -191,6 +222,14 @@ export default function CommunityHome(props) {
             </Button>
           </Columns.Column>
           <Columns.Column size={7}>
+            {showWelcomeCard ?
+              (
+                localStorage.getItem('is-staff') === 'true'?
+                  WelcomeCardStaff : WelcomeCardMember
+              ) 
+              :
+              (<></>)
+            }
             <Control>
               <Select
                 value={selectedMonth}

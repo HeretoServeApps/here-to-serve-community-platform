@@ -219,7 +219,7 @@ export default function CalendarPage() {
 
   useEffect(() => {
     axios
-      .get('/activity', {
+      .get(`/activities/${localStorage.getItem('community-id')}`, {
         headers: {
           Authorization: `JWT ${localStorage.getItem('token')}`,
         },
@@ -516,7 +516,7 @@ export default function CalendarPage() {
             <div class='rbc-calendar'>
               <Calendar
                 localizer={localizer}
-                style={{ height: 600, 'margin-top': 15 }}
+                style={{ height: 600 }}
                 date={date}
                 onNavigate={(date) => setDate(date)}
                 events={events}
