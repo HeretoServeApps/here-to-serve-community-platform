@@ -419,7 +419,7 @@ export default function CalendarPage() {
                   addSelectedStatus('Help needed', e.target.checked)
                 }
               />
-              <span class='dot-green'></span>Help needed
+              <span className='dot-green'></span>Help needed
             </div>
             <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
               <Checkbox
@@ -428,14 +428,14 @@ export default function CalendarPage() {
                   addSelectedStatus('Needs met', e.target.checked)
                 }
               />
-              <span class='dot-blue'></span>Needs met
+              <span className='dot-blue'></span>Needs met
             </div>
             <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
               <Checkbox
                 style={{ marginRight: '10px' }}
                 onClick={(e) => addSelectedStatus('Occasion', e.target.checked)}
               />
-              <span class='dot-orange'></span>Occasion
+              <span className='dot-orange'></span>Occasion
             </div>
             <Heading size={6} style={{ marginTop: '10%' }}>
               Member
@@ -445,7 +445,7 @@ export default function CalendarPage() {
                 <Select
                   name='member'
                   value={selectedMember}
-                  fullwidth={true}
+                  fullwidth='true'
                   onChange={(e) => filterMember(e.target.value)}
                 >
                   {members.map((m) => (
@@ -513,7 +513,7 @@ export default function CalendarPage() {
                 </Link>
               </Columns.Column>
             </Columns>
-            <div class='rbc-calendar'>
+            <div className='rbc-calendar'>
               <Calendar
                 localizer={localizer}
                 style={{ height: 600 }}

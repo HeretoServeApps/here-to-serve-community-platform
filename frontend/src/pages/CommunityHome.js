@@ -284,7 +284,7 @@ export default function CommunityHome(props) {
               </Button>
             </Control>
             <br />
-            <div class='rbc-calendar' style={{ height: '50%', marginBottom: '3%' }}>
+            <div className='rbc-calendar' style={{ height: '50%', marginBottom: '3%' }}>
               <Calendar
                 localizer={localizer}
                 toolbar={false}
