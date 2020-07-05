@@ -94,7 +94,7 @@ export default function CommunityHome(props) {
         (response) => {
           setDescription(response.data[0].description)
           setShowLeaders(response.data[0].display_leaders_on_home_page)
-          if(response.data[0].home_page_high_light === 'Calendar') {
+          if (response.data[0].home_page_high_light === 'Calendar') {
             setDisplayCalendar(true)
           } else if (response.data[0].home_page_high_light === 'Family Updates') {
             setDisplayFamilyUpdates(true)
@@ -154,7 +154,6 @@ export default function CommunityHome(props) {
       )
   }, [])
 
-
   useEffect(() => {
     axios
       .get('/community-people/', {
@@ -208,6 +207,54 @@ export default function CommunityHome(props) {
     </Message>
   )
 
+  const calendar = (
+    <div>
+      <Control>
+        <Select
+          value={selectedMonth}
+          onChange={(e) => setSelectedMonth(e.target.value)}
+          style={{ marginRight: '10px' }}
+        >
+          {months.map((month) => (
+            <option value={month}>{month}</option>
+          ))}
+        </Select>
+        <Select
+          value={selectedYear}
+          onChange={(e) => setSelectedYear(e.target.value)}
+          style={{ marginRight: '10px' }}
+        >
+          {years.map((year) => (
+            <option value={year}>{year}</option>
+          ))}
+        </Select>
+        <Button onClick={updateDate} color='info'>
+          Go
+        </Button>
+      </Control>
+      <br />
+      <div className='rbc-calendar' style={{ height: '50%', marginBottom: '3%' }}>
+        <Calendar
+          localizer={localizer}
+          toolbar={false}
+          date={date}
+          onNavigate={(date) => setDate(date)}
+          events={processEvents(events)}
+          startAccessor='start_time'
+          endAccessor='end_time'
+          allDayAccessor='all_day'
+          popup={true}
+          eventPropGetter={(event) => ({
+            style: {
+              backgroundColor: event.color,
+            },
+          })}
+        />
+      </div>
+    </div>
+  )
+
+
   return (
     <div>
       <CommunityNavbar />
@@ -260,48 +307,12 @@ export default function CommunityHome(props) {
               (<></>)
             }
             {/* What to show depends on what the user specified in edit community */}
-            <Control>
-              <Select
-                value={selectedMonth}
-                onChange={(e) => setSelectedMonth(e.target.value)}
-                style={{ marginRight: '10px' }}
-              >
-                {months.map((month) => (
-                  <option value={month}>{month}</option>
-                ))}
-              </Select>
-              <Select
-                value={selectedYear}
-                onChange={(e) => setSelectedYear(e.target.value)}
-                style={{ marginRight: '10px' }}
-              >
-                {years.map((year) => (
-                  <option value={year}>{year}</option>
-                ))}
-              </Select>
-              <Button onClick={updateDate} color='info'>
-                Go
-              </Button>
-            </Control>
-            <br />
-            <div className='rbc-calendar' style={{ height: '50%', marginBottom: '3%' }}>
-              <Calendar
-                localizer={localizer}
-                toolbar={false}
-                date={date}
-                onNavigate={(date) => setDate(date)}
-                events={processEvents(events)}
-                startAccessor='start_time'
-                endAccessor='end_time'
-                allDayAccessor='all_day'
-                popup={true}
-                eventPropGetter={(event) => ({
-                  style: {
-                    backgroundColor: event.color,
-                  },
-                })}
-              />
-            </div>
+            {displayCalendar ?
+              (calendar)
+              :
+              (<></>)
+            }
+
           </Columns.Column>
           <Columns.Column size={2}>
             <Link to='/create-new-activity' style={{ color: 'white' }}>
