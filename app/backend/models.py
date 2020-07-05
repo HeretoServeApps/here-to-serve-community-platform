@@ -11,7 +11,6 @@ from tinymce.models import HTMLField
 
 
 class Community(models.Model):
-    # defaults were just for already existing rows, no real meaning
     name = models.CharField(max_length=128, default='')
     is_closed = models.CharField(default='false', max_length=5)
     description = models.CharField(max_length=256, default='')
@@ -19,13 +18,28 @@ class Community(models.Model):
     country = models.CharField(max_length=128, default='US')
     ways_to_help = HTMLField(default='')
 
+
+    # Choices for homepage highlights
+    HOMEPAGE_HIGHLIGH_CHOICES = [
+        ('Calendar', 'Calendar'),
+        ('Family Updates', 'Family Updates'),
+        ('Ways to Help', 'Ways to Help'),
+        ('Message Board', 'Message Board'),
+        ('Photo Gallery', 'Photo Gallery'),
+        ('Well Wishes', 'Well Wishes')
+    ]
+    home_page_highlight = models.CharField(max_length=28, blank=False, choices=HOMEPAGE_HIGHLIGH_CHOICES, default='Calendar')
+    display_leaders_on_home_page = models.BooleanField(blank=False, default=True)
+
     def __str__(self):
         return self.name
+
 
 class Resource(models.Model):
     name = models.CharField(max_length=128, blank=False)
     link = models.URLField(blank=False)
     description = models.CharField(max_length=128, blank=True)
+
 
 class CustomSection(models.Model):
     # Choices for type
