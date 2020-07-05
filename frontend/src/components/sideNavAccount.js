@@ -6,7 +6,7 @@ import Menu from 'react-bulma-components/lib/components/menu';
 const SideNavAccount = (props) => {
   return (
     <div>
-        <Menu color='white' maxWidth='50%'>
+        <Menu color='white'>
             <Menu.List>
                 <Menu.List.Item>
                     <Link to='/account-settings'>General Account Settings</Link>

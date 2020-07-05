@@ -12,7 +12,8 @@ from django.utils.http import urlsafe_base64_decode
 class CommunitySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Community
-        fields = ('id', 'name', 'is_closed', 'description', 'zipcode', 'country', 'ways_to_help')
+        fields = ('id', 'name', 'is_closed', 'description', 'zipcode', 'country', 'ways_to_help',
+                  'display_leaders_on_home_page', 'home_page_highlight')
 
 
 class CustomSectionSerializer(serializers.ModelSerializer):

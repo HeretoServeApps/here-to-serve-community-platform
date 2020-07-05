@@ -29,6 +29,14 @@ export default function CommunityHome(props) {
   const [events, setEvents] = useState([])
 
   const [showWelcomeCard, setShowWelcomeCard] = useState(true)
+  const [showLeaders, setShowLeaders] = useState(true)
+
+  const [displayCalendar, setDisplayCalendar] = useState(true)
+  const [displayFamilyUpdates, setDisplayFamilyUpdates] = useState(false)
+  const [displayWaysToHelp, setDisplayWaystoHelp] = useState(false)
+  const [messageBoard, setDisplayMessageBoard] = useState(false)
+  const [photoGallery, setDisplayPhotoGallery] = useState(false)
+  const [wellWishes, setDisplayWellWishes] = useState(false)
 
   const years = [...Array(15).keys()].map((i) => i + 2020)
   const months = [
@@ -85,6 +93,20 @@ export default function CommunityHome(props) {
       .then(
         (response) => {
           setDescription(response.data[0].description)
+          setShowLeaders(response.data[0].display_leaders_on_home_page)
+          if(response.data[0].home_page_high_light === 'Calendar') {
+            setDisplayCalendar(true)
+          } else if (response.data[0].home_page_high_light === 'Family Updates') {
+            setDisplayFamilyUpdates(true)
+          } else if (response.data[0].home_page_high_light === 'Ways to Help') {
+            setDisplayWaystoHelp(true)
+          } else if (response.data[0].home_page_high_light === 'Message Board') {
+            setDisplayMessageBoard(true)
+          } else if (response.data[0].home_page_high_light === 'Photo Gallery') {
+            setDisplayPhotoGallery(true)
+          } else if (response.data[0].home_page_high_light === 'Well Wishes') {
+            setDisplayWellWishes(true)
+          }
         },
         (error) => {
           console.log(error)
@@ -160,7 +182,7 @@ export default function CommunityHome(props) {
     <Message color='primary'>
       <Message.Header>
         Welcome!
-        <Button remove onClick={() => setShowWelcomeCard(false)}/>
+        <Button remove onClick={() => setShowWelcomeCard(false)} />
       </Message.Header>
       <Message.Body>
         Here are our top <b>3 tips</b> for getting started:<br />
@@ -175,7 +197,7 @@ export default function CommunityHome(props) {
     <Message color='primary'>
       <Message.Header>
         Welcome!
-        <Button remove onClick={() => setShowWelcomeCard(false)}/>
+        <Button remove onClick={() => setShowWelcomeCard(false)} />
       </Message.Header>
       <Message.Body>
         Here are our top <strong>3 tips</strong> for getting started:<br />
@@ -199,22 +221,29 @@ export default function CommunityHome(props) {
             <Heading size={6}>About</Heading>
             <p>{description}</p>
             <br />
-            <Heading size={6}>Community Leaders</Heading>
-            {coordinators.map((c) => (
-              <div style={{ marginBottom: '1%' }}>
-                <p style={{ fontWeight: 'bold' }}>{c.label}</p>
-                <p style={linkStyle}>
-                  <a
-                    href={'mailto:' + c.email}
-                    style={{ color: '#2C8595', fontWeight: '500' }}
-                  >
-                    {c.email}
-                  </a>
-                </p>
-                <p style={{ fontSize: '0.8em' }}>{c.phone}</p>
+
+            {showLeaders ?
+              (<div><Heading size={6}>Community Leaders</Heading>
+                {coordinators.map((c) => (
+                  <div style={{ marginBottom: '1%' }}>
+                    <p style={{ fontWeight: 'bold' }}>{c.label}</p>
+                    <p style={linkStyle}>
+                      <a
+                        href={'mailto:' + c.email}
+                        style={{ color: '#2C8595', fontWeight: '500' }}
+                      >
+                        {c.email}
+                      </a>
+                    </p>
+                    <p style={{ fontSize: '0.8em' }}>{c.phone}</p>
+                  </div>
+                ))}<br />
               </div>
-            ))}
-            <br />
+              )
+              :
+              (<></>)
+            }
+
             <Button color='primary'>
               <Link to='/edit-community' style={{ color: 'white' }}>
                 Edit Community
@@ -224,12 +253,13 @@ export default function CommunityHome(props) {
           <Columns.Column size={7}>
             {showWelcomeCard ?
               (
-                localStorage.getItem('is-staff') === 'true'?
+                localStorage.getItem('is-staff') === 'true' ?
                   WelcomeCardStaff : WelcomeCardMember
-              ) 
+              )
               :
               (<></>)
             }
+            {/* What to show depends on what the user specified in edit community */}
             <Control>
               <Select
                 value={selectedMonth}
