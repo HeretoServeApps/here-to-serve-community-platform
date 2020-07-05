@@ -26,9 +26,12 @@ export default function CommunityEdit() {
         maxWidth: '100%',
     }
 
-    const [communityName, setCommunityName] = useState()
-    const [communityDescription, setCommunityDescription] = useState()
-    const [communityZipcode, setCommunityZipcode] = useState()
+    const [communityName, setCommunityName] = useState('')
+    const [communityDescription, setCommunityDescription] = useState('')
+    const [communityZipcode, setCommunityZipcode] = useState('')
+    const [homePageHighlight, setHomePageHighlight] = useState('')
+    const [showLeaders, setShowLeaders] = useState(true)
+    const [communityTimezone, setCommunityTimezone] = useState('')
 
     useEffect(() => {
         axios
@@ -47,6 +50,8 @@ export default function CommunityEdit() {
                     setCommunityName(response.data[0].name)
                     setCommunityDescription(response.data[0].description)
                     setCommunityZipcode(response.data[0].zipcode)
+                    setHomePageHighlight(response.data[0].home_page_highlight)
+                    setShowLeaders(response.data[0].display_coordinators_on_home_page)
                 },
                 (error) => {
                     console.log(error)
@@ -123,8 +128,8 @@ export default function CommunityEdit() {
                         <Field>
                             <Label>Community Time Zone</Label>
                             <Control>
-                                <Select name='Timezone' value='Calendar'>
-                                    <option>Calendar</option>
+                                <Select name='Timezone' value='Pacific Time' onChange={(e) => setCommunityTimezone(e.target.value)}>
+                                    <option>Pacific Time</option>
                                 </Select>
                             </Control>
                         </Field>
@@ -142,7 +147,7 @@ export default function CommunityEdit() {
                         <Field>
                             <Label>Home Page Highlight</Label>
                             <Control>
-                                <Select name='Home Page Highlight' value='Calendar'>
+                                <Select name='Home Page Highlight' value={homePageHighlight} onChange={(e) => setHomePageHighlight(e.target.value)}>
                                     <option>Calendar</option>
                                     <option>Family Updates</option>
                                     <option>Ways to Help</option>
@@ -156,7 +161,7 @@ export default function CommunityEdit() {
                             <Label>
                                 Show Coordinators on Home Page
                             </Label>
-                            <CheckboxField text={'Display Coordinator list on home page.'} />
+                            <CheckboxField checked={showLeaders} text={'Display Coordinator list on home page.'} onChange={(e) => setShowLeaders(e.target.checked)} />
                             <p style={{ fontSize: '80%' }} className='has-text-grey'>
                                 If checked, Members will see the list of Coordinators under the sections list on your Community home page                            
                             </p>

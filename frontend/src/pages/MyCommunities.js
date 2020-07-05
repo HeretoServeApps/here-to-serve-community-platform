@@ -42,6 +42,7 @@ export default function MyCommunities() {
 
   const containerStyle = {
     margin: '5% auto',
+    fullheight: true
   }
 
   var noteStyle = {
