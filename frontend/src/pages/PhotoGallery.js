@@ -8,12 +8,14 @@ import Heading from 'react-bulma-components/lib/components/heading'
 import CommunityNavbar from '../components/communityNavbar'
 import Button from 'react-bulma-components/lib/components/button'
 import SideBar from '../components/sidebar'
+import Image from 'react-bulma-components/lib/components/image'
 import {
   Textarea,
   Label,
   Field,
   Control,
   InputFile,
+  Input,
 } from 'react-bulma-components/lib/components/form'
 import Icon from 'react-bulma-components/lib/components/icon'
 
@@ -22,6 +24,11 @@ export default function PhotoGallery(props) {
   const [isEditing, setIsEditing] = useState(false)
   const [content, setContent] = useState('')
   const [newContent, setNewContent] = useState('')
+  const [title, setTitle] = useState('')
+  const [file, setFile] = useState('')
+  const [fileURL, setFileURL] = useState('')
+  const [description, setDescription] = useState('')
+  const [photos, setPhotos] = useState('')
 
   var containerStyle = {
     margin: '5% 5%',
@@ -35,6 +42,13 @@ export default function PhotoGallery(props) {
     padding: '20px',
     backgroundColor: 'hsl(0, 0%, 96%)',
     borderRadius: '10px',
+  }
+
+  var formContainerStyle = {
+    padding: '5%',
+    border: '1px solid hsl(0, 0%, 86%)',
+    borderRadius: '10px',
+    marginTop: '20px',
   }
 
   useEffect(() => {
@@ -60,8 +74,31 @@ export default function PhotoGallery(props) {
       )
   }, [token])
 
-  const editWaysToHelp = useCallback(() => {
-    var url = '/edit-ways-to-help/'
+  useEffect(() => {
+    axios
+      .get('/photos', {
+        headers: {
+          Authorization: `JWT ${token}`,
+        },
+        params: {
+          name: localStorage.getItem('community-name'),
+          zipcode: localStorage.getItem('community-zipcode'),
+          is_closed: localStorage.getItem('community-is-closed'),
+        },
+      })
+      .then(
+        (response) => {
+          console.log(response.data)
+          setPhotos(response.data)
+        },
+        (error) => {
+          console.log(error)
+        }
+      )
+  }, [token])
+
+  const addPhoto = useCallback(() => {
+    var url = '/add-photo/'
     var myHeaders = new Headers()
     myHeaders.append('Authorization', `JWT ${localStorage.getItem('token')}`)
 
@@ -69,7 +106,10 @@ export default function PhotoGallery(props) {
     formdata.append('name', localStorage.getItem('community-name'))
     formdata.append('zipcode', localStorage.getItem('community-zipcode'))
     formdata.append('is_closed', localStorage.getItem('community-is-closed'))
-    formdata.append('ways_to_help', newContent)
+    formdata.append('title', title)
+    formdata.append('description', description)
+    formdata.append('photo', file)
+    formdata.append('community', '')
 
     var requestOptions = {
       method: 'POST',
@@ -83,6 +123,8 @@ export default function PhotoGallery(props) {
       .then((result) => window.location.reload())
       .catch((error) => console.log('error', error))
   })
+
+  const showModal = (p) => {}
 
   if (isEditing) {
     return (
@@ -107,28 +149,57 @@ export default function PhotoGallery(props) {
                   </Button>
                 </Columns.Column>
               </Columns>
-              <Label>Select Photo</Label>
-              <Columns>
-                <Columns.Column size={10}>
-                  <Field>
-                    <Control>
-                      <InputFile
-                        icon={<Icon icon='upload' />}
-                        fullwidth={true}
-                      />
-                    </Control>
-                  </Field>
-                </Columns.Column>
-                <Columns.Column size={2}>
-                  <Button
-                    color='primary'
-                    onClick={() => editWaysToHelp()}
-                    fullwidth={true}
-                  >
-                    Finish
-                  </Button>
-                </Columns.Column>
-              </Columns>
+
+              <div style={formContainerStyle}>
+                <Field>
+                  <Label>
+                    Title<span style={{ color: '#F83D34' }}>*</span>
+                  </Label>
+                  <Input
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                  />
+                </Field>
+                <Field>
+                  <Label>
+                    Description<span style={{ color: '#F83D34' }}>*</span>
+                  </Label>
+                  <Textarea
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                  />
+                </Field>
+                <Field>
+                  <Label>
+                    Select Photo<span style={{ color: '#F83D34' }}>*</span>
+                  </Label>
+                  <Control>
+                    <InputFile
+                      value={file}
+                      icon={<Icon icon='upload' />}
+                      fullwidth={true}
+                      onChange={(e) => {
+                        setFileURL(URL.createObjectURL(e.target.files[0]))
+                        setFile(e.target.files[0])
+                      }}
+                    />
+                  </Control>
+                </Field>
+                <Columns>
+                  <Columns.Column size={3}>
+                    <Image
+                      src={
+                        fileURL !== ''
+                          ? fileURL
+                          : 'https://vignette.wikia.nocookie.net/project-pokemon/images/4/47/Placeholder.png/revision/latest?cb=20170330235552&format=original'
+                      }
+                    />
+                  </Columns.Column>
+                </Columns>
+                <Button color='primary' onClick={() => addPhoto()}>
+                  Finish
+                </Button>
+              </div>
             </Columns.Column>
           </Columns>
         </Container>
@@ -159,15 +230,19 @@ export default function PhotoGallery(props) {
                 </Button>
               </Columns.Column>
             </Columns>
-            <div>
-              {content === '' ? (
+            <Columns isMultiline={true}>
+              {photos.length === 0 ? (
                 <p style={noteStyle}>
-                  No content has been posted for this page.
+                  No photos have been added to this gallery.
                 </p>
               ) : (
-                <div dangerouslySetInnerHTML={{ __html: content }}></div>
+                photos.map((p) => (
+                  <Columns.Column size={3} key={p.uuid}>
+                    <Image src={p.photo} onClick={() => showModal(p)} />
+                  </Columns.Column>
+                ))
               )}
-            </div>
+            </Columns>
           </Columns.Column>
         </Columns>
       </Container>

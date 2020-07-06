@@ -23,10 +23,10 @@ from rest_framework.views import APIView
 from .serializers import (
     CommunitySerializer, UserSerializer, CommunityUserRoleSerializer, UserSerializerWithToken, 
     PasswordResetConfirmSerializer, ActivitySerializer, RideActivitySerializer, MealActivitySerializer, UserSerializerWithID,
-    EventActivitySerializer, AnnouncementSerializer, CustomSectionSerializer, WellWishSerializer, DiscussionPostSerializer, ResourceSerializer
+    EventActivitySerializer, AnnouncementSerializer, CustomSectionSerializer, WellWishSerializer, DiscussionPostSerializer, PhotoSerializer
 )
 from .models import (
-    Community, User, CommunityUserRole, Activity, EventActivity, MealActivity, RideActivity, Announcement, CustomSection, WellWish, Resource, DiscussionPost
+    Community, User, CommunityUserRole, Activity, EventActivity, MealActivity, RideActivity, Announcement, CustomSection, WellWish, DiscussionPost, Photo
 )
 
 
@@ -622,3 +622,30 @@ class EditDiscussionPost(APIView):
         post.message = message
         post.save()
         return Response('Edited discussion post')
+
+class PhotoViewSet(viewsets.ModelViewSet):
+    queryset = Photo.objects.all().order_by('title')
+    serializer_class = PhotoSerializer
+
+    def get_queryset(self):
+        name = self.request.query_params.get('name')
+        zipcode = self.request.query_params.get('zipcode')
+        is_closed = self.request.query_params.get('is_closed')
+        comm = Community.objects.filter(name=name, zipcode=zipcode, is_closed=is_closed).values_list('id')
+        photos = Photo.objects.all().filter(community__in=comm)
+        return photos
+
+class AddPhoto(APIView):
+    permission_classes = (permissions.AllowAny,)
+
+    def post(self, request, format=None):
+        name = request.data['name']
+        zipcode = request.data['zipcode']
+        is_closed = request.data['is_closed']
+        community = Community.objects.get(name=name).id
+        request.data['community'] = community
+        serializer = PhotoSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
