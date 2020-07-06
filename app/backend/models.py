@@ -8,6 +8,7 @@ from django.utils import timezone
 from phone_field import PhoneField
 from django.conf import settings
 from tinymce.models import HTMLField
+import uuid
 
 
 class Community(models.Model):
@@ -382,3 +383,12 @@ class EventActivity(models.Model):
     )
     location = models.CharField(max_length=150, blank=True, default='')
 
+class Photo(models.Model):
+    uuid = models.UUIDField(
+        primary_key=True, default=uuid.uuid4, editable=False,
+    )
+    created_at = models.DateTimeField(auto_now_add=True) 
+    title = models.CharField(max_length=100)
+    photo = models.FileField()
+    description = models.CharField(max_length=256, default='')
+    community = models.ForeignKey(Community, on_delete=models.CASCADE, null=False, blank=False)

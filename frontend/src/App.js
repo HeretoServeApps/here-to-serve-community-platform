@@ -33,6 +33,7 @@ import WellWishes from './pages/WellWishes'
 import CreateCustomSection from './pages/CreateCustomSection'
 import ActivityReport from './pages/ActivityReport'
 import CustomGeneral from './pages/CustomGeneral'
+import PhotoGallery from './pages/PhotoGallery'
 
 export default function App() {
   const [loggedIn, setLoggedIn] = useState(
@@ -62,8 +63,8 @@ export default function App() {
           localStorage.setItem('rememberMe', rememberMe)
           localStorage.setItem('email', email)
           localStorage.getItem('token') &&
-            localStorage.getItem('token') !== 'undefined' &&
-            localStorage.getItem('token') !== undefined
+          localStorage.getItem('token') !== 'undefined' &&
+          localStorage.getItem('token') !== undefined
             ? setLoggedIn(true)
             : setLoggedIn(false)
         },
@@ -95,27 +96,27 @@ export default function App() {
       howKnow,
       skillsToOffer
     ) => {
-      var FormData = require('form-data');
-      var data = new FormData();
-      data.append('email', email);
-      data.append('password', password);
-      data.append('first_name', firstName);
-      data.append('last_name', lastName);
-      data.append('address_line_1', addressLine1);
-      data.append('address_line_2', addressLine2);
-      data.append('city', city);
-      data.append('country', country);
-      data.append('state', state);
-      data.append('zipcode', zipcode);
-      data.append('phone_number_1', phoneNumber1);
-      data.append('phone_number_1_type', phoneNumber1Type);
-      data.append('phone_number_2', phoneNumber2);
-      data.append('phone_number_2_type', phoneNumber2Type);
-      data.append('how_learn', howLearn);
-      data.append('how_help', howHelp);
-      data.append('how_know', howKnow);
-      data.append('skills_to_offer', skillsToOffer);
-      data.append('who', who);
+      var FormData = require('form-data')
+      var data = new FormData()
+      data.append('email', email)
+      data.append('password', password)
+      data.append('first_name', firstName)
+      data.append('last_name', lastName)
+      data.append('address_line_1', addressLine1)
+      data.append('address_line_2', addressLine2)
+      data.append('city', city)
+      data.append('country', country)
+      data.append('state', state)
+      data.append('zipcode', zipcode)
+      data.append('phone_number_1', phoneNumber1)
+      data.append('phone_number_1_type', phoneNumber1Type)
+      data.append('phone_number_2', phoneNumber2)
+      data.append('phone_number_2_type', phoneNumber2Type)
+      data.append('how_learn', howLearn)
+      data.append('how_help', howHelp)
+      data.append('how_know', howKnow)
+      data.append('skills_to_offer', skillsToOffer)
+      data.append('who', who)
 
       var config = {
         method: 'post',
@@ -123,8 +124,8 @@ export default function App() {
         headers: {
           'Content-Type': 'application/json',
         },
-        data: data
-      };
+        data: data,
+      }
 
       axios(config)
         .then(function (response) {
@@ -138,8 +139,8 @@ export default function App() {
             : setLoggedIn(false)
         })
         .catch(function (error) {
-          console.log(error);
-        });
+          console.log(error)
+        })
     },
     []
   )
@@ -159,7 +160,7 @@ export default function App() {
     })
       .then((res) => res.json())
       .then(
-        (json) => { },
+        (json) => {},
         (error) => {
           console.log(error)
         }
@@ -279,13 +280,14 @@ export default function App() {
             exact
             component={CustomGeneral}
           />
+          <PrivateRoute path='/photo-gallery' exact component={PhotoGallery} />
           <PrivateRoute
             path='/edit-community'
             exact
             component={CommunityEdit}
           />
         </Switch>
-        <AppFooter/>
+        <AppFooter />
       </Router>
     </div>
   )

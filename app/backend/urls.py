@@ -16,6 +16,7 @@ router.register(r'discussion-posts', views.DiscussionPostViewSet)
 router.register(r'community-custom-sections', views.CommunityCustomSections)
 router.register(r'one-custom-section', views.OneCustomSectionViewSet)
 router.register(r'activity', views.ActivityViewSet, basename='activity')
+router.register(r'photos', views.PhotoViewSet)
 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
@@ -46,4 +47,5 @@ urlpatterns = [
     path('delete-discussion-post/', views.DeleteDiscussionPost.as_view()),
     path('edit-discussion-post/', views.EditDiscussionPost.as_view()),
     path(r'activities/<int:community_id>/', views.ActivityList.as_view()),
+    path('add-photo/', views.AddPhoto.as_view())
 ]
