@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 from datetime import timedelta
+from decouple import config
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -169,3 +170,10 @@ EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com' # mail service smtp
 EMAIL_HOST_USER = 'h4i.heretoserve@gmail.com' # email id
 EMAIL_HOST_PASSWORD = 'h4ipassword123' #password
+
+#AWS 
+AWS_ACCESS_KEY_ID = config('S3_KEY')
+AWS_SECRET_ACCESS_KEY = config('S3_SECRET')
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+AWS_STORAGE_BUCKET_NAME = 'here-to-serve-test-bucket'
+AWS_S3_REGION_NAME = 'us-east-2'
