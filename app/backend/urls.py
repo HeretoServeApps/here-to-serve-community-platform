@@ -28,6 +28,7 @@ urlpatterns = [
     path('users/', views.UserList.as_view()),
     path('communities/', views.CommunityList.as_view()),
     path('community-role-register/', views.CommunityUserRoleRegister.as_view()),
+    re_path(r'^edit-community/(?P<pk>\d+)/$', views.CommunityEditView.as_view()),
     path('reset-password/', views.ResetPassword.as_view()),
     path('reset-password/confirm/',views.PasswordResetConfirmView.as_view(), name = 'password_reset_confirm'),
     path('add-announcement/', views.AddAnnouncement.as_view()),

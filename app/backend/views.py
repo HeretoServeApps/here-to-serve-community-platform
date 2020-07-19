@@ -51,10 +51,12 @@ class OneCommunityViewSet(viewsets.ModelViewSet):
     serializer_class = CommunitySerializer
 
     def get_queryset(self):
-        name = self.request.query_params.get('name')
-        zipcode = self.request.query_params.get('zipcode')
-        is_closed = self.request.query_params.get('is_closed')
-        return Community.objects.filter(name=name, zipcode=zipcode, is_closed=is_closed)
+        return Community.objects.filter(pk=self.request.query_params.get('pk'))
+
+
+class CommunityEditView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Community.objects.all()
+    serializer_class = CommunitySerializer
 
 
 class UsersViewSet(viewsets.ModelViewSet):
@@ -487,6 +489,7 @@ class InviteUsers(APIView):
             return Response(status=status.HTTP_400_BAD_REQUEST)
         return Response(status=status.HTTP_200_OK)
 
+
 class WellWishViewSet(viewsets.ModelViewSet):
     queryset = WellWish.objects.all().order_by('name')
     serializer_class = WellWishSerializer
@@ -500,6 +503,7 @@ class WellWishViewSet(viewsets.ModelViewSet):
         for ann in anns:
             ann.author_name = ann.user.first_name + ' ' + ann.user.last_name
         return anns
+
 
 class AddWellWish(APIView):
     permission_classes = (permissions.AllowAny,)
@@ -517,6 +521,7 @@ class AddWellWish(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 class DeleteWellWish(APIView):
     permission_classes = (permissions.AllowAny,)
 
@@ -524,6 +529,7 @@ class DeleteWellWish(APIView):
         id = request.data['id']
         WellWish.objects.get(id=id).delete()
         return Response('Deleted well wish')
+
 
 class EditWellWish(APIView):
     permission_classes = (permissions.AllowAny,)
@@ -538,6 +544,7 @@ class EditWellWish(APIView):
         wellwish.save()
         return Response('Edited well wish')
 
+
 class EditWaysToHelp(APIView):
     permission_classes = (permissions.AllowAny,)
 
@@ -549,6 +556,7 @@ class EditWaysToHelp(APIView):
         community.ways_to_help = request.data['ways_to_help']
         community.save()
         return Response('Edited ways to help')
+
 
 class AddCustomSection(APIView):
     permission_classes = (permissions.AllowAny,)

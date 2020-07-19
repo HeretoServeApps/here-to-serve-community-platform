@@ -57,9 +57,7 @@ export default function PhotoGallery(props) {
           Authorization: `JWT ${token}`,
         },
         params: {
-          name: localStorage.getItem('community-name'),
-          zipcode: localStorage.getItem('community-zipcode'),
-          is_closed: localStorage.getItem('community-is-closed'),
+          pk: localStorage.getItem("community-id")
         },
       })
       .then(
@@ -119,7 +117,7 @@ export default function PhotoGallery(props) {
 
     fetch(url, requestOptions)
       .then((response) => response.text())
-      .then((result) => console.log(result)/*window.location.reload()*/)
+      .then((result) => window.location.reload())
       .catch((error) => console.log('error', error))
   })
 
