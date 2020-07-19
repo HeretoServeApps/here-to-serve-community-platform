@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import axios from 'axios'
-import { Editor } from '@tinymce/tinymce-react'
 
 import Container from 'react-bulma-components/lib/components/container'
 import Columns from 'react-bulma-components/lib/components/columns'
@@ -103,13 +102,13 @@ export default function PhotoGallery(props) {
     myHeaders.append('Authorization', `JWT ${localStorage.getItem('token')}`)
 
     var formdata = new FormData()
-    formdata.append('name', localStorage.getItem('community-name'))
-    formdata.append('zipcode', localStorage.getItem('community-zipcode'))
-    formdata.append('is_closed', localStorage.getItem('community-is-closed'))
+    formdata.append('community-id', localStorage.getItem('community-id'))
     formdata.append('title', title)
     formdata.append('description', description)
     formdata.append('photo', file)
     formdata.append('community', '')
+
+    console.log(formdata)
 
     var requestOptions = {
       method: 'POST',
@@ -120,7 +119,7 @@ export default function PhotoGallery(props) {
 
     fetch(url, requestOptions)
       .then((response) => response.text())
-      .then((result) => window.location.reload())
+      .then((result) => console.log(result)/*window.location.reload()*/)
       .catch((error) => console.log('error', error))
   })
 
@@ -238,7 +237,7 @@ export default function PhotoGallery(props) {
               ) : (
                 photos.map((p) => (
                   <Columns.Column size={3} key={p.uuid}>
-                    <Image src={p.photo} onClick={() => showModal(p)} />
+                    <Image src={p.photo.split('?')[0]} onClick={() => showModal(p)} />
                   </Columns.Column>
                 ))
               )}

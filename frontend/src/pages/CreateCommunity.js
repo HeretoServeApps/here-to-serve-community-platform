@@ -10,12 +10,16 @@ import {
   Select,
   Textarea,
   Checkbox,
+  Label,
+  InputFile
 } from 'react-bulma-components/lib/components/form'
 import Button from 'react-bulma-components/lib/components/button'
 import Container from 'react-bulma-components/lib/components/container'
 import Heading from 'react-bulma-components/lib/components/heading'
 import Columns from 'react-bulma-components/lib/components/columns'
 import Notification from 'react-bulma-components/lib/components/notification'
+import Image from 'react-bulma-components/lib/components/image';
+import Icon from 'react-bulma-components/lib/components/icon';
 
 import CheckboxField from '../components/checkboxfield'
 import CheckboxTermofUse from '../components/checkboxTermofUse'
@@ -39,49 +43,59 @@ export default function CreateCommunity() {
   const [zipcode, setZipcode] = useState('')
   const [country, setCountry] = useState('United States')
   const [isClosed, setIsClosed] = useState(false)
+  const [photoFile, setPhotoFile] = useState('')
+  const [photoURL, setPhotoURL] = useState('')
+
   const token = localStorage.getItem('token')
   let history = useHistory()
 
-  const handleSubmit = useCallback(() => {
-    // First add the new community to the database
-    const param = JSON.stringify({
-      name: name,
-      description: description,
-      zipcode: zipcode,
-      country: country,
-      is_closed: isClosed.toString(),
-    })
-    axios
-      .post('/community/', param, {
-        headers: {
-          Authorization: `JWT ${token}`,
-          'Content-Type': 'application/json',
-        },
+
+  const handleSubmit = useCallback((name, description, zipcode, country, isClosed, photoFile) => {
+    // First add the community to database
+    var url = '/community/'
+    var myHeaders = new Headers()
+    myHeaders.append('Authorization', `JWT ${localStorage.getItem('token')}`)
+
+    var formdata = new FormData()
+    formdata.append('name', name)
+    formdata.append('description', description)
+    formdata.append('zipcode', zipcode)
+    formdata.append('country', country)
+    formdata.append('photo_file', photoFile)
+    formdata.append('is_closed', isClosed)
+
+    var requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: formdata,
+      redirect: 'follow',
+    }
+
+    fetch(url, requestOptions)
+      .then((response) => 
+    {
+      //After user creates the community, they are added as a community leader
+      var formdata = new FormData()
+      formdata.append('community', name)
+      formdata.append('user', localStorage.getItem('email'))
+      formdata.append('role', 'ADMIN')
+
+      var requestOptions = {
+        method: 'POST',
+        body: formdata,
+        redirect: 'follow',
+      }
+
+      fetch(process.env.REACT_APP_API_URL + '/community-role-register/', requestOptions)
+        .then((response) => response.text())
+        .then((result) => history.push('/my-communities'))
+        .catch((error) => console.log('error', error))})
+      .then((result) => {
+        history.push('/my-communities')
       })
-      .then(
-        (response) => {
-          // After user creates the community, they are added as a community leader
-          var formdata = new FormData()
-          formdata.append('community', name)
-          formdata.append('user', localStorage.getItem('email'))
-          formdata.append('role', 'ADMIN')
+      .catch((error) => console.log('error', error))
 
-          var requestOptions = {
-            method: 'POST',
-            body: formdata,
-            redirect: 'follow',
-          }
-
-          fetch(process.env.REACT_APP_API_URL + '/community-role-register/', requestOptions)
-            .then((response) => response.text())
-            .then((result) => history.push('/my-communities'))
-            .catch((error) => console.log('error', error))
-        },
-        (error) => {
-          console.log(error)
-        }
-      )
-  }, [name, description, zipcode, country, isClosed, token])
+  }, [name, description, zipcode, country, isClosed, photoFile])
 
   return (
     <Container style={containerStyle}>
@@ -135,6 +149,32 @@ export default function CreateCommunity() {
         The zip code should be the location of the community, not necessarily
         where the caregiver lives.
       </p>
+
+      <Label>
+        Homepage Photo
+      </Label>
+      <div style={{ width: 320, marginBottom: '3%' }}>
+        <Field>
+          <Control>
+            <InputFile
+              value={photoFile}
+              icon={<Icon icon='upload' />}
+              onChange={(e) => {
+                setPhotoURL(URL.createObjectURL(e.target.files[0]))
+                setPhotoFile(e.target.files[0])
+              }}
+            />
+          </Control>
+        </Field>
+        {photoURL === '' ? 
+          <></> 
+          : 
+          <Image
+            src={photoURL}
+          />
+        }
+      </div>
+
       <br />
       <Field className='has-text-grey'>
         <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
@@ -151,7 +191,7 @@ export default function CreateCommunity() {
         <CheckboxTermofUse />
       </Field>
       <Button
-        onClick={() => handleSubmit()}
+        onClick={() => handleSubmit(name, description, zipcode, country, isClosed, photoFile)}
         style={{ marginTop: '1rem', marginBottom: '1rem' }}
         color='primary'
         fullwidth={true}

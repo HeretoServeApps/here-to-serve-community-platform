@@ -110,6 +110,7 @@ class CommunityList(APIView):
     def get(self, request, format=None):
         communities = [community.name for community in Community.objects.all()]
         return Response(communities)
+        
 
 
 class CommunityCustomSections(viewsets.ModelViewSet):
@@ -124,6 +125,7 @@ class CommunityCustomSections(viewsets.ModelViewSet):
         sections = CustomSection.objects.filter(community__name=community_name)
         return sections
 
+
 class OneCustomSectionViewSet(viewsets.ModelViewSet):
     queryset = CustomSection.objects.all().order_by('name')
     serializer_class = CustomSectionSerializer
@@ -132,6 +134,7 @@ class OneCustomSectionViewSet(viewsets.ModelViewSet):
         section_id = self.request.query_params.get('section_id')
         section = CustomSection.objects.filter(id=section_id)
         return section
+
 
 class CommunityUserRoleRegister(APIView):
     """
@@ -253,16 +256,17 @@ class ActivityViewSet(viewsets.ViewSet):
                 new_activity['location'] = location
             activities.append(new_activity)
 
-        if(request.data['activity_type'] == 'Giving Rides'):
+        if request.data['activity_type'] == 'Giving Rides':
             serializer = RideActivitySerializer(data=activities, many=True)
-        elif(request.data['activity_type'] == 'Preparing Meals'):
+        elif request.data['activity_type'] == 'Preparing Meals':
             serializer = MealActivitySerializer(data=activities, many=True)
         else:
             serializer = EventActivitySerializer(data=activities, many=True)
 
         if serializer.is_valid():
             created_instances = serializer.save()
-            # once the activities have been created in the database, add the selected coordinators for the coordinator ManyToMany field
+            # once the activities have been created in the database, add the selected coordinators
+            # for the coordinator ManyToMany field
             for specific_activity in created_instances:
                 specific_activity.activity.coordinators.add(*User.objects.filter(id__in=coordinators))
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -287,7 +291,7 @@ class ActivityList(APIView):
                 preparing_meal_obj = get_object_or_404(MealActivity.objects.all(), pk=activity['id'])
                 preparing_meal_serializer = MealActivitySerializer(preparing_meal_obj)
                 for item in preparing_meal_serializer.data:
-                    if(item == 'dietary_restrictions'):
+                    if item == 'dietary_restrictions':
                         # Since dietary restrictions is a string, we want to convert it to a map and process it
                         restrictions_string = preparing_meal_serializer.data[item]
                         json_acceptable_string = restrictions_string.replace("'", "\"")
@@ -310,7 +314,8 @@ class ActivityList(APIView):
             if activity['activity_type'] == 'Occasion':
                 activity['color'] = '#e6a940'
                 activity['activity_status'] = 'Occasion'
-            # Depending on the outcome of [volunteers needed - volunteers signed up], we change the color of the activity
+            # Depending on the outcome of [volunteers needed - volunteers signed up],
+            # we change the color of the activity
             else:
                 # If all volunteer spots have been filled, color this activity blue
                 if int(activity['num_volunteers_needed']) - len(activity['volunteers']) == 0:
@@ -349,6 +354,7 @@ class AnnouncementViewSet(viewsets.ModelViewSet):
             ann.author_name = ann.user.first_name + ' ' + ann.user.last_name
         return anns
 
+
 class AddAnnouncement(APIView):
     permission_classes = (permissions.AllowAny,)
 
@@ -365,6 +371,7 @@ class AddAnnouncement(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 class DeleteAnnouncement(APIView):
     permission_classes = (permissions.AllowAny,)
 
@@ -372,6 +379,7 @@ class DeleteAnnouncement(APIView):
         id = request.data['id']
         Announcement.objects.get(id=id).delete()
         return Response('Deleted announcement')
+
 
 class EditAnnouncement(APIView):
     permission_classes = (permissions.AllowAny,)
@@ -385,6 +393,7 @@ class EditAnnouncement(APIView):
         announcement.message = message
         announcement.save()
         return Response('Edited announcement')
+
 
 class CommunityPeopleList(APIView):
     """
@@ -610,6 +619,7 @@ class DeleteDiscussionPost(APIView):
         DiscussionPost.objects.get(id=id).delete()
         return Response('Deleted discussion post')
 
+
 class EditDiscussionPost(APIView):
     permission_classes = (permissions.AllowAny,)
 
@@ -623,6 +633,7 @@ class EditDiscussionPost(APIView):
         post.save()
         return Response('Edited discussion post')
 
+
 class PhotoViewSet(viewsets.ModelViewSet):
     queryset = Photo.objects.all().order_by('title')
     serializer_class = PhotoSerializer
@@ -632,18 +643,16 @@ class PhotoViewSet(viewsets.ModelViewSet):
         zipcode = self.request.query_params.get('zipcode')
         is_closed = self.request.query_params.get('is_closed')
         comm = Community.objects.filter(name=name, zipcode=zipcode, is_closed=is_closed).values_list('id')
-        photos = Photo.objects.all().filter(community__in=comm)
+        photos = Photo.objects.all().filter(community__in=comm).exclude(title='community_profile')
         return photos
+
 
 class AddPhoto(APIView):
     permission_classes = (permissions.AllowAny,)
 
     def post(self, request, format=None):
-        name = request.data['name']
-        zipcode = request.data['zipcode']
-        is_closed = request.data['is_closed']
-        community = Community.objects.get(name=name).id
-        request.data['community'] = community
+        title = request.data['title']
+        request.data['community'] = request.data['community-id']
         serializer = PhotoSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
