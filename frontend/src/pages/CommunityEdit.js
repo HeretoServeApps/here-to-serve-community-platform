@@ -33,6 +33,7 @@ export default function CommunityEdit() {
     const [homePageHighlight, setHomePageHighlight] = useState('')
     const [showLeaders, setShowLeaders] = useState(true)
     const [communityTimezone, setCommunityTimezone] = useState('')
+    const pk = localStorage.getItem('community-id')
 
     // Homepage image
     const [photoFile, setPhotoFile] = useState('')
@@ -45,9 +46,7 @@ export default function CommunityEdit() {
                     Authorization: `JWT ${localStorage.getItem('token')}`,
                 },
                 params: {
-                    name: localStorage.getItem('community-name'),
-                    zipcode: localStorage.getItem('community-zipcode'),
-                    is_closed: localStorage.getItem('community-is-closed'),
+                    pk: localStorage.getItem('community-id')
                 },
             })
             .then(
@@ -57,7 +56,7 @@ export default function CommunityEdit() {
                     setCommunityZipcode(response.data[0].zipcode)
                     setHomePageHighlight(response.data[0].home_page_highlight)
                     setShowLeaders(response.data[0].display_coordinators_on_home_page)
-                    setPhotoURL(response.data[0].photo_url)
+                    setPhotoFile(response.data[0].photo_file)
                 },
                 (error) => {
                     console.log(error)
@@ -65,52 +64,33 @@ export default function CommunityEdit() {
             )
     }, [])
 
-
-    useEffect(() => {
-        axios
-          .get('/photos', {
-            headers: {
-              Authorization: `JWT ${localStorage.getItem('token')}`,
-            },
-            params: {
-              'community-id': localStorage.getItem('community-id'),
-            },
-          })
-          .then(
-            (response) => {
-              setPhotoURL(response.data)
-              console.log(response.data)
-            },
-            (error) => {
-              console.log(error)
-            }
-          )
-      }, [])
-    
-
-    const addPhoto = useCallback(() => {
-        var url = '/add-photo/'
+    const editCommunity = useCallback(() => {
+        var url = '/edit-community/' + pk + '/'
         var myHeaders = new Headers()
         myHeaders.append('Authorization', `JWT ${localStorage.getItem('token')}`)
+        myHeaders.append('id', pk)
 
-        var formdata = new FormData()
-        formdata.append('community-id', localStorage.getItem('community-id'))
-        formdata.append('title', 'community_profile')
-        formdata.append('description', '')
-        formdata.append('photo', photoFile)
-        formdata.append('community', '')
+        var formdata = new FormData();
+        formdata.append('name', communityName)
+        formdata.append('description', communityDescription)
+        formdata.append('zipcode', communityZipcode)
+
+        localStorage.setItem('community-name', communityName)
+        localStorage.setItem('community-zipcode', communityZipcode)
 
         var requestOptions = {
-        method: 'POST',
-        headers: myHeaders,
-        body: formdata,
-        redirect: 'follow',
+            method: 'PUT',
+            headers: myHeaders,
+            body: formdata,
+            redirect: 'follow'
         }
 
         fetch(url, requestOptions)
-        .then((response) => response.text())
-        .then((result) => window.location.reload())
-        .catch((error) => console.log('error', error))
+        .then(response => response.text())
+        .then(result => 
+            window.location.reload()
+        )
+        .catch(error => console.log('error', error))
     })
 
     return (
@@ -172,7 +152,7 @@ export default function CommunityEdit() {
                                 </Control>
                             </Field>
                             <Image
-                                src={photoURL}
+                                src={photoURL ? photoURL : photoFile}
                             />
                         </div>
                         <Field style={{ maxWidth: '30%' }}>
@@ -250,7 +230,7 @@ export default function CommunityEdit() {
                                     }}
                                     fullwidth={true}
                                     color='primary'
-                                    onClick={() => addPhoto()}
+                                    onClick={() => editCommunity()}
                                 >
                                     Save
                                 </Button>

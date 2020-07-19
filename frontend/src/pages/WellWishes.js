@@ -57,9 +57,7 @@ export default function WellWishes(props) {
           Authorization: `JWT ${token}`,
         },
         params: {
-          name: localStorage.getItem('community-name'),
-          zipcode: localStorage.getItem('community-zipcode'),
-          is_closed: localStorage.getItem('community-is-closed'),
+          pk: localStorage.getItem("community-id")
         },
       })
       .then(
