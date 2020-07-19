@@ -13,7 +13,7 @@ class CommunitySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Community
         fields = ('id', 'name', 'is_closed', 'description', 'zipcode', 'country', 'ways_to_help',
-                  'display_leaders_on_home_page', 'home_page_highlight')
+                  'display_leaders_on_home_page', 'home_page_highlight', 'photo_file',)
 
 
 class CustomSectionSerializer(serializers.ModelSerializer):
@@ -165,15 +165,18 @@ class AnnouncementSerializer(serializers.ModelSerializer):
         model = Announcement
         fields = ('id', 'subject', 'message', 'date_time', 'show_on_page', 'community', 'user', 'author_name')
 
+
 class WellWishSerializer(serializers.ModelSerializer):
     class Meta:
         model = WellWish
         fields = ('id', 'subject', 'message', 'date_time', 'community', 'user', 'author_name')
 
+
 class DiscussionPostSerializer(serializers.ModelSerializer):
     class Meta:
         model = DiscussionPost
         fields = ('id', 'subject', 'message', 'date_time', 'community', 'user', 'author_name', 'section')
+
 
 class PhotoSerializer(serializers.ModelSerializer):
     class Meta:

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import axios from 'axios'
 
 import Container from 'react-bulma-components/lib/components/container'
@@ -15,6 +15,7 @@ import {
 } from 'react-bulma-components/lib/components/form'
 import Image from 'react-bulma-components/lib/components/image';
 import Icon from 'react-bulma-components/lib/components/icon';
+import Button from 'react-bulma-components/lib/components/button';
 
 import SideBar from '../components/sidebar'
 import CommunityNavbar from '../components/communityNavbar'
@@ -32,6 +33,10 @@ export default function CommunityEdit() {
     const [homePageHighlight, setHomePageHighlight] = useState('')
     const [showLeaders, setShowLeaders] = useState(true)
     const [communityTimezone, setCommunityTimezone] = useState('')
+
+    // Homepage image
+    const [photoFile, setPhotoFile] = useState('')
+    const [photoURL, setPhotoURL] = useState('')
 
     useEffect(() => {
         axios
@@ -52,12 +57,61 @@ export default function CommunityEdit() {
                     setCommunityZipcode(response.data[0].zipcode)
                     setHomePageHighlight(response.data[0].home_page_highlight)
                     setShowLeaders(response.data[0].display_coordinators_on_home_page)
+                    setPhotoURL(response.data[0].photo_url)
                 },
                 (error) => {
                     console.log(error)
                 }
             )
     }, [])
+
+
+    useEffect(() => {
+        axios
+          .get('/photos', {
+            headers: {
+              Authorization: `JWT ${localStorage.getItem('token')}`,
+            },
+            params: {
+              'community-id': localStorage.getItem('community-id'),
+            },
+          })
+          .then(
+            (response) => {
+              setPhotoURL(response.data)
+              console.log(response.data)
+            },
+            (error) => {
+              console.log(error)
+            }
+          )
+      }, [])
+    
+
+    const addPhoto = useCallback(() => {
+        var url = '/add-photo/'
+        var myHeaders = new Headers()
+        myHeaders.append('Authorization', `JWT ${localStorage.getItem('token')}`)
+
+        var formdata = new FormData()
+        formdata.append('community-id', localStorage.getItem('community-id'))
+        formdata.append('title', 'community_profile')
+        formdata.append('description', '')
+        formdata.append('photo', photoFile)
+        formdata.append('community', '')
+
+        var requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: formdata,
+        redirect: 'follow',
+        }
+
+        fetch(url, requestOptions)
+        .then((response) => response.text())
+        .then((result) => window.location.reload())
+        .catch((error) => console.log('error', error))
+    })
 
     return (
         <div>
@@ -107,10 +161,19 @@ export default function CommunityEdit() {
                         <div style={{ width: 320, marginBottom: '3%' }}>
                             <Field>
                                 <Control>
-                                    <InputFile icon={<Icon icon="upload" />} placeholder="Textarea" />
+                                    <InputFile
+                                        value={photoFile}
+                                        icon={<Icon icon='upload' />}
+                                        onChange={(e) => {
+                                            setPhotoURL(URL.createObjectURL(e.target.files[0]))
+                                            setPhotoFile(e.target.files[0])
+                                        }}
+                                        />
                                 </Control>
                             </Field>
-                            <Image src="https://vignette.wikia.nocookie.net/project-pokemon/images/4/47/Placeholder.png/revision/latest?cb=20170330235552&format=original" size='3by2' />
+                            <Image
+                                src={photoURL}
+                            />
                         </div>
                         <Field style={{ maxWidth: '30%' }}>
                             <Control>
@@ -166,8 +229,35 @@ export default function CommunityEdit() {
                                 If checked, Members will see the list of Coordinators under the sections list on your Community home page                            
                             </p>
                         </Field>
+                        <Columns style={{marginTop: '5%'}}>
+                            <Columns.Column size={3}>
+                                <Button
+                                    className='is-primary is-inverted'
+                                    style={{
+                                        marginBottom: '1rem',
+                                        boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)',
+                                    }}
+                                    fullwidth={true}
+                                >
+                                    Cancel
+                                </Button>
+                            </Columns.Column>
+                            <Columns.Column size={3}>
+                                <Button
+                                    style={{
+                                        marginBottom: '1rem',
+                                        boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)',
+                                    }}
+                                    fullwidth={true}
+                                    color='primary'
+                                    onClick={() => addPhoto()}
+                                >
+                                    Save
+                                </Button>
+                            </Columns.Column>
+                        </Columns>
                     </Columns.Column>
-                </Columns>
+                </Columns>         
             </Container>
         </div>
 

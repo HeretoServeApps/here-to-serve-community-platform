@@ -175,5 +175,6 @@ EMAIL_HOST_PASSWORD = 'h4ipassword123' #password
 AWS_ACCESS_KEY_ID = config('S3_KEY')
 AWS_SECRET_ACCESS_KEY = config('S3_SECRET')
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-AWS_STORAGE_BUCKET_NAME = 'here-to-serve-test-bucket'
+AWS_STORAGE_BUCKET_NAME = 'here-to-serve-test'
 AWS_S3_REGION_NAME = 'us-east-2'
+AWS_DEFAULT_ACL = None

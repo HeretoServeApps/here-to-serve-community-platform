@@ -18,6 +18,7 @@ import CustomSections from '../components/customSections'
 
 export default function CommunityHome(props) {
   const [description, setDescription] = useState('')
+  const [profilePhoto, setProfilePhoto] = useState('')
   const token = localStorage.getItem('token')
   const [coordinators, setCoordinators] = useState([])
 
@@ -94,6 +95,7 @@ export default function CommunityHome(props) {
         (response) => {
           setDescription(response.data[0].description)
           setShowLeaders(response.data[0].display_leaders_on_home_page)
+          setProfilePhoto(response.data[0].photo_file)
           if (response.data[0].home_page_high_light === 'Calendar') {
             setDisplayCalendar(true)
           } else if (response.data[0].home_page_high_light === 'Family Updates') {
@@ -262,7 +264,7 @@ export default function CommunityHome(props) {
         <Columns isMultiline={true}>
           <Columns.Column size={3}>
             <Image
-              src="https://vignette.wikia.nocookie.net/project-pokemon/images/4/47/Placeholder.png/revision/latest?cb=20170330235552&format=original" size='3by2'
+              src={profilePhoto}
               style={{ marginBottom: '7%' }}
             />
             <Heading size={6}>About</Heading>

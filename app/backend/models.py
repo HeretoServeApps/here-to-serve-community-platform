@@ -29,8 +29,13 @@ class Community(models.Model):
         ('Photo Gallery', 'Photo Gallery'),
         ('Well Wishes', 'Well Wishes')
     ]
-    home_page_highlight = models.CharField(max_length=28, blank=False, choices=HOMEPAGE_HIGHLIGH_CHOICES, default='Calendar')
+    home_page_highlight = models.CharField(
+        max_length=28, blank=False, choices=HOMEPAGE_HIGHLIGH_CHOICES, default='Calendar'
+    )
     display_leaders_on_home_page = models.BooleanField(blank=False, default=True)
+    photo_file = models.FileField(
+        default='https://vignette.wikia.nocookie.net/project-pokemon/images/4/47/Placeholder.png/revision/latest?cb=20170330235552&format=original'
+    )
 
     def __str__(self):
         return self.name
@@ -80,6 +85,7 @@ class DiscussionPost(models.Model):
     date_time = models.CharField(max_length=100, blank=False)
     community = models.ForeignKey(Community, on_delete=models.CASCADE, null=False, blank=False)
     section = models.ForeignKey(CustomSection, on_delete=models.CASCADE, null=False, blank=False)
+
 
 class UserManager(BaseUserManager):
     def create_user(self, email, first_name, last_name, phone_number_1, address_line_1='', address_line_2='', 
@@ -349,6 +355,7 @@ class Activity(models.Model):
     coordinators = models.ManyToManyField(User, related_name="coordinators")
     volunteers = models.ManyToManyField(User, related_name="volunteers")
 
+
 class RideActivity(models.Model):
     activity = models.OneToOneField(
         Activity,
@@ -382,6 +389,7 @@ class EventActivity(models.Model):
         primary_key=True,
     )
     location = models.CharField(max_length=150, blank=True, default='')
+
 
 class Photo(models.Model):
     uuid = models.UUIDField(
