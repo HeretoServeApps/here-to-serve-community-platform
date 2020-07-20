@@ -397,7 +397,7 @@ class Photo(models.Model):
         primary_key=True, default=uuid.uuid4, editable=False,
     )
     created_at = models.DateTimeField(auto_now_add=True) 
-    title = models.CharField(max_length=100)
+    title = models.CharField(max_length=100, default='')
     photo = models.FileField()
     description = models.CharField(max_length=256, default='')
     community = models.ForeignKey(Community, on_delete=models.CASCADE, null=False, blank=False)

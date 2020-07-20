@@ -8,6 +8,7 @@ import CommunityNavbar from '../components/communityNavbar'
 import Button from 'react-bulma-components/lib/components/button'
 import SideBar from '../components/sidebar'
 import Image from 'react-bulma-components/lib/components/image'
+import Box from 'react-bulma-components/lib/components/box'
 import {
   Textarea,
   Label,
@@ -17,6 +18,8 @@ import {
   Input,
 } from 'react-bulma-components/lib/components/form'
 import Icon from 'react-bulma-components/lib/components/icon'
+import ImageGallery from 'react-image-gallery'
+import '../../node_modules/react-image-gallery/styles/css/image-gallery.css'
 
 export default function PhotoGallery(props) {
   const token = localStorage.getItem('token')
@@ -27,7 +30,7 @@ export default function PhotoGallery(props) {
   const [file, setFile] = useState('')
   const [fileURL, setFileURL] = useState('')
   const [description, setDescription] = useState('')
-  const [photos, setPhotos] = useState('')
+  const [photos, setPhotos] = useState([])
 
   var containerStyle = {
     margin: '5% 5%',
@@ -57,7 +60,7 @@ export default function PhotoGallery(props) {
           Authorization: `JWT ${token}`,
         },
         params: {
-          pk: localStorage.getItem("community-id")
+          pk: localStorage.getItem('community-id'),
         },
       })
       .then(
@@ -85,7 +88,18 @@ export default function PhotoGallery(props) {
       })
       .then(
         (response) => {
-          setPhotos(response.data)
+          var gallery = []
+
+          response.data.forEach((p) => {
+            gallery.push({
+              original: p.photo.split('?')[0],
+              thumbnail: p.photo.split('?')[0],
+              originalTitle: p.title,
+              thumbnailTitle: p.title,
+              description: p.description,
+            })
+          })
+          setPhotos(gallery)
         },
         (error) => {
           console.log(error)
@@ -148,18 +162,14 @@ export default function PhotoGallery(props) {
 
               <div style={formContainerStyle}>
                 <Field>
-                  <Label>
-                    Title<span style={{ color: '#F83D34' }}>*</span>
-                  </Label>
+                  <Label>Title</Label>
                   <Input
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                   />
                 </Field>
                 <Field>
-                  <Label>
-                    Description<span style={{ color: '#F83D34' }}>*</span>
-                  </Label>
+                  <Label>Description</Label>
                   <Textarea
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
@@ -226,22 +236,35 @@ export default function PhotoGallery(props) {
                 </Button>
               </Columns.Column>
             </Columns>
-            <Columns isMultiline={true}>
-              {photos.length === 0 ? (
-                <p style={noteStyle}>
-                  No photos have been added to this gallery.
-                </p>
-              ) : (
-                photos.map((p) => (
-                  <Columns.Column size={3} key={p.uuid}>
-                    <Image src={p.photo.split('?')[0]} onClick={() => showModal(p)} />
-                  </Columns.Column>
-                ))
-              )}
-            </Columns>
+
+            {photos.length === 0 ? (
+              <p style={noteStyle}>
+                No photos have been added to this gallery.
+              </p>
+            ) : (
+              <Box>
+                <ImageGallery items={photos} thumbnailPosition='right' />
+              </Box>
+            )}
           </Columns.Column>
         </Columns>
       </Container>
     </div>
   )
 }
+
+/*
+{photos.length === 0 ? (
+                <p style={noteStyle}>
+                  No photos have been added to this gallery.
+                </p>
+              ) : (
+                photos.map((p) => (
+                  <Columns.Column size={3} key={p.uuid}>
+                    <Image
+                      src={p.photo.split('?')[0]}
+                      onClick={() => showModal(p)}
+                    />
+                  </Columns.Column>
+                ))
+              )} */

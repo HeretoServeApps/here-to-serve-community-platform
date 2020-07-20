@@ -12,11 +12,13 @@ import Heading from 'react-bulma-components/lib/components/heading'
 import CommunityNavbar from '../components/communityNavbar'
 import Button from 'react-bulma-components/lib/components/button'
 import { Select, Control } from 'react-bulma-components/lib/components/form'
-import Image from 'react-bulma-components/lib/components/image';
-import Message from 'react-bulma-components/lib/components/message';
-import Card from 'react-bulma-components/lib/components/card';
-import Media from 'react-bulma-components/lib/components/media';
-import Content from 'react-bulma-components/lib/components/content';
+import Image from 'react-bulma-components/lib/components/image'
+import Message from 'react-bulma-components/lib/components/message'
+import Card from 'react-bulma-components/lib/components/card'
+import Media from 'react-bulma-components/lib/components/media'
+import Content from 'react-bulma-components/lib/components/content'
+import ImageGallery from 'react-image-gallery'
+import '../../node_modules/react-image-gallery/styles/css/image-gallery.css'
 
 import CustomSections from '../components/customSections'
 
@@ -73,6 +75,15 @@ export default function CommunityHome(props) {
     maxWidth: '100%',
   }
 
+  var noteStyle = {
+    fontSize: '0.75rem',
+    fontStyle: 'italic',
+    textAlign: 'center',
+    padding: '20px',
+    backgroundColor: 'hsl(0, 0%, 96%)',
+    borderRadius: '10px',
+  }
+
   function updateDate() {
     setDate(moment(`${selectedMonth} ${selectedYear}`, 'MMMM YYYY').toDate())
   }
@@ -95,7 +106,7 @@ export default function CommunityHome(props) {
           Authorization: `JWT ${token}`,
         },
         params: {
-          pk: localStorage.getItem('community-id')
+          pk: localStorage.getItem('community-id'),
         },
       })
       .then(
@@ -105,7 +116,9 @@ export default function CommunityHome(props) {
           setProfilePhoto(response.data[0].photo_file)
           if (response.data[0].home_page_highlight === 'Calendar') {
             setDisplayCalendar(true)
-          } else if (response.data[0].home_page_highlight === 'Family Updates') {
+          } else if (
+            response.data[0].home_page_highlight === 'Family Updates'
+          ) {
             setDisplayFamilyUpdates(true)
             axios
               .get('/announcement', {
@@ -133,25 +146,36 @@ export default function CommunityHome(props) {
             setDisplayMessageBoard(true)
           } else if (response.data[0].home_page_highlight === 'Photo Gallery') {
             setDisplayPhotoGallery(true)
-              axios
-                .get('/photos', {
-                  headers: {
-                    Authorization: `JWT ${token}`,
-                  },
-                  params: {
-                    name: localStorage.getItem('community-name'),
-                    zipcode: localStorage.getItem('community-zipcode'),
-                    is_closed: localStorage.getItem('community-is-closed'),
-                  },
-                })
-                .then(
-                  (response) => {
-                    setPhotoGallery(response.data)
-                  },
-                  (error) => {
-                    console.log(error)
-                  }
-                )
+            axios
+              .get('/photos', {
+                headers: {
+                  Authorization: `JWT ${token}`,
+                },
+                params: {
+                  name: localStorage.getItem('community-name'),
+                  zipcode: localStorage.getItem('community-zipcode'),
+                  is_closed: localStorage.getItem('community-is-closed'),
+                },
+              })
+              .then(
+                (response) => {
+                  var gallery = []
+
+                  response.data.forEach((p) => {
+                    gallery.push({
+                      original: p.photo.split('?')[0],
+                      thumbnail: p.photo.split('?')[0],
+                      originalTitle: p.title,
+                      thumbnailTitle: p.title,
+                      description: p.description,
+                    })
+                  })
+                  setPhotoGallery(gallery)
+                },
+                (error) => {
+                  console.log(error)
+                }
+              )
           } else if (response.data[0].home_page_highlight === 'Well Wishes') {
             setDisplayWellWishes(true)
             axios
@@ -225,13 +249,13 @@ export default function CommunityHome(props) {
     axios
       .get('/community-people/', {
         headers: {
-          'Authorization': `JWT ${localStorage.getItem('token')}`,
+          Authorization: `JWT ${localStorage.getItem('token')}`,
           'Content-Type': 'application/json',
         },
         params: JSON.stringify({
           user: localStorage.getItem('email'),
-          community: localStorage.getItem('community-name')
-        })
+          community: localStorage.getItem('community-name'),
+        }),
       })
       .then(
         (response) => {
@@ -250,10 +274,15 @@ export default function CommunityHome(props) {
         <Button remove onClick={() => setShowWelcomeCard(false)} />
       </Message.Header>
       <Message.Body>
-        Here are our top <b>3 tips</b> for getting started:<br />
-        1. <Link to='/add-people'>Invite</Link> members to join this community<br />
-        2. Create a <Link to='/create-new-activity'>Calendar Activity</Link> to let members volunteer<br />
-        3. Add an <Link to='/create-announcement'>Update</Link> to keep friends and family in the loop
+        Here are our top <b>3 tips</b> for getting started:
+        <br />
+        1. <Link to='/add-people'>Invite</Link> members to join this community
+        <br />
+        2. Create a <Link to='/create-new-activity'>Calendar Activity</Link> to
+        let members volunteer
+        <br />
+        3. Add an <Link to='/create-announcement'>Update</Link> to keep friends
+        and family in the loop
       </Message.Body>
     </Message>
   )
@@ -265,10 +294,15 @@ export default function CommunityHome(props) {
         <Button remove onClick={() => setShowWelcomeCard(false)} />
       </Message.Header>
       <Message.Body>
-        Here are our top <strong>3 tips</strong> for getting started:<br />
-        1. <Link to='/add-people'>Tell your friends</Link> to join this community<br />
-        2. View your <Link to='/calendar'>calendar</Link> activities<br />
-        3. View <Link to='/announcements'>updates</Link> recently made to this care community
+        Here are our top <strong>3 tips</strong> for getting started:
+        <br />
+        1. <Link to='/add-people'>Tell your friends</Link> to join this
+        community
+        <br />
+        2. View your <Link to='/calendar'>calendar</Link> activities
+        <br />
+        3. View <Link to='/announcements'>updates</Link> recently made to this
+        care community
       </Message.Body>
     </Message>
   )
@@ -282,7 +316,9 @@ export default function CommunityHome(props) {
           style={{ marginRight: '10px' }}
         >
           {months.map((month, index) => (
-            <option value={month} key={index}>{month}</option>
+            <option value={month} key={index}>
+              {month}
+            </option>
           ))}
         </Select>
         <Select
@@ -291,7 +327,9 @@ export default function CommunityHome(props) {
           style={{ marginRight: '10px' }}
         >
           {years.map((year, index) => (
-            <option value={year} key={index}>{year}</option>
+            <option value={year} key={index}>
+              {year}
+            </option>
           ))}
         </Select>
         <Button onClick={updateDate} color='info'>
@@ -299,7 +337,10 @@ export default function CommunityHome(props) {
         </Button>
       </Control>
       <br />
-      <div className='rbc-calendar' style={{ height: '50%', marginBottom: '3%' }}>
+      <div
+        className='rbc-calendar'
+        style={{ height: '50%', marginBottom: '3%' }}
+      >
         <Calendar
           localizer={localizer}
           toolbar={false}
@@ -329,9 +370,10 @@ export default function CommunityHome(props) {
           return (
             <Card key={index} style={{ marginBottom: '5%' }}>
               <Card.Content>
-                <Media.Item style={{ marginBottom: '2%'}}>
+                <Media.Item style={{ marginBottom: '2%' }}>
                   <Heading subtitle size={6}>
-                    <b>{a.author_name}</b> posted in <b className='has-theme-color'>Well Wishes</ b>
+                    <b>{a.author_name}</b> posted in{' '}
+                    <b className='has-theme-color'>Well Wishes</b>
                   </Heading>
                   <Heading size={4}>{a.subject}</Heading>
                 </Media.Item>
@@ -370,9 +412,10 @@ export default function CommunityHome(props) {
           return (
             <Card key={index} style={{ marginBottom: '5%' }}>
               <Card.Content>
-                <Media.Item style={{ marginBottom: '2%'}}>
+                <Media.Item style={{ marginBottom: '2%' }}>
                   <Heading subtitle size={6}>
-                    <b>{a.author_name}</b> posted in <b className='has-theme-color'>Family Updates</ b>
+                    <b>{a.author_name}</b> posted in{' '}
+                    <b className='has-theme-color'>Family Updates</b>
                   </Heading>
                   <Heading size={4}>{a.subject}</Heading>
                 </Media.Item>
@@ -389,6 +432,15 @@ export default function CommunityHome(props) {
     </div>
   )
 
+  const photoGalleryContainer = (
+    <div>
+      {photoGallery.length === 0 ? (
+        <p style={noteStyle}>No photos have been added to this gallery.</p>
+      ) : (
+        <ImageGallery items={photoGallery} thumbnailPosition='right' />
+      )}
+    </div>
+  )
 
   return (
     <div>
@@ -396,16 +448,14 @@ export default function CommunityHome(props) {
       <Container style={containerStyle}>
         <Columns isMultiline={true}>
           <Columns.Column size={3}>
-            <Image
-              src={profilePhoto}
-              style={{ marginBottom: '7%' }}
-            />
+            <Image src={profilePhoto} style={{ marginBottom: '7%' }} />
             <Heading size={6}>About</Heading>
             <p>{description}</p>
             <br />
-            
-            {showLeaders && coordinators.length !== 0 ?
-              (<div><Heading size={6}>Community Leaders</Heading>
+
+            {showLeaders && coordinators.length !== 0 ? (
+              <div>
+                <Heading size={6}>Community Leaders</Heading>
                 {coordinators.map((c, index) => (
                   <div style={{ marginBottom: '1%' }} key={index}>
                     <p style={{ fontWeight: 'bold' }}>{c.label}</p>
@@ -420,12 +470,12 @@ export default function CommunityHome(props) {
                     </p>
                     <p style={{ fontSize: '0.8em' }}>{c.phone}</p>
                   </div>
-                ))}<br />
+                ))}
+                <br />
               </div>
-              )
-              :
-              (<></>)
-            }
+            ) : (
+              <></>
+            )}
 
             <Button color='primary'>
               <Link to='/edit-community' style={{ color: 'white' }}>
@@ -434,36 +484,21 @@ export default function CommunityHome(props) {
             </Button>
           </Columns.Column>
           <Columns.Column size={7}>
-            {showWelcomeCard ?
-              (
-                localStorage.getItem('is-staff') === 'true' ?
-                  WelcomeCardStaff : WelcomeCardMember
+            {showWelcomeCard ? (
+              localStorage.getItem('is-staff') === 'true' ? (
+                WelcomeCardStaff
+              ) : (
+                WelcomeCardMember
               )
-              :
-              (<></>)
-            }
+            ) : (
+              <></>
+            )}
             {/* What to show depends on what the user specified for homepage highlight in edit community */}
-            {displayCalendar ?
-              (calendar)
-              :
-              (<></>)
-            }
-            {displayWellWishes ? 
-              (wellWishesContainer)
-              :
-              (<></>)
-            }
-            {displayFamilyUpdates ? 
-              (familyUpdatesContainer) 
-              :
-              (<></>)
-            }
-            {displayWaysToHelp ? 
-              (waysToHelpContainer) 
-              :
-              (<></>)
-            }
-
+            {displayCalendar ? calendar : <></>}
+            {displayWellWishes ? wellWishesContainer : <></>}
+            {displayFamilyUpdates ? familyUpdatesContainer : <></>}
+            {displayWaysToHelp ? waysToHelpContainer : <></>}
+            {displayPhotoGallery ? photoGalleryContainer : <></>}
           </Columns.Column>
           <Columns.Column size={2}>
             <Link to='/create-new-activity' style={{ color: 'white' }}>
@@ -471,7 +506,8 @@ export default function CommunityHome(props) {
                 Create Activity
               </Button>
             </Link>
-            <a href='https://www.heretoserve.org/'
+            <a
+              href='https://www.heretoserve.org/'
               target='_blank'
               rel='noopener noreferrer'
             >
@@ -486,7 +522,8 @@ export default function CommunityHome(props) {
                 Here to Serve Website
               </Button>
             </a>
-            <a href='https://heretoserve.salsalabs.org/secureonlinedonationform/index.html'
+            <a
+              href='https://heretoserve.salsalabs.org/secureonlinedonationform/index.html'
               target='_blank'
               rel='noopener noreferrer'
             >
