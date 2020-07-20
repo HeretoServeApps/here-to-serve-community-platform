@@ -31,24 +31,6 @@ export default function Announcements(props) {
 
   useEffect(() => {
     axios
-      .get('/one-community/', {
-        headers: {
-          Authorization: `JWT ${token}`,
-        },
-        params: {
-          pk: localStorage.getItem('community-id')
-        },
-      })
-      .then(
-        (response) => {},
-        (error) => {
-          console.log(error)
-        }
-      )
-  }, [token])
-
-  useEffect(() => {
-    axios
       .get('/announcement', {
         headers: {
           Authorization: `JWT ${token}`,

@@ -85,7 +85,6 @@ export default function PhotoGallery(props) {
       })
       .then(
         (response) => {
-          console.log(response.data)
           setPhotos(response.data)
         },
         (error) => {
