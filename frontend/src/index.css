@@ -124,3 +124,7 @@ thead th {
   font-size: 14px;
   font-weight: bold;
 }
+
+.has-theme-color {
+  color: #2C8595
+}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Page, Text, Document, StyleSheet, View } from '@react-pdf/renderer'
 import PropTypes from 'prop-types'
 import axios from 'axios'
