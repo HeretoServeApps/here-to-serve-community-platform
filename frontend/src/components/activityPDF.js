@@ -111,7 +111,7 @@ export default function PDF(props) {
 
   useEffect(() => {
     axios
-      .get('/activity', {
+      .get(`/activities/${localStorage.getItem('community-id')}`, {
         headers: {
           Authorization: `JWT ${localStorage.getItem('token')}`,
         },

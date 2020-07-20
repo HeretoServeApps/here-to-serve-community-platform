@@ -199,19 +199,19 @@ export default function ActivityReport() {
 
     useEffect(() => {
         axios
-            .get('/activity', {
-                headers: {
-                    Authorization: `JWT ${localStorage.getItem('token')}`,
-                },
-            })
-            .then(
-                (response) => {
-                    setActivities(response.data)
-                },
-                (error) => {
-                    console.log(error)
-                }
-            )
+          .get(`/activities/${localStorage.getItem('community-id')}`, {
+            headers: {
+              Authorization: `JWT ${localStorage.getItem('token')}`,
+            },
+          })
+          .then(
+            (response) => {
+              setActivities(response.data)
+            },
+            (error) => {
+              console.log(error)
+            }
+          )
     }, [])
 
     const isDateWithinRange = useCallback((date) => {
