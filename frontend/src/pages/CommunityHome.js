@@ -44,6 +44,9 @@ export default function CommunityHome(props) {
   const [displayWellWishes, setDisplayWellWishes] = useState(false)
 
   const [wellWishes, setWellWishes] = useState([])
+  const [familyUpdates, setFamilyUpdates] = useState([])
+  const [waystoHelp, setWaysToHelp] = useState('')
+  const [photoGallery, setPhotoGallery] = useState('')
 
   const years = [...Array(15).keys()].map((i) => i + 2020)
   const months = [
@@ -104,12 +107,51 @@ export default function CommunityHome(props) {
             setDisplayCalendar(true)
           } else if (response.data[0].home_page_highlight === 'Family Updates') {
             setDisplayFamilyUpdates(true)
+            axios
+              .get('/announcement', {
+                headers: {
+                  Authorization: `JWT ${token}`,
+                },
+                params: {
+                  name: localStorage.getItem('community-name'),
+                  zipcode: localStorage.getItem('community-zipcode'),
+                  is_closed: localStorage.getItem('community-is-closed'),
+                },
+              })
+              .then(
+                (response) => {
+                  setFamilyUpdates(response.data)
+                },
+                (error) => {
+                  console.log(error)
+                }
+              )
           } else if (response.data[0].home_page_highlight === 'Ways to Help') {
             setDisplayWaystoHelp(true)
+            setWaysToHelp(response.data[0].ways_to_help)
           } else if (response.data[0].home_page_highlight === 'Message Board') {
             setDisplayMessageBoard(true)
           } else if (response.data[0].home_page_highlight === 'Photo Gallery') {
             setDisplayPhotoGallery(true)
+              axios
+                .get('/photos', {
+                  headers: {
+                    Authorization: `JWT ${token}`,
+                  },
+                  params: {
+                    name: localStorage.getItem('community-name'),
+                    zipcode: localStorage.getItem('community-zipcode'),
+                    is_closed: localStorage.getItem('community-is-closed'),
+                  },
+                })
+                .then(
+                  (response) => {
+                    setPhotoGallery(response.data)
+                  },
+                  (error) => {
+                    console.log(error)
+                  }
+                )
           } else if (response.data[0].home_page_highlight === 'Well Wishes') {
             setDisplayWellWishes(true)
             axios
@@ -306,6 +348,47 @@ export default function CommunityHome(props) {
     </div>
   )
 
+  const waysToHelpContainer = (
+    <Card style={{ marginBottom: '5%' }}>
+      <Card.Content>
+        <Media.Item style={{ marginBottom: '2%' }}>
+          <Heading size={4}>Ways to Help</Heading>
+        </Media.Item>
+        <Content>
+          <div dangerouslySetInnerHTML={{ __html: waystoHelp }}></div>
+        </Content>
+      </Card.Content>
+    </Card>
+  )
+
+  const familyUpdatesContainer = (
+    <div>
+      {familyUpdates
+        .slice()
+        .reverse()
+        .map((a, index) => {
+          return (
+            <Card key={index} style={{ marginBottom: '5%' }}>
+              <Card.Content>
+                <Media.Item style={{ marginBottom: '2%'}}>
+                  <Heading subtitle size={6}>
+                    <b>{a.author_name}</b> posted in <b className='has-theme-color'>Family Updates</ b>
+                  </Heading>
+                  <Heading size={4}>{a.subject}</Heading>
+                </Media.Item>
+                <Content>
+                  <div dangerouslySetInnerHTML={{ __html: a.message }}></div>
+                </Content>
+                <p style={{ fontSize: '80%' }} className='has-text-grey'>
+                  {a.date_time}
+                </p>
+              </Card.Content>
+            </Card>
+          )
+        })}
+    </div>
+  )
+
 
   return (
     <div>
@@ -367,6 +450,16 @@ export default function CommunityHome(props) {
             }
             {displayWellWishes ? 
               (wellWishesContainer)
+              :
+              (<></>)
+            }
+            {displayFamilyUpdates ? 
+              (familyUpdatesContainer) 
+              :
+              (<></>)
+            }
+            {displayWaysToHelp ? 
+              (waysToHelpContainer) 
               :
               (<></>)
             }
