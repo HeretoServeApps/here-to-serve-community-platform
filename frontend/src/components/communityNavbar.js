@@ -11,7 +11,7 @@ const Bar = styled.div`
 `
 
 const links = [
-  ['Home', '/community-home'],
+  [localStorage.getItem('community-name'), '/community-home'],
   ['About', '/about'],
   ['Calendar', '/calendar'],
   ['Family Updates', '/announcements'],
@@ -30,7 +30,6 @@ const CommunityNavbar = (props) => {
       <Columns isMultiline={true}>
         <Columns.Column isMultiline={true}>
           <Columns>
-            <Columns.Column size={2} style={{color: "white"}}>{localStorage.getItem('community-name')}</Columns.Column>
             {links.map((title) => (
               <Columns.Column>
                 <Link to={title[1]}>

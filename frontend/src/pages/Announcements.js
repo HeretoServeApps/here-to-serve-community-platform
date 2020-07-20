@@ -61,7 +61,6 @@ export default function Announcements(props) {
       })
       .then(
         (response) => {
-          console.log(response.data)
           setAnnouncements(response.data)
         },
         (error) => {

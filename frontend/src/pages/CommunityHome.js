@@ -4,6 +4,7 @@ import axios from 'axios'
 import { Calendar, momentLocalizer } from 'react-big-calendar'
 import moment from 'moment'
 import 'react-big-calendar/lib/sass/styles.scss'
+import styled from 'styled-components'
 
 import Container from 'react-bulma-components/lib/components/container'
 import Columns from 'react-bulma-components/lib/components/columns'
@@ -13,6 +14,9 @@ import Button from 'react-bulma-components/lib/components/button'
 import { Select, Control } from 'react-bulma-components/lib/components/form'
 import Image from 'react-bulma-components/lib/components/image';
 import Message from 'react-bulma-components/lib/components/message';
+import Card from 'react-bulma-components/lib/components/card';
+import Media from 'react-bulma-components/lib/components/media';
+import Content from 'react-bulma-components/lib/components/content';
 
 import CustomSections from '../components/customSections'
 
@@ -32,12 +36,14 @@ export default function CommunityHome(props) {
   const [showWelcomeCard, setShowWelcomeCard] = useState(true)
   const [showLeaders, setShowLeaders] = useState(true)
 
-  const [displayCalendar, setDisplayCalendar] = useState(true)
+  const [displayCalendar, setDisplayCalendar] = useState(false)
   const [displayFamilyUpdates, setDisplayFamilyUpdates] = useState(false)
   const [displayWaysToHelp, setDisplayWaystoHelp] = useState(false)
-  const [messageBoard, setDisplayMessageBoard] = useState(false)
-  const [photoGallery, setDisplayPhotoGallery] = useState(false)
-  const [wellWishes, setDisplayWellWishes] = useState(false)
+  const [displayMessageBoard, setDisplayMessageBoard] = useState(false)
+  const [displayPhotoGallery, setDisplayPhotoGallery] = useState(false)
+  const [displayWellWishes, setDisplayWellWishes] = useState(false)
+
+  const [wellWishes, setWellWishes] = useState([])
 
   const years = [...Array(15).keys()].map((i) => i + 2020)
   const months = [
@@ -94,18 +100,37 @@ export default function CommunityHome(props) {
           setDescription(response.data[0].description)
           setShowLeaders(response.data[0].display_leaders_on_home_page)
           setProfilePhoto(response.data[0].photo_file)
-          if (response.data[0].home_page_high_light === 'Calendar') {
+          if (response.data[0].home_page_highlight === 'Calendar') {
             setDisplayCalendar(true)
-          } else if (response.data[0].home_page_high_light === 'Family Updates') {
+          } else if (response.data[0].home_page_highlight === 'Family Updates') {
             setDisplayFamilyUpdates(true)
-          } else if (response.data[0].home_page_high_light === 'Ways to Help') {
+          } else if (response.data[0].home_page_highlight === 'Ways to Help') {
             setDisplayWaystoHelp(true)
-          } else if (response.data[0].home_page_high_light === 'Message Board') {
+          } else if (response.data[0].home_page_highlight === 'Message Board') {
             setDisplayMessageBoard(true)
-          } else if (response.data[0].home_page_high_light === 'Photo Gallery') {
+          } else if (response.data[0].home_page_highlight === 'Photo Gallery') {
             setDisplayPhotoGallery(true)
-          } else if (response.data[0].home_page_high_light === 'Well Wishes') {
+          } else if (response.data[0].home_page_highlight === 'Well Wishes') {
             setDisplayWellWishes(true)
+            axios
+              .get('/well-wishes', {
+                headers: {
+                  Authorization: `JWT ${token}`,
+                },
+                params: {
+                  name: localStorage.getItem('community-name'),
+                  zipcode: localStorage.getItem('community-zipcode'),
+                  is_closed: localStorage.getItem('community-is-closed'),
+                },
+              })
+              .then(
+                (response) => {
+                  setWellWishes(response.data)
+                },
+                (error) => {
+                  console.log(error)
+                }
+              )
           }
         },
         (error) => {
@@ -176,7 +201,6 @@ export default function CommunityHome(props) {
       )
   }, [])
 
-
   const WelcomeCardStaff = (
     <Message color='primary'>
       <Message.Header>
@@ -215,8 +239,8 @@ export default function CommunityHome(props) {
           onChange={(e) => setSelectedMonth(e.target.value)}
           style={{ marginRight: '10px' }}
         >
-          {months.map((month) => (
-            <option value={month}>{month}</option>
+          {months.map((month, index) => (
+            <option value={month} key={index}>{month}</option>
           ))}
         </Select>
         <Select
@@ -224,8 +248,8 @@ export default function CommunityHome(props) {
           onChange={(e) => setSelectedYear(e.target.value)}
           style={{ marginRight: '10px' }}
         >
-          {years.map((year) => (
-            <option value={year}>{year}</option>
+          {years.map((year, index) => (
+            <option value={year} key={index}>{year}</option>
           ))}
         </Select>
         <Button onClick={updateDate} color='info'>
@@ -254,6 +278,34 @@ export default function CommunityHome(props) {
     </div>
   )
 
+  const wellWishesContainer = (
+    <div>
+      {wellWishes
+        .slice()
+        .reverse()
+        .map((a, index) => {
+          return (
+            <Card key={index} style={{ marginBottom: '5%' }}>
+              <Card.Content>
+                <Media.Item style={{ marginBottom: '2%'}}>
+                  <Heading subtitle size={6}>
+                    <b>{a.author_name}</b> posted in <b className='has-theme-color'>Well Wishes</ b>
+                  </Heading>
+                  <Heading size={4}>{a.subject}</Heading>
+                </Media.Item>
+                <Content>
+                  <div dangerouslySetInnerHTML={{ __html: a.message }}></div>
+                </Content>
+                <p style={{ fontSize: '80%' }} className='has-text-grey'>
+                  {a.date_time}
+                </p>
+              </Card.Content>
+            </Card>
+          )
+        })}
+    </div>
+  )
+
 
   return (
     <div>
@@ -268,16 +320,17 @@ export default function CommunityHome(props) {
             <Heading size={6}>About</Heading>
             <p>{description}</p>
             <br />
-
-            {showLeaders ?
+            
+            {showLeaders && coordinators.length !== 0 ?
               (<div><Heading size={6}>Community Leaders</Heading>
-                {coordinators.map((c) => (
-                  <div style={{ marginBottom: '1%' }}>
+                {coordinators.map((c, index) => (
+                  <div style={{ marginBottom: '1%' }} key={index}>
                     <p style={{ fontWeight: 'bold' }}>{c.label}</p>
                     <p style={linkStyle}>
                       <a
                         href={'mailto:' + c.email}
-                        style={{ color: '#2C8595', fontWeight: '500' }}
+                        style={{ fontWeight: '500' }}
+                        className='has-theme-color'
                       >
                         {c.email}
                       </a>
@@ -306,9 +359,14 @@ export default function CommunityHome(props) {
               :
               (<></>)
             }
-            {/* What to show depends on what the user specified in edit community */}
+            {/* What to show depends on what the user specified for homepage highlight in edit community */}
             {displayCalendar ?
               (calendar)
+              :
+              (<></>)
+            }
+            {displayWellWishes ? 
+              (wellWishesContainer)
               :
               (<></>)
             }

@@ -9,7 +9,8 @@ from phone_field import PhoneField
 from django.conf import settings
 from tinymce.models import HTMLField
 import uuid
-
+import pytz
+import datetime
 
 class Community(models.Model):
     name = models.CharField(max_length=128, default='')
@@ -18,7 +19,7 @@ class Community(models.Model):
     zipcode = models.CharField(max_length=10, default='')
     country = models.CharField(max_length=128, default='US')
     ways_to_help = HTMLField(default='')
-
+    community_time_zone = models.CharField(max_length=128, choices=[(tz, tz) for tz in pytz.all_timezones], default='UTC')
 
     # Choices for homepage highlights
     HOMEPAGE_HIGHLIGH_CHOICES = [
@@ -32,7 +33,7 @@ class Community(models.Model):
     home_page_highlight = models.CharField(
         max_length=28, blank=False, choices=HOMEPAGE_HIGHLIGH_CHOICES, default='Calendar'
     )
-    display_leaders_on_home_page = models.BooleanField(blank=False, default=True)
+    display_leaders_on_home_page = models.CharField(blank=False, default='true', max_length=5)
     photo_file = models.FileField(
         default='https://vignette.wikia.nocookie.net/project-pokemon/images/4/47/Placeholder.png/revision/latest?cb=20170330235552&format=original'
     )

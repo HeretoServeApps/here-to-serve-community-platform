@@ -6,9 +6,10 @@ import Columns from 'react-bulma-components/lib/components/columns'
 import Heading from 'react-bulma-components/lib/components/heading'
 import CommunityNavbar from '../components/communityNavbar'
 import Button from 'react-bulma-components/lib/components/button'
-import PostCard from '../components/postCard'
 import { Editor } from '@tinymce/tinymce-react'
+
 import SideBar from '../components/sidebar'
+import PostCard from '../components/postCard'
 
 import axios from 'axios'
 
@@ -49,24 +50,6 @@ export default function WellWishes(props) {
     backgroundColor: 'hsl(0, 0%, 96%)',
     borderRadius: '10px',
   }
-
-  useEffect(() => {
-    axios
-      .get('/one-community/', {
-        headers: {
-          Authorization: `JWT ${token}`,
-        },
-        params: {
-          pk: localStorage.getItem("community-id")
-        },
-      })
-      .then(
-        (response) => {},
-        (error) => {
-          console.log(error)
-        }
-      )
-  }, [token])
 
   useEffect(() => {
     const formValues = [subject, message]
@@ -126,7 +109,6 @@ export default function WellWishes(props) {
       })
       .then(
         (response) => {
-          console.log(response.data)
           setWellWishes(response.data)
         },
         (error) => {
@@ -197,8 +179,8 @@ export default function WellWishes(props) {
                           ],
                           toolbar:
                             'undo redo | formatselect | link image | bold italic backcolor | \
-                      alignleft aligncenter alignright alignjustify | \
-                      bullist numlist outdent indent | removeformat | help',
+                            alignleft aligncenter alignright alignjustify | \
+                            bullist numlist outdent indent | removeformat | help',
                         }}
                         onEditorChange={(content, editor) =>
                           setMessage(content)

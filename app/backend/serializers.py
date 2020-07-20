@@ -13,7 +13,7 @@ class CommunitySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Community
         fields = ('id', 'name', 'is_closed', 'description', 'zipcode', 'country', 'ways_to_help',
-                  'display_leaders_on_home_page', 'home_page_highlight', 'photo_file',)
+                  'display_leaders_on_home_page', 'home_page_highlight', 'photo_file', 'community_time_zone',)
 
 
 class CustomSectionSerializer(serializers.ModelSerializer):

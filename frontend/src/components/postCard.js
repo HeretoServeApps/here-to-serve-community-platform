@@ -190,7 +190,7 @@ export default function PostCard({
               <Modal
                 show={showModal}
                 onClose={() => setShowModal(false)}
-                closeOnBlur='true'
+                closeOnBlur={true}
               >
                 <Modal.Card>
                   <Modal.Card.Head onClose={() => setShowModal(false)}>
