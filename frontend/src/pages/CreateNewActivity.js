@@ -3,6 +3,7 @@ import DayPicker, { DateUtils } from 'react-day-picker'
 import 'react-day-picker/lib/style.css'
 import { Link } from 'react-router-dom'
 import { useHistory } from 'react-router-dom'
+import axios from 'axios'
 
 import Container from 'react-bulma-components/lib/components/container'
 import Columns from 'react-bulma-components/lib/components/columns'
@@ -19,7 +20,6 @@ import {
   Textarea,
   Checkbox,
 } from 'react-bulma-components/lib/components/form'
-import axios from 'axios'
 import MultiSelect from "@khanacademy/react-multi-select";
 import SideBar from '../components/sidebar'
 

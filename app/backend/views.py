@@ -78,6 +78,21 @@ class CommunityUserRoleViewSet(viewsets.ModelViewSet):
     serializer_class = CommunityUserRoleSerializer
 
 
+class EditCommunityUserRole(APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def post(self, request, format=None):
+        community_id = request.data['community-id']
+        user_email = request.data['user-email']
+        user_id = User.objects.get(email=user_email).id
+        userRoleObject = CommunityUserRole.objects.get(community=community_id, user=user_id)
+        print(userRoleObject.community)
+        print(userRoleObject.user)
+        userRoleObject.role = request.data['role']
+        userRoleObject.save()
+        return Response('Edited Community User Role')
+
+
 @api_view(['GET'])
 def current_user(request):
     """

@@ -476,12 +476,17 @@ export default function CommunityHome(props) {
             ) : (
               <></>
             )}
+            
+            {localStorage.getItem('user-role') === 'Administrator' ?
+              <Button color='primary'>
+                <Link to='/edit-community' style={{ color: 'white' }}>
+                  Edit Community
+                </Link>
+              </Button>
+              :
+              <></>
+            }
 
-            <Button color='primary'>
-              <Link to='/edit-community' style={{ color: 'white' }}>
-                Edit Community
-              </Link>
-            </Button>
           </Columns.Column>
           <Columns.Column size={7}>
             {showWelcomeCard ? (
