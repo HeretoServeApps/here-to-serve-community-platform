@@ -102,8 +102,8 @@ export default function CommunityPeople() {
                                     search === '' ||
                                     (p.first_name + p.last_name).toLowerCase().includes(search.toLowerCase())
                             )
-                            .map((p) => (
-                                <tr key={p.id}>
+                            .map((p, index) => (
+                                <tr key={index}>
                                     <td>
                                         <strong>
                                             <Link 
@@ -139,9 +139,11 @@ export default function CommunityPeople() {
                                 </tr>
                             ))
                         ) : (
-                            <p className='has-text-grey-light' style={noteStyle}>
-                                No members match this search. 
-                            </p>
+                            <tr className='has-text-grey-light' style={noteStyle}>
+                                <td>
+                                    No members match this search. 
+                                </td>
+                            </tr>
                         )}
                     </tbody>
                 </Table>

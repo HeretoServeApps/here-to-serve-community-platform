@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react'
 import { useHistory } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import countryList from 'react-select-country-list'
+import axios from 'axios'
 
 import Heading from 'react-bulma-components/lib/components/heading'
 import Card from 'react-bulma-components/lib/components/card';
@@ -48,6 +49,11 @@ export default function CommunityOneMember(props) {
     const [validForm, setValidForm] = useState(false)
     let history = useHistory()
 
+    const roleMap = {
+        'Community Leader': 'COMM_LEADER',
+        'Coordinator': 'COORDINATOR',
+        'Community Member': 'COMM_MEMBER'
+    }
 
     const removeMember = useCallback(() => {
         var url = '/edit-user/' + pk + '/'
@@ -73,6 +79,23 @@ export default function CommunityOneMember(props) {
         .catch(error => console.log('error', error));
     })
 
+    const editRole = useCallback(() => {
+        const param = JSON.stringify({
+            'community-id': localStorage.getItem('community-id'),
+            'user-email': newEmail,
+            'role': roleMap[newRole],
+        })
+        axios.post('/edit-community-user-role/', param, {
+            headers: {
+            'Authorization': `JWT ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json',
+            },
+        })
+        .catch(error => console.log('error', error)
+        )
+    }, [newEmail, newRole])
+
+
     const editMember = useCallback(() => {
         // Edit user's information. First_name, last_name, and email are required. 
         var url = '/edit-user/' + pk + '/'
@@ -95,10 +118,6 @@ export default function CommunityOneMember(props) {
         formdata.append('zipcode', newZipcode)
         formdata.append('country', newCountry)
 
-        // Edit user's role in the community
-        // formdata.append('role', newRole)
-        // formdata.append('community', localStorage.getItem('community-name'))
-
         var requestOptions = {
             method: 'PUT',
             headers: myHeaders,
@@ -106,11 +125,14 @@ export default function CommunityOneMember(props) {
             redirect: 'follow'
         }
 
+        // Change the user's role
+        editRole()
+
         fetch(url, requestOptions)
         .then(response => response.text())
-        .then(result => 
+        .then(result => {
             history.push('/community-people')
-        )
+        })
         .catch(error => console.log('error', error))
     })
 
@@ -288,8 +310,8 @@ export default function CommunityOneMember(props) {
                         >
                             {countryList()
                             .getLabels()
-                            .map((c) => (
-                                <option style={{ position: 'static' }} value={c}>
+                            .map((c, index) => (
+                                <option style={{ position: 'static' }} value={c} key={index}>
                                 {c}
                                 </option>
                             ))}
