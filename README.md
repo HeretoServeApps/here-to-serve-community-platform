@@ -1,4 +1,9 @@
 # Here to Serve
+![python3.x](https://img.shields.io/badge/python-3.x-brightgreen.svg)
+![constributors](https://img.shields.io/github/contributors/dzungpng/here-to-serve)
+![languages](https://img.shields.io/github/languages/count/dzungpng/here-to-serve)
+
+![stars](https://img.shields.io/github/stars/dzungpng/here-to-serve?style=social)
 
 ![](images/logo-h2s.svg)
 
