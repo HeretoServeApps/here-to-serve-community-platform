@@ -2,6 +2,30 @@
 
 ![](images/logo-h2s.svg)
 
+## Demos
+
+### Registering as a New User
+![register](readme_media/register.gif "register")
+
+### Creating a new Community
+![createcommunity](readme_media/create_community.gif "createcommunity")
+
+### Writing a Post
+![post](readme_media/post.gif "post")
+
+### Creating a calendar event
+![event](readme_media/create_event.gif "event")
+
+## Other Functionalities:
+- Customizing homepage
+- Permissions
+- Password reset
+- Email notifications
+- Calendar filtering
+- Adding custom links to sidebar
+- Managing community members
+- Managing photo gallery
+
 ## Project structure
 
 The backend is under `app` folder, while the frontend is in the `frontend` folder. <br />
@@ -98,9 +122,6 @@ $ python manage.py runserver
 - localhost:8000/admin <br />
 
 This endpoint allows you to login as an admin and easily view and update models.
-When you have successfully logged in, you should see this view:
-
-![](images/admin-view.png)
 
 - localhost:8000 <br />
 
@@ -108,7 +129,6 @@ You can add communities as an admin directly on this interface. <br />
 
 This endpoint allows you to view the models as a rest API.
 
-![](images/rest-view.png)
 
 ## Running Project: Frontend
 
@@ -117,9 +137,8 @@ $ cd frontend
 $ yarn start
 ```
 
-If you navigate to localhost:3000, you should see the following view:
+And navigate to localhost:3000.
 
-![](images/frontend-view.png)
 
 These are test communities we added with the admin view. If you want to test further, 
 try going to admin view (localhost:8000/admin) and add some more communities.
