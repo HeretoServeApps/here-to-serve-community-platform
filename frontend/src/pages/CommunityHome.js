@@ -506,11 +506,19 @@ export default function CommunityHome(props) {
             {displayPhotoGallery ? photoGalleryContainer : <></>}
           </Columns.Column>
           <Columns.Column size={2}>
-            <Link to='/create-new-activity' style={{ color: 'white' }}>
-              <Button color='primary' className='is-fullwidth'>
-                Create Activity
-              </Button>
-            </Link>
+            {localStorage.getItem('role') === 'Administrator' ? 
+              (<Link to='/create-new-activity' style={{ color: 'white' }}>
+                <Button color='primary' className='is-fullwidth'>
+                  Create Activity
+                </Button>
+              </Link>)
+              :
+              (<Link to='#' style={{ color: 'white' }}>
+                <Button color='primary' className='is-fullwidth'>
+                  My Activities
+                </Button>
+              </Link>)
+            }
             <a
               href='https://www.heretoserve.org/'
               target='_blank'

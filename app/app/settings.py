@@ -162,7 +162,6 @@ CORS_ORIGIN_WHITELIST = [
 ALLOWED_HOSTS = ['*']
 CORS_ORIGIN_ALLOW_ALL = True
 
-
 # Email Settings
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_PORT = 587
@@ -178,3 +177,6 @@ DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 AWS_STORAGE_BUCKET_NAME = 'here-to-serve-test'
 AWS_S3_REGION_NAME = 'us-east-2'
 AWS_DEFAULT_ACL = None
+
+# Django file uploads
+DATA_UPLOAD_MAX_MEMORY_SIZE = 5242880  # (5 MB)
