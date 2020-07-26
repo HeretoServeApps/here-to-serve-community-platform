@@ -34,6 +34,7 @@ import CreateCustomSection from './pages/CreateCustomSection'
 import ActivityReport from './pages/ActivityReport'
 import CustomGeneral from './pages/CustomGeneral'
 import PhotoGallery from './pages/PhotoGallery'
+import PasswordSettings from './pages/PasswordSettings'
 
 export default function App() {
   const [loggedIn, setLoggedIn] = useState(
@@ -285,6 +286,11 @@ export default function App() {
             path='/edit-community'
             exact
             component={CommunityEdit}
+          />
+          <PrivateRoute
+            path='/password-settings'
+            exact
+            component={PasswordSettings}
           />
         </Switch>
         <AppFooter />

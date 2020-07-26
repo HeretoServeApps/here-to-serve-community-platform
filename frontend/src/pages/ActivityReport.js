@@ -228,25 +228,11 @@ export default function ActivityReport() {
             <CommunityNavbar />
             <Container style={containerStyle}>
                 <Columns>
-                    <Columns.Column size={6}>
+                    <Columns.Column size={8}>
                         <Heading size={4}>Activity Report</Heading>
                     </Columns.Column>
-                    <Columns.Column size={6}>
+                    <Columns.Column size={4}>
                         <Columns>
-                            <Columns.Column>
-                                <Link to='/create-new-activity'>
-                                    <Button
-                                        style={{
-                                            marginBottom: '1rem',
-                                            boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)',
-                                        }}
-                                        color='primary'
-                                        fullwidth={true}
-                                    >
-                                        Create New Activity
-                                    </Button>
-                                </Link>
-                            </Columns.Column>
                             <Columns.Column>
                                 <PDFDownloadLink 
                                     document={
