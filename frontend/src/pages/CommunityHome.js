@@ -4,7 +4,8 @@ import axios from 'axios'
 import { Calendar, momentLocalizer } from 'react-big-calendar'
 import moment from 'moment'
 import 'react-big-calendar/lib/sass/styles.scss'
-import styled from 'styled-components'
+import ImageGallery from 'react-image-gallery'
+import '../../node_modules/react-image-gallery/styles/css/image-gallery.css'
 
 import Container from 'react-bulma-components/lib/components/container'
 import Columns from 'react-bulma-components/lib/components/columns'
@@ -17,8 +18,6 @@ import Message from 'react-bulma-components/lib/components/message'
 import Card from 'react-bulma-components/lib/components/card'
 import Media from 'react-bulma-components/lib/components/media'
 import Content from 'react-bulma-components/lib/components/content'
-import ImageGallery from 'react-image-gallery'
-import '../../node_modules/react-image-gallery/styles/css/image-gallery.css'
 
 import CustomSections from '../components/customSections'
 
@@ -49,6 +48,8 @@ export default function CommunityHome(props) {
   const [familyUpdates, setFamilyUpdates] = useState([])
   const [waystoHelp, setWaysToHelp] = useState('')
   const [photoGallery, setPhotoGallery] = useState('')
+
+  const [userRole, setUserRole] = useState('')
 
   const years = [...Array(15).keys()].map((i) => i + 2020)
   const months = [
@@ -260,6 +261,7 @@ export default function CommunityHome(props) {
       .then(
         (response) => {
           localStorage.setItem('user-role', response.data.user_role)
+          setUserRole(response.data.user_role)
         },
         (error) => {
           console.log(error)
@@ -437,7 +439,7 @@ export default function CommunityHome(props) {
       {photoGallery.length === 0 ? (
         <p style={noteStyle}>No photos have been added to this gallery.</p>
       ) : (
-        <ImageGallery items={photoGallery} thumbnailPosition='right' />
+        <ImageGallery items={photoGallery} thumbnailPosition='right' autoPlay={true}/>
       )}
     </div>
   )
@@ -477,7 +479,7 @@ export default function CommunityHome(props) {
               <></>
             )}
             
-            {localStorage.getItem('user-role') === 'Administrator' ?
+            {userRole === 'Administrator' ?
               <Button color='primary'>
                 <Link to='/edit-community' style={{ color: 'white' }}>
                   Edit Community
@@ -506,11 +508,19 @@ export default function CommunityHome(props) {
             {displayPhotoGallery ? photoGalleryContainer : <></>}
           </Columns.Column>
           <Columns.Column size={2}>
-            <Link to='/create-new-activity' style={{ color: 'white' }}>
-              <Button color='primary' className='is-fullwidth'>
-                Create Activity
-              </Button>
-            </Link>
+            {userRole === 'Administrator' ? 
+              (<Link to='/create-new-activity' style={{ color: 'white' }}>
+                <Button color='primary' className='is-fullwidth'>
+                  Create Activity
+                </Button>
+              </Link>)
+              :
+              (<Link to='#' style={{ color: 'white' }}>
+                <Button color='primary' className='is-fullwidth'>
+                  My Activities
+                </Button>
+              </Link>)
+            }
             <a
               href='https://www.heretoserve.org/'
               target='_blank'
