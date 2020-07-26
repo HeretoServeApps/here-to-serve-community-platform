@@ -34,6 +34,7 @@ import CreateCustomSection from './pages/CreateCustomSection'
 import ActivityReport from './pages/ActivityReport'
 import CustomGeneral from './pages/CustomGeneral'
 import PhotoGallery from './pages/PhotoGallery'
+import MessageBoard from './pages/MessageBoard'
 
 export default function App() {
   const [loggedIn, setLoggedIn] = useState(
@@ -286,6 +287,7 @@ export default function App() {
             exact
             component={CommunityEdit}
           />
+          <PrivateRoute path='/message-board' exact component={MessageBoard} />
         </Switch>
         <AppFooter />
       </Router>

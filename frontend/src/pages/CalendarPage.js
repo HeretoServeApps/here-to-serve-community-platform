@@ -470,7 +470,19 @@ export default function CalendarPage() {
         <Columns.Column size={9}>
           <Container style={containerStyle}>
             <Columns>
-              <Columns.Column size={8} style={{ marginRight: '6%' }}>
+              <Columns.Column size={9}>
+                <Heading size={4}>Community Calendar</Heading>
+              </Columns.Column>
+              <Columns.Column size={3}>
+                <Link to='/create-new-activity' style={{ color: 'white' }}>
+                  <Button color='primary' fullwidth={true}>
+                    Create a New Activity
+                  </Button>
+                </Link>
+              </Columns.Column>
+            </Columns>
+            <Columns>
+              <Columns.Column size={9}>
                 <Select
                   value={selectedMonth}
                   onChange={(e) => setSelectedMonth(e.target.value)}
@@ -489,21 +501,18 @@ export default function CalendarPage() {
                     <option value={year}>{year}</option>
                   ))}
                 </Select>
-                <Button onClick={updateDate} color='info'>
+                <Button
+                  onClick={updateDate}
+                  style={{ color: 'white', backgroundColor: '#2C8595' }}
+                >
                   Go
                 </Button>
               </Columns.Column>
-              <Columns.Column>
-                <Link to='/create-new-activity' style={{ color: 'white' }}>
-                  <Button color='primary' fullwidth={true}>
-                    Create a New Activity
-                  </Button>
-                </Link>
+              <Columns.Column size={3}>
                 <Link to='/activity-report' style={{ color: 'white' }}>
                   <Button
                     className='is-primary is-inverted'
                     style={{
-                      marginTop: '1rem',
                       boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)',
                     }}
                     fullwidth={true}

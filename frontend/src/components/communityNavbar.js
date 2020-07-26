@@ -27,34 +27,28 @@ const CommunityNavbar = (props) => {
   return (
     <Bar>
       <Columns isMultiline={true}>
-        <Columns.Column isMultiline={true}>
-          <Columns>
-            <Columns.Column>
-              <Link to='/community-home'>
-                <Button
-                  className='is-small is-primary'
-                >
-                  {localStorage.getItem('community-name')}
-                </Button>
-              </Link>
-            </Columns.Column>
-            {links.map((title) => (
-              <Columns.Column>
-                <Link to={title[1]}>
-                  <Button
-                    className={
-                      title === activeLink
-                        ? 'is-small is-primary is-active'
-                        : 'is-small is-primary'
-                    }
-                  >
-                    {title[0]}
-                  </Button>
-                </Link>
-              </Columns.Column>
-            ))}
-          </Columns>
+        <Columns.Column>
+          <Link to='/community-home'>
+            <Button className='is-small is-primary'>
+              <strong>{localStorage.getItem('community-name')}</strong>
+            </Button>
+          </Link>
         </Columns.Column>
+        {links.map((title) => (
+          <Columns.Column>
+            <Link to={title[1]}>
+              <Button
+                className={
+                  title === activeLink
+                    ? 'is-small is-primary is-active'
+                    : 'is-small is-primary'
+                }
+              >
+                {title[0]}
+              </Button>
+            </Link>
+          </Columns.Column>
+        ))}
       </Columns>
     </Bar>
   )

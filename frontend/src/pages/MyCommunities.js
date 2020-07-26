@@ -30,19 +30,20 @@ export default function MyCommunities() {
         }
       )
   }, [token])
-  
 
-  const setCommunityInfoInLocalStorage = useCallback((name, zipcode, is_closed, id) => {
-    localStorage.setItem('community-name', name)
-    localStorage.setItem('community-zipcode', zipcode)
-    localStorage.setItem('community-is-closed', is_closed)
-    localStorage.setItem('community-id', id)
-  }, [])
-
+  const setCommunityInfoInLocalStorage = useCallback(
+    (name, zipcode, is_closed, id) => {
+      localStorage.setItem('community-name', name)
+      localStorage.setItem('community-zipcode', zipcode)
+      localStorage.setItem('community-is-closed', is_closed)
+      localStorage.setItem('community-id', id)
+    },
+    []
+  )
 
   const containerStyle = {
     margin: '5% auto',
-    fullheight: true
+    fullheight: true,
   }
 
   var noteStyle = {
@@ -87,7 +88,7 @@ export default function MyCommunities() {
                 c.name.toLowerCase().includes(search.toLowerCase())
             )
             .map((c) => (
-              <Columns.Column size={4} key={c.id}>
+              <Columns.Column size={3} key={c.id}>
                 <Link
                   to={{
                     pathname: '/community-home/',
@@ -97,9 +98,17 @@ export default function MyCommunities() {
                       is_closed: c.is_closed,
                     },
                   }}
-                  onClick={() => setCommunityInfoInLocalStorage(c.name, c.zipcode, c.is_closed, c.id)}
+                  onClick={() =>
+                    setCommunityInfoInLocalStorage(
+                      c.name,
+                      c.zipcode,
+                      c.is_closed,
+                      c.id
+                    )
+                  }
+                  style={{ color: 'black' }}
                 >
-                  <CommunityCard text={c.name} />
+                  <CommunityCard text={c.name} photo={c.photo_file} />
                 </Link>
               </Columns.Column>
             ))
