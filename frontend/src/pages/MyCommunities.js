@@ -99,7 +99,7 @@ export default function MyCommunities() {
                   }}
                   onClick={() => setCommunityInfoInLocalStorage(c.name, c.zipcode, c.is_closed, c.id)}
                 >
-                  <CommunityCard text={c.name} />
+                  <CommunityCard title={c.name} img={c.photo_file} />
                 </Link>
               </Columns.Column>
             ))

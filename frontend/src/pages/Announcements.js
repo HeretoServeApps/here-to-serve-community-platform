@@ -1,3 +1,5 @@
+// This is the Family Updates page
+
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 

@@ -1,5 +1,4 @@
 import React, { useState, useCallback } from 'react'
-import { Link, useHistory } from 'react-router-dom'
 import Heading from 'react-bulma-components/lib/components/heading'
 import Icon from 'react-bulma-components/lib/components/icon'
 import Button from 'react-bulma-components/lib/components/button'
@@ -10,9 +9,7 @@ import {
   Field,
   Control,
   Input,
-  Select,
-  Textarea,
-  Label,
+  Label
 } from 'react-bulma-components/lib/components/form'
 import { Editor } from '@tinymce/tinymce-react'
 
@@ -27,10 +24,8 @@ export default function PostCard({
   const [showMenu, setShowMenu] = useState(false)
   const [showModal, setShowModal] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
-  const [pk, setPk] = useState('')
   const [newSubject, setNewSubject] = useState(subject ? subject : '')
   const [newMessage, setNewMessage] = useState(message ? message : '')
-  let history = useHistory()
 
   const deletePost = useCallback(() => {
     var url = '/delete-' + type + '/'
@@ -126,20 +121,38 @@ export default function PostCard({
               Message<span style={{ color: '#F83D34' }}>*</span>
             </Label>
             <Control>
+              <input id="my-file" type="file" name="my-file" style={{display:"none"}} />
               <Editor
                 initialValue={newMessage}
                 init={{
-                  height: 300,
+                  height: 500,
                   menubar: false,
                   plugins: [
-                    'advlist autolink lists link image charmap print preview anchor',
-                    'searchreplace visualblocks code fullscreen',
-                    'insertdatetime media table paste code help wordcount',
+                      'advlist autolink lists link image charmap print preview anchor',
+                      'searchreplace wordcount visualblocks code fullscreen',
+                      'insertdatetime media table contextmenu paste code'
                   ],
-                  toolbar:
-                    'undo redo | formatselect | link image | bold italic backcolor | \
-                      alignleft aligncenter alignright alignjustify | \
-                      bullist numlist outdent indent | removeformat | help',
+                  toolbar: 'insertfile undo redo | formatselect styleselect | bold italic backcolor | \
+                            alignleft aligncenter alignright alignjustify | \
+                            bullist numlist outdent indent | link image media | help',
+                  file_browser_callback_types: 'image',
+                  file_picker_callback: function (callback, value, meta) {
+                    if (meta.filetype == 'image') {
+                        var input = document.getElementById('my-file');
+                        input.click();
+                        input.onchange = function () {
+                            var file = input.files[0];
+                            var reader = new FileReader();
+                            reader.onload = function (e) {
+                                callback(e.target.result, {
+                                    alt: file.name
+                                });
+                            };
+                            reader.readAsDataURL(file);
+                        };
+                    }
+                  },
+                  paste_data_images: true,
                 }}
                 onEditorChange={(content, editor) => setNewMessage(content)}
               />

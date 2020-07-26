@@ -50,6 +50,8 @@ export default function CommunityHome(props) {
   const [waystoHelp, setWaysToHelp] = useState('')
   const [photoGallery, setPhotoGallery] = useState('')
 
+  const [userRole, setUserRole] = useState('')
+
   const years = [...Array(15).keys()].map((i) => i + 2020)
   const months = [
     'January',
@@ -260,6 +262,7 @@ export default function CommunityHome(props) {
       .then(
         (response) => {
           localStorage.setItem('user-role', response.data.user_role)
+          setUserRole(response.data.user_role)
         },
         (error) => {
           console.log(error)
@@ -477,7 +480,7 @@ export default function CommunityHome(props) {
               <></>
             )}
             
-            {localStorage.getItem('user-role') === 'Administrator' ?
+            {userRole === 'Administrator' ?
               <Button color='primary'>
                 <Link to='/edit-community' style={{ color: 'white' }}>
                   Edit Community
@@ -506,7 +509,7 @@ export default function CommunityHome(props) {
             {displayPhotoGallery ? photoGalleryContainer : <></>}
           </Columns.Column>
           <Columns.Column size={2}>
-            {localStorage.getItem('role') === 'Administrator' ? 
+            {userRole === 'Administrator' ? 
               (<Link to='/create-new-activity' style={{ color: 'white' }}>
                 <Button color='primary' className='is-fullwidth'>
                   Create Activity
