@@ -4,7 +4,8 @@ import axios from 'axios'
 import { Calendar, momentLocalizer } from 'react-big-calendar'
 import moment from 'moment'
 import 'react-big-calendar/lib/sass/styles.scss'
-import styled from 'styled-components'
+import ImageGallery from 'react-image-gallery'
+import '../../node_modules/react-image-gallery/styles/css/image-gallery.css'
 
 import Container from 'react-bulma-components/lib/components/container'
 import Columns from 'react-bulma-components/lib/components/columns'
@@ -17,8 +18,6 @@ import Message from 'react-bulma-components/lib/components/message'
 import Card from 'react-bulma-components/lib/components/card'
 import Media from 'react-bulma-components/lib/components/media'
 import Content from 'react-bulma-components/lib/components/content'
-import ImageGallery from 'react-image-gallery'
-import '../../node_modules/react-image-gallery/styles/css/image-gallery.css'
 
 import CustomSections from '../components/customSections'
 
@@ -440,7 +439,7 @@ export default function CommunityHome(props) {
       {photoGallery.length === 0 ? (
         <p style={noteStyle}>No photos have been added to this gallery.</p>
       ) : (
-        <ImageGallery items={photoGallery} thumbnailPosition='right' />
+        <ImageGallery items={photoGallery} thumbnailPosition='right' autoPlay={true}/>
       )}
     </div>
   )

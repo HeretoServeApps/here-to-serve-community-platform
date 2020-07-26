@@ -132,7 +132,7 @@ export default function PostCard({
                       'searchreplace wordcount visualblocks code fullscreen',
                       'insertdatetime media table contextmenu paste code'
                   ],
-                  toolbar: 'insertfile undo redo | formatselect styleselect | bold italic backcolor | \
+                  toolbar: 'insertfile undo redo | formatselect | bold italic backcolor | \
                             alignleft aligncenter alignright alignjustify | \
                             bullist numlist outdent indent | link image media | help',
                   file_browser_callback_types: 'image',
