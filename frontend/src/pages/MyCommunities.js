@@ -56,14 +56,15 @@ export default function MyCommunities() {
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <Heading size={4}>My Communities</Heading>
         <div style={{ display: 'flex' }}>
-          <Button color='primary' style={{ marginRight: '10px' }}>
-            <Link to='/select-communities' style={{ color: 'white' }}>
-              Join
-            </Link>
-          </Button>
-          <Button color='primary' outlined={true}>
-            Edit
-          </Button>
+          {localStorage.getItem('is-staff') !== 'true' ?
+            (<Button color='primary' style={{ marginRight: '10px' }}>
+              <Link to='/select-communities' style={{ color: 'white' }}>
+                Join
+              </Link>
+            </Button>) 
+            :
+            (<></>)
+          }
         </div>
       </div>
       <Columns>
