@@ -601,7 +601,7 @@ class EditCustomSection(APIView):
 
 class AddVolunteerToActivity(APIView):
     """
-    A user can add themself as a volunteer for a community.
+    A user can add themself as a volunteer for an activity.
     """
     permission_classes = (permissions.AllowAny, )
 
