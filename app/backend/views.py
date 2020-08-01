@@ -606,11 +606,11 @@ class AddVolunteerToActivity(APIView):
     permission_classes = (permissions.AllowAny, )
 
     def post(self, request, format=None):
-        activity_title = request.data['activity']
+        activity_id = request.data['activity']
         user_email = request.data['user']
         user = User.objects.get(email=user_email).id
-        activity = Activity.objects.get(title=activity_title)
-        activity.add(user)
+        activity = Activity.objects.get(id=activity_id)
+        activity.volunteers.add(user)
         activity.save()
         return Response('Added new volunteer to activity')
 
