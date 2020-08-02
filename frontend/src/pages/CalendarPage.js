@@ -494,11 +494,16 @@ export default function CalendarPage() {
                 </Button>
               </Columns.Column>
               <Columns.Column>
-                <Link to='/create-new-activity' style={{ color: 'white' }}>
-                  <Button color='primary' fullwidth={true}>
-                    Create a New Activity
-                  </Button>
-                </Link>
+                {localStorage.getItem('user-role') === 'Administrator' ?
+                  <Link to='/create-new-activity' style={{ color: 'white' }}>
+                    <Button color='primary' fullwidth={true}>
+                      Create a New Activity
+                    </Button>
+                  </Link>
+                  :
+                  <></>
+                }
+               
                 <Link to='/activity-report' style={{ color: 'white' }}>
                   <Button
                     className='is-primary is-inverted'

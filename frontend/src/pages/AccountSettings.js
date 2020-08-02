@@ -7,7 +7,6 @@ import Heading from 'react-bulma-components/lib/components/heading'
 import Button from 'react-bulma-components/lib/components/button';
 import {
     Field,
-    Control,
     Input,
     Label,
     Select
@@ -16,9 +15,6 @@ import {
 import SideNavAccount from '../components/sideNavAccount'
 
 export default function AccountSettings() {
-    const [currentPassword, setCurrentPassword] = useState('')
-    const [newPassword, setNewPassword] = useState('')
-    const [confirmNewPassword, setConfirmNewPassword] = useState('')
     const [firstName, setFirstName] = useState('')
     const [lastName, setLastName] = useState('')
     const [email, setEmail] = useState('')
@@ -116,7 +112,8 @@ export default function AccountSettings() {
         city, 
         state, 
         zipcode, 
-        country
+        country,
+        pk
     ])
 
 
