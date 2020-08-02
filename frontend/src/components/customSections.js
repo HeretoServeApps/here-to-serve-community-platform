@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 
-import Container from 'react-bulma-components/lib/components/container'
-import Heading from 'react-bulma-components/lib/components/heading'
 import Button from 'react-bulma-components/lib/components/button'
-import Columns from 'react-bulma-components/lib/components/columns'
 import Box from 'react-bulma-components/lib/components/box'
 import Menu from 'react-bulma-components/lib/components/menu'
 
@@ -12,13 +9,7 @@ import axios from 'axios'
 
 export default function CustomSections() {
   const [sections, setSections] = useState([])
-  var containerStyle = {
-    margin: '5% auto',
-    maxWidth: '300px',
-    padding: '1rem',
-    border: '0.1rem solid #E5E5E5',
-    borderRadius: '10px',
-  }
+  const [userRole, setUserRole] = useState('')
 
   useEffect(() => {
     axios
@@ -40,6 +31,10 @@ export default function CustomSections() {
       )
   }, [])
 
+  useEffect(() => {
+    setUserRole(localStorage.getItem('user-role'))
+  }, [])
+
   return (
     <div style={{ marginBottom: '10%' }}>
       <div
@@ -50,9 +45,13 @@ export default function CustomSections() {
         }}
       >
         <strong>Custom Sections</strong>
-        <Link to='/create-custom-section'>
-          <Button className='is-light is-small'>+</Button>
-        </Link>
+        {userRole === 'Administrator' ? 
+          <Link to='/create-custom-section'>
+            <Button className='is-light is-small'>+</Button>
+          </Link>
+        :
+          <></>
+        }
       </div>
       <br />
       <Menu>

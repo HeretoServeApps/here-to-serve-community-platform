@@ -61,17 +61,24 @@ export default function Announcements(props) {
           <Columns.Column size={3}>
             <SideBar />
           </Columns.Column>
+          
           <Columns.Column size={9}>
             <Columns>
               <Columns.Column size={8}>
                 <Heading size={4}>Family Updates</Heading>
               </Columns.Column>
+
               <Columns.Column size={4}>
-                <Link to='/create-announcement' style={{ marginRight: '10px' }}>
-                  <Button color='primary' className='is-fullwidth'>
-                    Create Update
-                  </Button>
-                </Link>
+                {localStorage.getItem('user-role') === 'Administrator' ? 
+                  <Link to='/create-announcement' style={{ marginRight: '10px' }}>
+                    <Button color='primary' className='is-fullwidth'>
+                      Create Update
+                    </Button>
+                  </Link>
+                  :
+                  <></>
+                }
+                
               </Columns.Column>
             </Columns>
             <div>

@@ -41,7 +41,7 @@ export default function MyCommunities() {
 
 
   const containerStyle = {
-    margin: '5% auto',
+    margin: '5% 5%',
     fullheight: true
   }
 
