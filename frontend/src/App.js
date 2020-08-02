@@ -35,6 +35,7 @@ import ActivityReport from './pages/ActivityReport'
 import CustomGeneral from './pages/CustomGeneral'
 import PhotoGallery from './pages/PhotoGallery'
 import PasswordSettings from './pages/PasswordSettings'
+import ActivityEdit from './pages/ActivityEdit'
 
 export default function App() {
   const [loggedIn, setLoggedIn] = useState(
@@ -291,6 +292,11 @@ export default function App() {
             path='/password-settings'
             exact
             component={PasswordSettings}
+          />
+          <PrivateRoute
+            path='/edit-activity/:activity'
+            exact
+            component={ActivityEdit}
           />
         </Switch>
         <AppFooter />

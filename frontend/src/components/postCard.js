@@ -194,7 +194,7 @@ export default function PostCard({
               >
                 <Dropdown.Item value='edit' onClick={() => setIsEditing(true)}>
                   Edit
-              </Dropdown.Item>
+                </Dropdown.Item>
                 <Dropdown.Item
                   value='delete'
                   style={{ color: 'hsl(348, 100%, 61%)' }}
@@ -209,12 +209,12 @@ export default function PostCard({
                 >
                   <Modal.Card>
                     <Modal.Card.Head onClose={() => setShowModal(false)}>
-                      <Modal.Card.Title>Delete Announcement</Modal.Card.Title>
+                    <Modal.Card.Title>Delete "{subject}"</Modal.Card.Title>
                     </Modal.Card.Head>
                     <Section style={{ backgroundColor: 'white' }}>
                       Are you sure you want to delete this post? You can't undo
                       this action.
-                  </Section>
+                    </Section>
                     <Modal.Card.Foot
                       style={{
                         alignItems: 'center',

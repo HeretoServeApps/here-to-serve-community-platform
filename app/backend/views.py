@@ -357,6 +357,19 @@ class ActivityList(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+class ActivityEditView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Activity.objects.all()
+    serializer_class = ActivitySerializer
+
+
+class OneActivityViewSet(viewsets.ModelViewSet):
+    queryset = Activity.objects.all()
+    serializer_class = ActivitySerializer
+
+    def get_queryset(self):
+        return Activity.objects.filter(pk=self.request.query_params.get('pk'))
+
+
 class AnnouncementViewSet(viewsets.ModelViewSet):
     queryset = Announcement.objects.all().order_by('name')
     serializer_class = AnnouncementSerializer
