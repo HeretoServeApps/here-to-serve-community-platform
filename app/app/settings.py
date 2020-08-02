@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     'corsheaders',
     'django_countries',
     'phone_field',
-    'tinymce'
+    'tinymce',
+    'djcelery'
 ]
 
 MIDDLEWARE = [
@@ -180,3 +181,13 @@ AWS_DEFAULT_ACL = None
 
 # Django file uploads
 DATA_UPLOAD_MAX_MEMORY_SIZE = 5242880  # (5 MB)
+
+# Celery settings
+//Specify which broker you will use, we are using django's broker for development
+BROKER_URL = 'django://'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_RESULT_BACKEND = 'djcelery.backends.database:DatabaseBackend'
+CELERYBEAT_SCHEDULER = "djcelery.schedulers.DatabaseScheduler"
+djcelery.setup_loader()

@@ -381,7 +381,7 @@ class AddAnnouncement(APIView):
 
         user_email = request.data['user']
         user = User.objects.get(email=user_email).id
-        user_name = User.objects.get(email=user_email).name
+        user_name = User.objects.get(email=user_email).first_name + ' ' + User.objects.get(email=user_email).last_name
         
         request.data['community'] = community
         request.data['user'] = user
@@ -392,8 +392,8 @@ class AddAnnouncement(APIView):
         for role in comm:
             mailing_list.append(role.user.email)
 
-        msg_plain = name + ' posted a new family update in the care community ' + community_name + ': \"'+ request.data['message'] +'\"' 
-        msg_html = name + ' posted a new family update in the care community ' + community_name + ': \"'+ request.data['message'] +'\"' 
+        msg_plain = user_name + ' posted a new family update in the care community ' + community_name + ': \"'+ request.data['message'] +'\"' 
+        msg_html = user_name + ' posted a new family update in the care community ' + community_name + ': \"'+ request.data['message'] +'\"' 
         try:
             send_mail(
                 'New Family Update in ' + community_name + ' Care Community',  
