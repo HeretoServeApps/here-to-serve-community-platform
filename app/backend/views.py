@@ -377,12 +377,35 @@ class AddAnnouncement(APIView):
 
     def post(self, request, format=None):
         community_name = request.data['community']
-        user_email = request.data['user']
         community = Community.objects.get(name=community_name).id
+
+        user_email = request.data['user']
         user = User.objects.get(email=user_email).id
+        user_name = User.objects.get(email=user_email).name
+        
         request.data['community'] = community
         request.data['user'] = user
         serializer = AnnouncementSerializer(data=request.data)
+
+        mailing_list = []
+        comm = CommunityUserRole.objects.all().filter(community=community).select_related('user')
+        for role in comm:
+            mailing_list.append(role.user.email)
+
+        msg_plain = name + ' posted a new family update in the care community ' + community_name + ': \"'+ request.data['message'] +'\"' 
+        msg_html = name + ' posted a new family update in the care community ' + community_name + ': \"'+ request.data['message'] +'\"' 
+        try:
+            send_mail(
+                'New Family Update in ' + community_name + ' Care Community',  
+                msg_plain,
+                settings.EMAIL_HOST_USER,
+                mailing_list,
+                fail_silently=False,
+                html_message=msg_html,
+            )
+        except BadHeaderError:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
