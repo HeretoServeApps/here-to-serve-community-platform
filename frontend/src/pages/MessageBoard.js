@@ -1,46 +1,34 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import { useHistory } from 'react-router-dom'
+import axios from 'axios'
+import { Editor } from '@tinymce/tinymce-react'
 
 import Container from 'react-bulma-components/lib/components/container'
 import Columns from 'react-bulma-components/lib/components/columns'
 import Heading from 'react-bulma-components/lib/components/heading'
 import CommunityNavbar from '../components/communityNavbar'
 import Button from 'react-bulma-components/lib/components/button'
-import { Editor } from '@tinymce/tinymce-react'
-import { Edit, XCircle, Coffee } from 'react-feather'
-
 import SideBar from '../components/sidebar'
-import PostCard from '../components/postCard'
-
-import axios from 'axios'
-
+import { Edit2, XCircle, Coffee } from 'react-feather'
 import {
   Control,
   Label,
   Field,
   Input,
 } from 'react-bulma-components/lib/components/form'
+import PostCard from '../components/postCard'
 
-export default function WellWishes(props) {
+export default function MessageBoard(props) {
   const token = localStorage.getItem('token')
   const [showForm, setShowForm] = useState(false)
-  const [wellwishes, setWellWishes] = useState([])
+  const [messages, setMessages] = useState([])
 
   const [subject, setSubject] = useState('')
   const [message, setMessage] = useState('')
   const [validForm, setValidForm] = useState(false)
-  let history = useHistory()
 
   var containerStyle = {
     margin: '5% 5%',
     maxWidth: '100%',
-  }
-
-  var formContainerStyle = {
-    padding: '5%',
-    border: '1px solid hsl(0, 0%, 86%)',
-    borderRadius: '10px',
-    marginTop: '20px',
   }
 
   var noteStyle = {
@@ -50,6 +38,13 @@ export default function WellWishes(props) {
     padding: '20px',
     backgroundColor: 'hsl(0, 0%, 96%)',
     borderRadius: '10px',
+  }
+
+  var formContainerStyle = {
+    padding: '5%',
+    border: '1px solid hsl(0, 0%, 86%)',
+    borderRadius: '10px',
+    marginTop: '20px',
   }
 
   useEffect(() => {
@@ -80,7 +75,7 @@ export default function WellWishes(props) {
     })
 
     axios
-      .post('/add-well-wish/', param, {
+      .post('/add-message/', param, {
         headers: {
           Authorization: `JWT ${token}`,
           'Content-Type': 'application/json',
@@ -98,7 +93,7 @@ export default function WellWishes(props) {
 
   useEffect(() => {
     axios
-      .get('/well-wishes', {
+      .get('/messages', {
         headers: {
           Authorization: `JWT ${token}`,
         },
@@ -110,7 +105,7 @@ export default function WellWishes(props) {
       })
       .then(
         (response) => {
-          setWellWishes(response.data)
+          setMessages(response.data)
         },
         (error) => {
           console.log(error)
@@ -128,27 +123,29 @@ export default function WellWishes(props) {
           </Columns.Column>
           <Columns.Column size={9}>
             <Columns>
-              <Columns.Column size={8}>
-                <Heading size={4}>Well Wishes</Heading>
+              <Columns.Column size={9}>
+                <Heading size={4}>Message Board</Heading>
               </Columns.Column>
-              <Columns.Column size={4}>
+              <Columns.Column size={3}>
                 <Button
                   onClick={() => setShowForm(!showForm)}
                   color='primary'
                   className='is-fullwidth'
                 >
-                  {showForm ? 'Hide Message Form' : 'Leave a Message'}
+                  {showForm ? (
+                    <div>
+                      <XCircle size={12} style={{ marginRight: '5px' }} />
+                      Hide Message Form
+                    </div>
+                  ) : (
+                    <div>
+                      <Edit2 size={12} style={{ marginRight: '5px' }} />
+                      Leave a Message
+                    </div>
+                  )}
                 </Button>
               </Columns.Column>
             </Columns>
-            <div>
-              <p>
-                Well Wishes is the place to drop a line to say hello, post a
-                prayer or let the family you are helping know that you’re
-                thinking about them.
-              </p>
-            </div>
-
             {showForm && (
               <div>
                 <div style={formContainerStyle}>
@@ -168,41 +165,25 @@ export default function WellWishes(props) {
                       Message<span style={{ color: '#F83D34' }}>*</span>
                     </Label>
                     <Control>
-                    <input id="my-file" type="file" name="my-file" style={{display:"none"}} />
-                <Editor
-                  initialValue={message}
-                  init={{
-                    height: 500,
-                    menubar: false,
-                    plugins: [
-                        'advlist autolink lists link image charmap print preview anchor',
-                        'searchreplace wordcount visualblocks code fullscreen',
-                        'insertdatetime media table contextmenu paste code'
-                    ],
-                    toolbar: 'insertfile undo redo | formatselect | bold italic backcolor | \
-                              alignleft aligncenter alignright alignjustify | \
-                              bullist numlist outdent indent | link image media | help',
-                    file_browser_callback_types: 'image',
-                    file_picker_callback: function (callback, value, meta) {
-                      if (meta.filetype == 'image') {
-                          var input = document.getElementById('my-file');
-                          input.click();
-                          input.onchange = function () {
-                              var file = input.files[0];
-                              var reader = new FileReader();
-                              reader.onload = function (e) {
-                                  callback(e.target.result, {
-                                      alt: file.name
-                                  });
-                              };
-                              reader.readAsDataURL(file);
-                          };
-                      }
-                    },
-                    paste_data_images: true,
-                  }}
-                  onEditorChange={(content, editor) => setMessage(content)}
-                />
+                      <Editor
+                        initialValue={message}
+                        init={{
+                          height: 300,
+                          menubar: false,
+                          plugins: [
+                            'advlist autolink lists link image charmap print preview anchor',
+                            'searchreplace visualblocks code fullscreen',
+                            'insertdatetime media table paste code help wordcount',
+                          ],
+                          toolbar:
+                            'undo redo | formatselect | link image | bold italic backcolor | \
+                            alignleft aligncenter alignright alignjustify | \
+                            bullist numlist outdent indent | removeformat | help',
+                        }}
+                        onEditorChange={(content, editor) =>
+                          setMessage(content)
+                        }
+                      />
                     </Control>
                   </Field>
                 </div>
@@ -216,13 +197,12 @@ export default function WellWishes(props) {
                     Finish
                   </Button>
                 </div>
+                <br />
               </div>
             )}
-
-            <br />
             <div>
-              {wellwishes.length > 0 ? (
-                wellwishes
+              {messages.length > 0 ? (
+                messages
                   .slice()
                   .reverse()
                   .map((a, index) => {
@@ -234,7 +214,7 @@ export default function WellWishes(props) {
                         dateTime={a.date_time}
                         user={a.author_name}
                         id={a.id}
-                        type='well-wish'
+                        type='message'
                       />
                     )
                   })

@@ -8,6 +8,8 @@ import ImageGallery from 'react-image-gallery'
 import '../../node_modules/react-image-gallery/styles/css/image-gallery.css'
 
 import Container from 'react-bulma-components/lib/components/container'
+import Box from 'react-bulma-components/lib/components/box'
+import Menu from 'react-bulma-components/lib/components/menu'
 import Columns from 'react-bulma-components/lib/components/columns'
 import Heading from 'react-bulma-components/lib/components/heading'
 import CommunityNavbar from '../components/communityNavbar'
@@ -20,6 +22,18 @@ import Media from 'react-bulma-components/lib/components/media'
 import Content from 'react-bulma-components/lib/components/content'
 
 import CustomSections from '../components/customSections'
+import {
+  Edit,
+  Home,
+  Users,
+  Mail,
+  Phone,
+  Link as LinkIcon,
+  Calendar as CalendarIcon,
+  CreditCard,
+  RefreshCw,
+  Star,
+} from 'react-feather'
 
 export default function CommunityHome(props) {
   const [description, setDescription] = useState('')
@@ -334,8 +348,11 @@ export default function CommunityHome(props) {
             </option>
           ))}
         </Select>
-        <Button onClick={updateDate} color='info'>
-          Go
+        <Button
+          onClick={updateDate}
+          style={{ color: 'white', backgroundColor: '#2C8595' }}
+        >
+          <RefreshCw size={12} style={{ marginRight: '5px' }} /> Go
         </Button>
       </Control>
       <br />
@@ -345,6 +362,7 @@ export default function CommunityHome(props) {
       >
         <Calendar
           localizer={localizer}
+          style={{ height: 450 }}
           toolbar={false}
           date={date}
           onNavigate={(date) => setDate(date)}
@@ -439,7 +457,11 @@ export default function CommunityHome(props) {
       {photoGallery.length === 0 ? (
         <p style={noteStyle}>No photos have been added to this gallery.</p>
       ) : (
-        <ImageGallery items={photoGallery} thumbnailPosition='right' autoPlay={true}/>
+        <ImageGallery
+          items={photoGallery}
+          thumbnailPosition='right'
+          autoPlay={true}
+        />
       )}
     </div>
   )
@@ -450,41 +472,57 @@ export default function CommunityHome(props) {
       <Container style={containerStyle}>
         <Columns isMultiline={true}>
           <Columns.Column size={3}>
-            <Image src={profilePhoto} style={{ marginBottom: '7%' }} />
-            <Heading size={6}>About</Heading>
-            <p>{description}</p>
-            <br />
-
-            {showLeaders && coordinators.length !== 0 && (
-              <div>
-                <Heading size={6}>Community Leaders</Heading>
-                {coordinators.map((c, index) => (
-                  <div style={{ marginBottom: '1%' }} key={index}>
-                    <p style={{ fontWeight: 'bold' }}>{c.label}</p>
-                    <p style={linkStyle}>
-                      <a
-                        href={'mailto:' + c.email}
-                        style={{ fontWeight: '500' }}
-                        className='has-theme-color'
-                      >
-                        {c.email}
-                      </a>
-                    </p>
-                    <p style={{ fontSize: '0.8em' }}>{c.phone}</p>
-                  </div>
-                ))}
-                <br />
-              </div>
-            )}
-            
-            {userRole === 'Administrator' &&
-              <Button color='primary'>
-                <Link to='/edit-community' style={{ color: 'white' }}>
-                  Edit Community
-                </Link>
-              </Button>
-            }
-
+            <Box>
+              <Image src={profilePhoto} style={{ marginBottom: '7%' }} />
+              <br />
+              <Heading size={6}>
+                <Home size={12} /> About Community
+              </Heading>
+              <p style={{ fontSize: '0.8em' }}>{description}</p>
+              <hr />
+              {showLeaders && coordinators.length !== 0 ? (
+                <div>
+                  <Heading size={6}>
+                    <Users size={12} /> Community Leaders
+                  </Heading>
+                  {coordinators.map((c, index) => (
+                    <div style={{ marginBottom: '10px' }} key={index}>
+                      <p style={{ fontWeight: 'bold', fontSize: '0.8em' }}>
+                        {c.label}
+                      </p>
+                      <p style={linkStyle}>
+                        <Mail size={10} style={{ margin: '0 5px' }} />
+                        <a
+                          href={'mailto:' + c.email}
+                          className='has-theme-color'
+                        >
+                          {c.email}
+                        </a>
+                      </p>
+                      <p style={{ fontSize: '0.8em' }}>
+                        {' '}
+                        <Phone size={10} style={{ margin: '0 5px' }} />
+                        {c.phone}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <></>
+              )}
+              {localStorage.getItem('user-role') === 'Administrator' ? (
+                <div>
+                  <hr />
+                  <Button color='primary'>
+                    <Link to='/edit-community' style={{ color: 'white' }}>
+                      <Edit size={12} /> Edit Community
+                    </Link>
+                  </Button>
+                </div>
+              ) : (
+                <></>
+              )}
+            </Box>
           </Columns.Column>
           <Columns.Column size={7}>
             {showWelcomeCard && (
@@ -502,19 +540,20 @@ export default function CommunityHome(props) {
             {displayPhotoGallery && photoGalleryContainer}
           </Columns.Column>
           <Columns.Column size={2}>
-            {userRole === 'Administrator' ? 
-              (<Link to='/create-new-activity' style={{ color: 'white' }}>
+            {userRole === 'Administrator' ? (
+              <Link to='/create-new-activity' style={{ color: 'white' }}>
                 <Button color='primary' className='is-fullwidth'>
+                  <CalendarIcon size={12} style={{ marginRight: '5px' }} />
                   Create Activity
                 </Button>
-              </Link>)
-              :
-              (<Link to='#' style={{ color: 'white' }}>
+              </Link>
+            ) : (
+              <Link to='#' style={{ color: 'white' }}>
                 <Button color='primary' className='is-fullwidth'>
                   My Activities
                 </Button>
-              </Link>)
-            }
+              </Link>
+            )}
             <a
               href='https://www.heretoserve.org/'
               target='_blank'
@@ -528,7 +567,8 @@ export default function CommunityHome(props) {
                 }}
                 fullwidth={true}
               >
-                Here to Serve Website
+                <LinkIcon size={12} style={{ marginRight: '5px' }} />
+                Here to Serve
               </Button>
             </a>
             <a
@@ -544,11 +584,24 @@ export default function CommunityHome(props) {
                 }}
                 fullwidth={true}
               >
+                <CreditCard size={12} style={{ marginRight: '5px' }} />
                 Donate Now!
               </Button>
             </a>
             <br />
-            <CustomSections />
+            <Menu>
+              <Menu.List>
+                <CustomSections />
+                <Link to='/create-custom-section'>
+                  <p className='sidebar'>
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                      <Star size={12} style={{ marginRight: '10px' }} />{' '}
+                      <p>Create Custom Section</p>
+                    </div>
+                  </p>
+                </Link>
+              </Menu.List>
+            </Menu>
           </Columns.Column>
         </Columns>
       </Container>

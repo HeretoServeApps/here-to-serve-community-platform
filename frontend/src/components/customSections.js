@@ -4,11 +4,20 @@ import { Link } from 'react-router-dom'
 import Button from 'react-bulma-components/lib/components/button'
 import Box from 'react-bulma-components/lib/components/box'
 import Menu from 'react-bulma-components/lib/components/menu'
+import { Link as LinkIcon, MessageSquare, FileText } from 'react-feather'
 
 import axios from 'axios'
 
 export default function CustomSections() {
   const [sections, setSections] = useState([])
+
+  var containerStyle = {
+    margin: '5% auto',
+    maxWidth: '300px',
+    padding: '1rem',
+    border: '0.1rem solid #E5E5E5',
+    borderRadius: '10px',
+  }
   const [userRole, setUserRole] = useState('')
 
   useEffect(() => {
@@ -36,27 +45,10 @@ export default function CustomSections() {
   }, [])
 
   return (
-    <div style={{ marginBottom: '10%' }}>
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-        }}
-      >
-        <strong>Custom Sections</strong>
-        {userRole === 'Administrator' ? 
-          <Link to='/create-custom-section'>
-            <Button className='is-light is-small'>+</Button>
-          </Link>
-        :
-          <></>
-        }
-      </div>
-      <br />
-      <Menu>
-        <Menu.List>
-          <Box>
+    <div>
+      {sections.length !== 0 ? (
+        <Menu>
+          <Menu.List>
             {sections.map((section) =>
               section.type !== 'BUTTON' ? (
                 <Link
@@ -67,17 +59,33 @@ export default function CustomSections() {
                     },
                   }}
                 >
-                  <p className='sidebar'>{section.name}</p>
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                    {section.type === 'DP' ? (
+                      <MessageSquare
+                        size={12}
+                        style={{ marginRight: '10px' }}
+                      />
+                    ) : (
+                      <FileText size={12} style={{ marginRight: '10px' }} />
+                    )}
+                    <p className='sidebar'>{section.name}</p>
+                  </div>
                 </Link>
               ) : (
                 <a href={section.link} target='_blank'>
-                  <p className='sidebar'>{section.name}</p>
+                  <p className='sidebar'>
+                    <LinkIcon size={12} style={{ marginRight: '10px' }} />
+                    {section.name}
+                  </p>
                 </a>
               )
             )}
-          </Box>
-        </Menu.List>
-      </Menu>
+          </Menu.List>
+          <hr />
+        </Menu>
+      ) : (
+        <div />
+      )}
     </div>
   )
 }

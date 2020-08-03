@@ -2,11 +2,13 @@ import React, { useState, useEffect, useCallback } from 'react'
 import { Calendar, momentLocalizer } from 'react-big-calendar'
 import { useHistory } from 'react-router-dom'
 import moment from 'moment'
+import '../index.css'
 import 'react-big-calendar/lib/sass/styles.scss'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 
 import Button from 'react-bulma-components/lib/components/button'
+import Box from 'react-bulma-components/lib/components/box'
 import Container from 'react-bulma-components/lib/components/container'
 import Columns from 'react-bulma-components/lib/components/columns'
 import Heading from 'react-bulma-components/lib/components/heading'
@@ -22,10 +24,11 @@ import {
 import CheckboxField from '../components/checkboxfield'
 import CommunityNavbar from '../components/communityNavbar'
 import CustomSections from '../components/customSections'
+import { RefreshCw, Calendar as CalendarIcon } from 'react-feather'
 
 export default function CalendarPage() {
   var containerStyle = {
-    margin: '5% 10% 0% 0%',
+    margin: '5% 5%',
     maxWidth: '100%',
   }
 
@@ -100,7 +103,6 @@ export default function CalendarPage() {
   const [selectedCategories, setSelectedCategories] = useState([])
   const [originalEvents, setOriginalEvents] = useState([])
   const [selectedStatuses, setSelectedStatuses] = useState([])
-
 
   // FUNCTIONS ---------------------------------------------------------------------------------------------
 
@@ -228,10 +230,10 @@ export default function CalendarPage() {
     setEvents(filteredEvents)
   }
 
-//adds volunteer to activity 
-const addVolunteer = useCallback(() => {
+  //adds volunteer to activity
+  const addVolunteer = useCallback(() => {
     const param = JSON.stringify({
-      activity : selectedEvent.id,
+      activity: selectedEvent.id,
       user: localStorage.getItem('email'),
     })
 
@@ -325,8 +327,8 @@ const addVolunteer = useCallback(() => {
             <Columns.Column size={6}>
               <Heading size={4}>{selectedEvent.title}</Heading>
             </Columns.Column>
-            {localStorage.getItem('user-role') === 'Administrator' ? 
-            ( <Columns>
+            {localStorage.getItem('user-role') === 'Administrator' ? (
+              <Columns>
                 <Columns.Column>
                   <Link to={
                     {
@@ -360,9 +362,7 @@ const addVolunteer = useCallback(() => {
                   </Button>
                 </Columns.Column>
               </Columns>
-              ) 
-              :
-              (
+            ) : (
               <Columns.Column>
                 <Button
                   onClick={() => addVolunteer()}
@@ -374,8 +374,7 @@ const addVolunteer = useCallback(() => {
                   Sign up as a volunteer
                 </Button>
               </Columns.Column>
-              )
-            }
+            )}
           </Columns>
           <Heading size={6}>Details:</Heading>
           <i>Date:</i> {moment(selectedEvent.start_time).format('LL')}
@@ -517,70 +516,90 @@ const addVolunteer = useCallback(() => {
   return (
     <div>
       <CommunityNavbar />
-      <Columns style={{ marginBottom: '5%' }}>
-        <Columns.Column size={3}>
-          <Container style={statusContainerStyle}>
-            <CustomSections />
-            <Heading size={6}>Status</Heading>
-            <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
-              <Checkbox
-                style={{ marginRight: '10px' }}
-                onClick={(e) =>
-                  addSelectedStatus('Help needed', e.target.checked)
-                }
-              />
-              <span className='dot-green'></span>Help needed
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
-              <Checkbox
-                style={{ marginRight: '10px' }}
-                onClick={(e) =>
-                  addSelectedStatus('Needs met', e.target.checked)
-                }
-              />
-              <span className='dot-blue'></span>Needs met
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
-              <Checkbox
-                style={{ marginRight: '10px' }}
-                onClick={(e) => addSelectedStatus('Occasion', e.target.checked)}
-              />
-              <span className='dot-orange'></span>Occasion
-            </div>
-            <Heading size={6} style={{ marginTop: '10%' }}>
-              Member
-            </Heading>
-            <Field>
-              <Control>
-                <Select
-                  name='member'
-                  value={selectedMember}
-                  fullwidth='true'
-                  onChange={(e) => filterMember(e.target.value)}
-                >
-                  {members.map((m) => (
-                    <option>
-                      {m.first_name} {m.last_name}
-                    </option>
-                  ))}
-                </Select>
-              </Control>
-            </Field>
-            <Heading size={6} style={{ marginTop: '10%' }}>
-              Activity Type
-            </Heading>
-            {categories.map((t) => (
-              <CheckboxField
-                text={t}
-                onChange={(e) => addSelectedCategories(t, e.target.checked)}
-              />
-            ))}
-          </Container>
-        </Columns.Column>
-        <Columns.Column size={9}>
-          <Container style={containerStyle}>
+      <Container style={containerStyle}>
+        <Columns isMultiline={true}>
+          <Columns.Column size={3}>
+            <Box>
+              <CustomSections />
+              <Heading size={6}>Status</Heading>
+              <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
+                <Checkbox
+                  style={{ marginRight: '10px' }}
+                  onClick={(e) =>
+                    addSelectedStatus('Help needed', e.target.checked)
+                  }
+                />
+                <span className='dot-green'></span>Help needed
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
+                <Checkbox
+                  style={{ marginRight: '10px' }}
+                  onClick={(e) =>
+                    addSelectedStatus('Needs met', e.target.checked)
+                  }
+                />
+                <span className='dot-blue'></span>Needs met
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
+                <Checkbox
+                  style={{ marginRight: '10px' }}
+                  onClick={(e) =>
+                    addSelectedStatus('Occasion', e.target.checked)
+                  }
+                />
+                <span className='dot-orange'></span>Occasion
+              </div>
+              <hr />
+              <Heading size={6} style={{ marginTop: '10%' }}>
+                Member
+              </Heading>
+              <Field>
+                <Control>
+                  <Select
+                    name='member'
+                    value={selectedMember}
+                    fullwidth='true'
+                    onChange={(e) => filterMember(e.target.value)}
+                  >
+                    {members.map((m) => (
+                      <option>
+                        {m.first_name} {m.last_name}
+                      </option>
+                    ))}
+                  </Select>
+                </Control>
+              </Field>
+              <hr />
+              <Heading size={6} style={{ marginTop: '10%' }}>
+                Activity Type
+              </Heading>
+              {categories.map((t) => (
+                <CheckboxField
+                  text={t}
+                  onChange={(e) => addSelectedCategories(t, e.target.checked)}
+                />
+              ))}
+            </Box>
+          </Columns.Column>
+          <Columns.Column size={9}>
+            <Columns isMultiline={true}>
+              <Columns.Column size={9}>
+                <Heading size={4}>Community Calendar</Heading>
+              </Columns.Column>
+              <Columns.Column size={3}>
+                {localStorage.getItem('user-role') === 'Administrator' && (
+                  <Link to='/create-new-activity' style={{ color: 'white' }}>
+                    <Button color='primary' fullwidth={true}>
+                      <CalendarIcon size={12} style={{ marginRight: '5px' }} />
+                      Create Activity
+                    </Button>
+                  </Link>
+                )}
+              </Columns.Column>
+            </Columns>
+            <hr style={{ marginTop: 0 }} />
             <Columns>
-              <Columns.Column size={8} style={{ marginRight: '6%' }}>
+              <Columns.Column size={9}>
                 <Select
                   value={selectedMonth}
                   onChange={(e) => setSelectedMonth(e.target.value)}
@@ -599,8 +618,11 @@ const addVolunteer = useCallback(() => {
                     <option value={year}>{year}</option>
                   ))}
                 </Select>
-                <Button onClick={updateDate} color='info'>
-                  Go
+                <Button
+                  onClick={updateDate}
+                  style={{ color: 'white', backgroundColor: '#2C8595' }}
+                >
+                  <RefreshCw size={12} style={{ marginRight: '5px' }} /> Go
                 </Button>
               </Columns.Column>
               <Columns.Column>
@@ -613,12 +635,10 @@ const addVolunteer = useCallback(() => {
                   :
                   <></>
                 }
-
                 <Link to='/activity-report' style={{ color: 'white' }}>
                   <Button
                     className='is-primary is-inverted'
                     style={{
-                      marginTop: '1rem',
                       boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)',
                     }}
                     fullwidth={true}
@@ -647,9 +667,9 @@ const addVolunteer = useCallback(() => {
                 })}
               />
             </div>
-          </Container>
-        </Columns.Column>
-      </Columns>
+          </Columns.Column>
+        </Columns>
+      </Container>
     </div>
   )
 }

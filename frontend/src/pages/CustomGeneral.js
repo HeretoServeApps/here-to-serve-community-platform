@@ -360,7 +360,6 @@ export default function CustomGeneral(props) {
                         </div>
                       </div>
                     )}
-                    <br />
                     {discussionPosts.length == 0 ? (
                       <p style={noteStyle}>
                         No posts have been made for this page.
