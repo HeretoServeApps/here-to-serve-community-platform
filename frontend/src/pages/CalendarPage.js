@@ -328,15 +328,24 @@ const addVolunteer = useCallback(() => {
             {localStorage.getItem('user-role') === 'Administrator' ? 
             ( <Columns>
                 <Columns.Column>
-                  <Button
-                    style={{
-                      boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)',
-                    }}
-                    fullwidth={true}
-                    color='primary'
-                  >
-                    Edit Activity
-                  </Button>
+                  <Link to={
+                    {
+                      pathname: '/edit-activity/' + selectedEvent.title,
+                      state: {
+                        pk: selectedEvent.id,
+                      }
+                    }
+                  }>
+                    <Button
+                      style={{
+                        boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)',
+                      }}
+                      fullwidth={true}
+                      color='primary'
+                    >
+                      Edit Activity
+                    </Button>
+                  </Link>
                 </Columns.Column>
                 <Columns.Column>
                   <Button
@@ -345,6 +354,7 @@ const addVolunteer = useCallback(() => {
                     }}
                     fullwidth={true}
                     color='danger'
+                    onClick={() => setShowRemoveModel(true)}
                   >
                     Remove Activity
                   </Button>
