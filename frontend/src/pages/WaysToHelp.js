@@ -8,6 +8,8 @@ import Heading from 'react-bulma-components/lib/components/heading'
 import CommunityNavbar from '../components/communityNavbar'
 import Button from 'react-bulma-components/lib/components/button'
 import SideBar from '../components/sidebar'
+import { Edit, XCircle, Coffee } from 'react-feather'
+import { useFlexLayout } from 'react-table'
 
 export default function WaysToHelp(props) {
   const token = localStorage.getItem('token')
@@ -36,7 +38,7 @@ export default function WaysToHelp(props) {
           Authorization: `JWT ${token}`,
         },
         params: {
-          pk: localStorage.getItem('community-id')
+          pk: localStorage.getItem('community-id'),
         },
       })
       .then(
@@ -84,19 +86,11 @@ export default function WaysToHelp(props) {
               <SideBar />
             </Columns.Column>
             <Columns.Column size={9}>
-              <Columns>
-                <Columns.Column size={10}>
-                  <Heading size={4}>Ways to Help</Heading>
-                </Columns.Column>
-                <Columns.Column size={2}>
-                  <Button
-                    className='is-fullwidth'
-                    onClick={() => setIsEditing(false)}
-                  >
-                    Cancel
-                  </Button>
-                </Columns.Column>
-              </Columns>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <Heading size={4}>Ways to Help</Heading>
+
+                <XCircle onClick={() => setIsEditing(false)} color='#F83D34' />
+              </div>
               <div>
                 <input id="my-file" type="file" name="my-file" style={{display:"none"}} />
                 <Editor
@@ -156,24 +150,17 @@ export default function WaysToHelp(props) {
             <SideBar />
           </Columns.Column>
           <Columns.Column size={9}>
-            <Columns>
-              <Columns.Column size={10}>
-                <Heading size={4}>Ways to Help</Heading>
-              </Columns.Column>
-              <Columns.Column size={2}>
-                <Button
-                  color='primary'
-                  className='is-fullwidth'
-                  onClick={() => setIsEditing(true)}
-                >
-                  Edit
-                </Button>
-              </Columns.Column>
-            </Columns>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <Heading size={4}>Ways to Help</Heading>
+              <Edit onClick={() => setIsEditing(true)} />
+            </div>
             <div>
               {content === '' ? (
                 <p style={noteStyle}>
-                  No content has been posted for this page.
+                  <Coffee size={100} color='#E5E5E5' />
+                  <br />
+                  <br />
+                  Sit tight! Nothing been posted yet.
                 </p>
               ) : (
                 <div dangerouslySetInnerHTML={{ __html: content }}></div>

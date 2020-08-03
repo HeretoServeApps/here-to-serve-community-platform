@@ -9,9 +9,14 @@ import {
   Field,
   Control,
   Input,
-  Label
+  Label,
 } from 'react-bulma-components/lib/components/form'
+import Media from 'react-bulma-components/lib/components/media'
+import Image from 'react-bulma-components/lib/components/image'
+import Content from 'react-bulma-components/lib/components/content'
+import Box from 'react-bulma-components/lib/components/box'
 import { Editor } from '@tinymce/tinymce-react'
+import { MoreVertical, Edit, XCircle } from 'react-feather'
 
 export default function PostCard({
   id,
@@ -84,6 +89,7 @@ export default function PostCard({
   var userStyle = {
     fontSize: '0.75rem',
     fontWeight: 'bold',
+    marginBottom: '0',
   }
 
   var dateStyle = {
@@ -121,7 +127,12 @@ export default function PostCard({
               Message<span style={{ color: '#F83D34' }}>*</span>
             </Label>
             <Control>
-              <input id="my-file" type="file" name="my-file" style={{ display: "none" }} />
+              <input
+                id='my-file'
+                type='file'
+                name='my-file'
+                style={{ display: 'none' }}
+              />
               <Editor
                 initialValue={newMessage}
                 init={{
@@ -130,26 +141,27 @@ export default function PostCard({
                   plugins: [
                     'advlist autolink lists link image charmap print preview anchor',
                     'searchreplace wordcount visualblocks code fullscreen',
-                    'insertdatetime media table contextmenu paste code'
+                    'insertdatetime media table contextmenu paste code',
                   ],
-                  toolbar: 'insertfile undo redo | formatselect | bold italic backcolor | \
+                  toolbar:
+                    'insertfile undo redo | formatselect | bold italic backcolor | \
                             alignleft aligncenter alignright alignjustify | \
                             bullist numlist outdent indent | link image media | help',
                   file_browser_callback_types: 'image',
                   file_picker_callback: function (callback, value, meta) {
                     if (meta.filetype == 'image') {
-                      var input = document.getElementById('my-file');
-                      input.click();
+                      var input = document.getElementById('my-file')
+                      input.click()
                       input.onchange = function () {
-                        var file = input.files[0];
-                        var reader = new FileReader();
+                        var file = input.files[0]
+                        var reader = new FileReader()
                         reader.onload = function (e) {
                           callback(e.target.result, {
-                            alt: file.name
-                          });
-                        };
-                        reader.readAsDataURL(file);
-                      };
+                            alt: file.name,
+                          })
+                        }
+                        reader.readAsDataURL(file)
+                      }
                     }
                   },
                   paste_data_images: true,
@@ -170,76 +182,91 @@ export default function PostCard({
   }
 
   return (
-    <div style={cardStyle}>
-      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <div>
-          <p style={userStyle}>{user}</p>
-          <p style={dateStyle}>{dateTime}</p>
-        </div>
+    <Box>
+      <Media renderAs='article'>
+        <Media.Item position='center'>
+          <Content>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <div>
+                <p style={userStyle}>{user}</p>
+                <p style={dateStyle}>{dateTime}</p>
+              </div>
+              {localStorage.getItem('user-role') === 'Administrator' && (
+                <div>
+                  <MoreVertical
+                    size={20}
+                    onClick={() => setShowMenu(!showMenu)}
+                  />
 
-        {localStorage.getItem('user-role') === 'Administrator' ?
-          <div>
-            <Button color='light' onClick={() => setShowMenu(!showMenu)}>
-              <Icon icon='angle-down' />
-            </Button>
-            {showMenu && (
-              <div
-                style={{
-                  zIndex: 1,
-                  position: 'absolute',
-                  backgroundColor: 'white',
-                  border: '1px solid hsl(0, 0%, 86%)',
-                  borderRadius: '5px',
-                }}
-              >
-                <Dropdown.Item value='edit' onClick={() => setIsEditing(true)}>
-                  Edit
-              </Dropdown.Item>
-                <Dropdown.Item
-                  value='delete'
-                  style={{ color: 'hsl(348, 100%, 61%)' }}
-                  onClick={() => setShowModal(true)}
-                >
-                  Delete
-              </Dropdown.Item>
-                <Modal
-                  show={showModal}
-                  onClose={() => setShowModal(false)}
-                  closeOnBlur={true}
-                >
-                  <Modal.Card>
-                    <Modal.Card.Head onClose={() => setShowModal(false)}>
-                      <Modal.Card.Title>Delete Announcement</Modal.Card.Title>
-                    </Modal.Card.Head>
-                    <Section style={{ backgroundColor: 'white' }}>
-                      Are you sure you want to delete this post? You can't undo
-                      this action.
-                  </Section>
-                    <Modal.Card.Foot
+                  {showMenu && (
+                    <div
                       style={{
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
+                        zIndex: 1,
+                        position: 'absolute',
+                        backgroundColor: 'white',
+                        border: '1px solid hsl(0, 0%, 86%)',
+                        borderRadius: '5px',
+                        right: '20px',
                       }}
                     >
-                      <Button onClick={() => setShowModal(false)}>Cancel</Button>
-                      <Button color='primary' onClick={() => deletePost()}>
-                        Delete Post
-                    </Button>
-                    </Modal.Card.Foot>
-                  </Modal.Card>
-                </Modal>
-              </div>
-            )}
-          </div>
-          :
-          <></>
-        }
-
-      </div>
-      <div style={contentStyle}>
-        <Heading size={4}>{subject}</Heading>
-        <div dangerouslySetInnerHTML={{ __html: message }}></div>
-      </div>
-    </div>
+                      <Dropdown.Item
+                        value='edit'
+                        onClick={() => setIsEditing(true)}
+                      >
+                        <Edit size={10} /> <strong>Edit</strong>
+                      </Dropdown.Item>
+                      <Dropdown.Item
+                        value='delete'
+                        onClick={() => setShowModal(true)}
+                      >
+                        <XCircle size={10} color='#F83D34' />{' '}
+                        <strong style={{ color: '#F83D34' }}>Delete</strong>
+                      </Dropdown.Item>
+                      <Modal
+                        show={showModal}
+                        onClose={() => setShowModal(false)}
+                        closeOnBlur={true}
+                      >
+                        <Modal.Card>
+                          <Modal.Card.Head onClose={() => setShowModal(false)}>
+                            <Modal.Card.Title>
+                              Delete Announcement
+                            </Modal.Card.Title>
+                          </Modal.Card.Head>
+                          <Section style={{ backgroundColor: 'white' }}>
+                            Are you sure you want to delete this post? You can't
+                            undo this action.
+                          </Section>
+                          <Modal.Card.Foot
+                            style={{
+                              alignItems: 'center',
+                              justifyContent: 'space-between',
+                            }}
+                          >
+                            <Button onClick={() => setShowModal(false)}>
+                              Cancel
+                            </Button>
+                            <Button
+                              color='primary'
+                              onClick={() => deletePost()}
+                            >
+                              Delete Post
+                            </Button>
+                          </Modal.Card.Foot>
+                        </Modal.Card>
+                      </Modal>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+            <Section>
+              <Heading size={4}>{subject}</Heading>
+              <div dangerouslySetInnerHTML={{ __html: message }}></div>
+            </Section>
+          </Content>
+        </Media.Item>
+      </Media>
+    </Box>
   )
 }

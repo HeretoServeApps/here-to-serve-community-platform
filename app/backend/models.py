@@ -305,7 +305,15 @@ class WellWish(models.Model):
     date_time = models.CharField(max_length=100, blank=False)
     community = models.ForeignKey(Community, on_delete=models.CASCADE, null=False, blank=False)
 
-    
+class Message(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=False, blank=False)
+    author_name = models.CharField(max_length=50, blank=True)
+    subject = models.CharField(max_length=100, blank=False)
+    message = HTMLField()
+    # making date/time and show strings for now
+    date_time = models.CharField(max_length=100, blank=False)
+    community = models.ForeignKey(Community, on_delete=models.CASCADE, null=False, blank=False)
+
 class Activity(models.Model):
 
     GIVING_RIDES = "Giving Rides"

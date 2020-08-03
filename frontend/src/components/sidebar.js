@@ -4,68 +4,128 @@ import { Link } from 'react-router-dom'
 
 import Menu from 'react-bulma-components/lib/components/menu'
 import CustomSections from './customSections'
+import {
+  Layers,
+  Calendar,
+  AlertCircle,
+  UserPlus,
+  Users,
+  Paperclip,
+  Mail,
+  Send,
+  Inbox,
+  Edit,
+  Star,
+} from 'react-feather'
 
 const SideBar = (props) => {
   return (
     <div>
-      <CustomSections />
       <Menu color='white'>
         <Menu.List>
-          <h1>
-            <strong>Manage Calendar</strong>
-          </h1>
-          <br />
           <Box>
+            <CustomSections />
+
             <Link to='/create-new-activity'>
-              <p className='sidebar'>Create New Activity</p>
+              <p className='sidebar'>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                  <Calendar size={12} style={{ marginRight: '10px' }} />
+                  <p>Create New Activity</p>
+                </div>
+              </p>
             </Link>
 
             <Link to='#'>
-              <p className='sidebar'>Manage Existing Activities</p>
+              <p className='sidebar'>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                  <Layers size={12} style={{ marginRight: '10px' }} />
+                  <p>Manage Existing Activities</p>
+                </div>
+              </p>
             </Link>
 
             <Link to='/activity-report'>
-              <p className='sidebar'>Activity Report</p>
+              <p className='sidebar'>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                  <Paperclip size={12} style={{ marginRight: '10px' }} />
+                  <p>Activity Report</p>
+                </div>
+              </p>
             </Link>
-          </Box>
+            <hr />
 
-          <h1>
-            <strong>Manage Members</strong>
-          </h1>
-          <br />
-          <Box>
             <Link to='/community-people'>
-              <p className='sidebar'>View & Update Member Information</p>
+              <p className='sidebar'>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                  <Users size={12} style={{ marginRight: '10px' }} />{' '}
+                  <p>View & Update Member Information</p>
+                </div>
+              </p>
+            </Link>
+
+            <Link to='/add-people'>
+              <p className='sidebar'>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                  <UserPlus size={12} style={{ marginRight: '10px' }} />
+                  <p>Invite New Members</p>
+                </div>
+              </p>
             </Link>
 
             <Link to='#'>
-              <p className='sidebar'>Invite Added Members to Sign in</p>
+              <p className='sidebar'>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                  <AlertCircle size={12} style={{ marginRight: '10px' }} />
+                  <p>Review Join Requests</p>
+                </div>
+              </p>
             </Link>
 
-            <Link to='#'>
-              <p className='sidebar'>Review Join Requests</p>
-            </Link>
-          </Box>
+            <hr />
 
-          <h1>
-            <strong>Manage Community</strong>
-          </h1>
-          <br />
-          <Box>
             <Link to='/announcements'>
-              <p className='sidebar'>Manage Announcements & Emails</p>
+              <p className='sidebar'>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                  <Inbox size={12} style={{ marginRight: '10px' }} />{' '}
+                  <p>Manage Announcements & Emails</p>
+                </div>
+              </p>
             </Link>
 
             <Link to='/create-announcement'>
-              <p className='sidebar'>Add Announcement</p>
+              <p className='sidebar'>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                  <Send size={12} style={{ marginRight: '10px' }} />{' '}
+                  <p>Add Announcement</p>
+                </div>
+              </p>
             </Link>
 
             <Link to='#'>
-              <p className='sidebar'>Email Members</p>
+              <p className='sidebar'>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                  <Mail size={12} style={{ marginRight: '10px' }} />{' '}
+                  <p>Email Members</p>
+                </div>
+              </p>
             </Link>
 
             <Link to='/edit-community'>
-              <p className='sidebar'>Edit Community Information</p>
+              <p className='sidebar'>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                  <Edit size={12} style={{ marginRight: '10px' }} />{' '}
+                  <p>Edit Community Information</p>
+                </div>
+              </p>
+            </Link>
+
+            <Link to='/create-custom-section'>
+              <p className='sidebar'>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                  <Star size={12} style={{ marginRight: '10px' }} />{' '}
+                  <p>Create Custom Section</p>
+                </div>
+              </p>
             </Link>
           </Box>
         </Menu.List>

@@ -34,6 +34,7 @@ import CreateCustomSection from './pages/CreateCustomSection'
 import ActivityReport from './pages/ActivityReport'
 import CustomGeneral from './pages/CustomGeneral'
 import PhotoGallery from './pages/PhotoGallery'
+import MessageBoard from './pages/MessageBoard'
 import PasswordSettings from './pages/PasswordSettings'
 
 export default function App() {
@@ -287,6 +288,7 @@ export default function App() {
             exact
             component={CommunityEdit}
           />
+          <PrivateRoute path='/message-board' exact component={MessageBoard} />
           <PrivateRoute
             path='/password-settings'
             exact
