@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 import Menu from 'react-bulma-components/lib/components/menu'
 import CustomSections from './customSections'
 import {
-  PlusCircle,
+  Layers,
   Calendar,
   AlertCircle,
   UserPlus,
@@ -15,19 +15,21 @@ import {
   Send,
   Inbox,
   Edit,
+  Star,
 } from 'react-feather'
 
 const SideBar = (props) => {
   return (
     <div>
-      <CustomSections />
       <Menu color='white'>
         <Menu.List>
           <Box>
+            <CustomSections />
+
             <Link to='/create-new-activity'>
               <p className='sidebar'>
                 <div style={{ display: 'flex', alignItems: 'center' }}>
-                  <PlusCircle size={12} style={{ marginRight: '10px' }} />
+                  <Calendar size={12} style={{ marginRight: '10px' }} />
                   <p>Create New Activity</p>
                 </div>
               </p>
@@ -36,7 +38,7 @@ const SideBar = (props) => {
             <Link to='#'>
               <p className='sidebar'>
                 <div style={{ display: 'flex', alignItems: 'center' }}>
-                  <Calendar size={12} style={{ marginRight: '10px' }} />
+                  <Layers size={12} style={{ marginRight: '10px' }} />
                   <p>Manage Existing Activities</p>
                 </div>
               </p>
@@ -61,11 +63,11 @@ const SideBar = (props) => {
               </p>
             </Link>
 
-            <Link to='#'>
+            <Link to='/add-people'>
               <p className='sidebar'>
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                   <UserPlus size={12} style={{ marginRight: '10px' }} />
-                  <p>Invite Added Members to Sign in</p>
+                  <p>Invite New Members</p>
                 </div>
               </p>
             </Link>
@@ -113,6 +115,15 @@ const SideBar = (props) => {
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                   <Edit size={12} style={{ marginRight: '10px' }} />{' '}
                   <p>Edit Community Information</p>
+                </div>
+              </p>
+            </Link>
+
+            <Link to='/create-custom-section'>
+              <p className='sidebar'>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                  <Star size={12} style={{ marginRight: '10px' }} />{' '}
+                  <p>Create Custom Section</p>
                 </div>
               </p>
             </Link>

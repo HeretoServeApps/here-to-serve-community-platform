@@ -8,6 +8,7 @@ import CommunityNavbar from '../components/communityNavbar'
 import Button from 'react-bulma-components/lib/components/button'
 import PostCard from '../components/postCard'
 import SideBar from '../components/sidebar'
+import { Coffee } from 'react-feather'
 
 import axios from 'axios'
 
@@ -91,7 +92,12 @@ export default function Announcements(props) {
                     )
                   })
               ) : (
-                <p style={noteStyle}>No updates have been created.</p>
+                <p style={noteStyle}>
+                  <Coffee size={100} color='#E5E5E5' />
+                  <br />
+                  <br />
+                  Sit tight! Nothing been posted yet.
+                </p>
               )}
             </div>
           </Columns.Column>

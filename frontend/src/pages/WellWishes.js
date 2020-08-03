@@ -7,6 +7,7 @@ import Heading from 'react-bulma-components/lib/components/heading'
 import CommunityNavbar from '../components/communityNavbar'
 import Button from 'react-bulma-components/lib/components/button'
 import { Editor } from '@tinymce/tinymce-react'
+import { Edit, XCircle, Coffee } from 'react-feather'
 
 import SideBar from '../components/sidebar'
 import PostCard from '../components/postCard'
@@ -222,7 +223,12 @@ export default function WellWishes(props) {
                     )
                   })
               ) : (
-                <p style={noteStyle}>No well wishes have been posted yet.</p>
+                <p style={noteStyle}>
+                  <Coffee size={100} color='#E5E5E5' />
+                  <br />
+                  <br />
+                  Sit tight! Nothing been posted yet.
+                </p>
               )}
             </div>
           </Columns.Column>

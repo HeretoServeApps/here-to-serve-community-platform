@@ -12,6 +12,7 @@ router.register(r'community-user-role', views.CommunityUserRoleViewSet)
 router.register(r'one-community', views.OneCommunityViewSet)
 router.register(r'announcement', views.AnnouncementViewSet)
 router.register(r'well-wishes', views.WellWishViewSet)
+router.register(r'messages', views.MessageViewSet)
 router.register(r'discussion-posts', views.DiscussionPostViewSet)
 router.register(r'community-custom-sections', views.CommunityCustomSections)
 router.register(r'one-custom-section', views.OneCustomSectionViewSet)
@@ -49,5 +50,8 @@ urlpatterns = [
     path('edit-discussion-post/', views.EditDiscussionPost.as_view()),
     path(r'activities/<int:community_id>/', views.ActivityList.as_view()),
     path('add-photo/', views.AddPhoto.as_view()),
-    path('edit-community-user-role/', views.EditCommunityUserRole.as_view())
+    path('edit-community-user-role/', views.EditCommunityUserRole.as_view()),
+    path('add-message/', views.AddMessage.as_view()),
+    path('delete-message/', views.DeleteMessage.as_view()),
+    path('edit-message/', views.EditMessage.as_view()),
 ]

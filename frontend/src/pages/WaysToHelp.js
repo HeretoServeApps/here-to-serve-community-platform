@@ -8,7 +8,7 @@ import Heading from 'react-bulma-components/lib/components/heading'
 import CommunityNavbar from '../components/communityNavbar'
 import Button from 'react-bulma-components/lib/components/button'
 import SideBar from '../components/sidebar'
-import { Edit, XCircle } from 'react-feather'
+import { Edit, XCircle, Coffee } from 'react-feather'
 import { useFlexLayout } from 'react-table'
 
 export default function WaysToHelp(props) {
@@ -139,7 +139,10 @@ export default function WaysToHelp(props) {
             <div>
               {content === '' ? (
                 <p style={noteStyle}>
-                  No content has been posted for this page.
+                  <Coffee size={100} color='#E5E5E5' />
+                  <br />
+                  <br />
+                  Sit tight! Nothing been posted yet.
                 </p>
               ) : (
                 <div dangerouslySetInnerHTML={{ __html: content }}></div>

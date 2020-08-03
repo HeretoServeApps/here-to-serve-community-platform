@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom'
 import axios from 'axios'
 
 import Button from 'react-bulma-components/lib/components/button'
+import Box from 'react-bulma-components/lib/components/box'
 import Container from 'react-bulma-components/lib/components/container'
 import Columns from 'react-bulma-components/lib/components/columns'
 import Heading from 'react-bulma-components/lib/components/heading'
@@ -20,10 +21,11 @@ import {
 import CheckboxField from '../components/checkboxfield'
 import CommunityNavbar from '../components/communityNavbar'
 import CustomSections from '../components/customSections'
+import { RefreshCw, Calendar as CalendarIcon } from 'react-feather'
 
 export default function CalendarPage() {
   var containerStyle = {
-    margin: '5% 10% 0% 0%',
+    margin: '5% 5%',
     maxWidth: '100%',
   }
 
@@ -408,80 +410,86 @@ export default function CalendarPage() {
   return (
     <div>
       <CommunityNavbar />
-      <Columns style={{ marginBottom: '5%' }}>
-        <Columns.Column size={3}>
-          <Container style={statusContainerStyle}>
-            <CustomSections />
-            <Heading size={6}>Status</Heading>
-            <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
-              <Checkbox
-                style={{ marginRight: '10px' }}
-                onClick={(e) =>
-                  addSelectedStatus('Help needed', e.target.checked)
-                }
-              />
-              <span className='dot-green'></span>Help needed
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
-              <Checkbox
-                style={{ marginRight: '10px' }}
-                onClick={(e) =>
-                  addSelectedStatus('Needs met', e.target.checked)
-                }
-              />
-              <span className='dot-blue'></span>Needs met
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
-              <Checkbox
-                style={{ marginRight: '10px' }}
-                onClick={(e) => addSelectedStatus('Occasion', e.target.checked)}
-              />
-              <span className='dot-orange'></span>Occasion
-            </div>
-            <Heading size={6} style={{ marginTop: '10%' }}>
-              Member
-            </Heading>
-            <Field>
-              <Control>
-                <Select
-                  name='member'
-                  value={selectedMember}
-                  fullwidth='true'
-                  onChange={(e) => filterMember(e.target.value)}
-                >
-                  {members.map((m) => (
-                    <option>
-                      {m.first_name} {m.last_name}
-                    </option>
-                  ))}
-                </Select>
-              </Control>
-            </Field>
-            <Heading size={6} style={{ marginTop: '10%' }}>
-              Activity Type
-            </Heading>
-            {categories.map((t) => (
-              <CheckboxField
-                text={t}
-                onChange={(e) => addSelectedCategories(t, e.target.checked)}
-              />
-            ))}
-          </Container>
-        </Columns.Column>
-        <Columns.Column size={9}>
-          <Container style={containerStyle}>
-            <Columns>
+      <Container style={containerStyle}>
+        <Columns isMultiline={true}>
+          <Columns.Column size={3}>
+            <Box>
+              <CustomSections />
+              <Heading size={6}>Status</Heading>
+              <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
+                <Checkbox
+                  style={{ marginRight: '10px' }}
+                  onClick={(e) =>
+                    addSelectedStatus('Help needed', e.target.checked)
+                  }
+                />
+                <span className='dot-green'></span>Help needed
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
+                <Checkbox
+                  style={{ marginRight: '10px' }}
+                  onClick={(e) =>
+                    addSelectedStatus('Needs met', e.target.checked)
+                  }
+                />
+                <span className='dot-blue'></span>Needs met
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
+                <Checkbox
+                  style={{ marginRight: '10px' }}
+                  onClick={(e) =>
+                    addSelectedStatus('Occasion', e.target.checked)
+                  }
+                />
+                <span className='dot-orange'></span>Occasion
+              </div>
+              <hr />
+              <Heading size={6} style={{ marginTop: '10%' }}>
+                Member
+              </Heading>
+              <Field>
+                <Control>
+                  <Select
+                    name='member'
+                    value={selectedMember}
+                    fullwidth='true'
+                    onChange={(e) => filterMember(e.target.value)}
+                  >
+                    {members.map((m) => (
+                      <option>
+                        {m.first_name} {m.last_name}
+                      </option>
+                    ))}
+                  </Select>
+                </Control>
+              </Field>
+              <hr />
+              <Heading size={6} style={{ marginTop: '10%' }}>
+                Activity Type
+              </Heading>
+              {categories.map((t) => (
+                <CheckboxField
+                  text={t}
+                  onChange={(e) => addSelectedCategories(t, e.target.checked)}
+                />
+              ))}
+            </Box>
+          </Columns.Column>
+          <Columns.Column size={9}>
+            <Columns isMultiline={true}>
               <Columns.Column size={9}>
                 <Heading size={4}>Community Calendar</Heading>
               </Columns.Column>
               <Columns.Column size={3}>
                 <Link to='/create-new-activity' style={{ color: 'white' }}>
                   <Button color='primary' fullwidth={true}>
-                    Create a New Activity
+                    <CalendarIcon size={12} style={{ marginRight: '5px' }} />
+                    Create Activity
                   </Button>
                 </Link>
               </Columns.Column>
             </Columns>
+            <hr style={{ marginTop: 0 }} />
             <Columns>
               <Columns.Column size={9}>
                 <Select
@@ -506,7 +514,7 @@ export default function CalendarPage() {
                   onClick={updateDate}
                   style={{ color: 'white', backgroundColor: '#2C8595' }}
                 >
-                  Go
+                  <RefreshCw size={12} style={{ marginRight: '5px' }} /> Go
                 </Button>
               </Columns.Column>
               <Columns.Column size={3}>
@@ -542,9 +550,9 @@ export default function CalendarPage() {
                 })}
               />
             </div>
-          </Container>
-        </Columns.Column>
-      </Columns>
+          </Columns.Column>
+        </Columns>
+      </Container>
     </div>
   )
 }

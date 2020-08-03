@@ -8,7 +8,7 @@ import styled from 'styled-components'
 
 import Container from 'react-bulma-components/lib/components/container'
 import Box from 'react-bulma-components/lib/components/box'
-import Section from 'react-bulma-components/lib/components/section'
+import Menu from 'react-bulma-components/lib/components/menu'
 import Columns from 'react-bulma-components/lib/components/columns'
 import Heading from 'react-bulma-components/lib/components/heading'
 import CommunityNavbar from '../components/communityNavbar'
@@ -23,7 +23,18 @@ import ImageGallery from 'react-image-gallery'
 import '../../node_modules/react-image-gallery/styles/css/image-gallery.css'
 
 import CustomSections from '../components/customSections'
-import { Edit, Home, Users, Mail, Phone } from 'react-feather'
+import {
+  Edit,
+  Home,
+  Users,
+  Mail,
+  Phone,
+  Link as LinkIcon,
+  Calendar as CalendarIcon,
+  CreditCard,
+  RefreshCw,
+  Star,
+} from 'react-feather'
 
 export default function CommunityHome(props) {
   const [description, setDescription] = useState('')
@@ -339,7 +350,7 @@ export default function CommunityHome(props) {
           onClick={updateDate}
           style={{ color: 'white', backgroundColor: '#2C8595' }}
         >
-          Go
+          <RefreshCw size={12} style={{ marginRight: '5px' }} /> Go
         </Button>
       </Control>
       <br />
@@ -349,6 +360,7 @@ export default function CommunityHome(props) {
       >
         <Calendar
           localizer={localizer}
+          style={{ height: 450 }}
           toolbar={false}
           date={date}
           onNavigate={(date) => setDate(date)}
@@ -526,6 +538,7 @@ export default function CommunityHome(props) {
           <Columns.Column size={2}>
             <Link to='/create-new-activity' style={{ color: 'white' }}>
               <Button color='primary' className='is-fullwidth'>
+                <CalendarIcon size={12} style={{ marginRight: '5px' }} />
                 Create Activity
               </Button>
             </Link>
@@ -542,7 +555,8 @@ export default function CommunityHome(props) {
                 }}
                 fullwidth={true}
               >
-                Here to Serve Website
+                <LinkIcon size={12} style={{ marginRight: '5px' }} />
+                Here to Serve
               </Button>
             </a>
             <a
@@ -558,11 +572,24 @@ export default function CommunityHome(props) {
                 }}
                 fullwidth={true}
               >
+                <CreditCard size={12} style={{ marginRight: '5px' }} />
                 Donate Now!
               </Button>
             </a>
             <br />
-            <CustomSections />
+            <Menu>
+              <Menu.List>
+                <CustomSections />
+                <Link to='/create-custom-section'>
+                  <p className='sidebar'>
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                      <Star size={12} style={{ marginRight: '10px' }} />{' '}
+                      <p>Create Custom Section</p>
+                    </div>
+                  </p>
+                </Link>
+              </Menu.List>
+            </Menu>
           </Columns.Column>
         </Columns>
       </Container>

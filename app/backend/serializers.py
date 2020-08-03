@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from rest_framework_jwt.settings import api_settings
 from .models import (
-    Community, User, CommunityUserRole, Activity, EventActivity, MealActivity, RideActivity, Announcement, CustomSection, WellWish, DiscussionPost, Photo
+    Community, User, CommunityUserRole, Activity, EventActivity, MealActivity, RideActivity, Announcement, CustomSection, WellWish, DiscussionPost, Photo, Message
 ) 
 
 from django.contrib.auth.forms import SetPasswordForm
@@ -171,6 +171,10 @@ class WellWishSerializer(serializers.ModelSerializer):
         model = WellWish
         fields = ('id', 'subject', 'message', 'date_time', 'community', 'user', 'author_name')
 
+class MessageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Message
+        fields = ('id', 'subject', 'message', 'date_time', 'community', 'user', 'author_name')
 
 class DiscussionPostSerializer(serializers.ModelSerializer):
     class Meta:
