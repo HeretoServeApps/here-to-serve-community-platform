@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { Calendar, momentLocalizer } from 'react-big-calendar'
 import moment from 'moment'
+import '../index.css'
 import 'react-big-calendar/lib/sass/styles.scss'
 import { Link } from 'react-router-dom'
 import axios from 'axios'

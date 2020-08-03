@@ -30,7 +30,9 @@ const CommunityNavbar = (props) => {
         <Columns.Column>
           <Link to='/community-home'>
             <Button className='is-small is-primary'>
-              <strong>{localStorage.getItem('community-name')}</strong>
+              <strong style={{ fontSize: '1.2em' }}>
+                {localStorage.getItem('community-name')}
+              </strong>
             </Button>
           </Link>
         </Columns.Column>

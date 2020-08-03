@@ -7,6 +7,7 @@ import Button from 'react-bulma-components/lib/components/button'
 import Columns from 'react-bulma-components/lib/components/columns'
 import Box from 'react-bulma-components/lib/components/box'
 import Menu from 'react-bulma-components/lib/components/menu'
+import { MoreHorizontal } from 'react-feather'
 
 import axios from 'axios'
 
@@ -46,12 +47,12 @@ export default function CustomSections() {
         style={{
           display: 'flex',
           justifyContent: 'space-between',
-          alignItems: 'center',
+          alignItems: 'flex-end',
         }}
       >
         <strong>Custom Sections</strong>
         <Link to='/create-custom-section'>
-          <Button className='is-light is-small'>+</Button>
+          <MoreHorizontal className='has-text-grey-light' size={18} />
         </Link>
       </div>
       <br />

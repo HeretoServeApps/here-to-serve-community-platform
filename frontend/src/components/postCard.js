@@ -19,6 +19,7 @@ import Image from 'react-bulma-components/lib/components/image'
 import Content from 'react-bulma-components/lib/components/content'
 import Box from 'react-bulma-components/lib/components/box'
 import { Editor } from '@tinymce/tinymce-react'
+import { MoreVertical, Edit, XCircle } from 'react-feather'
 
 export default function PostCard({
   id,
@@ -172,9 +173,11 @@ export default function PostCard({
                 <p style={dateStyle}>{dateTime}</p>
               </div>
               <div>
-                <Button color='light' onClick={() => setShowMenu(!showMenu)}>
-                  <Icon icon='angle-down' />
-                </Button>
+                <MoreVertical
+                  size={20}
+                  onClick={() => setShowMenu(!showMenu)}
+                />
+
                 {showMenu && (
                   <div
                     style={{
@@ -183,20 +186,21 @@ export default function PostCard({
                       backgroundColor: 'white',
                       border: '1px solid hsl(0, 0%, 86%)',
                       borderRadius: '5px',
+                      right: '20px',
                     }}
                   >
                     <Dropdown.Item
                       value='edit'
                       onClick={() => setIsEditing(true)}
                     >
-                      Edit
+                      <Edit size={10} /> <strong>Edit</strong>
                     </Dropdown.Item>
                     <Dropdown.Item
                       value='delete'
-                      style={{ color: 'hsl(348, 100%, 61%)' }}
                       onClick={() => setShowModal(true)}
                     >
-                      Delete
+                      <XCircle size={10} color='#F83D34' />{' '}
+                      <strong style={{ color: '#F83D34' }}>Delete</strong>
                     </Dropdown.Item>
                     <Modal
                       show={showModal}

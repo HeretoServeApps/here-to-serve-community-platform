@@ -7,6 +7,8 @@ import 'react-big-calendar/lib/sass/styles.scss'
 import styled from 'styled-components'
 
 import Container from 'react-bulma-components/lib/components/container'
+import Box from 'react-bulma-components/lib/components/box'
+import Section from 'react-bulma-components/lib/components/section'
 import Columns from 'react-bulma-components/lib/components/columns'
 import Heading from 'react-bulma-components/lib/components/heading'
 import CommunityNavbar from '../components/communityNavbar'
@@ -21,6 +23,7 @@ import ImageGallery from 'react-image-gallery'
 import '../../node_modules/react-image-gallery/styles/css/image-gallery.css'
 
 import CustomSections from '../components/customSections'
+import { Edit, Home, Users, Mail, Phone } from 'react-feather'
 
 export default function CommunityHome(props) {
   const [description, setDescription] = useState('')
@@ -332,7 +335,10 @@ export default function CommunityHome(props) {
             </option>
           ))}
         </Select>
-        <Button onClick={updateDate} color='info'>
+        <Button
+          onClick={updateDate}
+          style={{ color: 'white', backgroundColor: '#2C8595' }}
+        >
           Go
         </Button>
       </Control>
@@ -448,45 +454,57 @@ export default function CommunityHome(props) {
       <Container style={containerStyle}>
         <Columns isMultiline={true}>
           <Columns.Column size={3}>
-            <Image src={profilePhoto} style={{ marginBottom: '7%' }} />
-            <Heading size={6}>About</Heading>
-            <p>{description}</p>
-            <br />
-
-            {showLeaders && coordinators.length !== 0 ? (
-              <div>
-                <Heading size={6}>Community Leaders</Heading>
-                {coordinators.map((c, index) => (
-                  <div style={{ marginBottom: '1%' }} key={index}>
-                    <p style={{ fontWeight: 'bold' }}>{c.label}</p>
-                    <p style={linkStyle}>
-                      <a
-                        href={'mailto:' + c.email}
-                        style={{ fontWeight: '500' }}
-                        className='has-theme-color'
-                      >
-                        {c.email}
-                      </a>
-                    </p>
-                    <p style={{ fontSize: '0.8em' }}>{c.phone}</p>
-                  </div>
-                ))}
-                <br />
-              </div>
-            ) : (
-              <></>
-            )}
-            
-            {localStorage.getItem('user-role') === 'Administrator' ?
-              <Button color='primary'>
-                <Link to='/edit-community' style={{ color: 'white' }}>
-                  Edit Community
-                </Link>
-              </Button>
-              :
-              <></>
-            }
-
+            <Box>
+              <Image src={profilePhoto} style={{ marginBottom: '7%' }} />
+              <br />
+              <Heading size={6}>
+                <Home size={12} /> About Community
+              </Heading>
+              <p style={{ fontSize: '0.8em' }}>{description}</p>
+              <hr />
+              {showLeaders && coordinators.length !== 0 ? (
+                <div>
+                  <Heading size={6}>
+                    <Users size={12} /> Community Leaders
+                  </Heading>
+                  {coordinators.map((c, index) => (
+                    <div style={{ marginBottom: '10px' }} key={index}>
+                      <p style={{ fontWeight: 'bold', fontSize: '0.8em' }}>
+                        {c.label}
+                      </p>
+                      <p style={linkStyle}>
+                        <Mail size={10} style={{ margin: '0 5px' }} />
+                        <a
+                          href={'mailto:' + c.email}
+                          className='has-theme-color'
+                        >
+                          {c.email}
+                        </a>
+                      </p>
+                      <p style={{ fontSize: '0.8em' }}>
+                        {' '}
+                        <Phone size={10} style={{ margin: '0 5px' }} />
+                        {c.phone}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <></>
+              )}
+              {localStorage.getItem('user-role') === 'Administrator' ? (
+                <div>
+                  <hr />
+                  <Button color='primary'>
+                    <Link to='/edit-community' style={{ color: 'white' }}>
+                      <Edit size={12} /> Edit Community
+                    </Link>
+                  </Button>
+                </div>
+              ) : (
+                <></>
+              )}
+            </Box>
           </Columns.Column>
           <Columns.Column size={7}>
             {showWelcomeCard ? (
