@@ -307,7 +307,6 @@ class WellWish(models.Model):
 
     
 class Activity(models.Model):
-
     GIVING_RIDES = "Giving Rides"
     PREPARING_MEALS = "Preparing Meals"
     SHOPPING = "Shopping"

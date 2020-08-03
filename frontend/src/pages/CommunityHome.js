@@ -455,7 +455,7 @@ export default function CommunityHome(props) {
             <p>{description}</p>
             <br />
 
-            {showLeaders && coordinators.length !== 0 ? (
+            {showLeaders && coordinators.length !== 0 && (
               <div>
                 <Heading size={6}>Community Leaders</Heading>
                 {coordinators.map((c, index) => (
@@ -475,37 +475,31 @@ export default function CommunityHome(props) {
                 ))}
                 <br />
               </div>
-            ) : (
-              <></>
             )}
             
-            {userRole === 'Administrator' ?
+            {userRole === 'Administrator' &&
               <Button color='primary'>
                 <Link to='/edit-community' style={{ color: 'white' }}>
                   Edit Community
                 </Link>
               </Button>
-              :
-              <></>
             }
 
           </Columns.Column>
           <Columns.Column size={7}>
-            {showWelcomeCard ? (
+            {showWelcomeCard && (
               localStorage.getItem('is-staff') === 'true' ? (
                 WelcomeCardStaff
               ) : (
                 WelcomeCardMember
               )
-            ) : (
-              <></>
             )}
             {/* What to show depends on what the user specified for homepage highlight in edit community */}
-            {displayCalendar ? calendar : <></>}
-            {displayWellWishes ? wellWishesContainer : <></>}
-            {displayFamilyUpdates ? familyUpdatesContainer : <></>}
-            {displayWaysToHelp ? waysToHelpContainer : <></>}
-            {displayPhotoGallery ? photoGalleryContainer : <></>}
+            {displayCalendar && calendar}
+            {displayWellWishes && wellWishesContainer}
+            {displayFamilyUpdates && familyUpdatesContainer}
+            {displayWaysToHelp && waysToHelpContainer}
+            {displayPhotoGallery && photoGalleryContainer}
           </Columns.Column>
           <Columns.Column size={2}>
             {userRole === 'Administrator' ? 

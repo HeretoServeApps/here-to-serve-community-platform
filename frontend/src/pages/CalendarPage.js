@@ -266,12 +266,9 @@ export default function CalendarPage() {
     myHeaders.append('Authorization', `JWT ${localStorage.getItem('token')}`)
     myHeaders.append('id', pk)
 
-    var formdata = new FormData()
-
     var requestOptions = {
         method: 'DELETE',
         headers: myHeaders,
-        body: formdata,
         redirect: 'follow'
     }
 
@@ -300,7 +297,7 @@ export default function CalendarPage() {
                 {
                   pathname: '/edit-activity/' + selectedEvent.title,
                   state: {
-                    pk: selectedEvent.id
+                    pk: selectedEvent.id,
                   }
                 }
               }>
