@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { Calendar, momentLocalizer } from 'react-big-calendar'
+import { useHistory } from 'react-router-dom'
 import moment from 'moment'
 import 'react-big-calendar/lib/sass/styles.scss'
 import { Link } from 'react-router-dom'
@@ -42,6 +43,8 @@ export default function CalendarPage() {
     borderRadius: '1rem',
   }
 
+  const token = localStorage.getItem('token')
+
   const [selectedMonth, setSelectedMonth] = useState(moment().format('MMMM'))
   const [selectedYear, setSelectedYear] = useState(moment().format('YYYY'))
   const [date, setDate] = useState()
@@ -75,8 +78,13 @@ export default function CalendarPage() {
     'Occasion',
   ]
 
+  let history = useHistory()
+
   // Events and event selection
   const [events, setEvents] = useState([])
+
+  //for current user email
+  const [currentUserEmail, setUserEmail] = useState('')
 
   const [selectedEvent, setSelectedEvent] = useState(null)
   const [isSelectingEvent, setIsSelectingEvent] = useState(false)
@@ -92,6 +100,7 @@ export default function CalendarPage() {
   const [selectedCategories, setSelectedCategories] = useState([])
   const [originalEvents, setOriginalEvents] = useState([])
   const [selectedStatuses, setSelectedStatuses] = useState([])
+
 
   // FUNCTIONS ---------------------------------------------------------------------------------------------
 
@@ -219,6 +228,30 @@ export default function CalendarPage() {
     setEvents(filteredEvents)
   }
 
+//adds volunteer to activity 
+const addVolunteer = useCallback(() => {
+    const param = JSON.stringify({
+      activity : selectedEvent.id,
+      user: localStorage.getItem('email'),
+    })
+
+    axios
+      .post('/add-volunteer-to-activity/', param, {
+        headers: {
+          Authorization: `JWT ${token}`,
+          'Content-Type': 'application/json',
+        },
+      })
+      .then(
+        (response) => {
+          history.push('/community-home')
+        },
+        (error) => {
+          console.log(error)
+        }
+      )
+  }, [selectedEvent, token])
+
   // API CALLS ---------------------------------------------------------------------------------------------
 
   useEffect(() => {
@@ -292,38 +325,47 @@ export default function CalendarPage() {
             <Columns.Column size={6}>
               <Heading size={4}>{selectedEvent.title}</Heading>
             </Columns.Column>
-            <Columns.Column>
-              <Link to={
-                {
-                  pathname: '/edit-activity/' + selectedEvent.title,
-                  state: {
-                    pk: selectedEvent.id,
-                  }
-                }
-              }>
+            {localStorage.getItem('user-role') === 'Administrator' ? 
+            ( <Columns>
+                <Columns.Column>
+                  <Button
+                    style={{
+                      boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)',
+                    }}
+                    fullwidth={true}
+                    color='primary'
+                  >
+                    Edit Activity
+                  </Button>
+                </Columns.Column>
+                <Columns.Column>
+                  <Button
+                    style={{
+                      boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)',
+                    }}
+                    fullwidth={true}
+                    color='danger'
+                  >
+                    Remove Activity
+                  </Button>
+                </Columns.Column>
+              </Columns>
+              ) 
+              :
+              (
+              <Columns.Column>
                 <Button
+                  onClick={() => addVolunteer()}
                   style={{
                     boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)',
                   }}
-                  fullwidth={true}
                   color='primary'
                 >
-                  Edit Activity
+                  Sign up as a volunteer
                 </Button>
-              </Link>
-            </Columns.Column>
-            <Columns.Column>
-              <Button
-                style={{
-                  boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)',
-                }}
-                fullwidth={true}
-                color='danger'
-                onClick={() => setShowRemoveModel(true)}
-              >
-                Remove Activity
-              </Button>
-            </Columns.Column>
+              </Columns.Column>
+              )
+            }
           </Columns>
           <Heading size={6}>Details:</Heading>
           <i>Date:</i> {moment(selectedEvent.start_time).format('LL')}
@@ -405,20 +447,20 @@ export default function CalendarPage() {
           {selectedEvent.volunteers.length === 0 ? (
             'No volunteers has signed up.'
           ) : (
-              <ul>
-                {selectedEvent.volunteers.map((person) => (
-                  <li>
-                    {person.first_name}: {person.email}
-                  </li>
-                ))}
-              </ul>
-            )}
+            <ul>
+              {selectedEvent.volunteers.map((person) => (
+                <li>
+                  {person.first_name} {person.last_name}: {person.email}
+                </li>
+              ))}
+            </ul>
+          )}
           <br />
           <i>Coordinators:</i>
           <ul>
             {selectedEvent.coordinators.map((person) => (
               <li>
-                {person.first_name}: {person.phone_number_1}
+                {person.first_name} {person.last_name}: {person.phone_number_1}
               </li>
             ))}
           </ul>
