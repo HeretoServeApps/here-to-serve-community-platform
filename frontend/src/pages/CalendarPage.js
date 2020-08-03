@@ -529,12 +529,14 @@ export default function CalendarPage() {
                 <Heading size={4}>Community Calendar</Heading>
               </Columns.Column>
               <Columns.Column size={3}>
-                <Link to='/create-new-activity' style={{ color: 'white' }}>
-                  <Button color='primary' fullwidth={true}>
-                    <CalendarIcon size={12} style={{ marginRight: '5px' }} />
-                    Create Activity
-                  </Button>
-                </Link>
+                {localStorage.getItem('user-role') === 'Administrator' && (
+                  <Link to='/create-new-activity' style={{ color: 'white' }}>
+                    <Button color='primary' fullwidth={true}>
+                      <CalendarIcon size={12} style={{ marginRight: '5px' }} />
+                      Create Activity
+                    </Button>
+                  </Link>
+                )}
               </Columns.Column>
             </Columns>
             <hr style={{ marginTop: 0 }} />
@@ -566,15 +568,6 @@ export default function CalendarPage() {
                 </Button>
               </Columns.Column>
               <Columns.Column>
-                {localStorage.getItem('user-role') === 'Administrator' ? (
-                  <Link to='/create-new-activity' style={{ color: 'white' }}>
-                    <Button color='primary' fullwidth={true}>
-                      Create a New Activity
-                    </Button>
-                  </Link>
-                ) : (
-                  <></>
-                )}
                 <Link to='/activity-report' style={{ color: 'white' }}>
                   <Button
                     className='is-primary is-inverted'
