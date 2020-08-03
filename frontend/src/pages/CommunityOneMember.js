@@ -415,36 +415,40 @@ export default function CommunityOneMember(props) {
                         </p>
                     </Content>
                 </Card.Content>
-                <Columns>
-                    <Columns.Column size={6}>
-                        <Button
-                            style={{
-                                marginBottom: '1rem',
-                                boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)',
-                            }}
-                            color='primary'
-                            fullwidth={true}
-                            onClick={() => setIsEditing(true)}
-                            disabled={validForm}
-                        >
-                            Edit Profile
-                        </Button>
-                    </Columns.Column>
-                    <Columns.Column size={6}>
-                        <Button
-                            style={{
-                                marginBottom: '1rem',
-                                boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)',
-                            }}
-                            color='danger'
-                            fullwidth={true}
-                            onClick={() => setIsRemoving(true)}
-                            disabled={validForm}
-                        >
-                            Remove User
-                        </Button>                       
-                    </Columns.Column>
-                </Columns>
+                {localStorage.getItem('user-role') === 'Administrator' ? 
+                    <Columns>
+                        <Columns.Column size={6}>
+                            <Button
+                                style={{
+                                    marginBottom: '1rem',
+                                    boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)',
+                                }}
+                                color='primary'
+                                fullwidth={true}
+                                onClick={() => setIsEditing(true)}
+                                disabled={validForm}
+                            >
+                                Edit Profile
+                            </Button>
+                        </Columns.Column>
+                        <Columns.Column size={6}>
+                            <Button
+                                style={{
+                                    marginBottom: '1rem',
+                                    boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)',
+                                }}
+                                color='danger'
+                                fullwidth={true}
+                                onClick={() => setIsRemoving(true)}
+                                disabled={validForm}
+                            >
+                                Remove User
+                            </Button>                       
+                        </Columns.Column>
+                    </Columns>
+                    :
+                    <></>
+                }
             </Card>
         </div>
     )

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { Calendar, momentLocalizer } from 'react-big-calendar'
+import { useHistory } from 'react-router-dom'
 import moment from 'moment'
 import '../index.css'
 import 'react-big-calendar/lib/sass/styles.scss'
@@ -43,6 +44,8 @@ export default function CalendarPage() {
     borderRadius: '1rem',
   }
 
+  const token = localStorage.getItem('token')
+
   const [selectedMonth, setSelectedMonth] = useState(moment().format('MMMM'))
   const [selectedYear, setSelectedYear] = useState(moment().format('YYYY'))
   const [date, setDate] = useState()
@@ -76,8 +79,13 @@ export default function CalendarPage() {
     'Occasion',
   ]
 
+  let history = useHistory()
+
   // Events and event selection
   const [events, setEvents] = useState([])
+
+  //for current user email
+  const [currentUserEmail, setUserEmail] = useState('')
 
   const [selectedEvent, setSelectedEvent] = useState(null)
   const [isSelectingEvent, setIsSelectingEvent] = useState(false)
@@ -218,6 +226,30 @@ export default function CalendarPage() {
     setEvents(filteredEvents)
   }
 
+  //adds volunteer to activity
+  const addVolunteer = useCallback(() => {
+    const param = JSON.stringify({
+      activity: selectedEvent.id,
+      user: localStorage.getItem('email'),
+    })
+
+    axios
+      .post('/add-volunteer-to-activity/', param, {
+        headers: {
+          Authorization: `JWT ${token}`,
+          'Content-Type': 'application/json',
+        },
+      })
+      .then(
+        (response) => {
+          history.push('/community-home')
+        },
+        (error) => {
+          console.log(error)
+        }
+      )
+  }, [selectedEvent, token])
+
   // API CALLS ---------------------------------------------------------------------------------------------
 
   useEffect(() => {
@@ -273,28 +305,44 @@ export default function CalendarPage() {
             <Columns.Column size={6}>
               <Heading size={4}>{selectedEvent.title}</Heading>
             </Columns.Column>
-            <Columns.Column>
-              <Button
-                style={{
-                  boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)',
-                }}
-                fullwidth={true}
-                color='primary'
-              >
-                Edit Activity
-              </Button>
-            </Columns.Column>
-            <Columns.Column>
-              <Button
-                style={{
-                  boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)',
-                }}
-                fullwidth={true}
-                color='danger'
-              >
-                Remove Activity
-              </Button>
-            </Columns.Column>
+            {localStorage.getItem('user-role') === 'Administrator' ? (
+              <Columns>
+                <Columns.Column>
+                  <Button
+                    style={{
+                      boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)',
+                    }}
+                    fullwidth={true}
+                    color='primary'
+                  >
+                    Edit Activity
+                  </Button>
+                </Columns.Column>
+                <Columns.Column>
+                  <Button
+                    style={{
+                      boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)',
+                    }}
+                    fullwidth={true}
+                    color='danger'
+                  >
+                    Remove Activity
+                  </Button>
+                </Columns.Column>
+              </Columns>
+            ) : (
+              <Columns.Column>
+                <Button
+                  onClick={() => addVolunteer()}
+                  style={{
+                    boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)',
+                  }}
+                  color='primary'
+                >
+                  Sign up as a volunteer
+                </Button>
+              </Columns.Column>
+            )}
           </Columns>
           <Heading size={6}>Details:</Heading>
           <i>Date:</i> {moment(selectedEvent.start_time).format('LL')}
@@ -379,7 +427,7 @@ export default function CalendarPage() {
             <ul>
               {selectedEvent.volunteers.map((person) => (
                 <li>
-                  {person.first_name}: {person.email}
+                  {person.first_name} {person.last_name}: {person.email}
                 </li>
               ))}
             </ul>
@@ -389,7 +437,7 @@ export default function CalendarPage() {
           <ul>
             {selectedEvent.coordinators.map((person) => (
               <li>
-                {person.first_name}: {person.phone_number_1}
+                {person.first_name} {person.last_name}: {person.phone_number_1}
               </li>
             ))}
           </ul>
@@ -517,7 +565,16 @@ export default function CalendarPage() {
                   <RefreshCw size={12} style={{ marginRight: '5px' }} /> Go
                 </Button>
               </Columns.Column>
-              <Columns.Column size={3}>
+              <Columns.Column>
+                {localStorage.getItem('user-role') === 'Administrator' ? (
+                  <Link to='/create-new-activity' style={{ color: 'white' }}>
+                    <Button color='primary' fullwidth={true}>
+                      Create a New Activity
+                    </Button>
+                  </Link>
+                ) : (
+                  <></>
+                )}
                 <Link to='/activity-report' style={{ color: 'white' }}>
                   <Button
                     className='is-primary is-inverted'

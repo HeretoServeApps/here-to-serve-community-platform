@@ -12,6 +12,9 @@ const SideNavAccount = (props) => {
                     <Link to='/account-settings'>General Account Settings</Link>
                 </Menu.List.Item>
                 <Menu.List.Item>
+                  <Link to='/password-settings'>Password Settings</Link>
+                </Menu.List.Item>
+                <Menu.List.Item>
                   <Link to='/email-settings'>Email Settings</Link>
                 </Menu.List.Item>
             </Menu.List>

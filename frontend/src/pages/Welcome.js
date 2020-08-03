@@ -10,12 +10,12 @@ import Card from 'react-bulma-components/lib/components/card'
 import Columns from 'react-bulma-components/lib/components/columns'
 import styled from 'styled-components'
 
-import family from '../images/family.png'
-import img from '../images/welcome-background.svg'
+// import family from '../images/family.png'
+// import img from '../images/welcome-background.svg'
+import families from '../images/families.png'
 
 const Background = styled.div`
-  background-image: url(${img});
-  background-color: white;
+  background-color: #addbe4;
   height: 100%;
   width: 100%;
   position: absolute;
@@ -43,18 +43,18 @@ export default function Welcome() {
     margin: '5%',
     padding: '1%',
     boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.25)',
-    height: '20rem',
+    height: '25rem'
   }
 
   return (
-    <div style={{ backgroundColor: '#2C8595', paddingBottom: '80px' }}>
+    <div>
       <BackgroundWrapper>
         <Background />
       </BackgroundWrapper>
-      <Container style={{ marginBottom: '50px', width: '80%' }}>
+      <Container style={{ width: '90%' }}>
         <Columns>
-          <Columns.Column>
-            <Container style={{ padding: '20% 40% 0 5%' }}>
+          <Columns.Column size={4}>
+            <Container style={{ padding: '30% 0 0 20%' }}>
               <Heading size={2}>
                 Join a <HighLight>care community</HighLight> today.
               </Heading>
@@ -86,11 +86,14 @@ export default function Welcome() {
               </ButtonBg>
             </Container>
           </Columns.Column>
-          <Columns.Column>
-            <Container style={{ width: '80%' }}>
+          <Columns.Column size={8}>
+            <Container style={{ marginTop: '2%'}}>
               <img
-                src={family}
-                style={{ width: '100%' }}
+                src={families}
+                style={{  
+                  height: 'auto',
+                  width: '1000px'
+                }}
                 alt='family'
               ></img>
             </Container>

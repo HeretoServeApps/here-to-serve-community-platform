@@ -1,24 +1,20 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useCallback } from "react"
+import countryList from 'react-select-country-list'
 
 import Container from 'react-bulma-components/lib/components/container';
 import Columns from 'react-bulma-components/lib/components/columns'
 import Heading from 'react-bulma-components/lib/components/heading'
-import Table from 'react-bulma-components/lib/components/table'
 import Button from 'react-bulma-components/lib/components/button';
-import { Link } from 'react-router-dom'
 import {
     Field,
-    Control,
     Input,
     Label,
+    Select
 } from 'react-bulma-components/lib/components/form'
 
 import SideNavAccount from '../components/sideNavAccount'
 
 export default function AccountSettings() {
-    const [currentPassword, setCurrentPassword] = useState('')
-    const [newPassword, setNewPassword] = useState('')
-    const [confirmNewPassword, setConfirmNewPassword] = useState('')
     const [firstName, setFirstName] = useState('')
     const [lastName, setLastName] = useState('')
     const [email, setEmail] = useState('')
@@ -32,10 +28,10 @@ export default function AccountSettings() {
     const [city, setCity] = useState('')
     const [state, setState] = useState('')
     const [country, setCountry] = useState('')
-
+    const [pk, setPk] = useState('')
 
     var containerStyle = {
-        margin: '5% auto',
+        margin: '3% auto',
         maxWidth: '80%',
         padding: '4rem',
     }
@@ -54,134 +50,232 @@ export default function AccountSettings() {
                     setEmail(json.email)
                     setPhone1(json.phone_number_1)
                     setPhone1Type(json.phone_number_1_type)
-                    json.phone_number_2 ? setPhone2(json.phone_number_2) : setPhone2('-')
-                    json.phone_number_2_type ? setPhone2Type(json.phone_number_2_type) : setPhone2Type('-')
+                    setPhone2(json.phone_number_2)
+                    setPhone2Type(json.phone_number_2_type)
                     setAddressLine1(json.address_line_1)
-                    json.address_line_2 ? setAddressLine2(json.address_line_2) : setAddressLine2('-')
+                    setAddressLine2(json.address_line_2)
                     setCity(json.city)
-                    json.state ? setState(json.state) : setState('-')
                     setCountry(json.country)
-                    json.zipcode ? setZipcode(json.zipcode) : setZipcode('-')
+                    setState(json.state)
+                    setZipcode(json.zipcode)
+                    setPk(json.id)
                 })
         }
     }, [])
 
+    const editInformation = useCallback(() => {
+        // Edit user's information. First_name, last_name, and email are required. 
+        var url = '/edit-user/' + pk + '/'
+        var myHeaders = new Headers()
+        myHeaders.append('Authorization', `JWT ${localStorage.getItem('token')}`)
+        myHeaders.append('id', pk)
+
+        var formdata = new FormData();
+        formdata.append('first_name', firstName)
+        formdata.append('last_name', lastName)
+        formdata.append('email', email)
+        formdata.append('phone_number_1', phone1)
+        formdata.append('phone_number_1_type', phone1Type)
+        formdata.append('phone_number_2', phone2)
+        formdata.append('phone_number_2_type', phone2Type)
+        formdata.append('address_line_1', addressLine1)
+        formdata.append('address_line_2', addressLine2)
+        formdata.append('city', city)
+        formdata.append('state', state)
+        formdata.append('zipcode', zipcode)
+        formdata.append('country', country)
+
+        var requestOptions = {
+            method: 'PUT',
+            headers: myHeaders,
+            body: formdata,
+            redirect: 'follow'
+        }
+
+        fetch(url, requestOptions)
+        .then(response => response.text())
+        .then(result => {
+            window.location.reload()
+        })
+        .catch(error => console.log('error', error))
+    }, 
+    [
+        firstName,
+        lastName, 
+        email, 
+        phone1, 
+        phone1Type, 
+        phone2, 
+        phone2Type, 
+        addressLine1, 
+        addressLine2, 
+        city, 
+        state, 
+        zipcode, 
+        country,
+        pk
+    ])
+
+
     return (
         <Container style={containerStyle}>
-            <Columns style={{ fullWidth: true, margin: '0% 0% 1% 18%' }}>
-                <Columns.Column>
-                    <Heading size={4} style={{ margin: '0% 0% 3% 30%' }}>Account Information</Heading>
-                </Columns.Column>
-                <Columns.Column>
-                    <div style={{ display: 'flex' }}>
-                        <Button color='primary' style={{ marginRight: '10px' }}>
-                            <Link to='#' style={{ color: 'white' }}>
-                                Edit
-                        </Link>
-                        </Button>
-                    </div>
-                </Columns.Column>
-            </Columns>
             <Columns>
                 <Columns.Column style={{ maxWidth: '30%' }}>
                     <SideNavAccount />
                 </Columns.Column>
                 <Columns.Column>
-                    <Table>
-                        <tbody>
-                            <tr>
-                                <td align='right'><strong>First Name</strong></td>
-                                <td>{firstName}</td>
-                            </tr>
-                            <tr>
-                                <td align='right'><strong>Last Name</strong></td>
-                                <td>{lastName}</td>
-                            </tr>
-                            <tr>
-                                <td align='right'><strong>Email</strong></td>
-                                <td>{email}</td>
-                            </tr>
-                            <tr>
-                                <td align='right'><strong>Phone 1</strong></td>
-                                <td>{phone1}</td>
-                            </tr>
-                            <tr>
-                                <td align='right'><strong>Phone 1 Type</strong></td>
-                                <td>{phone1Type}</td>
-                            </tr>
-                            <tr>
-                                <td align='right'><strong>Phone 2</strong></td>
-                                <td>{phone2}</td>
-                            </tr>
-                            <tr>
-                                <td align='right'><strong>Phone 2 Type</strong></td>
-                                <td>{phone2Type}</td>
-                            </tr>
-                            <tr>
-                                <td align='right'><strong>Address Line 1</strong></td>
-                                <td>{addressLine1}</td>
-                            </tr>
-                            <tr>
-                                <td align='right'><strong>Address Line 2</strong></td>
-                                <td>{addressLine2}</td>
-                            </tr>
-                            <tr>
-                                <td align='right'><strong>City</strong></td>
-                                <td>{city}</td>
-                            </tr>
-                            <tr>
-                                <td align='right'><strong>Zip code</strong></td>
-                                <td>{zipcode}</td>
-                            </tr>
-                            <tr>
-                                <td align='right'><strong>State/Province</strong></td>
-                                <td>{state}</td>
-                            </tr>
-                            <tr>
-                                <td align='right'><strong>Country</strong></td>
-                                <td>{country}</td>
-                            </tr>
-                        </tbody>
-                    </Table>
-                    <Heading size={4} style={{ margin: '8% 0% 3% 0%', }}>Edit Password</Heading>
-                    <Field style={{ maxWidth: '50%' }}>
-                        <Label>Current Password</Label>
-                        <Control>
-                            <Input
-                                value={currentPassword}
-                                onChange={e => setCurrentPassword(e.target.value)}
-                                placeholder=''
-                            />
-                        </Control>
-                    </Field>
-                    <Field style={{ maxWidth: '50%' }}>
-                        <Label>New Password</Label>
-                        <Control>
-                            <Input
-                                value={newPassword}
-                                onChange={e => setNewPassword(e.target.value)}
-                                placeholder=''
-                            />
-                        </Control>
-                    </Field>
-                    <Field style={{ maxWidth: '50%' }}>
-                        <Label>Confirm New Password</Label>
-                        <Control>
-                            <Input
-                                value={confirmNewPassword}
-                                onChange={e => setConfirmNewPassword(e.target.value)}
-                                placeholder=''
-                            />
-                        </Control>
-                    </Field>
-                    <Columns style={{ margin: '3% auto', maxWidth: '80%' }}>
+
+                    {/* Account Information  */}
+                    <Heading size={4} style={{ marginBottom: '3%' }}>Account Information</Heading>
+                    <Columns>
                         <Columns.Column>
-                            <Button color="primary" fullwidth={true}>SAVE CHANGES</Button>
+                            <Field>
+                                <Label>First Name<span style={{ color: '#F83D34' }}>*</span></Label>
+                                <Input
+                                    value={firstName}
+                                    onChange={(e) => setFirstName(e.target.value)}
+                                    placeholder={firstName}
+                                />
+                            </Field>
                         </Columns.Column>
                         <Columns.Column>
-                            <Button fullwidth={true}>CANCEL</Button>
+                            <Field>
+                                <Label>Last Name<span style={{ color: '#F83D34' }}>*</span></Label>
+                                <Input
+                                    value={lastName}
+                                    onChange={(e) => setLastName(e.target.value)}
+                                    placeholder={lastName}
+                                />
+                            </Field>
                         </Columns.Column>
-                    </Columns>
+                        </Columns>
+                        <Field>
+                            <Label>Email<span style={{ color: '#F83D34' }}>*</span></Label>
+                            <Input
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                placeholder={email}
+                            />
+                        </Field>  
+                        <Columns>
+                            <Columns.Column>
+                                <Field>
+                                    <Label>Primary Phone Number<span style={{ color: '#F83D34' }}>*</span></Label>
+                                    <Input
+                                        value={phone1}
+                                        onChange={(e) => setPhone1(e.target.value)}
+                                        placeholder={phone1}
+                                    />
+                                </Field>
+                            </Columns.Column>
+                            <Columns.Column>
+                                <Field>
+                                    <Label>Primary Phone Number Type<span style={{ color: '#F83D34' }}>*</span></Label>
+                                    <Select onChange={(e) => setPhone1Type(e.target.value)} value={phone1Type}>
+                                        <option>Mobile</option>
+                                        <option>Home</option>
+                                        <option>Work</option>
+                                    </Select>
+                                </Field>
+                            </Columns.Column>
+                        </Columns>      
+                        <Columns>
+                            <Columns.Column>
+                                <Field>
+                                    <Label>Secondary Phone Number</Label>
+                                    <Input
+                                        value={phone2}
+                                        onChange={(e) => setPhone2(e.target.value)}
+                                        placeholder={phone2}
+                                    />
+                                </Field>
+                            </Columns.Column>
+                            <Columns.Column>
+                                <Field>
+                                    <Label>Secondary Phone Number Type</Label>
+                                    <Select onChange={(e) => setPhone2Type(e.target.value)} value={phone2Type}>
+                                        <option></option>
+                                        <option>Mobile</option>
+                                        <option>Home</option>
+                                        <option>Work</option>
+                                    </Select>
+                                </Field>
+                            </Columns.Column>
+                        </Columns> 
+                        <Columns>
+                            <Columns.Column>
+                                <Field>
+                                    <Label>Address Line 1<span style={{ color: '#F83D34' }}>*</span></Label>
+                                    <Input
+                                        value={addressLine1}
+                                        onChange={(e) => setAddressLine1(e.target.value)}
+                                        placeholder={addressLine1}
+                                    />
+                                </Field>
+                            </Columns.Column>
+                            <Columns.Column>
+                                <Field>
+                                    <Label>Address Line 2</Label>
+                                    <Input
+                                        value={addressLine2}
+                                        onChange={(e) => setAddressLine2(e.target.value)}
+                                        placeholder={addressLine2}
+                                    />
+                                </Field>
+                            </Columns.Column>
+                        </Columns> 
+                        <Columns>
+                            <Columns.Column>
+                                <Field>
+                                    <Label>City<span style={{ color: '#F83D34' }}>*</span></Label>
+                                    <Input
+                                        value={city}
+                                        onChange={(e) => setCity(e.target.value)}
+                                        placeholder={city}
+                                    />
+                                </Field>
+                            </Columns.Column>
+                            <Columns.Column>
+                                <Field>
+                                    <Label>State<span style={{ color: '#F83D34' }}>*</span></Label>
+                                    <Input
+                                        value={state}
+                                        onChange={(e) => setState(e.target.value)}
+                                        placeholder={state}
+                                    />
+                                </Field>
+                            </Columns.Column>
+                            <Columns.Column>
+                                <Field>
+                                    <Label>Zipcode<span style={{ color: '#F83D34' }}>*</span></Label>
+                                    <Input
+                                        value={zipcode}
+                                        onChange={(e) => setZipcode(e.target.value)}
+                                        placeholder={zipcode}
+                                    />
+                                </Field>
+                            </Columns.Column>
+                        </Columns>
+                        <Field>
+                            <Label>Country<span style={{ color: '#F83D34' }}>*</span></Label>
+                            <Select onChange={(e) => setCountry(e.target.value)} value={country}>
+                                {countryList()
+                                    .getLabels()
+                                    .map((c) => (
+                                        <option style={{ position: 'static' }} value={c}>
+                                            {c}
+                                        </option>
+                                ))}
+                            </Select>
+                        </Field>
+                    <Button 
+                        color="primary" 
+                        fullwidth={true} 
+                        style={{maxWidth: '40%', marginTop: '8%'}} 
+                        onClick={() => editInformation()}
+                    >
+                        SAVE CHANGES
+                    </Button>
                 </Columns.Column>
             </Columns>
         </Container>

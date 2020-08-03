@@ -9,7 +9,7 @@ import SideNavAccount from '../components/sideNavAccount'
 
 export default function AccountSettings() {
   var containerStyle = {
-    margin: '5% auto',
+    margin: '3% auto',
     maxWidth: '80%',
     padding: '4rem',
   }
@@ -27,18 +27,16 @@ export default function AccountSettings() {
 
   return (
     <Container style={containerStyle}>
-      <Heading size={4} style={{ margin: '0% 0% 3% 30%', }}>Email Settings</Heading>
       <Columns>
         <Columns.Column style={{ maxWidth: '30%' }}>
           <SideNavAccount />
         </Columns.Column>
         <Columns.Column>
+        <Heading size={4} style={{ marginBottom: '3%', }}>Email Settings</Heading>
         <CheckboxField text={'Information about family and Here to Serve'} onChange={handleOnCheckInformationAboutH2S} />
         <CheckboxField text={'Receive Here to Serve newsletter'} onChange={handleOnCheckNewsLetter} />
         </Columns.Column>
       </Columns>
-
-
     </Container>
   );
 }

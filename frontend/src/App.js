@@ -35,6 +35,7 @@ import ActivityReport from './pages/ActivityReport'
 import CustomGeneral from './pages/CustomGeneral'
 import PhotoGallery from './pages/PhotoGallery'
 import MessageBoard from './pages/MessageBoard'
+import PasswordSettings from './pages/PasswordSettings'
 
 export default function App() {
   const [loggedIn, setLoggedIn] = useState(
@@ -288,6 +289,11 @@ export default function App() {
             component={CommunityEdit}
           />
           <PrivateRoute path='/message-board' exact component={MessageBoard} />
+          <PrivateRoute
+            path='/password-settings'
+            exact
+            component={PasswordSettings}
+          />
         </Switch>
         <AppFooter />
       </Router>
