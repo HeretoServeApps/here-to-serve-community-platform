@@ -303,28 +303,47 @@ const addVolunteer = useCallback(() => {
             <Columns.Column size={6}>
               <Heading size={4}>{selectedEvent.title}</Heading>
             </Columns.Column>
-            <Columns.Column>
-              <Button
-                style={{
-                  boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)',
-                }}
-                fullwidth={true}
-                color='primary'
-              >
-                Edit Activity
-              </Button>
-            </Columns.Column>
-            <Columns.Column>
-              <Button
-                style={{
-                  boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)',
-                }}
-                fullwidth={true}
-                color='danger'
-              >
-                Remove Activity
-              </Button>
-            </Columns.Column>
+            {localStorage.getItem('user-role') === 'Administrator' ? 
+            ( <Columns>
+                <Columns.Column>
+                  <Button
+                    style={{
+                      boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)',
+                    }}
+                    fullwidth={true}
+                    color='primary'
+                  >
+                    Edit Activity
+                  </Button>
+                </Columns.Column>
+                <Columns.Column>
+                  <Button
+                    style={{
+                      boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)',
+                    }}
+                    fullwidth={true}
+                    color='danger'
+                  >
+                    Remove Activity
+                  </Button>
+                </Columns.Column>
+              </Columns>
+              ) 
+              :
+              (
+              <Columns.Column>
+                <Button
+                  onClick={() => addVolunteer()}
+                  style={{
+                    boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)',
+                  }}
+                  color='primary'
+                >
+                  Sign up as a volunteer
+                </Button>
+              </Columns.Column>
+              )
+            }
           </Columns>
           <Heading size={6}>Details:</Heading>
           <i>Date:</i> {moment(selectedEvent.start_time).format('LL')}
@@ -409,7 +428,7 @@ const addVolunteer = useCallback(() => {
             <ul>
               {selectedEvent.volunteers.map((person) => (
                 <li>
-                  {person.first_name}: {person.email}
+                  {person.first_name} {person.last_name}: {person.email}
                 </li>
               ))}
             </ul>
@@ -419,23 +438,11 @@ const addVolunteer = useCallback(() => {
           <ul>
             {selectedEvent.coordinators.map((person) => (
               <li>
-                {person.first_name}: {person.phone_number_1}
+                {person.first_name} {person.last_name}: {person.phone_number_1}
               </li>
             ))}
           </ul>
           <br />
-          <Columns.Column>
-              <Button
-                onClick={() => addVolunteer()}
-                style={{
-                  boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)',
-                }}
-                fullwidth={true}
-                color='primary'
-              >
-                Sign up as a volunteer
-              </Button>
-            </Columns.Column>
           <Button
             className='is-primary is-inverted'
             onClick={() => goBackToCalendar()}
