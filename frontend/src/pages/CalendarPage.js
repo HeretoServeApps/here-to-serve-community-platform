@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { Calendar, momentLocalizer } from 'react-big-calendar'
+import { useHistory } from 'react-router-dom'
 import moment from 'moment'
 import 'react-big-calendar/lib/sass/styles.scss'
 import { Link } from 'react-router-dom'
@@ -40,6 +41,8 @@ export default function CalendarPage() {
     borderRadius: '1rem',
   }
 
+  const token = localStorage.getItem('token')
+
   const [selectedMonth, setSelectedMonth] = useState(moment().format('MMMM'))
   const [selectedYear, setSelectedYear] = useState(moment().format('YYYY'))
   const [date, setDate] = useState()
@@ -73,8 +76,13 @@ export default function CalendarPage() {
     'Occasion',
   ]
 
+  let history = useHistory()
+
   // Events and event selection
   const [events, setEvents] = useState([])
+
+  //for current user email
+  const [currentUserEmail, setUserEmail] = useState('')
 
   const [selectedEvent, setSelectedEvent] = useState(null)
   const [isSelectingEvent, setIsSelectingEvent] = useState(false)
@@ -88,6 +96,7 @@ export default function CalendarPage() {
   const [selectedCategories, setSelectedCategories] = useState([])
   const [originalEvents, setOriginalEvents] = useState([])
   const [selectedStatuses, setSelectedStatuses] = useState([])
+
 
   // FUNCTIONS ---------------------------------------------------------------------------------------------
 
@@ -214,6 +223,30 @@ export default function CalendarPage() {
     })
     setEvents(filteredEvents)
   }
+
+//adds volunteer to activity 
+const addVolunteer = useCallback(() => {
+    const param = JSON.stringify({
+      activity : selectedEvent.id,
+      user: localStorage.getItem('email'),
+    })
+
+    axios
+      .post('/add-volunteer-to-activity/', param, {
+        headers: {
+          Authorization: `JWT ${token}`,
+          'Content-Type': 'application/json',
+        },
+      })
+      .then(
+        (response) => {
+          history.push('/community-home')
+        },
+        (error) => {
+          console.log(error)
+        }
+      )
+  }, [selectedEvent, token])
 
   // API CALLS ---------------------------------------------------------------------------------------------
 
@@ -391,6 +424,18 @@ export default function CalendarPage() {
             ))}
           </ul>
           <br />
+          <Columns.Column>
+              <Button
+                onClick={() => addVolunteer()}
+                style={{
+                  boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)',
+                }}
+                fullwidth={true}
+                color='primary'
+              >
+                Sign up as a volunteer
+              </Button>
+            </Columns.Column>
           <Button
             className='is-primary is-inverted'
             onClick={() => goBackToCalendar()}

@@ -599,6 +599,22 @@ class EditCustomSection(APIView):
         return Response('Edited custom section')
 
 
+class AddVolunteerToActivity(APIView):
+    """
+    A user can add themself as a volunteer for an activity.
+    """
+    permission_classes = (permissions.AllowAny, )
+
+    def post(self, request, format=None):
+        activity_id = request.data['activity']
+        user_email = request.data['user']
+        user = User.objects.get(email=user_email).id
+        activity = Activity.objects.get(id=activity_id)
+        activity.volunteers.add(user)
+        activity.save()
+        return Response('Added new volunteer to activity')
+
+
 class DiscussionPostViewSet(viewsets.ModelViewSet):
     queryset = DiscussionPost.objects.all().order_by('name')
     serializer_class = DiscussionPostSerializer
