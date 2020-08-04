@@ -545,15 +545,19 @@ export default function CommunityHome(props) {
             {userRole === 'Administrator' ? (
               <Link to='/create-new-activity' style={{ color: 'white' }}>
                 <Button color='primary' className='is-fullwidth'>
-                  <CalendarIcon size={12} style={{ marginRight: '5px' }} />
-                  Create Activity
+                  <div>
+                    <CalendarIcon size={12} style={{ marginRight: '5px' }} />
+                    Create Activity
+                  </div>
                 </Button>
               </Link>
             ) : (
               <Link to='#' style={{ color: 'white' }}>
-                <Button color='primary' className='is-fullwidth'>
-                  My Activities
-                </Button>
+                <div>
+                  <Button color='primary' className='is-fullwidth'>
+                    My Activities
+                  </Button>
+                </div>
               </Link>
             )}
             <a
@@ -569,8 +573,10 @@ export default function CommunityHome(props) {
                 }}
                 fullwidth={true}
               >
-                <LinkIcon size={12} style={{ marginRight: '5px' }} />
-                Here to Serve
+                <div>
+                  <LinkIcon size={12} style={{ marginRight: '5px' }} />
+                  Here to Serve
+                </div>
               </Button>
             </a>
             <a
@@ -586,8 +592,10 @@ export default function CommunityHome(props) {
                 }}
                 fullwidth={true}
               >
-                <CreditCard size={12} style={{ marginRight: '5px' }} />
-                Donate Now!
+                <div>
+                  <CreditCard size={12} style={{ marginRight: '5px' }} />
+                  Donate Now!
+                </div>
               </Button>
             </a>
             <br />
