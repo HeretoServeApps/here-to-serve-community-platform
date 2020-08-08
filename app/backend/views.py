@@ -623,11 +623,9 @@ class RemoveUserFromCommunity(APIView):
     def post(self, request, format=None):
         community_id = request.data['community']
         user_email = request.data['user']
-        user = User.objects.get(email=user_email).id
-        community = Activity.objects.get(id=community_id)
-        community.volunteers.add(user)
-        community.save()
-        return Response('Added new volunteer to activity')
+        user_id = User.objects.get(email=user_email).id
+        CommunityUserRole.objects.get(community=community_id, user=user_id).delete()
+        return Response('Removed volunteer from community')
 
 class DiscussionPostViewSet(viewsets.ModelViewSet):
     queryset = DiscussionPost.objects.all().order_by('name')
