@@ -23,11 +23,12 @@ export default function SelectCommunities() {
     }
     const [newCommunities, setNewCommunities] = useState([])
     const token = localStorage.getItem('token')
+    const [communityId, setCommunityId] = useState('')
 
     useEffect(() => {
         axios.get('/communities/')
           .then((response) => {
-            setNewCommunities(response.data)
+            setNewCommunities(Array.from(response.data))
           })
       }, [])
 
@@ -41,6 +42,8 @@ export default function SelectCommunities() {
             this.setState({
              selected: evt.target.value,
              });
+
+
          }
 
           render() {
@@ -48,8 +51,10 @@ export default function SelectCommunities() {
               <Control>
                    {newCommunities.map((c) => (
                        <tr>
-                           <td>{c}</td>
-                           <td><Radio onChange={this.onChange} checked={this.state.selected === c} value={c} name="question"/></td>
+                           <td>{c.name}</td>
+                           <td><Radio onChange={this.onChange} checked={this.state.selected === String(c.id)} value={String(c.id)}
+                           name="community"/></td>
+
                        </tr>
                    ))}
               </Control>
