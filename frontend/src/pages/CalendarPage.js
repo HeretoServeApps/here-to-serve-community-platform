@@ -246,7 +246,7 @@ export default function CalendarPage() {
       })
       .then(
         (response) => {
-          history.push('/community-home')
+          window.location.reload()
         },
         (error) => {
           console.log(error)
@@ -626,15 +626,6 @@ export default function CalendarPage() {
                 </Button>
               </Columns.Column>
               <Columns.Column>
-                {localStorage.getItem('user-role') === 'Administrator' ?
-                  <Link to='/create-new-activity' style={{ color: 'white' }}>
-                    <Button color='primary' fullwidth={true}>
-                      Create a New Activity
-                    </Button>
-                  </Link>
-                  :
-                  <></>
-                }
                 <Link to='/activity-report' style={{ color: 'white' }}>
                   <Button
                     className='is-primary is-inverted'

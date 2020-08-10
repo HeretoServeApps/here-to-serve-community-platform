@@ -91,7 +91,7 @@ thead th {
   border-radius: 50%;
   display: inline-block;
   margin-right: 2%;
-  margin-top: 2%;
+  margin-top: 1%;
 }
 
 .dot-blue {
@@ -101,7 +101,7 @@ thead th {
   border-radius: 50%;
   display: inline-block;
   margin-right: 2%;
-  margin-top: 2%;
+  margin-top: 1%;
 }
 
 .dot-orange {
@@ -111,7 +111,7 @@ thead th {
   border-radius: 50%;
   display: inline-block;
   margin-right: 2%;
-  margin-top: 2%;
+  margin-top: 1%;
 }
 
 /*Calendar*/
