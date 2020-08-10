@@ -125,7 +125,7 @@ class CommunityList(APIView):
     permission_classes = (permissions.AllowAny, )
 
     def get(self, request, format=None):
-        communities = [community.name for community in Community.objects.all()]
+        communities = [{'name': community.name, 'id': community.id} for community in Community.objects.all()]
         return Response(communities)
         
 
