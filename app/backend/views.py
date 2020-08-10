@@ -614,6 +614,18 @@ class AddVolunteerToActivity(APIView):
         activity.save()
         return Response('Added new volunteer to activity')
 
+class RemoveUserFromCommunity(APIView):
+    """
+    A user can remove themself from a community.
+    """
+    permission_classes = (permissions.AllowAny, )
+
+    def post(self, request, format=None):
+        community_id = request.data['community']
+        user_email = request.data['user']
+        user_id = User.objects.get(email=user_email).id
+        CommunityUserRole.objects.get(community=community_id, user=user_id).delete()
+        return Response('Removed volunteer from community')
 
 class DiscussionPostViewSet(viewsets.ModelViewSet):
     queryset = DiscussionPost.objects.all().order_by('name')
