@@ -7,6 +7,8 @@ import Heading from 'react-bulma-components/lib/components/heading'
 import CheckboxField from '../components/checkboxfield'
 import Button from 'react-bulma-components/lib/components/button'
 import Table from 'react-bulma-components/lib/components/table'
+import { Radio, Control, Field } from 'react-bulma-components/lib/components/form'
+
 
 
 export default function SelectCommunities() {
@@ -19,7 +21,6 @@ export default function SelectCommunities() {
         border: '0.1rem solid #E5E5E5',
         borderRadius: '1rem'
     }
-
     const [newCommunities, setNewCommunities] = useState([])
     const token = localStorage.getItem('token')
 
@@ -28,7 +29,33 @@ export default function SelectCommunities() {
           .then((response) => {
             setNewCommunities(response.data)
           })
-      }, [])    
+      }, [])
+
+   class RadioGroup extends React.Component {
+
+       state = {
+            selected: undefined,
+         }
+
+        onChange = (evt) => {
+            this.setState({
+             selected: evt.target.value,
+             });
+         }
+
+          render() {
+            return (
+              <Control>
+                   {newCommunities.map((c) => (
+                       <tr>
+                           <td>{c}</td>
+                           <td><Radio onChange={this.onChange} checked={this.state.selected === c} value={c} name="question"/></td>
+                       </tr>
+                   ))}
+              </Control>
+            );
+          }
+      }
 
     return(
         <Container style={containerStyle}>
@@ -41,12 +68,7 @@ export default function SelectCommunities() {
                     </tr>
                 </thead>
                 <tbody>
-                    {newCommunities.map((c) => (
-                        <tr>
-                            <td>{c}</td>
-                             <td><CheckboxField text={''}/></td>
-                        </tr>
-                    ))}
+                <RadioGroup/>
                 </tbody>
             </Table>
             <Link to='/my-communities'>
