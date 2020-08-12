@@ -614,6 +614,22 @@ class AddVolunteerToActivity(APIView):
         activity.save()
         return Response('Added new volunteer to activity')
 
+class AddVolunteerToCommunity(APIView):
+    """
+    A user can add themself to a community.
+    """
+    permission_classes = (permissions.AllowAny, )
+
+    def post(self, request, format=None):
+        user_email = request.data['user']
+        user = User.objects.get(email=user_email).id
+        request.data['user'] = user
+        serializer = CommunityUserRoleSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 class RemoveUserFromCommunity(APIView):
     """
     A user can remove themself from a community.

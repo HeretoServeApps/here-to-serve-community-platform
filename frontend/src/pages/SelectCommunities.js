@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useCallback } from "react"
 import { Link } from 'react-router-dom'
 import axios from 'axios'
-
+import { useHistory } from 'react-router-dom'
 import Container from 'react-bulma-components/lib/components/container'
 import Heading from 'react-bulma-components/lib/components/heading'
 import CheckboxField from '../components/checkboxfield'
@@ -23,7 +23,32 @@ export default function SelectCommunities() {
     }
     const [newCommunities, setNewCommunities] = useState([])
     const token = localStorage.getItem('token')
-    const [communityId, setCommunityId] = useState('')
+    const [communityId, setCommunityId] = useState(0)
+    let history = useHistory()
+
+    //adds volunteer to community
+  const addVolunteer = useCallback(() => {
+    const param = JSON.stringify({
+      community: communityId,
+      user: localStorage.getItem('email'),
+    })
+
+    axios
+      .post('/add-volunteer-to-community/', param, {
+        headers: {
+          Authorization: `JWT ${token}`,
+          'Content-Type': 'application/json',
+        },
+      })
+      .then(
+        (response) => {
+          history.push('/my-communities')
+        },
+        (error) => {
+          console.log(error)
+        }
+      )
+  }, [communityId, token])
 
     useEffect(() => {
         axios.get('/communities/')
@@ -43,18 +68,16 @@ export default function SelectCommunities() {
              selected: evt.target.value,
              });
 
-
          }
-
           render() {
             return (
               <Control>
                    {newCommunities.map((c) => (
                        <tr>
                            <td>{c.name}</td>
-                           <td><Radio onChange={this.onChange} checked={this.state.selected === String(c.id)} value={String(c.id)}
-                           name="community"/></td>
-
+                           <td><Radio onChange={this.onChange} checked={this.state.selected === String(c.id)}
+                           value={String(c.id)} name="community"
+                           onClick = {this.state.selected === String(c.id) ? setCommunityId(c.id) : ""} /></td>
                        </tr>
                    ))}
               </Control>
@@ -77,7 +100,8 @@ export default function SelectCommunities() {
                 </tbody>
             </Table>
             <Link to='/my-communities'>
-                <Button style={{ marginTop: '1rem', marginBottom: '1rem' }} color='primary' fullwidth={true}>
+                <Button onClick={() => addVolunteer()} style={{ marginTop: '1rem', marginBottom: '1rem' }}
+                color='primary' fullwidth={true}>
                     JOIN SELECTED COMMUNITIES
                 </Button>
             </Link>
