@@ -83,7 +83,7 @@ class UserSerializerWithToken(serializers.ModelSerializer):
 class CommunityUserRoleSerializer(serializers.ModelSerializer):
     class Meta:
         model = CommunityUserRole
-        fields = ('community', 'user', 'role')
+        fields = ('community', 'user', 'role', 'is_approved')
 
 
 class PasswordResetConfirmSerializer(serializers.Serializer):

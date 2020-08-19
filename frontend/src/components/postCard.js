@@ -1,6 +1,5 @@
 import React, { useState, useCallback } from 'react'
 import Heading from 'react-bulma-components/lib/components/heading'
-import Icon from 'react-bulma-components/lib/components/icon'
 import Button from 'react-bulma-components/lib/components/button'
 import Dropdown from 'react-bulma-components/lib/components/dropdown'
 import Modal from 'react-bulma-components/lib/components/modal'
@@ -12,7 +11,6 @@ import {
   Label,
 } from 'react-bulma-components/lib/components/form'
 import Media from 'react-bulma-components/lib/components/media'
-import Image from 'react-bulma-components/lib/components/image'
 import Content from 'react-bulma-components/lib/components/content'
 import Box from 'react-bulma-components/lib/components/box'
 import { Editor } from '@tinymce/tinymce-react'

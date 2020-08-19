@@ -20,6 +20,8 @@ import Message from 'react-bulma-components/lib/components/message'
 import Card from 'react-bulma-components/lib/components/card'
 import Media from 'react-bulma-components/lib/components/media'
 import Content from 'react-bulma-components/lib/components/content'
+import Modal from 'react-bulma-components/lib/components/modal'
+import Section from 'react-bulma-components/lib/components/section'
 
 import CustomSections from '../components/customSections'
 import {
@@ -65,6 +67,8 @@ export default function CommunityHome(props) {
   const [photoGallery, setPhotoGallery] = useState('')
 
   const [userRole, setUserRole] = useState('')
+  const [showLeaveCommunityModal, setShowLeaveCommunityModal] = useState(false)
+
 
   const years = [...Array(15).keys()].map((i) => i + 2020)
   const months = [
@@ -548,7 +552,7 @@ export default function CommunityHome(props) {
                 <div>
                   <hr />
                       <Button
-                      onClick={() => removeCommunityMember()}
+                      onClick={() => setShowLeaveCommunityModal(true)}
                       style={{
                         boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)',
                       }}
@@ -556,6 +560,39 @@ export default function CommunityHome(props) {
                     >
                       Leave community
                     </Button>
+                    <Modal
+                      show={showLeaveCommunityModal}
+                      onClose={() => setShowLeaveCommunityModal(false)}
+                      closeOnBlur={true}
+                    >
+                      <Modal.Card>
+                        <Modal.Card.Head onClose={() => setShowLeaveCommunityModal(false)}>
+                          <Modal.Card.Title>
+                            Leave Community
+                          </Modal.Card.Title>
+                        </Modal.Card.Head>
+                        <Section style={{ backgroundColor: 'white' }}>
+                          Are you sure you want to leave this community? You can't
+                          undo this action.
+                        </Section>
+                        <Modal.Card.Foot
+                          style={{
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                          }}
+                        >
+                          <Button onClick={() => setShowLeaveCommunityModal(false)}>
+                            Cancel
+                          </Button>
+                          <Button
+                            color='primary'
+                            onClick={() => removeCommunityMember()}
+                          >
+                            Leave Community
+                          </Button>
+                        </Modal.Card.Foot>
+                      </Modal.Card>
+                    </Modal>
                 </div>
               )}
             </Box>

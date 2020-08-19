@@ -14,7 +14,7 @@ import {
   Control,
   Input,
   Select,
-  Label
+  Label,
 } from 'react-bulma-components/lib/components/form'
 import Autocomplete from '../components/autocomplete'
 
@@ -78,7 +78,7 @@ export default function Register(props) {
       password,
       confirmEmail,
       confirmPassword,
-      howLearn
+      howLearn,
     ]
     const notValidForm =
       formValues.some((formVal) => {
@@ -86,8 +86,7 @@ export default function Register(props) {
       }) ||
       formValues.some((formVal) => {
         return formVal === 'Please select an option'
-      })
-      ||
+      }) ||
       email !== confirmEmail ||
       password !== confirmPassword
     setValidForm(notValidForm)
@@ -107,38 +106,42 @@ export default function Register(props) {
     password,
     confirmEmail,
     confirmPassword,
-    howLearn
+    howLearn,
   ])
 
   // If token is verified, logs the user in and add them to the community they chose to join
   useEffect(() => {
-    if (localStorage.getItem('token') && 
-        localStorage.getItem('token') !== 'undefined' &&
-        localStorage.getItem('token') !== undefined) {
-      var formdata = new FormData();
-      formdata.append('community', who);
-      formdata.append('user', email);
-      formdata.append("role", 'COMM_MEMBER');
+    if (
+      localStorage.getItem('token') &&
+      localStorage.getItem('token') !== 'undefined' &&
+      localStorage.getItem('token') !== undefined
+    ) {
+      var formdata = new FormData()
+      formdata.append('community', who)
+      formdata.append('user', email)
+      formdata.append('role', 'COMM_MEMBER')
 
       var requestOptions = {
         method: 'POST',
         body: formdata,
-        redirect: 'follow'
-      };
+        redirect: 'follow',
+      }
 
-      fetch(process.env.REACT_APP_API_URL + '/community-role-register/', requestOptions)
-        .then(response => response.text())
-        .then(result => history.push('/my-communities'))
-        .catch(error => console.log('error', error));
+      fetch(
+        process.env.REACT_APP_API_URL + '/community-role-register/',
+        requestOptions
+      )
+        .then((response) => response.text())
+        .then((result) => history.push('/my-communities'))
+        .catch((error) => console.log('error', error))
     }
   })
 
   // Get communities without token for the "who would you like to help?" field
   useEffect(() => {
-    axios.get('/communities/')
-      .then((response) => {
-        setCommunities(response.data)
-      })
+    axios.get('/communities/').then((response) => {
+      setCommunities(response.data)
+    })
   }, [])
 
   return (
@@ -253,7 +256,11 @@ export default function Register(props) {
         <Columns.Column>
           <Field>
             <Control>
-              <Select onChange={(e) => setPhoneNumber1Type(e.target.value)} name="phoneNumber1Type" value={phoneNumber1Type}>
+              <Select
+                onChange={(e) => setPhoneNumber1Type(e.target.value)}
+                name='phoneNumber1Type'
+                value={phoneNumber1Type}
+              >
                 <option>Mobile</option>
                 <option>Home</option>
                 <option>Work</option>
@@ -278,7 +285,11 @@ export default function Register(props) {
         <Columns.Column>
           <Field>
             <Control>
-              <Select onChange={(e) => setPhoneNumber2Type(e.target.value)} name="phoneNumber2Type" value={phoneNumber2Type}>
+              <Select
+                onChange={(e) => setPhoneNumber2Type(e.target.value)}
+                name='phoneNumber2Type'
+                value={phoneNumber2Type}
+              >
                 <option></option>
                 <option>Mobile</option>
                 <option>Home</option>
@@ -289,18 +300,29 @@ export default function Register(props) {
         </Columns.Column>
       </Columns>
 
-      <Heading size={6} style={{ marginTop: '5%' }}>Community Information</Heading>
+      <Heading size={6} style={{ marginTop: '5%' }}>
+        Community Information
+      </Heading>
       <Field>
-        <p><strong>Who would you like to help?<span style={{ color: '#F83D34' }}>*</span></strong></p>
-        <Autocomplete
-          suggestions={communities}
-          set_who={setWho}
-        />
+        <p>
+          <strong>
+            Who would you like to help?
+            <span style={{ color: '#F83D34' }}>*</span>
+          </strong>
+        </p>
+        <Autocomplete suggestions={communities} set_who={setWho} />
       </Field>
       <Field>
-        <Label>How did you know this person?<span style={{ color: '#F83D34' }}>*</span></Label>
+        <Label>
+          How did you know this person?
+          <span style={{ color: '#F83D34' }}>*</span>
+        </Label>
         <Control>
-          <Select onChange={(e) => setHowKnow(e.target.value)} name="howKnow" value={howKnow}>
+          <Select
+            onChange={(e) => setHowKnow(e.target.value)}
+            name='howKnow'
+            value={howKnow}
+          >
             <option>Please select an option</option>
             <option>Family</option>
             <option>Friend</option>
@@ -317,20 +339,32 @@ export default function Register(props) {
       <Field>
         <Label>How would you like to help?</Label>
         <Control>
-          <Select onChange={(e) => setHowHelp(e.target.value)} name="howHelp" value={howHelp}>
+          <Select
+            onChange={(e) => setHowHelp(e.target.value)}
+            name='howHelp'
+            value={howHelp}
+          >
             <option></option>
             <option>As an individual volunteer</option>
             <option>Through my house of worship</option>
-            <option>Through a volunteer organization that I am a member of</option>
+            <option>
+              Through a volunteer organization that I am a member of
+            </option>
           </Select>
         </Control>
       </Field>
       <Field>
         <Label>What skill can you offer?</Label>
         <Control>
-          <Select onChange={(e) => setSkillsToOffer(e.target.value)} name="skillsToOffer" value={skillsToOffer}>
+          <Select
+            onChange={(e) => setSkillsToOffer(e.target.value)}
+            name='skillsToOffer'
+            value={skillsToOffer}
+          >
             <option></option>
-            <option>Cared for someone with a life-threatening health crisis</option>
+            <option>
+              Cared for someone with a life-threatening health crisis
+            </option>
             <option>I have had a life-threatening health crisis</option>
             <option>Healthcare provider</option>
             <option>Computer, technology, and social media</option>
@@ -343,7 +377,9 @@ export default function Register(props) {
           </Select>
         </Control>
       </Field>
-      <Heading size={6} style={{ marginTop: '5%' }}>Login Information</Heading>
+      <Heading size={6} style={{ marginTop: '5%' }}>
+        Login Information
+      </Heading>
       <Field>
         <Control>
           <Input
@@ -391,7 +427,9 @@ export default function Register(props) {
         </Columns.Column>
       </Columns>
       <Field>
-        <Label>How did you learn about us?<span style={{ color: '#F83D34' }}>*</span></Label>
+        <Label>
+          How did you learn about us?<span style={{ color: '#F83D34' }}>*</span>
+        </Label>
         <Select
           name='How Learn'
           value={howLearn}
@@ -432,7 +470,7 @@ export default function Register(props) {
             who,
             howHelp,
             howKnow,
-            skillsToOffer,
+            skillsToOffer
           )
         }
       >

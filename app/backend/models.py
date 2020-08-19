@@ -272,6 +272,9 @@ class CommunityUserRole(models.Model):
         default=COMM_MEMBER,
         blank=False,
     )
+    # When a user joins a community, they must be approved
+    is_approved = models.BooleanField(default=False, null=False, blank=False)
+
 
 class Announcement(models.Model):
     TRUE = 'true'

@@ -8,7 +8,7 @@ import PrivateRoute from './components/privateroute'
 
 import Register from './pages/Register'
 import MyCommunities from './pages/MyCommunities'
-import SelectCommunities from './pages/SelectCommunities'
+import SelectCommunities from './pages/JoinCommunities'
 import CreateCommunity from './pages/CreateCommunity'
 import Login from './pages/Login'
 import CommunityAbout from './pages/CommunityAbout'
@@ -37,6 +37,8 @@ import PhotoGallery from './pages/PhotoGallery'
 import MessageBoard from './pages/MessageBoard'
 import PasswordSettings from './pages/PasswordSettings'
 import ActivityEdit from './pages/ActivityEdit'
+import ManageCustomSections from './pages/ManageCustomSections'
+import JoinRequests from './pages/JoinRequests'
 
 export default function App() {
   const [loggedIn, setLoggedIn] = useState(
@@ -300,6 +302,12 @@ export default function App() {
             exact
             component={ActivityEdit}
           />
+          <PrivateRoute
+            path='/manage-custom-sections'
+            exact
+            component={ManageCustomSections}
+          />
+          <PrivateRoute path='/join-requests' exact component={JoinRequests} />
         </Switch>
         <AppFooter />
       </Router>
