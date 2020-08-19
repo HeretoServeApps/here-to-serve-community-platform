@@ -592,12 +592,21 @@ class EditCustomSection(APIView):
     def post(self, request, format=None):
         section_id = request.data['section_id']
         custom_section = CustomSection.objects.get(id=section_id)
+        custom_section.name = request.data['name']
         custom_section.title = request.data['title']
         custom_section.description = request.data['description']
+        custom_section.link = request.data['link']
         custom_section.general_content = request.data['general_content']
         custom_section.save()
         return Response('Edited custom section')
 
+class DeleteCustomSection(APIView):
+    permission_classes = (permissions.AllowAny,)
+
+    def delete(self, request, format=None):
+        id = request.data['id']
+        CustomSection.objects.get(id=id).delete()
+        return Response('Deleted custom section')
 
 class AddVolunteerToActivity(APIView):
     """

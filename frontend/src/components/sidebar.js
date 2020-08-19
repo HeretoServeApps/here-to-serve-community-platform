@@ -119,11 +119,22 @@ const SideBar = (props) => {
               </p>
             </Link>
 
+            <hr />
+
             <Link to='/create-custom-section'>
               <p className='sidebar'>
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                   <Star size={12} style={{ marginRight: '10px' }} />{' '}
                   <p>Create Custom Section</p>
+                </div>
+              </p>
+            </Link>
+
+            <Link to='/manage-custom-sections'>
+              <p className='sidebar'>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                  <Layers size={12} style={{ marginRight: '10px' }} />{' '}
+                  <p>Manage Custom Sections</p>
                 </div>
               </p>
             </Link>

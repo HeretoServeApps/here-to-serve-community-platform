@@ -53,7 +53,7 @@ export default function CreateCustomSection(props) {
           Authorization: `JWT ${token}`,
         },
         params: {
-          pk: localStorage.getItem('community-id')
+          pk: localStorage.getItem('community-id'),
         },
       })
       .then()
@@ -122,7 +122,7 @@ export default function CreateCustomSection(props) {
                   <span style={{ color: '#F83D34' }}>*</span>
                 </Label>
                 <span style={noteStyle}>
-                  This will be displayed in place of the URL.
+                  This will be displayed in the sidebar.
                 </span>
                 <Control>
                   <Input
