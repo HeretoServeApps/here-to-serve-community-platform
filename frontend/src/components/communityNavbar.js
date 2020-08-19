@@ -7,7 +7,7 @@ import Columns from 'react-bulma-components/lib/components/columns'
 const Bar = styled.div`
   background-color: #2c8595;
   z-index: -1;
-  padding: 0 10%;
+  padding: 0 5%;
 `
 
 const links = [
@@ -27,17 +27,25 @@ const CommunityNavbar = (props) => {
   return (
     <Bar>
       <Columns isMultiline={true}>
-        <Columns.Column>
+        <Columns.Column
+          size={3}
+          style={{
+            display: 'flex',
+            justifyContent: 'space-around',
+            overflow: 'auto',
+            whiteSpace: 'nowrap',
+          }}
+        >
           <Link to='/community-home'>
             <Button className='is-small is-primary'>
-              <strong style={{ fontSize: '1.2em' }}>
+              <strong style={{ fontSize: '1.6em' }}>
                 {localStorage.getItem('community-name')}
               </strong>
             </Button>
           </Link>
         </Columns.Column>
-        {links.map((title) => (
-          <Columns.Column>
+        <Columns.Column style={{ overflow: 'auto', whiteSpace: 'nowrap' }}>
+          {links.map((title) => (
             <Link to={title[1]}>
               <Button
                 className={
@@ -46,11 +54,11 @@ const CommunityNavbar = (props) => {
                     : 'is-small is-primary'
                 }
               >
-                {title[0]}
+                <strong>{title[0]}</strong>
               </Button>
             </Link>
-          </Columns.Column>
-        ))}
+          ))}
+        </Columns.Column>
       </Columns>
     </Bar>
   )

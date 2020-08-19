@@ -43,11 +43,11 @@ export default function Welcome() {
     margin: '5%',
     padding: '1%',
     boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.25)',
-    height: '25rem'
+    height: '25rem',
   }
 
   return (
-    <div>
+    <div style={{ backgroundColor: '#addbe4' }}>
       <BackgroundWrapper>
         <Background />
       </BackgroundWrapper>
@@ -87,12 +87,12 @@ export default function Welcome() {
             </Container>
           </Columns.Column>
           <Columns.Column size={8}>
-            <Container style={{ marginTop: '2%'}}>
+            <Container style={{ marginTop: '2%' }}>
               <img
                 src={families}
-                style={{  
+                style={{
                   height: 'auto',
-                  width: '1000px'
+                  width: '1000px',
                 }}
                 alt='family'
               ></img>

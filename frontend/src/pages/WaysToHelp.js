@@ -92,35 +92,41 @@ export default function WaysToHelp(props) {
                 <XCircle onClick={() => setIsEditing(false)} color='#F83D34' />
               </div>
               <div>
-                <input id="my-file" type="file" name="my-file" style={{display:"none"}} />
+                <input
+                  id='my-file'
+                  type='file'
+                  name='my-file'
+                  style={{ display: 'none' }}
+                />
                 <Editor
                   initialValue={newContent}
                   init={{
                     height: 500,
                     menubar: false,
                     plugins: [
-                        'advlist autolink lists link image charmap print preview anchor',
-                        'searchreplace wordcount visualblocks code fullscreen',
-                        'insertdatetime media table contextmenu paste code'
+                      'advlist autolink lists link image charmap print preview anchor',
+                      'searchreplace wordcount visualblocks code fullscreen',
+                      'insertdatetime media table contextmenu paste code',
                     ],
-                    toolbar: 'insertfile undo redo | formatselect | bold italic backcolor | \
+                    toolbar:
+                      'insertfile undo redo | formatselect | bold italic backcolor | \
                               alignleft aligncenter alignright alignjustify | \
                               bullist numlist outdent indent | link image media | help',
                     file_browser_callback_types: 'image',
                     file_picker_callback: function (callback, value, meta) {
                       if (meta.filetype == 'image') {
-                          var input = document.getElementById('my-file');
-                          input.click();
-                          input.onchange = function () {
-                              var file = input.files[0];
-                              var reader = new FileReader();
-                              reader.onload = function (e) {
-                                  callback(e.target.result, {
-                                      alt: file.name
-                                  });
-                              };
-                              reader.readAsDataURL(file);
-                          };
+                        var input = document.getElementById('my-file')
+                        input.click()
+                        input.onchange = function () {
+                          var file = input.files[0]
+                          var reader = new FileReader()
+                          reader.onload = function (e) {
+                            callback(e.target.result, {
+                              alt: file.name,
+                            })
+                          }
+                          reader.readAsDataURL(file)
+                        }
                       }
                     },
                     paste_data_images: true,
@@ -160,7 +166,7 @@ export default function WaysToHelp(props) {
                   <Coffee size={100} color='#E5E5E5' />
                   <br />
                   <br />
-                  Sit tight! Nothing been posted yet.
+                  Sit tight! Nothing has been posted yet.
                 </p>
               ) : (
                 <div dangerouslySetInnerHTML={{ __html: content }}></div>

@@ -10,7 +10,7 @@ import CommunityNavbar from '../components/communityNavbar'
 import Button from 'react-bulma-components/lib/components/button'
 import PostCard from '../components/postCard'
 import SideBar from '../components/sidebar'
-import { Coffee } from 'react-feather'
+import { Coffee, Radio } from 'react-feather'
 
 import axios from 'axios'
 
@@ -62,24 +62,29 @@ export default function Announcements(props) {
           <Columns.Column size={3}>
             <SideBar />
           </Columns.Column>
-          
+
           <Columns.Column size={9}>
             <Columns>
-              <Columns.Column size={8}>
+              <Columns.Column size={9}>
                 <Heading size={4}>Family Updates</Heading>
               </Columns.Column>
 
-              <Columns.Column size={4}>
-                {localStorage.getItem('user-role') === 'Administrator' ? 
-                  <Link to='/create-announcement' style={{ marginRight: '10px' }}>
+              <Columns.Column size={3}>
+                {localStorage.getItem('user-role') === 'Administrator' ? (
+                  <Link
+                    to='/create-announcement'
+                    style={{ marginRight: '10px' }}
+                  >
                     <Button color='primary' className='is-fullwidth'>
-                      Create Update
+                      <div>
+                        <Radio size={12} style={{ marginRight: '5px' }} />
+                        Create Update
+                      </div>
                     </Button>
                   </Link>
-                  :
+                ) : (
                   <></>
-                }
-                
+                )}
               </Columns.Column>
             </Columns>
             <div>
@@ -105,7 +110,7 @@ export default function Announcements(props) {
                   <Coffee size={100} color='#E5E5E5' />
                   <br />
                   <br />
-                  Sit tight! Nothing been posted yet.
+                  Sit tight! Nothing has been posted yet.
                 </p>
               )}
             </div>

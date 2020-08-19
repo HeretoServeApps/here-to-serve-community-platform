@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useState, useEffect, useCallback } from 'react'
+import { Link, useHistory } from 'react-router-dom'
 import axios from 'axios'
 import { Calendar, momentLocalizer } from 'react-big-calendar'
 import moment from 'moment'
@@ -36,6 +36,7 @@ import {
 } from 'react-feather'
 
 export default function CommunityHome(props) {
+  let history = useHistory()
   const [description, setDescription] = useState('')
   const [profilePhoto, setProfilePhoto] = useState('')
   const token = localStorage.getItem('token')
@@ -98,6 +99,30 @@ export default function CommunityHome(props) {
     backgroundColor: 'hsl(0, 0%, 96%)',
     borderRadius: '10px',
   }
+
+  //adds volunteer to activity
+  const removeCommunityMember = useCallback(() => {
+    const param = JSON.stringify({
+      community: localStorage.getItem('community-id'),
+      user: localStorage.getItem('email'),
+    })
+
+    axios
+      .post('/remove-user-from-community/', param, {
+        headers: {
+          Authorization: `JWT ${token}`,
+          'Content-Type': 'application/json',
+        },
+      })
+      .then(
+        (response) => {
+          history.push('/my-communities')
+        },
+        (error) => {
+          console.log(error)
+        }
+      )
+  }, [token])
 
   function updateDate() {
     setDate(moment(`${selectedMonth} ${selectedYear}`, 'MMMM YYYY').toDate())
@@ -520,7 +545,18 @@ export default function CommunityHome(props) {
                   </Button>
                 </div>
               ) : (
-                <></>
+                <div>
+                  <hr />
+                      <Button
+                      onClick={() => removeCommunityMember()}
+                      style={{
+                        boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)',
+                      }}
+                      color='primary'
+                    >
+                      Leave community
+                    </Button>
+                </div>
               )}
             </Box>
           </Columns.Column>
@@ -543,15 +579,19 @@ export default function CommunityHome(props) {
             {userRole === 'Administrator' ? (
               <Link to='/create-new-activity' style={{ color: 'white' }}>
                 <Button color='primary' className='is-fullwidth'>
-                  <CalendarIcon size={12} style={{ marginRight: '5px' }} />
-                  Create Activity
+                  <div>
+                    <CalendarIcon size={12} style={{ marginRight: '5px' }} />
+                    Create Activity
+                  </div>
                 </Button>
               </Link>
             ) : (
               <Link to='#' style={{ color: 'white' }}>
-                <Button color='primary' className='is-fullwidth'>
-                  My Activities
-                </Button>
+                <div>
+                  <Button color='primary' className='is-fullwidth'>
+                    My Activities
+                  </Button>
+                </div>
               </Link>
             )}
             <a
@@ -567,8 +607,10 @@ export default function CommunityHome(props) {
                 }}
                 fullwidth={true}
               >
-                <LinkIcon size={12} style={{ marginRight: '5px' }} />
-                Here to Serve
+                <div>
+                  <LinkIcon size={12} style={{ marginRight: '5px' }} />
+                  Here to Serve
+                </div>
               </Button>
             </a>
             <a
@@ -584,8 +626,10 @@ export default function CommunityHome(props) {
                 }}
                 fullwidth={true}
               >
-                <CreditCard size={12} style={{ marginRight: '5px' }} />
-                Donate Now!
+                <div>
+                  <CreditCard size={12} style={{ marginRight: '5px' }} />
+                  Donate Now!
+                </div>
               </Button>
             </a>
             <br />

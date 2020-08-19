@@ -8,7 +8,7 @@ import Heading from 'react-bulma-components/lib/components/heading'
 import CommunityNavbar from '../components/communityNavbar'
 import Button from 'react-bulma-components/lib/components/button'
 import SideBar from '../components/sidebar'
-import { Edit2, XCircle, Coffee } from 'react-feather'
+import { Edit2, XCircle, X, Coffee, CheckCircle } from 'react-feather'
 import {
   Control,
   Label,
@@ -134,7 +134,7 @@ export default function MessageBoard(props) {
                 >
                   {showForm ? (
                     <div>
-                      <XCircle size={12} style={{ marginRight: '5px' }} />
+                      <X size={12} style={{ marginRight: '5px' }} />
                       Hide Message Form
                     </div>
                   ) : (
@@ -216,6 +216,7 @@ export default function MessageBoard(props) {
                     disabled={validForm}
                     onClick={() => handleSubmit()}
                   >
+                    <CheckCircle size={12} style={{ marginRight: '5px' }} />
                     Finish
                   </Button>
                 </div>
@@ -245,7 +246,7 @@ export default function MessageBoard(props) {
                   <Coffee size={100} color='#E5E5E5' />
                   <br />
                   <br />
-                  Sit tight! Nothing been posted yet.
+                  Sit tight! Nothing has been posted yet.
                 </p>
               )}
             </div>

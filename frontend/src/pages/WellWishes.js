@@ -7,7 +7,7 @@ import Heading from 'react-bulma-components/lib/components/heading'
 import CommunityNavbar from '../components/communityNavbar'
 import Button from 'react-bulma-components/lib/components/button'
 import { Editor } from '@tinymce/tinymce-react'
-import { Edit, XCircle, Coffee } from 'react-feather'
+import { Edit, XCircle, Coffee, Heart, Edit2, X } from 'react-feather'
 
 import SideBar from '../components/sidebar'
 import PostCard from '../components/postCard'
@@ -128,16 +128,24 @@ export default function WellWishes(props) {
           </Columns.Column>
           <Columns.Column size={9}>
             <Columns>
-              <Columns.Column size={8}>
+              <Columns.Column size={9}>
                 <Heading size={4}>Well Wishes</Heading>
               </Columns.Column>
-              <Columns.Column size={4}>
+              <Columns.Column size={3}>
                 <Button
                   onClick={() => setShowForm(!showForm)}
                   color='primary'
                   className='is-fullwidth'
                 >
-                  {showForm ? 'Hide Message Form' : 'Leave a Message'}
+                  <div>
+                    {showForm ? (
+                      <X size={12} style={{ marginRight: '5px' }} />
+                    ) : (
+                      <Edit2 size={12} style={{ marginRight: '5px' }} />
+                    )}
+
+                    {showForm ? 'Hide Message Form' : 'Leave a Message'}
+                  </div>
                 </Button>
               </Columns.Column>
             </Columns>
@@ -168,41 +176,53 @@ export default function WellWishes(props) {
                       Message<span style={{ color: '#F83D34' }}>*</span>
                     </Label>
                     <Control>
-                    <input id="my-file" type="file" name="my-file" style={{display:"none"}} />
-                <Editor
-                  initialValue={message}
-                  init={{
-                    height: 500,
-                    menubar: false,
-                    plugins: [
-                        'advlist autolink lists link image charmap print preview anchor',
-                        'searchreplace wordcount visualblocks code fullscreen',
-                        'insertdatetime media table contextmenu paste code'
-                    ],
-                    toolbar: 'insertfile undo redo | formatselect | bold italic backcolor | \
+                      <input
+                        id='my-file'
+                        type='file'
+                        name='my-file'
+                        style={{ display: 'none' }}
+                      />
+                      <Editor
+                        initialValue={message}
+                        init={{
+                          height: 500,
+                          menubar: false,
+                          plugins: [
+                            'advlist autolink lists link image charmap print preview anchor',
+                            'searchreplace wordcount visualblocks code fullscreen',
+                            'insertdatetime media table contextmenu paste code',
+                          ],
+                          toolbar:
+                            'insertfile undo redo | formatselect | bold italic backcolor | \
                               alignleft aligncenter alignright alignjustify | \
                               bullist numlist outdent indent | link image media | help',
-                    file_browser_callback_types: 'image',
-                    file_picker_callback: function (callback, value, meta) {
-                      if (meta.filetype == 'image') {
-                          var input = document.getElementById('my-file');
-                          input.click();
-                          input.onchange = function () {
-                              var file = input.files[0];
-                              var reader = new FileReader();
-                              reader.onload = function (e) {
+                          file_browser_callback_types: 'image',
+                          file_picker_callback: function (
+                            callback,
+                            value,
+                            meta
+                          ) {
+                            if (meta.filetype == 'image') {
+                              var input = document.getElementById('my-file')
+                              input.click()
+                              input.onchange = function () {
+                                var file = input.files[0]
+                                var reader = new FileReader()
+                                reader.onload = function (e) {
                                   callback(e.target.result, {
-                                      alt: file.name
-                                  });
-                              };
-                              reader.readAsDataURL(file);
-                          };
-                      }
-                    },
-                    paste_data_images: true,
-                  }}
-                  onEditorChange={(content, editor) => setMessage(content)}
-                />
+                                    alt: file.name,
+                                  })
+                                }
+                                reader.readAsDataURL(file)
+                              }
+                            }
+                          },
+                          paste_data_images: true,
+                        }}
+                        onEditorChange={(content, editor) =>
+                          setMessage(content)
+                        }
+                      />
                     </Control>
                   </Field>
                 </div>
@@ -243,7 +263,7 @@ export default function WellWishes(props) {
                   <Coffee size={100} color='#E5E5E5' />
                   <br />
                   <br />
-                  Sit tight! Nothing been posted yet.
+                  Sit tight! Nothing has been posted yet.
                 </p>
               )}
             </div>

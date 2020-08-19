@@ -19,6 +19,7 @@ import {
 } from 'react-bulma-components/lib/components/form'
 import Icon from 'react-bulma-components/lib/components/icon'
 import ImageGallery from 'react-image-gallery'
+import { Image as ImageIcon, X } from 'react-feather'
 import '../../node_modules/react-image-gallery/styles/css/image-gallery.css'
 
 export default function PhotoGallery(props) {
@@ -147,15 +148,18 @@ export default function PhotoGallery(props) {
             </Columns.Column>
             <Columns.Column size={9}>
               <Columns>
-                <Columns.Column size={10}>
+                <Columns.Column size={9}>
                   <Heading size={4}>Photo Gallery</Heading>
                 </Columns.Column>
-                <Columns.Column size={2}>
+                <Columns.Column size={3}>
                   <Button
                     className='is-fullwidth'
                     onClick={() => setIsEditing(false)}
                   >
-                    Cancel
+                    <div>
+                      <X size={12} style={{ marginRight: '5px' }} />
+                      Cancel
+                    </div>
                   </Button>
                 </Columns.Column>
               </Columns>
@@ -223,16 +227,19 @@ export default function PhotoGallery(props) {
           </Columns.Column>
           <Columns.Column size={9}>
             <Columns>
-              <Columns.Column size={10}>
+              <Columns.Column size={9}>
                 <Heading size={4}>Photo Gallery</Heading>
               </Columns.Column>
-              <Columns.Column size={2}>
+              <Columns.Column size={3}>
                 <Button
                   color='primary'
                   className='is-fullwidth'
                   onClick={() => setIsEditing(true)}
                 >
-                  Add Photo
+                  <div>
+                    <ImageIcon size={12} style={{ marginRight: '5px' }} />
+                    Add New Photo
+                  </div>
                 </Button>
               </Columns.Column>
             </Columns>

@@ -590,8 +590,13 @@ export default function CalendarPage() {
                 {localStorage.getItem('user-role') === 'Administrator' && (
                   <Link to='/create-new-activity' style={{ color: 'white' }}>
                     <Button color='primary' fullwidth={true}>
-                      <CalendarIcon size={12} style={{ marginRight: '5px' }} />
-                      Create Activity
+                      <div>
+                        <CalendarIcon
+                          size={12}
+                          style={{ marginRight: '5px' }}
+                        />
+                        Create Activity
+                      </div>
                     </Button>
                   </Link>
                 )}
@@ -634,18 +639,18 @@ export default function CalendarPage() {
                     }}
                     fullwidth={true}
                   >
-                    View Activity Report
+                    <div>View Activity Report</div>
                   </Button>
                 </Link>
               </Columns.Column>
             </Columns>
             <div className='rbc-calendar'>
               <Calendar
+                events={events}
                 localizer={localizer}
                 style={{ height: 600 }}
                 date={date}
                 onNavigate={(date) => setDate(date)}
-                events={events}
                 startAccessor='start_time'
                 endAccessor='end_time'
                 allDayAccessor='all_day'
