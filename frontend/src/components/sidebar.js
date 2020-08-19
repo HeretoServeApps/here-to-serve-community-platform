@@ -72,7 +72,7 @@ const SideBar = (props) => {
               </p>
             </Link>
 
-            <Link to='#'>
+            <Link to='/join-requests'>
               <p className='sidebar'>
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                   <AlertCircle size={12} style={{ marginRight: '10px' }} />
