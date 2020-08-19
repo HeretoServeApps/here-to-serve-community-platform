@@ -34,7 +34,7 @@ sensitive_post_parameters_m = method_decorator(sensitive_post_parameters())
 
 
 class CommunityViewSet(viewsets.ModelViewSet):
-    queryset = Community.objects.all().order_by('name')
+    queryset = Community.objects.all()
     serializer_class = CommunitySerializer
 
     def get_queryset(self):
@@ -78,6 +78,15 @@ class CommunityUserRoleViewSet(viewsets.ModelViewSet):
     serializer_class = CommunityUserRoleSerializer
 
 
+class OneUserAllRolesViewSet(viewsets.ModelViewSet):
+    queryset = CommunityUserRole.objects.all()
+    serializer_class = CommunityUserRoleSerializer
+
+    def get_queryset(self):
+        user_id = User.objects.get(email=self.request.query_params.get('user_email')).id
+        return CommunityUserRole.objects.filter(user=user_id)
+
+    
 class EditCommunityUserRole(APIView):
     permission_classes = (permissions.IsAuthenticated,)
 
@@ -86,8 +95,6 @@ class EditCommunityUserRole(APIView):
         user_email = request.data['user-email']
         user_id = User.objects.get(email=user_email).id
         userRoleObject = CommunityUserRole.objects.get(community=community_id, user=user_id)
-        print(userRoleObject.community)
-        print(userRoleObject.user)
         userRoleObject.role = request.data['role']
         userRoleObject.save()
         return Response('Edited Community User Role')
@@ -125,7 +132,7 @@ class CommunityList(APIView):
     permission_classes = (permissions.AllowAny, )
 
     def get(self, request, format=None):
-        communities = [community.name for community in Community.objects.all()]
+        communities = [{'name': community.name, 'id': community.id} for community in Community.objects.all()]
         return Response(communities)
         
 
@@ -613,6 +620,22 @@ class AddVolunteerToActivity(APIView):
         activity.volunteers.add(user)
         activity.save()
         return Response('Added new volunteer to activity')
+
+class AddVolunteerToCommunity(APIView):
+    """
+    A user can add themself to a community.
+    """
+    permission_classes = (permissions.AllowAny, )
+
+    def post(self, request, format=None):
+        user_email = request.data['user']
+        user = User.objects.get(email=user_email).id
+        request.data['user'] = user
+        serializer = CommunityUserRoleSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class RemoveUserFromCommunity(APIView):
     """

@@ -10,8 +10,6 @@ import Card from 'react-bulma-components/lib/components/card'
 import Columns from 'react-bulma-components/lib/components/columns'
 import styled from 'styled-components'
 
-// import family from '../images/family.png'
-// import img from '../images/welcome-background.svg'
 import families from '../images/families.png'
 
 const Background = styled.div`

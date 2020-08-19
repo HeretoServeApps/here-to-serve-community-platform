@@ -7,7 +7,7 @@ import Heading from 'react-bulma-components/lib/components/heading'
 import CommunityNavbar from '../components/communityNavbar'
 import Button from 'react-bulma-components/lib/components/button'
 import { Editor } from '@tinymce/tinymce-react'
-import { Edit, XCircle, Coffee, Heart, Edit2, X } from 'react-feather'
+import {Coffee, Edit2, X } from 'react-feather'
 
 import SideBar from '../components/sidebar'
 import PostCard from '../components/postCard'

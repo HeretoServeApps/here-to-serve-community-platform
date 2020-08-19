@@ -9,7 +9,6 @@ import CommunityNavbar from '../components/communityNavbar'
 import Button from 'react-bulma-components/lib/components/button'
 import SideBar from '../components/sidebar'
 import { Edit, XCircle, Coffee } from 'react-feather'
-import { useFlexLayout } from 'react-table'
 
 export default function WaysToHelp(props) {
   const token = localStorage.getItem('token')
@@ -114,7 +113,7 @@ export default function WaysToHelp(props) {
                               bullist numlist outdent indent | link image media | help',
                     file_browser_callback_types: 'image',
                     file_picker_callback: function (callback, value, meta) {
-                      if (meta.filetype == 'image') {
+                      if (meta.filetype ==='image') {
                         var input = document.getElementById('my-file')
                         input.click()
                         input.onchange = function () {
