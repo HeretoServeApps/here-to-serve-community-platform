@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import DayPicker, { DateUtils } from 'react-day-picker'
+import { DateUtils } from 'react-day-picker'
 import 'react-day-picker/lib/style.css'
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
@@ -13,15 +13,15 @@ import CommunityNavbar from '../components/communityNavbar'
 import Button from 'react-bulma-components/lib/components/button'
 import Tabs from 'react-bulma-components/lib/components/tabs'
 import {
-  Select,
-  Control,
-  Label,
-  Field,
-  Input,
-  Textarea,
-  Checkbox,
+    Select,
+    Control,
+    Label,
+    Field,
+    Input,
+    Textarea,
+    Checkbox,
 } from 'react-bulma-components/lib/components/form'
-import MultiSelect from "@khanacademy/react-multi-select";
+import MultiSelect from 'react-multi-select-component'
 import SideBar from '../components/sidebar'
 
 export default function ActivityEdit(props) {
@@ -175,12 +175,12 @@ export default function ActivityEdit(props) {
 
     const [activeTab, setActiveTab] = useState('What')
     const [validForm, setValidForm] = useState(false)
-  
+
     //What
     const [category, setCategory] = useState('')
     const [activityName, setActivityName] = useState('')
     const [notes, setNotes] = useState('')
-  
+
     //When
     const [startTime, setStartTime] = useState('12:00 PM')
     const [endTime, setEndTime] = useState('12:00 PM')
@@ -192,148 +192,66 @@ export default function ActivityEdit(props) {
     const [endMonth, setEndMonth] = useState(months[new Date().getMonth()])
     const [endDay, setEndDay] = useState(new Date().getDate())
     const [endYear, setEndYear] = useState(new Date().getFullYear())
-    const [selectedDays, setSelectedDays] = useState([])
-  
+
     //Where
     const [pickupLocation, setPickupLocation] = useState('')
     const [destination, setDestination] = useState('')
     const [location, setLocation] = useState('')
-  
+
     //Who
-    const [estimatedHours, setEstimatedHours] = useState('')
-    const [estimatedMinutes, setEstimatedMinutes] = useState('')
+    const [estimatedHours, setEstimatedHours] = useState(0)
+    const [estimatedMinutes, setEstimatedMinutes] = useState(0)
     const [numVolunteers, setNumVolunteers] = useState(1)
     const [coordinators, setCoordinators] = useState([])
     const [selectedCoordinators, setSelectedCoordinators] = useState([])
-  
-  
+
     const categories = [
-      'Giving Rides',
-      'Preparing Meals',
-      'Shopping',
-      'Childcare',
-      'Pet Care',
-      'House Cleaning',
-      'Laundry',
-      'Visits',
-      'Miscellaneous',
-      'Occasion',
+        'Giving Rides',
+        'Preparing Meals',
+        'Shopping',
+        'Childcare',
+        'Pet Care',
+        'House Cleaning',
+        'Laundry',
+        'Visits',
+        'Miscellaneous',
+        'Occasion',
     ]
-  
+
     //Dietary Restrictions (kept in case checkbox implementation is needed)
-    const initDietaryRestrictions = [
-      { name: 'Vegetarian', isChecked: false },
-      { name: 'Kosher', isChecked: false },
-      { name: 'Nut-free', isChecked: false },
-      { name: 'Lactose-free', isChecked: false },
-      { name: 'Wheat-free', isChecked: false },
-      { name: 'Gluten-free', isChecked: false },
-      { name: 'Soy-free', isChecked: false },
-      { name: 'Sugar-free', isChecked: false },
-      { name: 'Low-fat', isChecked: false },
-      { name: 'Low-carb', isChecked: false },
-      { name: 'Low-salt', isChecked: false },
-    ]
-    const [dietaryRestrictions, setDietaryRestrictions] = useState(initDietaryRestrictions)
-  
-    const initDaysOfWeek = [
-      { name: 'Sunday', isChecked: false },
-      { name: 'Monday', isChecked: false },
-      { name: 'Tuesday', isChecked: false },
-      { name: 'Wednesday', isChecked: false },
-      { name: 'Thursday', isChecked: false },
-      { name: 'Friday', isChecked: false },
-      { name: 'Saturday', isChecked: false }
-    ]
-    const [daysOfWeek, setDaysOfWeek] = useState(initDaysOfWeek)
-  
-    const monthDiff = (d1, d2) => {
-      var months
-      months = (d2.getFullYear() - d1.getFullYear()) * 12
-      months -= d1.getMonth()
-      months += d2.getMonth()
-      return months <= 0 ? 0 : months
-    }
-  
-    const getDaysBetweenDates = (start, end, dayName) => {
-      var result = []
-      var days = { sun: 0, mon: 1, tue: 2, wed: 3, thu: 4, fri: 5, sat: 6 }
-      var day = days[dayName.toLowerCase().substr(0, 3)]
-      var current = new Date(start)
-  
-      while (current <= end) {
-        if (current.getDay() === day) {
-          result.push(new Date(current))
+    const [dietaryRestrictions, setDietaryRestrictions] = useState([])
+
+    useEffect(() => {
+        const formValues = [
+          activityName,
+          startDay,
+          startMonth,
+          startYear,
+          estimatedHours,
+          estimatedMinutes,
+          numVolunteers,
+        ]
+        const notValidForm =
+          formValues.some((formVal) => {
+            return formVal === ''
+          }) ||
+          isNaN(estimatedHours) ||
+          isNaN(estimatedMinutes)
+    
+        if (notValidForm) {
+          setValidForm(false)
+        } else {
+          setValidForm(true)
         }
-        current.setDate(current.getDate() + 1)
-      }
-      console.log(result)
-      return result
-    }
-  
-    const containsDay = (array = [], day) => {
-      return array.some((d) => (DateUtils.isSameDay(d, day)))
-    }
-  
-    const handleDayClick = (day, modifiers = {}) => {
-      if (modifiers.disabled) {
-        return
-      }
-      const newSelectedDays = selectedDays
-      if (modifiers.selected) {
-        setSelectedDays(
-          newSelectedDays.filter(
-            (selectedDay) => !DateUtils.isSameDay(selectedDay, day)
-          )
-        )
-      } else {
-        setSelectedDays(newSelectedDays.concat([day]))
-      }
-    }
-  
-    const handleWeekdayToggle = (dayName, addDays) => {
-      const newSelectedDays = selectedDays
-      if (addDays) {
-        console.log('Adding Days')
-  
-        setSelectedDays(
-          newSelectedDays
-            .filter(
-              (d) =>
-                !containsDay(
-                  getDaysBetweenDates(
-                    new Date(startYear, months.indexOf(startMonth), startDay),
-                    new Date(endYear, months.indexOf(endMonth), endDay),
-                    dayName
-                  ),
-                  d
-                )
-            )
-            .concat(
-              getDaysBetweenDates(
-                new Date(startYear, months.indexOf(startMonth), startDay),
-                new Date(endYear, months.indexOf(endMonth), endDay),
-                dayName
-              )
-            )
-        )
-      } else {
-        console.log('Removing Days')
-        setSelectedDays(
-          newSelectedDays.filter(
-            (d) =>
-              !containsDay(
-                getDaysBetweenDates(
-                  new Date(startYear, months.indexOf(startMonth), startDay),
-                  new Date(endYear, months.indexOf(endMonth), endDay),
-                  dayName
-                ),
-                d
-              )
-          )
-        )
-      }
-    }
+      }, [
+        activityName,
+        startDay,
+        startMonth,
+        startYear,
+        estimatedHours,
+        estimatedMinutes,
+        numVolunteers,
+      ])
 
     const parseDate = (date, isStartDate) => {
         var splitDate = date.split('-')
@@ -342,28 +260,24 @@ export default function ActivityEdit(props) {
         var DDTHMSZ = splitDate[2]
         var splitDDTHMSZ = DDTHMSZ.split('T')
         var DD = splitDDTHMSZ[0]
-        var Time = splitDDTHMSZ[1].substr(0, splitDDTHMSZ[1].length-1)
+        var Time = moment(splitDDTHMSZ[1].substr(0, splitDDTHMSZ[1].length - 1), 'HH:mm:ss').format('h:mm A')
         isStartDate ? setStartDay(DD) : setEndDay(DD)
-        isStartDate ? setStartMonth(MM) : setEndMonth(MM)
+        isStartDate ? setStartMonth(months[parseInt(MM) - 1]) : setEndMonth(months[parseInt(MM) - 1])
         isStartDate ? setStartYear(YYYY) : setEndYear(YYYY)
         isStartDate ? setStartTime(Time) : setEndTime(Time)
     }
 
     useEffect(() => {
         axios
-          .get(`/edit-activity/${props.location.state.pk}`, {
+          .get(`/community-coordinators/${localStorage.getItem('community-id')}`, {
             headers: {
               Authorization: `JWT ${localStorage.getItem('token')}`,
-              id: props.location.state.pk
             },
           })
           .then(
             (response) => {
-              setCategory(response.data.activity_type)
-              setActivityName(response.data.title)
-              setNotes(response.data.description)
-              parseDate(response.data.start_time, true)
-              parseDate(response.data.end_time, false)
+              const options = response.data.map((item) => ({ label: `${item['first_name']} ${item['last_name']}`, value: item['id'] }))
+              setCoordinators(options)
             },
             (error) => {
               console.log(error)
@@ -371,9 +285,119 @@ export default function ActivityEdit(props) {
           )
       }, [])
 
-    const handleSubmit = useCallback(() => {
 
-    })
+    // API call to prepopulate fields relevant to activity
+    useEffect(() => {  
+        axios
+            .get(`/edit-activity/${props.location.state.pk}/`, {
+            headers: {
+                Authorization: `JWT ${localStorage.getItem('token')}`,
+            },
+            })
+            .then(
+                (response) => {
+                    // What tab items
+                    setCategory(response.data.activity_type)
+                    setActivityName(response.data.title)
+                    setNotes(response.data.description)
+
+                    // When tab items
+                    parseDate(response.data.start_time, true)
+                    parseDate(response.data.end_time, false)
+                    setAllDay(response.data.all_day)
+
+                    // Where tab items
+                    if(response.data.activity_type === 'Giving Rides')
+                    {
+                        setPickupLocation(response.data.pickup_location)
+                        setDestination(response.data.destination_location)
+                    }
+                    else if (response.data.activity_type === 'Preparing Meals')
+                    {
+                        setLocation(response.data.delivery_location)
+                        let initDietaryRestrictions = [
+                            { name: 'Vegetarian', isChecked: false },
+                            { name: 'Kosher', isChecked: false },
+                            { name: 'Nut-free', isChecked: false },
+                            { name: 'Lactose-free', isChecked: false },
+                            { name: 'Wheat-free', isChecked: false },
+                            { name: 'Gluten-free', isChecked: false },
+                            { name: 'Soy-free', isChecked: false },
+                            { name: 'Sugar-free', isChecked: false },
+                            { name: 'Low-fat', isChecked: false },
+                            { name: 'Low-carb', isChecked: false },
+                            { name: 'Low-salt', isChecked: false },
+                        ]
+                        for(var i = 0; i < initDietaryRestrictions.length; i++) {
+                            if(response.data.dietary_restrictions.includes(initDietaryRestrictions[i].name))
+                                initDietaryRestrictions[i].isChecked = true
+                        }
+                        setDietaryRestrictions(initDietaryRestrictions)
+                    } 
+                    else 
+                    {
+                        setLocation(response.data.location)
+                    }
+                    
+                    // Who tab items
+                    const options = response.data.coordinators.map((item) => ({ label: `${item['first_name']} ${item['last_name']}`, value: item['id'] }))
+                    setSelectedCoordinators(options)
+                    setEstimatedHours(response.data.est_hours)
+                    setEstimatedMinutes(response.data.est_minutes)
+                    setNumVolunteers(response.data.num_volunteers_needed)
+                },
+                (error) => {
+                    console.log(error)
+                }
+            )
+    }, [])
+
+    const handleSubmit = useCallback(() => {
+        let startDate = moment(
+            startYear + '-' + moment().month(startMonth).format("M") + '-' + startDay + ' ' + startTime, 'YYYY-MM-DD hh:mm:ss a'
+        )
+        let endDate = moment(
+            endYear + '-' + moment().month(endMonth).format("M") + '-' + endDay + ' ' + endTime, 'YYYY-MM-DD hh:mm:ss a'
+        )
+
+        let patchData = {
+            'title': activityName,
+            'description': notes,
+            'start_time': startDate,
+            'end_time': endDate,
+            'all_day': allDay,
+            'est_hours': estimatedHours,
+            'est_minutes': estimatedMinutes,
+            'num_volunteers_needed': numVolunteers,
+            'coordinators': selectedCoordinators,
+        }
+        if(category === 'Giving Rides') {
+            patchData['pickup_location'] = pickupLocation
+            patchData['destination_location'] = destination
+        } else if(category === 'Preparing Meals') {
+            let dietaryRestrictionStatus = {}
+            dietaryRestrictions.forEach((restriction) => dietaryRestrictionStatus[restriction.name] = restriction.isChecked)
+            patchData['delivery_location'] = location
+            patchData['dietary_restrictions'] = dietaryRestrictionStatus
+        } else {
+            patchData['location'] = location
+        }
+        patchData = JSON.stringify(patchData)
+        axios
+        .patch(`/edit-activity/${props.location.state.pk}/`, patchData, {
+          headers: {
+            Authorization: `JWT ${localStorage.getItem('token')}`,
+          }
+        })
+        .then(
+          (response) => {
+            console.log(response)
+          },
+          (error) => {
+            console.log(error)
+          }
+        )
+    }, [activityName, notes, estimatedHours, estimatedMinutes, startYear, endYear, startMonth, endMonth, startDay, endDay, startTime, endTime, numVolunteers, selectedCoordinators, dietaryRestrictions, pickupLocation, destination, location, dietaryRestrictions])
 
     return (
         <div>
@@ -421,21 +445,12 @@ export default function ActivityEdit(props) {
                                     Who
                                 </Tabs.Tab>
                             </Tabs>
-                        )}
+                                    )}
                         {activeTab === 'What' ? (
                             <div className='what' style={formContainerStyle}>
-                                <Field>
-                                    <Label>Select Category</Label>
-                                    <Control>
-                                        <Select
-                                            onChange={(e) => setCategory(e.target.value)}
-                                            name='category'
-                                            value={category}
-                                        >
-                                            {categories.map((cat) => (<option>{cat}</option>))}
-                                        </Select>
-                                    </Control>
-                                </Field>
+                                <div style={{marginBottom: '2%'}}>
+                                    <Label>Category: <span style={{ color: '#F83D34' }}>*</span></Label>{category}
+                                </div>
                                 <Field>
                                     <Label>
                                         Activity Name<span style={{ color: '#F83D34' }}>*</span>
@@ -473,6 +488,7 @@ export default function ActivityEdit(props) {
                                                                         return dietaryRestrictions
                                                                     })
                                                                 }}
+                                                                checked={restriction.isChecked}
                                                             />
                                                             <p>{restriction.name}</p>
                                                         </div>
@@ -635,54 +651,6 @@ export default function ActivityEdit(props) {
                                         </Field>
                                     </Columns.Column>
                                 </Columns>
-                                <Field>
-                                    <Control>
-                                        <p style={noteStyle}>Repeats</p>
-                                        {daysOfWeek.map((day, i) => (
-                                            <div style={checkboxStyle}>
-                                                <Checkbox
-                                                    style={{ marginRight: '10px' }}
-                                                    onChange={() => {
-                                                        handleWeekdayToggle(day.name, !day.isChecked)
-                                                        setDaysOfWeek((daysOfWeek) => {
-                                                            day.isChecked = !day.isChecked
-                                                            return daysOfWeek
-                                                        })
-                                                    }}
-                                                />
-                                                <p>{day.name}</p>
-                                            </div>
-                                        ))}
-                                    </Control>
-                                </Field>
-                                <p style={noteStyle}>
-                                    <b>Select all applicable dates on the calendar below.</b>
-                                </p>
-                                <DayPicker
-                                    selectedDays={selectedDays}
-                                    onDayClick={handleDayClick}
-                                    month={new Date(startYear, months.indexOf(startMonth))}
-                                    numberOfMonths={
-                                        monthDiff(
-                                            new Date(startYear, months.indexOf(startMonth), startDay),
-                                            new Date(endYear, months.indexOf(endMonth), endDay)
-                                        ) + 1
-                                    }
-                                    disabledDays={[
-                                        {
-                                            after: new Date(
-                                                endYear,
-                                                months.indexOf(endMonth),
-                                                endDay
-                                            ),
-                                            before: new Date(
-                                                startYear,
-                                                months.indexOf(startMonth),
-                                                startDay
-                                            ),
-                                        },
-                                    ]}
-                                />
                             </div>
                         ) : activeTab === 'Where' ? (
                             <div className='where' style={formContainerStyle}>
@@ -715,66 +683,66 @@ export default function ActivityEdit(props) {
                                         </Field>
                                     </div>
                                 ) : (
-                                        <Field>
-                                            <Control>
-                                                <Textarea
-                                                    value={location}
-                                                    onChange={(e) => setLocation(e.target.value)}
-                                                    placeholder={
-                                                        category === 'Preparing Meals' && 'Delivery Location'
-                                                    }
-                                                />
-                                            </Control>
-                                            <p style={{ fontSize: '80%' }} className='has-text-grey'>
-                                                The system will try to automatically display directions to the specified address(es) specified.
-                                                For best results, please use this format: Address, City, State all on one line.
-                                            </p>
-                                        </Field>
-                                    )}
+                                    <Field>
+                                        <Control>
+                                            <Textarea
+                                                value={location}
+                                                onChange={(e) => setLocation(e.target.value)}
+                                                placeholder={
+                                                    category === 'Preparing Meals' && 'Delivery Location'
+                                                }
+                                            />
+                                        </Control>
+                                        <p style={{ fontSize: '80%' }} className='has-text-grey'>
+                                            The system will try to automatically display directions to the specified address(es) specified.
+                                            For best results, please use this format: Address, City, State all on one line.
+                                        </p>
+                                    </Field>
+                                )}
                             </div>
                         ) : (
                             <div className='who' style={formContainerStyle}>
                                 <Field>
                                     <Label>
                                         Activity Coordinator
-                                        <span style={{ color: '#F83D34' }}>*</span>
+                                    <span style={{ color: '#F83D34' }}>*</span>
                                     </Label>
                                     <MultiSelect
-                                        valueRenderer={(selectedCoordinators) => <span width='100%'>Selected {selectedCoordinators.length} users </span>}
                                         options={coordinators}
-                                        selected={selectedCoordinators}
-                                        onSelectedChanged={(selected) => setSelectedCoordinators(selected)}
+                                        value={selectedCoordinators}
+                                        onChange={setSelectedCoordinators}
+                                        labelledBy={'Select'}
                                     />
                                 </Field>
                                 <Label>
                                     Estimated Average Task Time
                                     <span style={{ color: '#F83D34' }}>*</span>
-                                </Label>
-                                <Columns>
-                                    <Columns.Column>
-                                        <Field>
-                                            <Control>
-                                                <Input
-                                                    value={estimatedHours}
-                                                    onChange={(e) => setEstimatedHours(e.target.value)}
-                                                    placeholder='Hours'
-                                                />
-                                            </Control>
-                                            </Field>
-                                            <Field>
-                                                <Control>
-                                                    <Input
-                                                        value={estimatedMinutes}
-                                                        onChange={(e) => setEstimatedMinutes(e.target.value)}
-                                                        placeholder='Minutes'
-                                                    />
-                                                </Control>
-                                            </Field>
-                                            <p style={{ fontSize: '80%' }} className='has-text-grey'>
-                                                Optional. The estimated time for a Volunteer to complete this task. This information is used for Activity Status Reports.
+                                            </Label>
+                                            <Columns>
+                                                <Columns.Column>
+                                                    <Field>
+                                                        <Control>
+                                                            <Input
+                                                                value={estimatedHours}
+                                                                onChange={(e) => setEstimatedHours(e.target.value)}
+                                                                placeholder='Hours'
+                                                            />
+                                                        </Control>
+                                                    </Field>
+                                                    <Field>
+                                                        <Control>
+                                                            <Input
+                                                                value={estimatedMinutes}
+                                                                onChange={(e) => setEstimatedMinutes(e.target.value)}
+                                                                placeholder='Minutes'
+                                                            />
+                                                        </Control>
+                                                    </Field>
+                                                    <p style={{ fontSize: '80%' }} className='has-text-grey'>
+                                                        Optional. The estimated time for a Volunteer to complete this task. This information is used for Activity Status Reports.
                                             </p>
-                                            </Columns.Column>
-                                            <Columns.Column></Columns.Column>
+                                                </Columns.Column>
+                                                <Columns.Column></Columns.Column>
                                             </Columns>
                                             <Field>
                                                 <Label>
@@ -782,30 +750,30 @@ export default function ActivityEdit(props) {
                                                     <span style={{ color: '#F83D34' }}>*</span>
                                                 </Label>
                                                 <Control>
-                                                <div style={{ display: 'flex', alignItems: 'center' }}>
-                                                    <Select
-                                                        onChange={(e) => setNumVolunteers(e.target.value)}
-                                                        name='numVolunteers'
-                                                        value={numVolunteers}
-                                                        style={{ marginRight: '10px' }}
-                                                    >
-                                                        {count.map((c) => (
-                                                            <option>{c}</option>
-                                                        ))}
-                                                    </Select>
+                                                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                                                        <Select
+                                                            onChange={(e) => setNumVolunteers(e.target.value)}
+                                                            name='numVolunteers'
+                                                            value={numVolunteers}
+                                                            style={{ marginRight: '10px' }}
+                                                        >
+                                                            {count.map((c) => (
+                                                                <option>{c}</option>
+                                                            ))}
+                                                        </Select>
                                                     Volunteers per task/time
                                                 </div>
-                                            </Control>
-                                        </Field>
-                                    </div>
-                                )}
-                            <div
-                                style={{
-                                    display: 'flex',
-                                    justifyContent: 'space-between',
-                                    marginTop: '20px',
-                                }}
-                            >
+                                                </Control>
+                                            </Field>
+                                        </div>
+                                    )}
+                        <div
+                            style={{
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                marginTop: '20px',
+                            }}
+                        >
                             <Link to='#'>
                                 <Button
                                     className='is-primary is-inverted'

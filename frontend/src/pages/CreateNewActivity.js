@@ -384,7 +384,6 @@ export default function CreateNewActivity(props) {
       })
       .then(
         (response) => {
-          console.log(response.data)
           const options = response.data.map((item) => ({ label: `${item['first_name']} ${item['last_name']}`, value: item['id'] }))
           setCoordinators(options)
         },
@@ -396,7 +395,7 @@ export default function CreateNewActivity(props) {
 
 
   const handleSubmit = useCallback(() => {
-    const dietaryRestrictionStatus = {}
+    let dietaryRestrictionStatus = {}
     dietaryRestrictions.forEach((restriction) => dietaryRestrictionStatus[restriction.name] = restriction.isChecked)
 
     const param = JSON.stringify({

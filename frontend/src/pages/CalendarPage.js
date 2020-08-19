@@ -299,7 +299,6 @@ export default function CalendarPage() {
     var url = '/edit-activity/' + pk + '/'
     var myHeaders = new Headers()
     myHeaders.append('Authorization', `JWT ${localStorage.getItem('token')}`)
-    myHeaders.append('id', pk)
 
     var requestOptions = {
         method: 'DELETE',

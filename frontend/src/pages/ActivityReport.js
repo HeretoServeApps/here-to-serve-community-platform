@@ -250,10 +250,11 @@ export default function ActivityReport() {
                                     fileName="report.pdf"
                                 >
                                     <Button
-                                        className='is-primary is-inverted'
                                         style={{
-                                        boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)',
-                                        }}
+                                            marginBottom: '1rem',
+                                            boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)',
+                                          }}
+                                        color='primary'
                                         fullwidth={true}
                                     >
                                         Export Report

@@ -308,12 +308,12 @@ class ActivityList(APIView):
         for activity in serializer.data:
             # Depending on the type of activity, we add necessary fields to the result
             if activity['activity_type'] == 'Giving Rides':
-                ride_activity_obj = get_object_or_404(RideActivity.objects.all(), pk=activity['id'])
+                ride_activity_obj = get_object_or_404(RideActivity.objects.all(), activity=activity['id'])
                 ride_activity_serializer = RideActivitySerializer(ride_activity_obj)
                 for item in ride_activity_serializer.data:
                     activity[item] = ride_activity_serializer.data[item]
             elif activity['activity_type'] == 'Preparing Meals':
-                preparing_meal_obj = get_object_or_404(MealActivity.objects.all(), pk=activity['id'])
+                preparing_meal_obj = get_object_or_404(MealActivity.objects.all(), activity=activity['id'])
                 preparing_meal_serializer = MealActivitySerializer(preparing_meal_obj)
                 for item in preparing_meal_serializer.data:
                     if item == 'dietary_restrictions':
@@ -324,13 +324,12 @@ class ActivityList(APIView):
                         true_restrictions = []
                         for restriction in restrictions_map:
                             if restrictions_map[restriction]:
-                                restriction = restriction.split('-')[0]
                                 true_restrictions.append(restriction)
                         activity[item] = true_restrictions
                     else:
                         activity[item] = preparing_meal_serializer.data[item]
             else:
-                all_other_activity_obj = get_object_or_404(EventActivity.objects.all(), pk=activity['id'])
+                all_other_activity_obj = get_object_or_404(EventActivity.objects.all(), activity=activity['id'])
                 all_other_activity_serializer = EventActivitySerializer(all_other_activity_obj)
                 for item in all_other_activity_serializer.data:
                     activity[item] = all_other_activity_serializer.data[item]
@@ -365,9 +364,57 @@ class ActivityList(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class ActivityEditView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Activity.objects.all()
-    serializer_class = ActivitySerializer
+class SingleActivityView(APIView):
+    # permission_classes = (permissions.IsAuthenticated,)
+
+    def get(self, request, activity_id):
+        activity = Activity.objects.get(pk=activity_id)
+        serializer = ActivitySerializer(activity)
+        final_activity = serializer.data
+        if final_activity['activity_type'] == 'Giving Rides':
+            ride_activity_obj = get_object_or_404(RideActivity.objects.all(), activity=final_activity['id'])
+            ride_activity_serializer = RideActivitySerializer(ride_activity_obj)
+            for item in ride_activity_serializer.data:
+                final_activity[item] = ride_activity_serializer.data[item]
+        elif final_activity['activity_type'] == 'Preparing Meals':
+            preparing_meal_obj = get_object_or_404(MealActivity.objects.all(), activity=final_activity['id'])
+            preparing_meal_serializer = MealActivitySerializer(preparing_meal_obj)
+            for item in preparing_meal_serializer.data:
+                if item == 'dietary_restrictions':
+                    # Since dietary restrictions is a string, we want to convert it to a map and process it
+                    restrictions_string = preparing_meal_serializer.data[item]
+                    json_acceptable_string = restrictions_string.replace("'", "\"")
+                    restrictions_map = json.loads(json_acceptable_string)
+                    true_restrictions = []
+                    for restriction in restrictions_map:
+                        if restrictions_map[restriction]:
+                            true_restrictions.append(restriction)
+                    final_activity[item] = true_restrictions
+                else:
+                    final_activity[item] = preparing_meal_serializer.data[item]
+        else:
+            all_other_activity_obj = get_object_or_404(EventActivity.objects.all(), activity=final_activity['id'])
+            all_other_activity_serializer = EventActivitySerializer(all_other_activity_obj)
+            for item in all_other_activity_serializer.data:
+                final_activity[item] = all_other_activity_serializer.data[item]
+        return Response(final_activity)
+
+    def delete(self, request, activity_id):
+        activity = Activity.objects.get(pk=activity_id)
+        activity.delete()
+        return Response('Activity deleted', status=status.HTTP_204_NO_CONTENT)
+
+    def patch(self, request, activity_id):
+        activity =  Activity.objects.get(pk=activity_id)
+        print(request.data)
+        serializer = ActivitySerializer(activity, data=request.data, partial=True)
+        # if request.data['activity_type'] == 'Giving Rides':
+        #     ride_activity_obj = get_object_or_404(RideActivity.objects.all(), activity=final_activity['id'])
+        # if serializer.is_valid():
+        #     activity = serializer.save()
+        #     return Response(ActivitySerializer(activity).data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 
 class AnnouncementViewSet(viewsets.ModelViewSet):

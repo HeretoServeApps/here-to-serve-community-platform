@@ -1,28 +1,9 @@
-import React, { useState, useEffect, useCallback } from 'react'
-import { Trash2, Edit2 } from 'react-feather'
-import { Link } from 'react-router-dom'
-import { useHistory } from 'react-router-dom'
-import axios from 'axios'
-import {
-  Select,
-  Control,
-  Label,
-  Field,
-  Input,
-  Textarea,
-  Checkbox,
-  Radio,
-} from 'react-bulma-components/lib/components/form'
+import React, { useState, useCallback } from 'react'
+import { Trash2 } from 'react-feather'
+
 import Modal from 'react-bulma-components/lib/components/modal'
 import Heading from 'react-bulma-components/lib/components/heading'
-import CommunityNavbar from '../components/communityNavbar'
 import Button from 'react-bulma-components/lib/components/button'
-import Table from 'react-bulma-components/lib/components/table'
-
-var noteStyle = {
-  fontSize: '0.75rem',
-  fontStyle: 'italic',
-}
 
 const DeleteCustomSection = ({ id }) => {
   const token = localStorage.getItem('token')
