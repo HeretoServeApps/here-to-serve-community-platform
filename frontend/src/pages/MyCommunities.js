@@ -8,7 +8,6 @@ import Heading from 'react-bulma-components/lib/components/heading'
 import Columns from 'react-bulma-components/lib/components/columns'
 import Button from 'react-bulma-components/lib/components/button'
 import CommunityCard from '../components/communitycard'
-import CommunityCardUnapproved from '../components/communityCardUnapproved'
 
 import ApprovalCover from '../images/waiting_approval.png'
 
@@ -144,7 +143,7 @@ export default function MyCommunities() {
                     <CommunityCard text={c.name} photo={c.photo_file} />
                   </Link>)
                   :
-                  (<CommunityCardUnapproved text={c.name} photo={ApprovalCover} />)
+                  (<CommunityCard text={c.name} photo={ApprovalCover} />)
                 }
               </Columns.Column>
             ))
