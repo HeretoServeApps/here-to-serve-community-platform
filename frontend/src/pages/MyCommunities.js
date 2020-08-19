@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react'
 import axios from 'axios'
+import { Link } from 'react-router-dom'
 
 import { Input } from 'react-bulma-components/lib/components/form'
 import Container from 'react-bulma-components/lib/components/container'
@@ -7,11 +8,13 @@ import Heading from 'react-bulma-components/lib/components/heading'
 import Columns from 'react-bulma-components/lib/components/columns'
 import Button from 'react-bulma-components/lib/components/button'
 import CommunityCard from '../components/communitycard'
-import { Link } from 'react-router-dom'
+
+import ApprovalCover from '../images/waiting_approval.png'
 
 export default function MyCommunities() {
   const [communities, setCommunities] = useState([])
   const [search, setSearch] = useState('')
+  const [approvedCommunityIds, setApprovedCommunityIds] = useState([])
   const token = localStorage.getItem('token')
 
   useEffect(() => {
@@ -24,12 +27,39 @@ export default function MyCommunities() {
       .then(
         (response) => {
           setCommunities(response.data)
+          
         },
         (error) => {
           console.log(error)
         }
       )
-  }, [token])
+  }, [])
+
+  useEffect(() => {
+    axios
+      .get('/community-user-roles-one-user/', {
+        headers: {
+          Authorization: `JWT ${token}`,
+        },
+        params: {
+          user_email: localStorage.getItem('email'),
+        },
+      })
+      .then(
+        (response) => {
+          let approvedCommunities = []
+          for(var i = 0; i < response.data.length; i++) {
+            if(response.data[i].is_approved) {
+              approvedCommunities.push(response.data[i].community)
+            }
+          }
+          setApprovedCommunityIds(approvedCommunities)
+        },
+        (error) => {
+          console.log(error)
+        }
+      )
+  }, [])
 
   const setCommunityInfoInLocalStorage = useCallback(
     (name, zipcode, is_closed, id) => {
@@ -90,27 +120,31 @@ export default function MyCommunities() {
             )
             .map((c) => (
               <Columns.Column size={3} key={c.id}>
-                <Link
-                  to={{
-                    pathname: '/community-home/',
-                    state: {
-                      name: c.name,
-                      zipcode: c.zipcode,
-                      is_closed: c.is_closed,
-                    },
-                  }}
-                  onClick={() =>
-                    setCommunityInfoInLocalStorage(
-                      c.name,
-                      c.zipcode,
-                      c.is_closed,
-                      c.id
-                    )
-                  }
-                  style={{ color: 'black' }}
-                >
-                  <CommunityCard text={c.name} photo={c.photo_file} />
-                </Link>
+                {approvedCommunityIds.includes(c.id) ?  
+                  (<Link
+                    to={{
+                      pathname: '/community-home/',
+                      state: {
+                        name: c.name,
+                        zipcode: c.zipcode,
+                        is_closed: c.is_closed,
+                      },
+                    }}
+                    onClick={() =>
+                      setCommunityInfoInLocalStorage(
+                        c.name,
+                        c.zipcode,
+                        c.is_closed,
+                        c.id
+                      )
+                    }
+                    style={{ color: 'black' }}
+                  >
+                    <CommunityCard text={c.name} photo={c.photo_file} />
+                  </Link>)
+                  :
+                  (<CommunityCard text={c.name} photo={ApprovalCover} />)
+                }
               </Columns.Column>
             ))
         ) : (

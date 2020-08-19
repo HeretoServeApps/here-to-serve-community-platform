@@ -8,13 +8,13 @@ const SideNavAccount = (props) => {
     <div>
         <Menu color='white'>
             <Menu.List>
-                <Menu.List.Item>
+                <Menu.List.Item componentClass='span'>
                     <Link to='/account-settings'>General Account Settings</Link>
                 </Menu.List.Item>
-                <Menu.List.Item>
+                <Menu.List.Item to='/password-settings'>
                   <Link to='/password-settings'>Password Settings</Link>
                 </Menu.List.Item>
-                <Menu.List.Item>
+                <Menu.List.Item componentClass='span'>
                   <Link to='/email-settings'>Email Settings</Link>
                 </Menu.List.Item>
             </Menu.List>

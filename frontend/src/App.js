@@ -8,7 +8,7 @@ import PrivateRoute from './components/privateroute'
 
 import Register from './pages/Register'
 import MyCommunities from './pages/MyCommunities'
-import SelectCommunities from './pages/SelectCommunities'
+import SelectCommunities from './pages/JoinCommunities'
 import CreateCommunity from './pages/CreateCommunity'
 import Login from './pages/Login'
 import CommunityAbout from './pages/CommunityAbout'

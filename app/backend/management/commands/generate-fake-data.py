@@ -68,15 +68,17 @@ class Command(BaseCommand):
                 comm_member_roles.append(CommunityUserRole(
                     community=community,
                     user=User.objects.get(id=user_ids[i]),
-                    role=role  
-                    ))
+                    role=role,
+                    is_approved=True
+                ))
             
             for user in User.objects.all():
                 if user.is_staff:
                     comm_member_roles.append(CommunityUserRole(
                         community=community,
                         user=user,
-                        role="ADMIN"
+                        role="ADMIN",
+                        is_approved=True
                     ))
                     self.stdout.write(self.style.SUCCESS(f'Added user {user.first_name} as admin to {community.name}\'s community'))
 
