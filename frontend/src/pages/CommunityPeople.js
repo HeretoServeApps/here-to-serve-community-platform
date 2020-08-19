@@ -112,6 +112,7 @@ export default function CommunityPeople() {
                       .toLowerCase()
                       .includes(search.toLowerCase())
                 )
+                .filter((p) => p.is_approved)
                 .map((p, index) => (
                   <tr key={index}>
                     <td>

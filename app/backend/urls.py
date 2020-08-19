@@ -46,6 +46,7 @@ urlpatterns = [
     path('edit-ways-to-help/', views.EditWaysToHelp.as_view()),
     path('add-custom-section/', views.AddCustomSection.as_view()),
     path('edit-custom-section/', views.EditCustomSection.as_view()),
+    path('delete-custom-section/', views.DeleteCustomSection.as_view()),
     path('add-volunteer-to-activity/', views.AddVolunteerToActivity.as_view()),
     path('add-volunteer-to-community/', views.AddVolunteerToCommunity.as_view()),
     path('remove-user-from-community/', views.RemoveUserFromCommunity.as_view()),

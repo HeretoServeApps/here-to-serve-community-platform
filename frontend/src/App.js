@@ -36,6 +36,8 @@ import CustomGeneral from './pages/CustomGeneral'
 import PhotoGallery from './pages/PhotoGallery'
 import MessageBoard from './pages/MessageBoard'
 import PasswordSettings from './pages/PasswordSettings'
+import ManageCustomSections from './pages/ManageCustomSections'
+import JoinRequests from './pages/JoinRequests'
 
 export default function App() {
   const [loggedIn, setLoggedIn] = useState(
@@ -294,6 +296,12 @@ export default function App() {
             exact
             component={PasswordSettings}
           />
+          <PrivateRoute
+            path='/manage-custom-sections'
+            exact
+            component={ManageCustomSections}
+          />
+          <PrivateRoute path='/join-requests' exact component={JoinRequests} />
         </Switch>
         <AppFooter />
       </Router>

@@ -96,6 +96,7 @@ class EditCommunityUserRole(APIView):
         user_id = User.objects.get(email=user_email).id
         userRoleObject = CommunityUserRole.objects.get(community=community_id, user=user_id)
         userRoleObject.role = request.data['role']
+        userRoleObject.is_approved = request.data['is_approved']
         userRoleObject.save()
         return Response('Edited Community User Role')
 
@@ -451,6 +452,7 @@ class CommunityPeopleList(APIView):
         people_list = []
         for pk, role in community_people:
             member = User.objects.get(pk=pk)
+            is_approved = CommunityUserRole.objects.get(user=member.id, community=community).is_approved
             people_list.append({
                 'first_name': member.first_name,
                 'last_name': member.last_name,
@@ -458,6 +460,7 @@ class CommunityPeopleList(APIView):
                 'phone_number_1': member.phone_number_1,
                 'phone_number_type_1': member.phone_number_1_type,
                 'role': community_roles_map[role],
+                'is_approved': is_approved,
                 'phone_number_2': member.phone_number_2,
                 'phone_number_2_type': member.phone_number_2_type,
                 'address_line_1': member.address_line_1,
@@ -599,12 +602,21 @@ class EditCustomSection(APIView):
     def post(self, request, format=None):
         section_id = request.data['section_id']
         custom_section = CustomSection.objects.get(id=section_id)
+        custom_section.name = request.data['name']
         custom_section.title = request.data['title']
         custom_section.description = request.data['description']
+        custom_section.link = request.data['link']
         custom_section.general_content = request.data['general_content']
         custom_section.save()
         return Response('Edited custom section')
 
+class DeleteCustomSection(APIView):
+    permission_classes = (permissions.AllowAny,)
+
+    def delete(self, request, format=None):
+        id = request.data['id']
+        CustomSection.objects.get(id=id).delete()
+        return Response('Deleted custom section')
 
 class AddVolunteerToActivity(APIView):
     """
