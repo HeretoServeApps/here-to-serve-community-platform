@@ -333,7 +333,7 @@ export default function CalendarPage() {
                     {
                       pathname: '/edit-activity/' + selectedEvent.title,
                       state: {
-                        pk: selectedEvent.id,
+                        activity_pk: selectedEvent.id,
                       }
                     }
                   }>
@@ -343,6 +343,7 @@ export default function CalendarPage() {
                       }}
                       fullwidth={true}
                       color='primary'
+                      onClick={() => localStorage.setItem('activity-id', selectedEvent.id)}
                     >
                       Edit Activity
                     </Button>
@@ -357,7 +358,7 @@ export default function CalendarPage() {
                     color='danger'
                     onClick={() => setShowRemoveModel(true)}
                   >
-                    Remove Activity
+                    Delete Activity
                   </Button>
                 </Columns.Column>
               </Columns>

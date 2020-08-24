@@ -1,5 +1,6 @@
 import json, uuid
 from datetime import datetime, time
+from pprint import pprint
 
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
@@ -364,11 +365,19 @@ class ActivityList(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class SingleActivityView(APIView):
-    # permission_classes = (permissions.IsAuthenticated,)
+# 
+# Class for dealing with an activity (series of tasks of the same event batch)
+# 
+class ActivityEditView(APIView):
+    permission_classes = (permissions.IsAuthenticated,)
 
     def get(self, request, activity_id):
         activity = Activity.objects.get(pk=activity_id)
+        earliest_start_time = Activity.objects.filter(event_batch=activity.event_batch).earliest('start_time').start_time
+        latest_end_time = Activity.objects.filter(event_batch=activity.event_batch).latest('end_time').end_time
+        activity.start_time = earliest_start_time
+        activity.end_time = latest_end_time
+
         serializer = ActivitySerializer(activity)
         final_activity = serializer.data
         if final_activity['activity_type'] == 'Giving Rides':
@@ -397,26 +406,25 @@ class SingleActivityView(APIView):
             all_other_activity_serializer = EventActivitySerializer(all_other_activity_obj)
             for item in all_other_activity_serializer.data:
                 final_activity[item] = all_other_activity_serializer.data[item]
-        return Response(final_activity)
+        return Response(final_activity, status=status.HTTP_200_OK)
 
     def delete(self, request, activity_id):
+        # this function deletes a batch of tasks sharing the same event batch
         activity = Activity.objects.get(pk=activity_id)
-        activity.delete()
+        all_activities_with_event_batch = Activity.objects.filter(event_batch=activity.event_batch)
+        for item in all_activities_with_event_batch:
+            item.delete()
         return Response('Activity deleted', status=status.HTTP_204_NO_CONTENT)
 
     def patch(self, request, activity_id):
-        activity =  Activity.objects.get(pk=activity_id)
-        print(request.data)
+        activity = Activity.objects.get(pk=activity_id)
         serializer = ActivitySerializer(activity, data=request.data, partial=True)
-        # if request.data['activity_type'] == 'Giving Rides':
-        #     ride_activity_obj = get_object_or_404(RideActivity.objects.all(), activity=final_activity['id'])
-        # if serializer.is_valid():
-        #     activity = serializer.save()
-        #     return Response(ActivitySerializer(activity).data)
+        if serializer.is_valid():
+            question = serializer.save()
+            return Response(ActivitySerializer(activity).data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
-
+ 
 class AnnouncementViewSet(viewsets.ModelViewSet):
     queryset = Announcement.objects.all().order_by('name')
     serializer_class = AnnouncementSerializer
