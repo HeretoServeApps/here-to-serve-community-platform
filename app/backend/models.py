@@ -318,7 +318,6 @@ class Message(models.Model):
     community = models.ForeignKey(Community, on_delete=models.CASCADE, null=False, blank=False)
 
 class Activity(models.Model):
-
     GIVING_RIDES = "Giving Rides"
     PREPARING_MEALS = "Preparing Meals"
     SHOPPING = "Shopping"

@@ -9,7 +9,7 @@ import Heading from 'react-bulma-components/lib/components/heading'
 import Table from 'react-bulma-components/lib/components/table'
 import Columns from 'react-bulma-components/lib/components/columns'
 import Button from 'react-bulma-components/lib/components/button'
-import { UserPlus } from 'react-feather'
+import { UserPlus, AlertCircle } from 'react-feather'
 
 import CommunityNavbar from '../components/communityNavbar'
 
@@ -62,7 +62,7 @@ export default function CommunityPeople() {
       <CommunityNavbar />
       <Container style={containerStyle}>
         <Columns>
-          <Columns.Column size={9}>
+          <Columns.Column size={6}>
             <Heading size={4}>Community Members</Heading>
           </Columns.Column>
           <Columns.Column size={3}>
@@ -78,6 +78,22 @@ export default function CommunityPeople() {
               <div>
                 <UserPlus size={12} style={{ marginRight: '5px' }} />
                 Invite Members
+              </div>
+            </Button>
+          </Columns.Column>
+          <Columns.Column size={3}>
+            <Button
+              style={{
+                marginBottom: '1rem',
+                boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)',
+              }}
+              color='primary'
+              onClick={() => history.push('/join-requests')}
+              fullwidth={true}
+            >
+              <div>
+                <AlertCircle size={12} style={{ marginRight: '5px' }} />
+                Review Join Requests
               </div>
             </Button>
           </Columns.Column>

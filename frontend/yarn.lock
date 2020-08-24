@@ -5258,6 +5258,11 @@ globule@^1.0.0:
     lodash "~4.17.12"
     minimatch "~3.0.2"
 
+goober@^2.0.4:
+  version "2.0.5"
+  resolved "https://registry.yarnpkg.com/goober/-/goober-2.0.5.tgz#619316153b0d0f1de685497ae580f826e10b1ae6"
+  integrity sha512-PGcyBrSn9XF+DE0EAgFLbJp6iH3muZ8AlxDRFnYkMWK88DLL5lnvEEY4g9LFEXo271rIwu4FT3y1x8mzka3fGw==
+
 graceful-fs@^4.1.11, graceful-fs@^4.1.15, graceful-fs@^4.1.2, graceful-fs@^4.1.6, graceful-fs@^4.2.0, graceful-fs@^4.2.2:
   version "4.2.3"
   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.2.3.tgz#4a12ff1b60376ef09862c2093edd908328be8423"
@@ -9437,6 +9442,13 @@ react-lifecycles-compat@^3.0.4:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
   integrity sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==
+
+react-multi-select-component@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/react-multi-select-component/-/react-multi-select-component-3.0.1.tgz#9d579904c6c599b939969340225cdba38c909065"
+  integrity sha512-VYqMq0NtoidS/8foTYeIWterOvQTuxX0IaDd9XBOakWT0GEIF1DqP+bYdgEZFnvOSxo857Nyq39DYSvKCYsGdA==
+  dependencies:
+    goober "^2.0.4"
 
 react-onclickoutside@^6.7.1:
   version "6.9.0"

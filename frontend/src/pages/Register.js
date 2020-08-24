@@ -140,7 +140,11 @@ export default function Register(props) {
   // Get communities without token for the "who would you like to help?" field
   useEffect(() => {
     axios.get('/communities/').then((response) => {
-      setCommunities(response.data)
+      let suggestedCommunities = []
+      for(var i = 0; i < response.data.length; i++) {
+        suggestedCommunities.push(response.data[i].name)
+      }
+      setCommunities(suggestedCommunities)
     })
   }, [])
 

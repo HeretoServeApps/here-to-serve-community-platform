@@ -12,6 +12,8 @@ import Box from 'react-bulma-components/lib/components/box'
 import Container from 'react-bulma-components/lib/components/container'
 import Columns from 'react-bulma-components/lib/components/columns'
 import Heading from 'react-bulma-components/lib/components/heading'
+import Modal from 'react-bulma-components/lib/components/modal'
+import Section from 'react-bulma-components/lib/components/section'
 import {
   Select,
   Control,
@@ -89,6 +91,8 @@ export default function CalendarPage() {
 
   const [selectedEvent, setSelectedEvent] = useState(null)
   const [isSelectingEvent, setIsSelectingEvent] = useState(false)
+  const [showRemoveModal, setShowRemoveModel] = useState(false)
+
   // Setup the localizer by providing the moment (or globalize) Object
   // to the correct localizer.
   const localizer = momentLocalizer(moment)
@@ -242,7 +246,7 @@ export default function CalendarPage() {
       })
       .then(
         (response) => {
-          history.push('/community-home')
+          window.location.reload()
         },
         (error) => {
           console.log(error)
@@ -291,6 +295,23 @@ export default function CalendarPage() {
       )
   }, [])
 
+  const removeActivity = useCallback((pk) => {
+    var url = '/edit-activity/' + pk + '/'
+    var myHeaders = new Headers()
+    myHeaders.append('Authorization', `JWT ${localStorage.getItem('token')}`)
+
+    var requestOptions = {
+        method: 'DELETE',
+        headers: myHeaders,
+        redirect: 'follow'
+    }
+
+    fetch(url, requestOptions)
+    .then(response => response.text())
+    .then(result => window.location.reload())
+    .catch(error => console.log('error', error));
+  })
+
   // RENDERS ---------------------------------------------------------------------------------------------
 
   // Users will see this if they are selecting an event
@@ -308,15 +329,25 @@ export default function CalendarPage() {
             {localStorage.getItem('user-role') === 'Administrator' ? (
               <Columns>
                 <Columns.Column>
-                  <Button
-                    style={{
-                      boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)',
-                    }}
-                    fullwidth={true}
-                    color='primary'
-                  >
-                    Edit Activity
-                  </Button>
+                  <Link to={
+                    {
+                      pathname: '/edit-activity/' + selectedEvent.title,
+                      state: {
+                        activity_pk: selectedEvent.id,
+                      }
+                    }
+                  }>
+                    <Button
+                      style={{
+                        boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)',
+                      }}
+                      fullwidth={true}
+                      color='primary'
+                      onClick={() => localStorage.setItem('activity-id', selectedEvent.id)}
+                    >
+                      Edit Activity
+                    </Button>
+                  </Link>
                 </Columns.Column>
                 <Columns.Column>
                   <Button
@@ -325,8 +356,9 @@ export default function CalendarPage() {
                     }}
                     fullwidth={true}
                     color='danger'
+                    onClick={() => setShowRemoveModel(true)}
                   >
-                    Remove Activity
+                    Delete Activity
                   </Button>
                 </Columns.Column>
               </Columns>
@@ -390,17 +422,17 @@ export default function CalendarPage() {
               </a>
             </div>
           ) : (
-            <div>
-              <i>Location: </i>
-              <a
-                target='_blank'
-                rel='noopener noreferrer'
-                href={'https://maps.google.com/?q=' + selectedEvent.location}
-              >
-                {selectedEvent.location}
-              </a>{' '}
-            </div>
-          )}
+                <div>
+                  <i>Location: </i>
+                  <a
+                    target='_blank'
+                    rel='noopener noreferrer'
+                    href={'https://maps.google.com/?q=' + selectedEvent.location}
+                  >
+                    {selectedEvent.location}
+                  </a>{' '}
+                </div>
+              )}
           {isMealActivity ? (
             <div>
               <i>Dietary Restrictions: </i>{' '}
@@ -411,8 +443,8 @@ export default function CalendarPage() {
               </ul>
             </div>
           ) : (
-            ''
-          )}
+              ''
+            )}
           <i>Volunteers Needed:</i> {selectedEvent.num_volunteers_needed}
           <br />
           <i>Notes:</i> {selectedEvent.description}
@@ -450,6 +482,32 @@ export default function CalendarPage() {
             Back
           </Button>
         </Container>
+        <Modal
+          show={showRemoveModal}
+          onClose={() => setShowRemoveModel(false)}
+          closeOnBlur={true}
+        >
+          <Modal.Card>
+            <Modal.Card.Head onClose={() => setShowRemoveModel(false)}>
+              <Modal.Card.Title>Delete "{selectedEvent.title}"</Modal.Card.Title>
+            </Modal.Card.Head>
+            <Section style={{ backgroundColor: 'white' }}>
+              Are you sure you want to delete this activity? You can't undo
+              this action.
+            </Section>
+            <Modal.Card.Foot
+              style={{
+                alignItems: 'center',
+                justifyContent: 'space-between',
+              }}
+            >
+              <Button onClick={() => setShowRemoveModel(false)}>Cancel</Button>
+              <Button color='primary' onClick={() => removeActivity(selectedEvent.id)}>
+                Delete Activity
+              </Button>
+            </Modal.Card.Foot>
+          </Modal.Card>
+        </Modal>
       </div>
     )
   }

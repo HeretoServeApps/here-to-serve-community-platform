@@ -598,21 +598,19 @@ export default function CommunityHome(props) {
             </Box>
           </Columns.Column>
           <Columns.Column size={7}>
-            {showWelcomeCard ? (
+            {showWelcomeCard && (
               localStorage.getItem('is-staff') === 'true' ? (
                 WelcomeCardStaff
               ) : (
                 WelcomeCardMember
               )
-            ) : (
-              <></>
             )}
             {/* What to show depends on what the user specified for homepage highlight in edit community */}
-            {displayCalendar ? calendar : <></>}
-            {displayWellWishes ? wellWishesContainer : <></>}
-            {displayFamilyUpdates ? familyUpdatesContainer : <></>}
-            {displayWaysToHelp ? waysToHelpContainer : <></>}
-            {displayPhotoGallery ? photoGalleryContainer : <></>}
+            {displayCalendar && calendar}
+            {displayWellWishes && wellWishesContainer}
+            {displayFamilyUpdates && familyUpdatesContainer}
+            {displayWaysToHelp && waysToHelpContainer}
+            {displayPhotoGallery && photoGalleryContainer}
           </Columns.Column>
           <Columns.Column size={2}>
             {userRole === 'Administrator' ? (

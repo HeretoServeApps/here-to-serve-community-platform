@@ -384,7 +384,6 @@ export default function CreateNewActivity(props) {
       })
       .then(
         (response) => {
-          console.log(response.data)
           const options = response.data.map((item) => ({ label: `${item['first_name']} ${item['last_name']}`, value: item['id'] }))
           setCoordinators(options)
         },
@@ -396,7 +395,7 @@ export default function CreateNewActivity(props) {
 
 
   const handleSubmit = useCallback(() => {
-    const dietaryRestrictionStatus = {}
+    let dietaryRestrictionStatus = {}
     dietaryRestrictions.forEach((restriction) => dietaryRestrictionStatus[restriction.name] = restriction.isChecked)
 
     const param = JSON.stringify({
@@ -555,7 +554,7 @@ export default function CreateNewActivity(props) {
                   {category === 'Preparing Meals' ? (<p style={{ fontSize: '80%'}} className='has-text-grey'>examples: <br />- allergies <br />- no. people <br />- delivery instr.</p>) : (<></>)}
                   {category === 'Shopping' ? (<p style={{ fontSize: '80%'}} className='has-text-grey'>example: <br />- items needed</p>) : (<></>)}
                   {category === 'Childcare' ? (<p style={{ fontSize: '80%'}} className='has-text-grey'>example: <br />- feeding instructions<br />- kids favorites</p>) : (<></>)}
-                  {category === 'Pet Care' ? (<p style={{ fontSize: '80%'}} className='has-text-grey'>example: <br />- feeding insrtuctions<br />- favorite pet toys</p>) : (<></>)}
+                  {category === 'Pet Care' ? (<p style={{ fontSize: '80%'}} className='has-text-grey'>example: <br />- feeding instructions<br />- favorite pet toys</p>) : (<></>)}
                   {category === 'Laundry' ? (<p style={{ fontSize: '80%'}} className='has-text-grey'>example: <br />- washing machine settings</p>) : (<></>)}
                   {category === 'House Cleaning' ? (<p style={{ fontSize: '80%'}} className='has-text-grey'>example: <br />- rooms to clean</p>) : (<></>)}                  
                   {category === 'Visits' ? (<p style={{ fontSize: '80%'}} className='has-text-grey'>examples: <br />- additional instructions <br />- favorites <br />- activity ideas</p>) : (<></>)}
