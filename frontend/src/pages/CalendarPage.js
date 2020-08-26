@@ -92,6 +92,7 @@ export default function CalendarPage() {
   const [selectedEvent, setSelectedEvent] = useState(null)
   const [isSelectingEvent, setIsSelectingEvent] = useState(false)
   const [showRemoveModal, setShowRemoveModel] = useState(false)
+  const [isDeactivate, setIsDeactivate] = useState(false)
 
   // Setup the localizer by providing the moment (or globalize) Object
   // to the correct localizer.
@@ -127,6 +128,12 @@ export default function CalendarPage() {
     })
     setEvents(data)
     setOriginalEvents(data)
+  }
+
+    //toggles popup view for delete and deactivate
+    function deactivate(deactivate) {
+    setIsDeactivate(deactivate);
+    setShowRemoveModel(true);
   }
 
   const getEventInfo = useCallback((event) => {
@@ -312,6 +319,29 @@ export default function CalendarPage() {
     .catch(error => console.log('error', error));
   })
 
+  const deactivateActivity = useCallback((pk) => {
+    setIsDeactivate(false)
+    var url = '/edit-activity/' + pk + '/'
+    var myHeaders = new Headers()
+    myHeaders.append('Authorization', `JWT ${localStorage.getItem('token')}`)
+
+    const param = JSON.stringify({
+          'is_active' : false
+        })
+
+    axios
+        .patch(url, param, {
+          headers: {
+            'Authorization': `JWT ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json',
+          },
+        })
+          .then(
+            (response, err) => {
+              console.log(err)
+            })
+  })
+
   // RENDERS ---------------------------------------------------------------------------------------------
 
   // Users will see this if they are selecting an event
@@ -356,9 +386,21 @@ export default function CalendarPage() {
                     }}
                     fullwidth={true}
                     color='danger'
-                    onClick={() => setShowRemoveModel(true)}
+                    onClick={() => deactivate(false)}
                   >
                     Delete Activity
+                  </Button>
+                </Columns.Column>
+              <Columns.Column>
+                  <Button
+                    style={{
+                      boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)',
+                    }}
+                    fullwidth={true}
+                    color='primary'
+                    onClick={() => deactivate(true)}
+                  >
+                    Deactivate Activity
                   </Button>
                 </Columns.Column>
               </Columns>
@@ -489,12 +531,24 @@ export default function CalendarPage() {
         >
           <Modal.Card>
             <Modal.Card.Head onClose={() => setShowRemoveModel(false)}>
-              <Modal.Card.Title>Delete "{selectedEvent.title}"</Modal.Card.Title>
+            {isDeactivate ? (
+                <Modal.Card.Title>Deactivate "{selectedEvent.title}"</Modal.Card.Title>
+              ) : (
+                <Modal.Card.Title>Delete "{selectedEvent.title}"</Modal.Card.Title>
+              )}
+
             </Modal.Card.Head>
-            <Section style={{ backgroundColor: 'white' }}>
+            {isDeactivate ? (
+                <Section style={{ backgroundColor: 'white' }}>
+              Are you sure you want to deactivate this activity?
+            </Section>
+              ) : (
+                <Section style={{ backgroundColor: 'white' }}>
               Are you sure you want to delete this activity? You can't undo
               this action.
             </Section>
+              )}
+
             <Modal.Card.Foot
               style={{
                 alignItems: 'center',
@@ -502,9 +556,15 @@ export default function CalendarPage() {
               }}
             >
               <Button onClick={() => setShowRemoveModel(false)}>Cancel</Button>
-              <Button color='primary' onClick={() => removeActivity(selectedEvent.id)}>
+              {isDeactivate ? (
+                <Button color='primary' onClick={() => deactivateActivity(selectedEvent.id)}>
+                Deactivate Activity
+                 </Button>
+              ) : (
+                <Button color='primary' onClick={() => removeActivity(selectedEvent.id)}>
                 Delete Activity
-              </Button>
+                 </Button>
+              )}
             </Modal.Card.Foot>
           </Modal.Card>
         </Modal>

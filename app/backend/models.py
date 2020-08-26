@@ -354,6 +354,7 @@ class Activity(models.Model):
     start_time = models.DateTimeField(default=timezone.now)
     end_time = models.DateTimeField(blank=True, null=True)
     all_day = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
 
     # event(s) in an event batch will share a unique ID 
     # non-recurring events will be the only event in their batch
