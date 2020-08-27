@@ -112,8 +112,10 @@ export default function CalendarPage() {
   }
 
   function processEvents(data) {
+    let tempData = [];
     data.forEach((activity) => {
-      if (typeof activity['start_time'] === 'string') {
+      if (activity['is_active']) {
+        if (typeof activity['start_time'] === 'string') {
         var timezone_offset = new Date(
           activity['start_time']
         ).getTimezoneOffset()
@@ -124,10 +126,14 @@ export default function CalendarPage() {
           .add(timezone_offset, 'm')
           .toDate()
         activity['title'] = activity['activity_type'] + ': ' + activity['title']
+       }
+      tempData.push(activity)
       }
+
+
     })
-    setEvents(data)
-    setOriginalEvents(data)
+    setEvents(tempData)
+    setOriginalEvents(tempData)
   }
 
     //toggles popup view for delete and deactivate
@@ -340,6 +346,7 @@ export default function CalendarPage() {
             (response, err) => {
               console.log(err)
             })
+          .then(result => window.location.reload())
   })
 
   // RENDERS ---------------------------------------------------------------------------------------------

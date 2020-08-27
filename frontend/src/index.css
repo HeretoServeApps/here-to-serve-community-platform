@@ -71,6 +71,15 @@ thead th {
   width: 10%;
 }
 
+tr.strikeout td:before {
+    content: " ";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    border-bottom: 1px solid #111;
+    width: 100%;
+}
+
 #center-table th {
   text-align: center;
   vertical-align: middle;

@@ -421,6 +421,7 @@ export default function ActivityReport() {
                                             </td>)
                                         }
                                     </tr>
+
                                 ))
 
                             ) : (
