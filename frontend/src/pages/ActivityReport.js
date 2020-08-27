@@ -367,9 +367,10 @@ export default function ActivityReport() {
                         <tr>
                             <th>Activity</th>
                             <th>Time</th>
-                            <th>Status</th>
+                            <th>Volunteer Status</th>
                             <th>Average Volunteer Time/Person <br />(Requested)</th>
                             <th>Average Volunteer Time/Person <br />(Actual)</th>
+                            <th>Active Status</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -420,6 +421,14 @@ export default function ActivityReport() {
                                                 Occasions do not have volunteers
                                             </td>)
                                         }
+                                        {a.is_active ?
+                                            (<td>
+                                                   Active
+                                            </td>)
+                                            :
+                                            (<td>
+                                                  Inactive
+                                            </td>) }
                                     </tr>
 
                                 ))
