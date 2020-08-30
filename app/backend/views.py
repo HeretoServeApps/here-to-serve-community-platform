@@ -262,6 +262,7 @@ class ActivityViewSet(viewsets.ViewSet):
         location = data.pop('location')
         dietary_restrictions = data.pop('dietary_restrictions')
         coordinators = data.pop('coordinators')
+        volunteers = data.pop('volunteers')
         data['event_batch'] = uuid.uuid4()
 
         # creating a new <Type>Activity object for each date selected
@@ -295,6 +296,8 @@ class ActivityViewSet(viewsets.ViewSet):
             # for the coordinator ManyToMany field
             for specific_activity in created_instances:
                 specific_activity.activity.coordinators.add(*User.objects.filter(id__in=coordinators))
+                if len(volunteers) != 0:
+                    specific_activity.activity.volunteers.add(*User.objects.filter(id__in=volunteers))
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -366,7 +369,7 @@ class ActivityList(APIView):
 
 
 # 
-# Class for dealing with an activity (series of tasks of the same event batch)
+# Class for dealing with editing a single activity (series of tasks of the same event batch)
 # 
 class ActivityEditView(APIView):
     permission_classes = (permissions.IsAuthenticated,)
@@ -380,6 +383,8 @@ class ActivityEditView(APIView):
 
         serializer = ActivitySerializer(activity)
         final_activity = serializer.data
+        final_activity['selected_days'] = Activity.objects.filter(event_batch=activity.event_batch).values_list('start_time')
+
         if final_activity['activity_type'] == 'Giving Rides':
             ride_activity_obj = get_object_or_404(RideActivity.objects.all(), activity=final_activity['id'])
             ride_activity_serializer = RideActivitySerializer(ride_activity_obj)

@@ -329,14 +329,7 @@ export default function CalendarPage() {
             {localStorage.getItem('user-role') === 'Administrator' ? (
               <Columns>
                 <Columns.Column>
-                  <Link to={
-                    {
-                      pathname: '/edit-activity/' + selectedEvent.title,
-                      state: {
-                        activity_pk: selectedEvent.id,
-                      }
-                    }
-                  }>
+                  <Link to={'/edit-activity/' + selectedEvent.title}>
                     <Button
                       style={{
                         boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)',
@@ -445,7 +438,7 @@ export default function CalendarPage() {
           ) : (
               ''
             )}
-          <i>Volunteers Needed:</i> {selectedEvent.num_volunteers_needed}
+          <i>Volunteers Needed:</i> {selectedEvent.num_volunteers_needed - selectedEvent.volunteers.length} out of {selectedEvent.num_volunteers_needed}
           <br />
           <i>Notes:</i> {selectedEvent.description}
           <br />
