@@ -23,7 +23,7 @@ const links = [
 
 const activeLink = 'Home'
 
-const CommunityNavbar = (props) => {
+const CommunityNavbar = () => {
   return (
     <Bar>
       <Columns isMultiline={true}>

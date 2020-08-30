@@ -15,7 +15,7 @@ import PDF from '../components/activityPDF'
 import CommunityNavbar from '../components/communityNavbar'
 import SideBar from '../components/sidebar'
 
-export default function ActivityReport() {
+export default function ManageActivities() {
     // Create styles
     var containerStyle = {
         margin: '5% 5%',
@@ -236,7 +236,7 @@ export default function ActivityReport() {
                     <Columns.Column size={9}>
                         <Columns>
                             <Columns.Column size={8}>
-                                <Heading size={4}>Activity Report</Heading>
+                                <Heading size={4}>Manage Activities</Heading>
                             </Columns.Column>
                             <Columns.Column size={4}>
                                 <Columns>
