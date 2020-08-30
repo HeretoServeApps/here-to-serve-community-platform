@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { Calendar, momentLocalizer } from 'react-big-calendar'
-import { useHistory } from 'react-router-dom'
 import moment from 'moment'
 import '../index.css'
 import 'react-big-calendar/lib/sass/styles.scss'
@@ -76,13 +75,8 @@ export default function CalendarPage() {
     'Occasion',
   ]
 
-  let history = useHistory()
-
   // Events and event selection
   const [events, setEvents] = useState([])
-
-  //for current user email
-  const [currentUserEmail, setUserEmail] = useState('')
 
   const [selectedEvent, setSelectedEvent] = useState(null)
   const [isSelectingEvent, setIsSelectingEvent] = useState(false)
@@ -383,11 +377,10 @@ export default function CalendarPage() {
               </Columns.Column>
             <Columns.Column>
                 <Button
+                  className='is-primary is-inverted'
                   style={{
                     boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)',
                   }}
-                  fullwidth={true}
-                  color='primary'
                   onClick={() => deactivate(true)}
                 >
                   Deactivate Activity

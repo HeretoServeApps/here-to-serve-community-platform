@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import axios from 'axios'
-import Moment from 'moment';
-import { extendMoment } from 'moment-range';
-import { PDFDownloadLink } from '@react-pdf/renderer'
+import Moment from 'moment'
+import { Link } from 'react-router-dom'
+import { Edit2, Trash2, CheckCircle, PauseCircle } from 'react-feather'
+import { extendMoment } from 'moment-range'
 
 import { Input, Select, Field, Label, Control } from 'react-bulma-components/lib/components/form'
 import Container from 'react-bulma-components/lib/components/container'
@@ -10,8 +11,9 @@ import Heading from 'react-bulma-components/lib/components/heading'
 import Table from 'react-bulma-components/lib/components/table'
 import Columns from 'react-bulma-components/lib/components/columns'
 import Button from 'react-bulma-components/lib/components/button'
+import Modal from 'react-bulma-components/lib/components/modal'
+import Section from 'react-bulma-components/lib/components/section'
 
-import PDF from '../components/activityPDF'
 import CommunityNavbar from '../components/communityNavbar'
 import SideBar from '../components/sidebar'
 
@@ -49,6 +51,23 @@ export default function ManageActivities() {
     ]
 
     const years = Array.from(Array(5).keys()).map((y) => (y + (new Date().getFullYear())))
+
+    const count = Array.from(Array(51).keys()).slice(1, 51)
+
+    const monthMap = new Map()
+    monthMap['January'] = 1
+    monthMap['February'] = 2
+    monthMap['March'] = 3
+    monthMap['April'] = 4
+    monthMap['May'] = 5
+    monthMap['June'] = 6
+    monthMap['July'] = 7
+    monthMap['August'] = 8
+    monthMap['September'] = 9
+    monthMap['October'] = 10
+    monthMap['November'] = 11
+    monthMap['December'] = 12
+
     const months = [
         'January',
         'February',
@@ -64,119 +83,26 @@ export default function ManageActivities() {
         'December',
     ]
 
-    const times = [
-        '12:00 AM',
-        '12:15 AM',
-        '12:30 AM',
-        '12:45 AM',
-        '1:00 AM',
-        '1:15 AM',
-        '1:30 AM',
-        '1:45 AM',
-        '2:00 AM',
-        '2:15 AM',
-        '2:30 AM',
-        '2:45 AM',
-        '3:00 AM',
-        '3:15 AM',
-        '3:30 AM',
-        '3:45 AM',
-        '4:00 AM',
-        '4:15 AM',
-        '4:30 AM',
-        '4:45 AM',
-        '5:00 AM',
-        '5:15 AM',
-        '5:30 AM',
-        '5:45 AM',
-        '5:00 AM',
-        '5:15 AM',
-        '5:30 AM',
-        '5:45 AM',
-        '5:00 AM',
-        '5:15 AM',
-        '5:30 AM',
-        '5:45 AM',
-        '6:00 AM',
-        '6:15 AM',
-        '6:30 AM',
-        '6:45 AM',
-        '7:00 AM',
-        '7:15 AM',
-        '7:30 AM',
-        '7:45 AM',
-        '8:00 AM',
-        '8:15 AM',
-        '8:30 AM',
-        '8:45 AM',
-        '9:00 AM',
-        '9:15 AM',
-        '9:30 AM',
-        '9:45 AM',
-        '10:00 AM',
-        '10:15 AM',
-        '10:30 AM',
-        '10:45 AM',
-        '11:00 AM',
-        '11:15 AM',
-        '11:30 AM',
-        '11:45 AM',
-        '12:00 PM',
-        '12:15 PM',
-        '12:30 PM',
-        '12:45 PM',
-        '1:00 PM',
-        '1:15 PM',
-        '1:30 PM',
-        '1:45 PM',
-        '2:00 PM',
-        '2:15 PM',
-        '2:30 PM',
-        '2:45 PM',
-        '3:00 PM',
-        '3:15 PM',
-        '3:30 PM',
-        '3:45 PM',
-        '4:00 PM',
-        '4:15 PM',
-        '4:30 PM',
-        '4:45 PM',
-        '5:00 PM',
-        '5:15 PM',
-        '5:30 PM',
-        '5:45 PM',
-        '6:00 PM',
-        '6:15 PM',
-        '6:30 PM',
-        '6:45 PM',
-        '7:00 PM',
-        '7:15 PM',
-        '7:30 PM',
-        '7:45 PM',
-        '8:00 PM',
-        '8:15 PM',
-        '8:30 PM',
-        '8:45 PM',
-        '9:00 PM',
-        '9:15 PM',
-        '9:30 PM',
-        '9:45 PM',
-        '10:00 PM',
-        '10:15 PM',
-        '10:30 PM',
-        '10:45 PM',
-        '11:00 PM',
-        '11:15 PM',
-        '11:30 PM',
-        '11:45 PM',
-    ]
-    const count = Array.from(Array(51).keys()).slice(1, 51)
+    const nextMonthMap = {
+        'January': 'February',
+        'February': 'March',
+        'March': 'April',
+        'April': 'May',
+        'May': 'June',
+        'June': 'July',
+        'July': 'August',
+        'August': 'September',
+        'September': 'October',
+        'October': 'November',
+        'November': 'December',
+        'December': 'Janurary',
+    }
 
     // Date range
     const [startMonth, setStartMonth] = useState(months[new Date().getMonth()])
     const [startDay, setStartDay] = useState(new Date().getDate())
     const [startYear, setStartYear] = useState(new Date().getFullYear())
-    const [endMonth, setEndMonth] = useState(months[new Date().getMonth()])
+    const [endMonth, setEndMonth] = useState(nextMonthMap[months[new Date().getMonth()]])
     const [endDay, setEndDay] = useState(new Date().getDate())
     const [endYear, setEndYear] = useState(new Date().getFullYear())
 
@@ -185,19 +111,8 @@ export default function ManageActivities() {
     const [selectedActivityType, setSelectedActivityType] = useState('Filter by Activity Type')
     const moment = extendMoment(Moment);
 
-    const monthMap = new Map()
-    monthMap['January'] = 1
-    monthMap['February'] = 2
-    monthMap['March'] = 3
-    monthMap['April'] = 4
-    monthMap['May'] = 5
-    monthMap['June'] = 6
-    monthMap['July'] = 7
-    monthMap['August'] = 8
-    monthMap['September'] = 9
-    monthMap['October'] = 10
-    monthMap['November'] = 11
-    monthMap['December'] = 12
+    const [showRemoveModal, setShowRemoveModel] = useState(false)
+    const [isDeactivate, setIsDeactivate] = useState(false)
 
     useEffect(() => {
         axios
@@ -215,6 +130,54 @@ export default function ManageActivities() {
                 }
             )
     }, [])
+
+    const deactivateActivity = useCallback((pk) => {
+        setIsDeactivate(false)
+        var url = '/edit-activity/' + pk + '/'
+        var myHeaders = new Headers()
+        myHeaders.append('Authorization', `JWT ${localStorage.getItem('token')}`)
+    
+        const param = JSON.stringify({
+          'is_active' : false
+        })
+    
+        axios
+            .patch(url, param, {
+              headers: {
+                'Authorization': `JWT ${localStorage.getItem('token')}`,
+                'Content-Type': 'application/json',
+              },
+            })
+              .then(
+                (response, err) => {
+                  console.log(err)
+                })
+              .then(result => window.location.reload())
+    })
+
+    //toggles popup view for delete and deactivate
+    function deactivate(deactivate) {
+        setIsDeactivate(deactivate);
+        setShowRemoveModel(true);
+    }
+
+    const removeActivity = useCallback((pk) => {
+        var url = '/edit-activity/' + pk + '/'
+        var myHeaders = new Headers()
+        myHeaders.append('Authorization', `JWT ${localStorage.getItem('token')}`)
+    
+        var requestOptions = {
+            method: 'DELETE',
+            headers: myHeaders,
+            redirect: 'follow'
+        }
+    
+        fetch(url, requestOptions)
+        .then(response => response.text())
+        .then(result => window.location.reload())
+        .catch(error => console.log('error', error));
+    })
+    
 
     const isDateWithinRange = useCallback((date) => {
         // Might need to offset date from UTC to actual timezone
@@ -234,46 +197,10 @@ export default function ManageActivities() {
                         <SideBar />
                     </Columns.Column>
                     <Columns.Column size={9}>
-                        <Columns>
-                            <Columns.Column size={8}>
-                                <Heading size={4}>Manage Activities</Heading>
-                            </Columns.Column>
-                            <Columns.Column size={4}>
-                                <Columns>
-                                    <Columns.Column>
-                                        <PDFDownloadLink
-                                            document={
-                                                <PDF
-                                                    activity_type={selectedActivityType}
-                                                    start_day={startDay}
-                                                    start_month={startMonth}
-                                                    start_year={startYear}
-                                                    end_day={endDay}
-                                                    end_month={endMonth}
-                                                    end_year={endYear}
-                                                    search={search}
-                                                />
-                                            }
-                                            fileName="report.pdf"
-                                        >
-                                            <Button
-                                                style={{
-                                                    marginBottom: '1rem',
-                                                    boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)',
-                                                }}
-                                                color='primary'
-                                                fullwidth={true}
-                                            >
-                                                Export Report
-                                            </Button>
-                                        </PDFDownloadLink>
-                                    </Columns.Column>
-                                </Columns>
-                            </Columns.Column>
-                        </Columns>
+                        <Heading size={4}>Manage Activities</Heading>
                         <Container style={formContainerStyle}>
                             <Columns>
-                                <Columns.Column size={9}>
+                                <Columns.Column size={8}>
                                     <Input
                                         value={search}
                                         onChange={(e) => setSearch(e.target.value)}
@@ -281,7 +208,7 @@ export default function ManageActivities() {
                                         style={{ marginBottom: '3%' }}
                                     />
                                 </Columns.Column>
-                                <Columns.Column size={3}>
+                                <Columns.Column size={4}>
                                     <Field>
                                         <Control>
                                             <Select
@@ -370,15 +297,12 @@ export default function ManageActivities() {
                                 </Columns.Column>
                             </Columns>
 
-                            <Table id='center-table'>
+                            <Table>
                                 <thead>
                                     <tr>
                                         <th>Activity</th>
                                         <th>Time</th>
-                                        <th>Volunteer Status</th>
-                                        <th>Average Volunteer Time/Person <br />(Requested)</th>
-                                        <th>Average Volunteer Time/Person <br />(Actual)</th>
-                                        <th>Active Status</th>
+                                        <th>Options</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -389,7 +313,7 @@ export default function ManageActivities() {
                                             (selectedActivityType === 'Filter by Activity Type' || a.activity_type === selectedActivityType)
                                             &&
                                             isDateWithinRange(a.start_time)
-                                    ).length > 0 ? (
+                                        ).length > 0 ? (
                                             activities.filter(
                                                 (a) =>
                                                     (search === '' || (a.title).toLowerCase().includes(search.toLowerCase()))
@@ -399,44 +323,126 @@ export default function ManageActivities() {
                                                     (isDateWithinRange(a.start_time))
                                             )
                                                 .map((a) => (
+                                                    <div>
                                                     <tr key={a.id}>
                                                         <td>
-                                                            <strong>{a.title}</strong> <br />{a.activity_type}
+                                                            <strong>{a.title}</strong>
+                                                            <br />
+                                                            {a.activity_type}
                                                         </td>
-                                                        <td>
+                                                        <td style={{width: '15%'}}>
                                                             {moment(a.start_time).format('LL')}<br />
-                                                    Between {moment(a.start_time).add(new Date(a.start_time).getTimezoneOffset(), 'm').format('LT')}{' '}
-                                                    and {moment(a.end_time).add(new Date(a.start_time).getTimezoneOffset(), 'm').format('LT')}
+                                                            Between {moment(a.start_time).add(new Date(a.start_time).getTimezoneOffset(), 'm').format('LT')}{' '}
+                                                            and {moment(a.end_time).add(new Date(a.start_time).getTimezoneOffset(), 'm').format('LT')}
                                                         </td>
-                                                        <td>
-                                                            {a.volunteers.length}/{a.num_volunteers_needed} volunteers
-                                                </td>
-                                                        {a.activity_type !== 'Occasion' ?
-                                                            (<td>{a.est_hours_per_volunteer} hours <br />{Math.round(a.est_minutes_per_volunteer)} minutes</td>) :
-                                                            (<td>N/A</td>)}
-
-                                                        {a.activity_type !== 'Occasion' && a.actual_hours_per_volunteer !== 0 && a.actual_minutes_per_volunteer !== 0 ?
-                                                            <td>
-                                                                {a.actual_hours_per_volunteer} hours <br />{Math.round(a.actual_minutes_per_volunteer)} minutes
-                                                    </td>
-                                                            :
-                                                            a.activity_type !== 'Occasion' ?
-                                                                (<td>
-                                                                    No volunteers have signed-up
-                                                                </td>)
-                                                                :
-                                                                (<td>
-                                                                    Occasions do not have volunteers
-                                                                </td>)
-                                                        }
-                                                        {a.is_active ?
-                                                            (<td> Active</td>)
-                                                            :
-                                                            (<td>Inactive</td>)
-                                                        }
+                                                        <td style={{width: '15%'}}>
+                                                            <Columns>
+                                                                <Columns.Column size={3}>
+                                                                    <Link to={'/edit-activity/' + a.title}>
+                                                                        <Button
+                                                                            style={{
+                                                                            boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)',
+                                                                            }}
+                                                                            color='primary'
+                                                                            onClick={() => localStorage.setItem('activity-id', a.id)}
+                                                                        >
+                                                                            <Edit2 size={12} style={{ marginRight: '10px' }} />
+                                                                            Edit
+                                                                        </Button>
+                                                                    </Link>
+                                                                </Columns.Column>
+                                                                
+                                                                <Columns.Column size={4}>
+                                                                    <Button
+                                                                        style={{
+                                                                            boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)',
+                                                                        }}
+                                                                        color='danger'
+                                                                        onClick={() => deactivate(false)}
+                                                                    >
+                                                                        <Trash2 size={12} style={{ marginRight: '10px' }} />
+                                                                        Delete
+                                                                    </Button>
+                                                                </Columns.Column>
+                                                                <Columns.Column size={5}>
+                                                                    {a.is_active ? 
+                                                                        <Button
+                                                                            className='is-primary is-inverted'
+                                                                            style={{
+                                                                                boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)',
+                                                                            }}
+                                                                            onClick={() => deactivate(true)}
+                                                                        >
+                                                                            <div>
+                                                                            <PauseCircle
+                                                                                size={12}
+                                                                                style={{ marginRight: '5px' }}
+                                                                            />
+                                                                            Deactivate
+                                                                            </div>
+                                                                        </Button>
+                                                                        :
+                                                                        <Button
+                                                                            className='is-primary is-inverted'
+                                                                            style={{
+                                                                            boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)',
+                                                                            }}
+                                                                        >
+                                                                            <CheckCircle size={12} style={{ marginRight: '10px' }} />
+                                                                            Activate
+                                                                        </Button>
+                                                                    }
+                                                                </Columns.Column>
+                                                            </Columns>
+                                                        </td>
                                                     </tr>
-                                                ))
 
+                                                    <Modal
+                                                        show={showRemoveModal}
+                                                        onClose={() => setShowRemoveModel(false)}
+                                                        closeOnBlur={true}
+                                                    >
+                                                        <Modal.Card>
+                                                            <Modal.Card.Head onClose={() => setShowRemoveModel(false)}>
+                                                            {isDeactivate ? (
+                                                                <Modal.Card.Title>Deactivate "{a.title}"</Modal.Card.Title>
+                                                            ) : (
+                                                                <Modal.Card.Title>Delete "{a.title}"</Modal.Card.Title>
+                                                            )}
+
+                                                            </Modal.Card.Head>
+                                                            {isDeactivate ? (
+                                                                <Section style={{ backgroundColor: 'white' }}>
+                                                                    Are you sure you want to deactivate this activity?
+                                                                </Section>
+                                                            ) : (
+                                                                <Section style={{ backgroundColor: 'white' }}>
+                                                                    Are you sure you want to delete this activity? You can't undo
+                                                                    this action.
+                                                                </Section>
+                                                            )}
+
+                                                            <Modal.Card.Foot
+                                                            style={{
+                                                                alignItems: 'center',
+                                                                justifyContent: 'space-between',
+                                                            }}
+                                                            >
+                                                            <Button onClick={() => setShowRemoveModel(false)}>Cancel</Button>
+                                                            {isDeactivate ? (
+                                                                <Button color='primary' onClick={() => deactivateActivity(a.id)}>
+                                                                    Deactivate Activity
+                                                                </Button>
+                                                            ) : (
+                                                                <Button color='primary' onClick={() => removeActivity(a.id)}>
+                                                                    Delete Activity
+                                                                </Button>
+                                                            )}
+                                                            </Modal.Card.Foot>
+                                                        </Modal.Card>
+                                                    </Modal>
+                                                </div>
+                                            ))
                                         ) : (
                                             <p className='has-text-grey-light' style={noteStyle}>
                                                 No activities match this search.

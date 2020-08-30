@@ -49,6 +49,23 @@ export default function ActivityReport() {
     ]
 
     const years = Array.from(Array(5).keys()).map((y) => (y + (new Date().getFullYear())))
+    const count = Array.from(Array(51).keys()).slice(1, 51)
+
+
+    const monthMap = new Map()
+    monthMap['January'] = 1
+    monthMap['February'] = 2
+    monthMap['March'] = 3
+    monthMap['April'] = 4
+    monthMap['May'] = 5
+    monthMap['June'] = 6
+    monthMap['July'] = 7
+    monthMap['August'] = 8
+    monthMap['September'] = 9
+    monthMap['October'] = 10
+    monthMap['November'] = 11
+    monthMap['December'] = 12
+
     const months = [
         'January',
         'February',
@@ -64,119 +81,26 @@ export default function ActivityReport() {
         'December',
     ]
 
-    const times = [
-        '12:00 AM',
-        '12:15 AM',
-        '12:30 AM',
-        '12:45 AM',
-        '1:00 AM',
-        '1:15 AM',
-        '1:30 AM',
-        '1:45 AM',
-        '2:00 AM',
-        '2:15 AM',
-        '2:30 AM',
-        '2:45 AM',
-        '3:00 AM',
-        '3:15 AM',
-        '3:30 AM',
-        '3:45 AM',
-        '4:00 AM',
-        '4:15 AM',
-        '4:30 AM',
-        '4:45 AM',
-        '5:00 AM',
-        '5:15 AM',
-        '5:30 AM',
-        '5:45 AM',
-        '5:00 AM',
-        '5:15 AM',
-        '5:30 AM',
-        '5:45 AM',
-        '5:00 AM',
-        '5:15 AM',
-        '5:30 AM',
-        '5:45 AM',
-        '6:00 AM',
-        '6:15 AM',
-        '6:30 AM',
-        '6:45 AM',
-        '7:00 AM',
-        '7:15 AM',
-        '7:30 AM',
-        '7:45 AM',
-        '8:00 AM',
-        '8:15 AM',
-        '8:30 AM',
-        '8:45 AM',
-        '9:00 AM',
-        '9:15 AM',
-        '9:30 AM',
-        '9:45 AM',
-        '10:00 AM',
-        '10:15 AM',
-        '10:30 AM',
-        '10:45 AM',
-        '11:00 AM',
-        '11:15 AM',
-        '11:30 AM',
-        '11:45 AM',
-        '12:00 PM',
-        '12:15 PM',
-        '12:30 PM',
-        '12:45 PM',
-        '1:00 PM',
-        '1:15 PM',
-        '1:30 PM',
-        '1:45 PM',
-        '2:00 PM',
-        '2:15 PM',
-        '2:30 PM',
-        '2:45 PM',
-        '3:00 PM',
-        '3:15 PM',
-        '3:30 PM',
-        '3:45 PM',
-        '4:00 PM',
-        '4:15 PM',
-        '4:30 PM',
-        '4:45 PM',
-        '5:00 PM',
-        '5:15 PM',
-        '5:30 PM',
-        '5:45 PM',
-        '6:00 PM',
-        '6:15 PM',
-        '6:30 PM',
-        '6:45 PM',
-        '7:00 PM',
-        '7:15 PM',
-        '7:30 PM',
-        '7:45 PM',
-        '8:00 PM',
-        '8:15 PM',
-        '8:30 PM',
-        '8:45 PM',
-        '9:00 PM',
-        '9:15 PM',
-        '9:30 PM',
-        '9:45 PM',
-        '10:00 PM',
-        '10:15 PM',
-        '10:30 PM',
-        '10:45 PM',
-        '11:00 PM',
-        '11:15 PM',
-        '11:30 PM',
-        '11:45 PM',
-    ]
-    const count = Array.from(Array(51).keys()).slice(1, 51)
+    const nextMonthMap = {
+        'January': 'February',
+        'February': 'March',
+        'March': 'April',
+        'April': 'May',
+        'May': 'June',
+        'June': 'July',
+        'July': 'August',
+        'August': 'September',
+        'September': 'October',
+        'October': 'November',
+        'November': 'December',
+        'December': 'Janurary',
+    }
 
     // Date range
     const [startMonth, setStartMonth] = useState(months[new Date().getMonth()])
     const [startDay, setStartDay] = useState(new Date().getDate())
     const [startYear, setStartYear] = useState(new Date().getFullYear())
-    const [endMonth, setEndMonth] = useState(months[new Date().getMonth()])
+    const [endMonth, setEndMonth] = useState(nextMonthMap[months[new Date().getMonth()]])
     const [endDay, setEndDay] = useState(new Date().getDate())
     const [endYear, setEndYear] = useState(new Date().getFullYear())
 
@@ -184,20 +108,6 @@ export default function ActivityReport() {
     const [search, setSearch] = useState('')
     const [selectedActivityType, setSelectedActivityType] = useState('Filter by Activity Type')
     const moment = extendMoment(Moment);
-
-    const monthMap = new Map()
-    monthMap['January'] = 1
-    monthMap['February'] = 2
-    monthMap['March'] = 3
-    monthMap['April'] = 4
-    monthMap['May'] = 5
-    monthMap['June'] = 6
-    monthMap['July'] = 7
-    monthMap['August'] = 8
-    monthMap['September'] = 9
-    monthMap['October'] = 10
-    monthMap['November'] = 11
-    monthMap['December'] = 12
 
     useEffect(() => {
         axios
@@ -273,7 +183,7 @@ export default function ActivityReport() {
                         </Columns>
                         <Container style={formContainerStyle}>
                             <Columns>
-                                <Columns.Column size={9}>
+                                <Columns.Column size={8}>
                                     <Input
                                         value={search}
                                         onChange={(e) => setSearch(e.target.value)}
@@ -281,7 +191,7 @@ export default function ActivityReport() {
                                         style={{ marginBottom: '3%' }}
                                     />
                                 </Columns.Column>
-                                <Columns.Column size={3}>
+                                <Columns.Column size={4}>
                                     <Field>
                                         <Control>
                                             <Select
@@ -405,20 +315,20 @@ export default function ActivityReport() {
                                                         </td>
                                                         <td>
                                                             {moment(a.start_time).format('LL')}<br />
-                                                    Between {moment(a.start_time).add(new Date(a.start_time).getTimezoneOffset(), 'm').format('LT')}{' '}
-                                                    and {moment(a.end_time).add(new Date(a.start_time).getTimezoneOffset(), 'm').format('LT')}
+                                                            Between {moment(a.start_time).add(new Date(a.start_time).getTimezoneOffset(), 'm').format('LT')}{' '}
+                                                            and {moment(a.end_time).add(new Date(a.start_time).getTimezoneOffset(), 'm').format('LT')}
                                                         </td>
                                                         <td>
                                                             {a.volunteers.length}/{a.num_volunteers_needed} volunteers
-                                                </td>
+                                                        </td>
                                                         {a.activity_type !== 'Occasion' ?
                                                             (<td>{a.est_hours_per_volunteer} hours <br />{Math.round(a.est_minutes_per_volunteer)} minutes</td>) :
                                                             (<td>N/A</td>)}
 
-                                                        {a.activity_type !== 'Occasion' && a.actual_hours_per_volunteer !== 0 && a.actual_minutes_per_volunteer !== 0 ?
+                                                        {a.activity_type !== 'Occasion' && (a.actual_hours_per_volunteer !== 0 || a.actual_minutes_per_volunteer !== 0) ?
                                                             <td>
                                                                 {a.actual_hours_per_volunteer} hours <br />{Math.round(a.actual_minutes_per_volunteer)} minutes
-                                                    </td>
+                                                            </td>
                                                             :
                                                             a.activity_type !== 'Occasion' ?
                                                                 (<td>
@@ -436,7 +346,6 @@ export default function ActivityReport() {
                                                         }
                                                     </tr>
                                                 ))
-
                                         ) : (
                                             <p className='has-text-grey-light' style={noteStyle}>
                                                 No activities match this search.
