@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { Calendar, momentLocalizer } from 'react-big-calendar'
-import { useHistory } from 'react-router-dom'
 import moment from 'moment'
 import '../index.css'
 import 'react-big-calendar/lib/sass/styles.scss'
@@ -24,16 +23,11 @@ import {
 import CheckboxField from '../components/checkboxfield'
 import CommunityNavbar from '../components/communityNavbar'
 import CustomSections from '../components/customSections'
-import { RefreshCw, Calendar as CalendarIcon } from 'react-feather'
+import { RefreshCw, Clipboard, Layers, Edit2, Trash2, PauseCircle, Calendar as CalendarIcon } from 'react-feather'
 
 export default function CalendarPage() {
   var containerStyle = {
     margin: '5% 5%',
-    maxWidth: '100%',
-  }
-
-  var statusContainerStyle = {
-    margin: '20% 0% 0% 30%',
     maxWidth: '100%',
   }
 
@@ -81,17 +75,13 @@ export default function CalendarPage() {
     'Occasion',
   ]
 
-  let history = useHistory()
-
   // Events and event selection
   const [events, setEvents] = useState([])
-
-  //for current user email
-  const [currentUserEmail, setUserEmail] = useState('')
 
   const [selectedEvent, setSelectedEvent] = useState(null)
   const [isSelectingEvent, setIsSelectingEvent] = useState(false)
   const [showRemoveModal, setShowRemoveModel] = useState(false)
+  const [isDeactivate, setIsDeactivate] = useState(false)
 
   // Setup the localizer by providing the moment (or globalize) Object
   // to the correct localizer.
@@ -111,8 +101,10 @@ export default function CalendarPage() {
   }
 
   function processEvents(data) {
+    let tempData = [];
     data.forEach((activity) => {
-      if (typeof activity['start_time'] === 'string') {
+      if (activity['is_active']) {
+        if (typeof activity['start_time'] === 'string') {
         var timezone_offset = new Date(
           activity['start_time']
         ).getTimezoneOffset()
@@ -123,10 +115,18 @@ export default function CalendarPage() {
           .add(timezone_offset, 'm')
           .toDate()
         activity['title'] = activity['activity_type'] + ': ' + activity['title']
+       }
+      tempData.push(activity)
       }
     })
-    setEvents(data)
-    setOriginalEvents(data)
+    setEvents(tempData)
+    setOriginalEvents(tempData)
+  }
+
+  //toggles popup view for delete and deactivate
+  function deactivate(deactivate) {
+    setIsDeactivate(deactivate);
+    setShowRemoveModel(true);
   }
 
   const getEventInfo = useCallback((event) => {
@@ -312,6 +312,31 @@ export default function CalendarPage() {
     .catch(error => console.log('error', error));
   })
 
+  const deactivateActivity = useCallback((pk) => {
+    setIsDeactivate(false)
+    setShowRemoveModel(false)
+    var url = '/edit-activity/' + pk + '/'
+    var myHeaders = new Headers()
+    myHeaders.append('Authorization', `JWT ${localStorage.getItem('token')}`)
+
+    const param = JSON.stringify({
+      'is_active' : false
+    })
+
+    axios
+        .patch(url, param, {
+          headers: {
+            'Authorization': `JWT ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json',
+          },
+        })
+          .then(
+            (response, err) => {
+              console.log(err)
+            })
+          .then(result => window.location.reload())
+  })
+
   // RENDERS ---------------------------------------------------------------------------------------------
 
   // Users will see this if they are selecting an event
@@ -322,53 +347,63 @@ export default function CalendarPage() {
       <div>
         <CommunityNavbar />
         <Container style={eventContainerStyle}>
-          <Columns>
-            <Columns.Column size={6}>
-              <Heading size={4}>{selectedEvent.title}</Heading>
-            </Columns.Column>
-            {localStorage.getItem('user-role') === 'Administrator' ? (
-              <Columns>
-                <Columns.Column>
-                  <Link to={'/edit-activity/' + selectedEvent.title}>
-                    <Button
-                      style={{
-                        boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)',
-                      }}
-                      fullwidth={true}
-                      color='primary'
-                      onClick={() => localStorage.setItem('activity-id', selectedEvent.id)}
-                    >
-                      Edit Activity
-                    </Button>
-                  </Link>
-                </Columns.Column>
-                <Columns.Column>
+          <Heading size={4}>{selectedEvent.title}</Heading>
+          {localStorage.getItem('user-role') === 'Administrator' ? (
+            <Columns>
+              <Columns.Column>
+                <Link to={'/edit-activity/' + selectedEvent.title}>
                   <Button
                     style={{
                       boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)',
                     }}
                     fullwidth={true}
-                    color='danger'
-                    onClick={() => setShowRemoveModel(true)}
+                    color='primary'
+                    onClick={() => localStorage.setItem('activity-id', selectedEvent.id)}
                   >
-                    Delete Activity
+                    <Edit2 size={12} style={{ marginRight: '10px' }} />
+                    Edit Activity
                   </Button>
-                </Columns.Column>
-              </Columns>
-            ) : (
+                </Link>
+              </Columns.Column>
               <Columns.Column>
                 <Button
-                  onClick={() => addVolunteer()}
                   style={{
                     boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)',
                   }}
-                  color='primary'
+                  fullwidth={true}
+                  color='danger'
+                  onClick={() => deactivate(false)}
                 >
-                  Sign up as a volunteer
+                  <Trash2 size={12} style={{ marginRight: '10px' }} />
+                  Delete Activity
                 </Button>
               </Columns.Column>
-            )}
-          </Columns>
+            <Columns.Column>
+                <Button
+                  className='is-primary is-inverted'
+                  style={{
+                    boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)',
+                  }}
+                  onClick={() => deactivate(true)}
+                >
+                  <PauseCircle size={12} style={{ marginRight: '10px' }} />
+                  Deactivate Activity
+                </Button>
+              </Columns.Column>
+            </Columns>
+          ) : (
+            <Columns.Column>
+              <Button
+                onClick={() => addVolunteer()}
+                style={{
+                  boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)',
+                }}
+                color='primary'
+              >
+                Sign up as a volunteer
+              </Button>
+            </Columns.Column>
+          )}
           <Heading size={6}>Details:</Heading>
           <i>Date:</i> {moment(selectedEvent.start_time).format('LL')}
           <br />
@@ -482,12 +517,24 @@ export default function CalendarPage() {
         >
           <Modal.Card>
             <Modal.Card.Head onClose={() => setShowRemoveModel(false)}>
-              <Modal.Card.Title>Delete "{selectedEvent.title}"</Modal.Card.Title>
+            {isDeactivate ? (
+                <Modal.Card.Title>Deactivate "{selectedEvent.title}"</Modal.Card.Title>
+              ) : (
+                <Modal.Card.Title>Delete "{selectedEvent.title}"</Modal.Card.Title>
+              )}
+
             </Modal.Card.Head>
-            <Section style={{ backgroundColor: 'white' }}>
+            {isDeactivate ? (
+                <Section style={{ backgroundColor: 'white' }}>
+              Are you sure you want to deactivate this activity?
+            </Section>
+              ) : (
+                <Section style={{ backgroundColor: 'white' }}>
               Are you sure you want to delete this activity? You can't undo
               this action.
             </Section>
+              )}
+
             <Modal.Card.Foot
               style={{
                 alignItems: 'center',
@@ -495,9 +542,15 @@ export default function CalendarPage() {
               }}
             >
               <Button onClick={() => setShowRemoveModel(false)}>Cancel</Button>
-              <Button color='primary' onClick={() => removeActivity(selectedEvent.id)}>
+              {isDeactivate ? (
+                <Button color='primary' onClick={() => deactivateActivity(selectedEvent.id)}>
+                Deactivate Activity
+                 </Button>
+              ) : (
+                <Button color='primary' onClick={() => removeActivity(selectedEvent.id)}>
                 Delete Activity
-              </Button>
+                 </Button>
+              )}
             </Modal.Card.Foot>
           </Modal.Card>
         </Modal>
@@ -576,7 +629,7 @@ export default function CalendarPage() {
           </Columns.Column>
           <Columns.Column size={9}>
             <Columns isMultiline={true}>
-              <Columns.Column size={9}>
+              <Columns.Column size={6}>
                 <Heading size={4}>Community Calendar</Heading>
               </Columns.Column>
               <Columns.Column size={3}>
@@ -589,6 +642,21 @@ export default function CalendarPage() {
                           style={{ marginRight: '5px' }}
                         />
                         Create Activity
+                      </div>
+                    </Button>
+                  </Link>
+                )}
+              </Columns.Column>
+              <Columns.Column size={3}>
+                {localStorage.getItem('user-role') === 'Administrator' && (
+                  <Link to='/manage-activities' style={{ color: 'white' }}>
+                    <Button color='primary' fullwidth={true}>
+                      <div>
+                        <Layers
+                          size={12}
+                          style={{ marginRight: '5px' }}
+                        />
+                        Manage Activities
                       </div>
                     </Button>
                   </Link>
@@ -632,7 +700,13 @@ export default function CalendarPage() {
                     }}
                     fullwidth={true}
                   >
-                    <div>View Activity Report</div>
+                    <div>
+                      <Clipboard
+                        size={12}
+                        style={{ marginRight: '5px' }}
+                      />
+                      View Activity Report
+                    </div>
                   </Button>
                 </Link>
               </Columns.Column>

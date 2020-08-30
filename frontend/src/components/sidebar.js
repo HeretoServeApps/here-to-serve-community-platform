@@ -35,7 +35,7 @@ const SideBar = (props) => {
               </p>
             </Link>
 
-            <Link to='#'>
+            <Link to='/manage-activities'>
               <p className='sidebar'>
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                   <Layers size={12} style={{ marginRight: '10px' }} />

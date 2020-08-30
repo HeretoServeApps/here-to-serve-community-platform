@@ -423,11 +423,14 @@ class ActivityEditView(APIView):
 
     def patch(self, request, activity_id):
         activity = Activity.objects.get(pk=activity_id)
-        serializer = ActivitySerializer(activity, data=request.data, partial=True)
-        if serializer.is_valid():
-            question = serializer.save()
-            return Response(ActivitySerializer(activity).data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        all_activities_with_event_batch = Activity.objects.filter(event_batch=activity.event_batch)
+        for item in all_activities_with_event_batch:
+            serializer = ActivitySerializer(item, data=request.data, partial=True)
+            if serializer.is_valid():
+                question = serializer.save()
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(ActivitySerializer(activity).data)
 
  
 class AnnouncementViewSet(viewsets.ModelViewSet):
