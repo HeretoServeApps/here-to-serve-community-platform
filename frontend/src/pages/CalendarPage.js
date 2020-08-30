@@ -23,7 +23,7 @@ import {
 import CheckboxField from '../components/checkboxfield'
 import CommunityNavbar from '../components/communityNavbar'
 import CustomSections from '../components/customSections'
-import { RefreshCw, Clipboard, Layers, Calendar as CalendarIcon } from 'react-feather'
+import { RefreshCw, Clipboard, Layers, Edit2, Trash2, PauseCircle, Calendar as CalendarIcon } from 'react-feather'
 
 export default function CalendarPage() {
   var containerStyle = {
@@ -314,6 +314,7 @@ export default function CalendarPage() {
 
   const deactivateActivity = useCallback((pk) => {
     setIsDeactivate(false)
+    setShowRemoveModel(false)
     var url = '/edit-activity/' + pk + '/'
     var myHeaders = new Headers()
     myHeaders.append('Authorization', `JWT ${localStorage.getItem('token')}`)
@@ -359,6 +360,7 @@ export default function CalendarPage() {
                     color='primary'
                     onClick={() => localStorage.setItem('activity-id', selectedEvent.id)}
                   >
+                    <Edit2 size={12} style={{ marginRight: '10px' }} />
                     Edit Activity
                   </Button>
                 </Link>
@@ -372,6 +374,7 @@ export default function CalendarPage() {
                   color='danger'
                   onClick={() => deactivate(false)}
                 >
+                  <Trash2 size={12} style={{ marginRight: '10px' }} />
                   Delete Activity
                 </Button>
               </Columns.Column>
@@ -383,6 +386,7 @@ export default function CalendarPage() {
                   }}
                   onClick={() => deactivate(true)}
                 >
+                  <PauseCircle size={12} style={{ marginRight: '10px' }} />
                   Deactivate Activity
                 </Button>
               </Columns.Column>

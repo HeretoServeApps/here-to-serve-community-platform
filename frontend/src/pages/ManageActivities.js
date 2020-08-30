@@ -114,6 +114,9 @@ export default function ManageActivities() {
     const [showRemoveModal, setShowRemoveModel] = useState(false)
     const [isDeactivate, setIsDeactivate] = useState(false)
 
+    const [selectedActivityId, setSelectedActivityId] = useState(0)
+    const [selectedActivityTitle, setSelectedActivityTitle] = useState('')
+
     useEffect(() => {
         axios
             .get(`/activities/${localStorage.getItem('community-id')}`, {
@@ -133,6 +136,7 @@ export default function ManageActivities() {
 
     const deactivateActivity = useCallback((pk) => {
         setIsDeactivate(false)
+        setShowRemoveModel(false)
         var url = '/edit-activity/' + pk + '/'
         var myHeaders = new Headers()
         myHeaders.append('Authorization', `JWT ${localStorage.getItem('token')}`)
@@ -156,7 +160,9 @@ export default function ManageActivities() {
     })
 
     //toggles popup view for delete and deactivate
-    function deactivate(deactivate) {
+    function deactivate(deactivate, id, title) {
+        setSelectedActivityId(id)
+        setSelectedActivityTitle(title)
         setIsDeactivate(deactivate);
         setShowRemoveModel(true);
     }
@@ -325,7 +331,7 @@ export default function ManageActivities() {
                                                 .map((a) => (
                                                     <div>
                                                     <tr key={a.id}>
-                                                        <td>
+                                                        <td style={{width: '15%'}}>
                                                             <strong>{a.title}</strong>
                                                             <br />
                                                             {a.activity_type}
@@ -335,7 +341,7 @@ export default function ManageActivities() {
                                                             Between {moment(a.start_time).add(new Date(a.start_time).getTimezoneOffset(), 'm').format('LT')}{' '}
                                                             and {moment(a.end_time).add(new Date(a.start_time).getTimezoneOffset(), 'm').format('LT')}
                                                         </td>
-                                                        <td style={{width: '15%'}}>
+                                                        <td style={{width: '20%'}}>
                                                             <Columns>
                                                                 <Columns.Column size={3}>
                                                                     <Link to={'/edit-activity/' + a.title}>
@@ -358,7 +364,7 @@ export default function ManageActivities() {
                                                                             boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)',
                                                                         }}
                                                                         color='danger'
-                                                                        onClick={() => deactivate(false)}
+                                                                        onClick={() => deactivate(false, a.id, a.title)}
                                                                     >
                                                                         <Trash2 size={12} style={{ marginRight: '10px' }} />
                                                                         Delete
@@ -371,7 +377,7 @@ export default function ManageActivities() {
                                                                             style={{
                                                                                 boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)',
                                                                             }}
-                                                                            onClick={() => deactivate(true)}
+                                                                            onClick={() => deactivate(true, a.id, a.title)}
                                                                         >
                                                                             <div>
                                                                             <PauseCircle
@@ -396,7 +402,6 @@ export default function ManageActivities() {
                                                             </Columns>
                                                         </td>
                                                     </tr>
-
                                                     <Modal
                                                         show={showRemoveModal}
                                                         onClose={() => setShowRemoveModel(false)}
@@ -405,9 +410,9 @@ export default function ManageActivities() {
                                                         <Modal.Card>
                                                             <Modal.Card.Head onClose={() => setShowRemoveModel(false)}>
                                                             {isDeactivate ? (
-                                                                <Modal.Card.Title>Deactivate "{a.title}"</Modal.Card.Title>
+                                                                <Modal.Card.Title>Deactivate "{selectedActivityTitle}"</Modal.Card.Title>
                                                             ) : (
-                                                                <Modal.Card.Title>Delete "{a.title}"</Modal.Card.Title>
+                                                                <Modal.Card.Title>Delete "{selectedActivityTitle}"</Modal.Card.Title>
                                                             )}
 
                                                             </Modal.Card.Head>
@@ -417,8 +422,7 @@ export default function ManageActivities() {
                                                                 </Section>
                                                             ) : (
                                                                 <Section style={{ backgroundColor: 'white' }}>
-                                                                    Are you sure you want to delete this activity? You can't undo
-                                                                    this action.
+                                                                    Are you sure you want to delete this activity? You can't undo this action.
                                                                 </Section>
                                                             )}
 
@@ -430,17 +434,18 @@ export default function ManageActivities() {
                                                             >
                                                             <Button onClick={() => setShowRemoveModel(false)}>Cancel</Button>
                                                             {isDeactivate ? (
-                                                                <Button color='primary' onClick={() => deactivateActivity(a.id)}>
+                                                                <Button color='primary' onClick={() => deactivateActivity(selectedActivityId)}>
                                                                     Deactivate Activity
                                                                 </Button>
                                                             ) : (
-                                                                <Button color='primary' onClick={() => removeActivity(a.id)}>
+                                                                <Button color='primary' onClick={() => removeActivity(selectedActivityId)}>
                                                                     Delete Activity
                                                                 </Button>
                                                             )}
                                                             </Modal.Card.Foot>
                                                         </Modal.Card>
                                                     </Modal>
+                                                    
                                                 </div>
                                             ))
                                         ) : (
