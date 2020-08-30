@@ -272,7 +272,6 @@ export default function CreateNewActivity(props) {
       }
       current.setDate(current.getDate() + 1)
     }
-    console.log(result)
     return result
   }
 
@@ -299,8 +298,6 @@ export default function CreateNewActivity(props) {
   const handleWeekdayToggle = (dayName, addDays) => {
     const newSelectedDays = selectedDays
     if (addDays) {
-      console.log('Adding Days')
-
       setSelectedDays(
         newSelectedDays
           .filter(
@@ -323,7 +320,6 @@ export default function CreateNewActivity(props) {
           )
       )
     } else {
-      console.log('Removing Days')
       setSelectedDays(
         newSelectedDays.filter(
           (d) =>
@@ -397,7 +393,6 @@ export default function CreateNewActivity(props) {
   const handleSubmit = useCallback(() => {
     let dietaryRestrictionStatus = {}
     dietaryRestrictions.forEach((restriction) => dietaryRestrictionStatus[restriction.name] = restriction.isChecked)
-
     const param = JSON.stringify({
       'title': activityName,
       'description': notes,
@@ -416,6 +411,7 @@ export default function CreateNewActivity(props) {
       'all_day': allDay,
       'no_end_time': noEndTime,
       'coordinators': selectedCoordinators,
+      'volunteers': [],
     })
     axios.post('/activity/', param, {
       headers: {
@@ -796,7 +792,7 @@ export default function CreateNewActivity(props) {
                     <div className='who' style={formContainerStyle}>
                       <Field>
                         <Label>
-                          Activity Coordinator
+                          Activity Coordinator(s)
                     <span style={{ color: '#F83D34' }}>*</span>
                         </Label>
                         <MultiSelect
