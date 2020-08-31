@@ -39,6 +39,7 @@ import PasswordSettings from './pages/PasswordSettings'
 import ActivityEdit from './pages/ActivityEdit'
 import ManageCustomSections from './pages/ManageCustomSections'
 import JoinRequests from './pages/JoinRequests'
+import EmailMembers from './pages/EmailMembers'
 import ManageActivities from './pages/ManageActivities'
 
 export default function App() {
@@ -78,6 +79,20 @@ export default function App() {
           console.log(error)
         }
       )
+      .catch(function (error) {
+        if (error.response) {
+          // Request made and server responded
+          console.log(error.response.data)
+          console.log(error.response.status)
+          console.log(error.response.headers)
+        } else if (error.request) {
+          // The request was made but no response was received
+          console.log(error.request)
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          console.log('Error', error.message)
+        }
+      })
   }, [])
 
   const handleSignup = useCallback(
@@ -309,7 +324,12 @@ export default function App() {
             component={ManageCustomSections}
           />
           <PrivateRoute path='/join-requests' exact component={JoinRequests} />
-          <PrivateRoute path='/manage-activities' exact component={ManageActivities} />
+          <PrivateRoute path='/email-members' exact component={EmailMembers} />
+          <PrivateRoute
+            path='/manage-activities'
+            exact
+            component={ManageActivities}
+          />
         </Switch>
         <AppFooter />
       </Router>

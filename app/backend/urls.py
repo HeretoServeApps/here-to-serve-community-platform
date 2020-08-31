@@ -37,6 +37,7 @@ urlpatterns = [
     path('community-people/', views.CommunityPeopleList.as_view()),
     re_path(r'^edit-user/(?P<pk>\d+)/$', views.UserViewUpdate.as_view()),
     path('invite-members/', views.InviteUsers.as_view()),
+    path('send-email/', views.SendEmail.as_view()),
     path(r'community-coordinators/<int:community_id>/', views.CommunityCoordinatorsList.as_view()),
     path('delete-announcement/', views.DeleteAnnouncement.as_view()),
     path('edit-announcement/', views.EditAnnouncement.as_view()),

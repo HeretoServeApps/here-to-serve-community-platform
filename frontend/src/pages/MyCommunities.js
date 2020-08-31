@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom'
 import { Input } from 'react-bulma-components/lib/components/form'
 import Container from 'react-bulma-components/lib/components/container'
 import Heading from 'react-bulma-components/lib/components/heading'
+import Progress from 'react-bulma-components/lib/components/progress'
 import Columns from 'react-bulma-components/lib/components/columns'
 import Button from 'react-bulma-components/lib/components/button'
 import CommunityCard from '../components/communitycard'
@@ -16,8 +17,10 @@ export default function MyCommunities() {
   const [search, setSearch] = useState('')
   const [approvedCommunityIds, setApprovedCommunityIds] = useState([])
   const token = localStorage.getItem('token')
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
+    setLoading(true)
     axios
       .get('/community/', {
         headers: {
@@ -27,12 +30,12 @@ export default function MyCommunities() {
       .then(
         (response) => {
           setCommunities(response.data)
-          
         },
         (error) => {
           console.log(error)
         }
       )
+    setLoading(false)
   }, [])
 
   useEffect(() => {
@@ -48,8 +51,8 @@ export default function MyCommunities() {
       .then(
         (response) => {
           let approvedCommunities = []
-          for(var i = 0; i < response.data.length; i++) {
-            if(response.data[i].is_approved) {
+          for (var i = 0; i < response.data.length; i++) {
+            if (response.data[i].is_approved) {
               approvedCommunities.push(response.data[i].community)
             }
           }
@@ -107,6 +110,7 @@ export default function MyCommunities() {
           />
         </Columns.Column>
       </Columns>
+      <Progress color='primary' size='small' hidden={!loading} />
       <Columns isMultiline={true}>
         {communities.filter(
           (c) =>
@@ -120,8 +124,8 @@ export default function MyCommunities() {
             )
             .map((c) => (
               <Columns.Column size={3} key={c.id}>
-                {approvedCommunityIds.includes(c.id) ?  
-                  (<Link
+                {approvedCommunityIds.includes(c.id) ? (
+                  <Link
                     to={{
                       pathname: '/community-home/',
                       state: {
@@ -141,10 +145,10 @@ export default function MyCommunities() {
                     style={{ color: 'black' }}
                   >
                     <CommunityCard text={c.name} photo={c.photo_file} />
-                  </Link>)
-                  :
-                  (<CommunityCard text={c.name} photo={ApprovalCover} />)
-                }
+                  </Link>
+                ) : (
+                  <CommunityCard text={c.name} photo={ApprovalCover} />
+                )}
               </Columns.Column>
             ))
         ) : (

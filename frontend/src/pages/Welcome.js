@@ -34,6 +34,44 @@ const ButtonBg = styled.div`
   border-radius: 5px;
 `
 
+const Wave = styled.div`
+  & {
+    display: block;
+    position: relative;
+    height: 250px;
+    background: white;
+  }
+  &:before {
+    content: '';
+    display: block;
+    position: absolute;
+    border-radius: 100%;
+    width: 100%;
+    height: 300px;
+    background-color: #addbe4;
+    right: -25%;
+    top: 230px;
+  }
+  &:after {
+    content: '';
+    display: block;
+    position: absolute;
+    border-radius: 100%;
+    width: 100%;
+    height: 300px;
+    background-color: white;
+    left: -25%;
+    top: -30px;
+  }
+`
+
+const WaveContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  position: absolute;
+`
+
 export default function Welcome() {
   const aboutCard = {
     backgroundColor: 'white',
@@ -41,13 +79,14 @@ export default function Welcome() {
     margin: '5%',
     padding: '1%',
     boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.25)',
-    height: '25rem',
   }
 
   return (
-    <div style={{ backgroundColor: '#addbe4' }}>
+    <div style={{ backgroundColor: '#addbe4', paddingBottom: '30px' }}>
       <BackgroundWrapper>
-        <Background />
+        <WaveContainer>
+          <Wave />
+        </WaveContainer>
       </BackgroundWrapper>
       <Container style={{ width: '90%' }}>
         <Columns>
@@ -56,6 +95,7 @@ export default function Welcome() {
               <Heading size={2}>
                 Join a <HighLight>care community</HighLight> today.
               </Heading>
+              <br />
               <Link to='/register'>
                 <Button
                   style={{
@@ -128,13 +168,20 @@ export default function Welcome() {
                 <Content>
                   Here to Serve provides assistance to families caring for a
                   child in a life-or-death health crisis such as childhood
-                  cancer, transplants, critical conditions at birth, accidents,
-                  etc. We do this by: Mobilizing people and resources to meet
-                  daily living requirements of families who do not qualify for
-                  government assistance. Building online communities of support,
-                  called Care Communities, that provide a network of services
-                  and financial assistance for families with a critically-ill
-                  child.
+                  cancer, transplants, or critical conditions. We do this by:{' '}
+                  <ul>
+                    <li>
+                      Mobilizing people and resources to meet daily living
+                      requirements of families who do not qualify for government
+                      assistance.
+                    </li>
+                    <li>
+                      Building online communities of support, called Care
+                      Communities, that provide a network of services and
+                      financial assistance for families with a critically-ill
+                      child.
+                    </li>
+                  </ul>
                 </Content>
               </Card.Content>
             </Container>

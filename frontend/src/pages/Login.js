@@ -32,12 +32,15 @@ export default function Login(props) {
   const [password, setPassword] = useState('')
   const [rememberMe, setRememberMe] = useState(false)
   const [validForm, setValidForm] = useState(false)
+  const [invalid, setInvalid] = useState(false)
 
   let history = useHistory()
   useEffect(() => {
-    if (localStorage.getItem('token') && 
-        localStorage.getItem('token') !== 'undefined' &&
-        localStorage.getItem('token') !== undefined) {
+    if (
+      localStorage.getItem('token') &&
+      localStorage.getItem('token') !== 'undefined' &&
+      localStorage.getItem('token') !== undefined
+    ) {
       history.push('/my-communities')
     }
   })
@@ -47,14 +50,10 @@ export default function Login(props) {
   }
 
   useEffect(() => {
-    const formValues = [
-      email,
-      password
-    ]
-    const notValidForm =
-      formValues.some((formVal) => {
-        return formVal === ''
-      })
+    const formValues = [email, password]
+    const notValidForm = formValues.some((formVal) => {
+      return formVal === ''
+    })
     setValidForm(notValidForm)
   }, [email, password])
 
@@ -92,6 +91,9 @@ export default function Login(props) {
       >
         LOGIN
       </Button>
+      <div class='notification is-danger' hidden={!invalid}>
+        Incorrect username or password.
+      </div>
       <Notification style={notifStyle}>
         <a href='/forgot-password'>Forgot Password?</a> or{' '}
         <Link to='/register'>Create Account</Link>
