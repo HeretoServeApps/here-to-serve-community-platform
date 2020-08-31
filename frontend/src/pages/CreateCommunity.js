@@ -1,6 +1,5 @@
 import React, { useState, useCallback } from 'react'
 import countryList from 'react-select-country-list'
-import axios from 'axios'
 import { useHistory } from 'react-router-dom'
 
 import {
@@ -46,7 +45,6 @@ export default function CreateCommunity() {
   const [photoFile, setPhotoFile] = useState('')
   const [photoURL, setPhotoURL] = useState('')
 
-  const token = localStorage.getItem('token')
   let history = useHistory()
 
 
@@ -79,6 +77,7 @@ export default function CreateCommunity() {
       formdata.append('community', name)
       formdata.append('user', localStorage.getItem('email'))
       formdata.append('role', 'ADMIN')
+      formdata.append('is_approved', true)
 
       var requestOptions = {
         method: 'POST',

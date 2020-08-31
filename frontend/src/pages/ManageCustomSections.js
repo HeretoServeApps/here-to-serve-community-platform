@@ -1,26 +1,20 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { useHistory } from 'react-router-dom'
 
 import Container from 'react-bulma-components/lib/components/container'
 import Columns from 'react-bulma-components/lib/components/columns'
 import Heading from 'react-bulma-components/lib/components/heading'
 import CommunityNavbar from '../components/communityNavbar'
-import Button from 'react-bulma-components/lib/components/button'
 import Table from 'react-bulma-components/lib/components/table'
-import { Trash2, Edit2 } from 'react-feather'
 import axios from 'axios'
 import SideBar from '../components/sidebar'
-import Modal from 'react-bulma-components/lib/components/modal'
-import Section from 'react-bulma-components/lib/components/section'
 import EditCustomSection from '../components/editCustomSection'
 import DeleteCustomSection from '../components/deleteCustomSection'
 
-export default function ManageCustomSections(props) {
+export default function ManageCustomSections() {
   const token = localStorage.getItem('token')
   const [sections, setSections] = useState([])
 
-  let history = useHistory()
 
   var formContainerStyle = {
     padding: '5%',

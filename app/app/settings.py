@@ -159,7 +159,8 @@ CORS_ORIGIN_WHITELIST = [
     'http://localhost:3000',
     'http://127.0.0.1:3000'
 ]
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = [config('HEROKU_APP_URL'), '127.0.0.1:8000', 'localhost']
+
 CORS_ORIGIN_ALLOW_ALL = True
 
 # Email Settings
@@ -180,3 +181,7 @@ AWS_DEFAULT_ACL = None
 
 # Django file uploads
 DATA_UPLOAD_MAX_MEMORY_SIZE = 5242880  # (5 MB)
+
+# Deploy
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'

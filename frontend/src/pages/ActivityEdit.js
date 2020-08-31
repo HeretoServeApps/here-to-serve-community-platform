@@ -2,10 +2,8 @@ import React, { useState, useEffect, useCallback } from 'react'
 import DayPicker, { DateUtils } from 'react-day-picker'
 import 'react-day-picker/lib/style.css'
 import { Link } from 'react-router-dom'
-import PropTypes from 'prop-types'
 import axios from 'axios'
 import moment from 'moment'
-import { useHistory } from 'react-router-dom'
 
 import Container from 'react-bulma-components/lib/components/container'
 import Columns from 'react-bulma-components/lib/components/columns'
@@ -25,7 +23,7 @@ import {
 import MultiSelect from 'react-multi-select-component'
 import SideBar from '../components/sidebar'
 
-export default function ActivityEdit(props) {
+export default function ActivityEdit() {
     //Styles
     var containerStyle = {
         margin: '5% 5%',
@@ -49,7 +47,6 @@ export default function ActivityEdit(props) {
         display: 'flex',
         justifyContent: 'flex-start',
     }
-    let history = useHistory()
 
     const activityPk = localStorage.getItem('activity-id')
 
@@ -209,33 +206,11 @@ export default function ActivityEdit(props) {
     const [numVolunteers, setNumVolunteers] = useState(1)
     const [coordinators, setCoordinators] = useState([])
     const [selectedCoordinators, setSelectedCoordinators] = useState([])
-
-    const categories = [
-        'Giving Rides',
-        'Preparing Meals',
-        'Shopping',
-        'Childcare',
-        'Pet Care',
-        'House Cleaning',
-        'Laundry',
-        'Visits',
-        'Miscellaneous',
-        'Occasion',
-    ]
+    const [volunteers, setVolunteers] = useState([])
 
     //Dietary Restrictions (kept in case checkbox implementation is needed)
     const [dietaryRestrictions, setDietaryRestrictions] = useState([])
 
-    const initDaysOfWeek = [
-        { name: 'Sunday', isChecked: false },
-        { name: 'Monday', isChecked: false },
-        { name: 'Tuesday', isChecked: false },
-        { name: 'Wednesday', isChecked: false },
-        { name: 'Thursday', isChecked: false },
-        { name: 'Friday', isChecked: false },
-        { name: 'Saturday', isChecked: false }
-    ]
-    const [daysOfWeek, setDaysOfWeek] = useState(initDaysOfWeek)
     const monthDiff = (d1, d2) => {
         var months
         months = (d2.getFullYear() - d1.getFullYear()) * 12
@@ -244,25 +219,6 @@ export default function ActivityEdit(props) {
         return months <= 0 ? 0 : months
     }
 
-    const getDaysBetweenDates = (start, end, dayName) => {
-        var result = []
-        var days = { sun: 0, mon: 1, tue: 2, wed: 3, thu: 4, fri: 5, sat: 6 }
-        var day = days[dayName.toLowerCase().substr(0, 3)]
-        var current = new Date(start)
-
-        while (current <= end) {
-            if (current.getDay() === day) {
-                result.push(new Date(current))
-            }
-            current.setDate(current.getDate() + 1)
-        }
-        console.log(result)
-        return result
-    }
-
-    const containsDay = (array = [], day) => {
-        return array.some((d) => (DateUtils.isSameDay(d, day)))
-    }
 
     const handleDayClick = (day, modifiers = {}) => {
         if (modifiers.disabled) {
@@ -279,51 +235,6 @@ export default function ActivityEdit(props) {
             setSelectedDays(newSelectedDays.concat([day]))
         }
     }
-
-    const handleWeekdayToggle = (dayName, addDays) => {
-        const newSelectedDays = selectedDays
-        if (addDays) {
-            console.log('Adding Days')
-
-            setSelectedDays(
-                newSelectedDays
-                    .filter(
-                        (d) =>
-                            !containsDay(
-                                getDaysBetweenDates(
-                                    new Date(startYear, months.indexOf(startMonth), startDay),
-                                    new Date(endYear, months.indexOf(endMonth), endDay),
-                                    dayName
-                                ),
-                                d
-                            )
-                    )
-                    .concat(
-                        getDaysBetweenDates(
-                            new Date(startYear, months.indexOf(startMonth), startDay),
-                            new Date(endYear, months.indexOf(endMonth), endDay),
-                            dayName
-                        )
-                    )
-            )
-        } else {
-            console.log('Removing Days')
-            setSelectedDays(
-                newSelectedDays.filter(
-                    (d) =>
-                        !containsDay(
-                            getDaysBetweenDates(
-                                new Date(startYear, months.indexOf(startMonth), startDay),
-                                new Date(endYear, months.indexOf(endMonth), endDay),
-                                dayName
-                            ),
-                            d
-                        )
-                )
-            )
-        }
-    }
-
 
     useEffect(() => {
         const formValues = [
@@ -409,6 +320,17 @@ export default function ActivityEdit(props) {
                     parseDate(response.data.start_time, true)
                     parseDate(response.data.end_time, false)
                     setAllDay(response.data.all_day)
+                    
+                        
+                    var tempSelectedDays = []
+                    for(var i = 0; i < response.data.selected_days.length; i++){
+                        var day = response.data.selected_days[i][0].split('-')
+                        var year = parseInt(day[0])
+                        var month = parseInt(day[1])-1
+                        var date = parseInt(day[2].split('T')[0])
+                        tempSelectedDays.push(new Date(year, month, date))
+                    }
+                    setSelectedDays(tempSelectedDays)
 
                     // Where tab items
                     if (response.data.activity_type === 'Giving Rides') {
@@ -430,8 +352,8 @@ export default function ActivityEdit(props) {
                             { name: 'Low-carb', isChecked: false },
                             { name: 'Low-salt', isChecked: false },
                         ]
-                        for (var i = 0; i < initDietaryRestrictions.length; i++) {
-                            if (response.data.dietary_restrictions.includes(initDietaryRestrictions[i].name))
+                        for (var j = 0; j < initDietaryRestrictions.length; j++) {
+                            if (response.data.dietary_restrictions.includes(initDietaryRestrictions[j].name))
                                 initDietaryRestrictions[i].isChecked = true
                         }
                         setDietaryRestrictions(initDietaryRestrictions)
@@ -446,6 +368,7 @@ export default function ActivityEdit(props) {
                     setEstimatedHours(response.data.est_hours)
                     setEstimatedMinutes(response.data.est_minutes)
                     setNumVolunteers(response.data.num_volunteers_needed)
+                    setVolunteers(response.data.volunteers)
                 },
                 (error) => {
                     console.log(error)
@@ -457,17 +380,17 @@ export default function ActivityEdit(props) {
         var url = '/edit-activity/' + pk + '/'
         var myHeaders = new Headers()
         myHeaders.append('Authorization', `JWT ${localStorage.getItem('token')}`)
-    
+
         var requestOptions = {
             method: 'DELETE',
             headers: myHeaders,
             redirect: 'follow'
         }
-    
+
         fetch(url, requestOptions)
-        .then(response => response.text())
-        .then(result => window.location.reload())
-        .catch(error => console.log('error', error));
+            .then(response => response.text())
+            .then(result => window.location.reload())
+            .catch(error => console.log('error', error));
     }
 
     const handleSubmit = useCallback(() => {
@@ -475,58 +398,61 @@ export default function ActivityEdit(props) {
 
         let dietaryRestrictionStatus = {}
         dietaryRestrictions.forEach((restriction) => dietaryRestrictionStatus[restriction.name] = restriction.isChecked)
-        
+
+        let coordinatorIds = []
+        selectedCoordinators.forEach((coordinator) => coordinatorIds.push(coordinator['value']))
+
+        let volunteerIds = []
+        volunteers.forEach((volunteer) => volunteerIds.push(volunteer['id']))
+
         const param = JSON.stringify({
-          'title': activityName,
-          'description': notes,
-          'activity_type': category,
-          'community': localStorage.getItem('community-id'),
-          "dates": selectedDays,
-          'est_hours': estimatedHours,
-          'est_minutes': estimatedMinutes,
-          'num_volunteers_needed': numVolunteers,
-          'pickup_location': pickupLocation,
-          'destination_location': destination,
-          'location': location,
-          'dietary_restrictions': dietaryRestrictionStatus,
-          'start_time': startTime,
-          'end_time': endTime,
-          'all_day': allDay,
-          'no_end_time': noEndTime,
-          'coordinators': selectedCoordinators.values(),
+            'title': activityName,
+            'description': notes,
+            'activity_type': category,
+            'community': localStorage.getItem('community-id'),
+            "dates": selectedDays,
+            'est_hours': estimatedHours,
+            'est_minutes': estimatedMinutes,
+            'num_volunteers_needed': numVolunteers,
+            'pickup_location': pickupLocation,
+            'destination_location': destination,
+            'location': location,
+            'dietary_restrictions': dietaryRestrictionStatus,
+            'start_time': startTime,
+            'end_time': endTime,
+            'all_day': allDay,
+            'no_end_time': noEndTime,
+            'coordinators': coordinatorIds,
+            'volunteers': volunteerIds,
         })
         axios.post('/activity/', param, {
-          headers: {
-            'Authorization': `JWT ${localStorage.getItem('token')}`,
-            'Content-Type': 'application/json',
-          },
+            headers: {
+                'Authorization': `JWT ${localStorage.getItem('token')}`,
+                'Content-Type': 'application/json',
+            },
         })
-          .then(
-            (response, err) => {
-              console.log(err)
-            })
+            .then(
+                (response, err) => {
+                    console.log(err)
+                })
 
     }, [category, activityName, notes, estimatedHours, estimatedMinutes, startYear, endYear, startMonth, endMonth, startDay, endDay, startTime, endTime, selectedDays, numVolunteers, selectedCoordinators, dietaryRestrictions, pickupLocation, destination, location, dietaryRestrictions, activityPk])
 
     return (
         <div>
             <CommunityNavbar />
-
             <Container style={containerStyle}>
                 <Columns isMultiline={true}>
-
                     <Columns.Column size={3}>
                         <SideBar />
                     </Columns.Column>
-
                     <Columns.Column size={9}>
                         <Heading size={4}>Edit Activity</Heading>
-
                         {activeTab === 'What' ? (
                             <Tabs type='boxed' size='small' style={{ marginBottom: '0' }}>
                                 <Tabs.Tab active onClick={() => setActiveTab('What')}>
                                     What
-                    </Tabs.Tab>
+                                </Tabs.Tab>
                                 <Tabs.Tab onClick={() => setActiveTab('When')}>When</Tabs.Tab>
                                 <Tabs.Tab onClick={() => setActiveTab('Where')}>Where</Tabs.Tab>
                                 <Tabs.Tab onClick={() => setActiveTab('Who')}>Who</Tabs.Tab>
@@ -536,7 +462,7 @@ export default function ActivityEdit(props) {
                                 <Tabs.Tab onClick={() => setActiveTab('What')}>What</Tabs.Tab>
                                 <Tabs.Tab active onClick={() => setActiveTab('When')}>
                                     When
-                    </Tabs.Tab>
+                                </Tabs.Tab>
                                 <Tabs.Tab onClick={() => setActiveTab('Where')}>Where</Tabs.Tab>
                                 <Tabs.Tab onClick={() => setActiveTab('Who')}>Who</Tabs.Tab>
                             </Tabs>
@@ -546,23 +472,23 @@ export default function ActivityEdit(props) {
                                 <Tabs.Tab onClick={() => setActiveTab('When')}>When</Tabs.Tab>
                                 <Tabs.Tab active onClick={() => setActiveTab('Where')}>
                                     Where
-                    </Tabs.Tab>
+                                </Tabs.Tab>
                                 <Tabs.Tab onClick={() => setActiveTab('Who')}>Who</Tabs.Tab>
                             </Tabs>
                         ) : (
-                                        <Tabs type='boxed' size='small' style={{ marginBottom: '0' }}>
-                                            <Tabs.Tab onClick={() => setActiveTab('What')}>What</Tabs.Tab>
-                                            <Tabs.Tab onClick={() => setActiveTab('When')}>When</Tabs.Tab>
-                                            <Tabs.Tab onClick={() => setActiveTab('Where')}>Where</Tabs.Tab>
-                                            <Tabs.Tab active onClick={() => setActiveTab('Who')}>
-                                                Who
-                    </Tabs.Tab>
-                                        </Tabs>
-                                    )}
+                            <Tabs type='boxed' size='small' style={{ marginBottom: '0' }}>
+                                <Tabs.Tab onClick={() => setActiveTab('What')}>What</Tabs.Tab>
+                                <Tabs.Tab onClick={() => setActiveTab('When')}>When</Tabs.Tab>
+                                <Tabs.Tab onClick={() => setActiveTab('Where')}>Where</Tabs.Tab>
+                                <Tabs.Tab active onClick={() => setActiveTab('Who')}>
+                                    Who
+                                </Tabs.Tab>
+                            </Tabs>
+                        )}
 
                         {activeTab === 'What' ? (
                             <div className='what' style={formContainerStyle}>
-                                <div style={{marginBottom: '2%'}}>
+                                <div style={{ marginBottom: '2%' }}>
                                     <Label>Category: <span style={{ color: '#F83D34' }}>*</span></Label>{category}
                                 </div>
                                 <Field>
@@ -602,6 +528,7 @@ export default function ActivityEdit(props) {
                                                                         return dietaryRestrictions
                                                                     })
                                                                 }}
+                                                                checked={dietaryRestrictions[i].isChecked}
                                                             />
                                                             <p>{restriction.name}</p>
                                                         </div>
@@ -764,26 +691,6 @@ export default function ActivityEdit(props) {
                                         </Field>
                                     </Columns.Column>
                                 </Columns>
-                                <Field>
-                                    <Control>
-                                        <p style={noteStyle}>Repeats</p>
-                                        {daysOfWeek.map((day, i) => (
-                                            <div style={checkboxStyle}>
-                                                <Checkbox
-                                                    style={{ marginRight: '10px' }}
-                                                    onChange={() => {
-                                                        handleWeekdayToggle(day.name, !day.isChecked)
-                                                        setDaysOfWeek((daysOfWeek) => {
-                                                            day.isChecked = !day.isChecked
-                                                            return daysOfWeek
-                                                        })
-                                                    }}
-                                                />
-                                                <p>{day.name}</p>
-                                            </div>
-                                        ))}
-                                    </Control>
-                                </Field>
                                 <p style={noteStyle}>
                                     <b>Select all applicable dates on the calendar below.</b>
                                 </p>
@@ -861,74 +768,74 @@ export default function ActivityEdit(props) {
                                         </Field>
                                     )}
                             </div>
-                            ) : (
-                                        <div className='who' style={formContainerStyle}>
+                        ) : (
+                            <div className='who' style={formContainerStyle}>
+                                <Field>
+                                    <Label>
+                                        Activity Coordinator(s)
+                                        <span style={{ color: '#F83D34' }}>*</span>
+                                    </Label>
+                                    <MultiSelect
+                                        options={coordinators}
+                                        value={selectedCoordinators}
+                                        onChange={setSelectedCoordinators}
+                                        labelledBy={'Select'}
+                                    />
+                                </Field>
+                                    <Label>
+                                        Estimated Average Task Time
+                                        <span style={{ color: '#F83D34' }}>*</span>
+                                    </Label>
+                                    <Columns>
+                                        <Columns.Column>
                                             <Field>
-                                                <Label>
-                                                    Activity Coordinator
-                                                    <span style={{ color: '#F83D34' }}>*</span>
-                                                </Label>
-                                                <MultiSelect
-                                                    options={coordinators}
-                                                    value={selectedCoordinators}
-                                                    onChange={setSelectedCoordinators}
-                                                    labelledBy={'Select'}
-                                                />
-                                            </Field>
-                                            <Label>
-                                                Estimated Average Task Time
-                                                <span style={{ color: '#F83D34' }}>*</span>
-                                            </Label>
-                                            <Columns>
-                                                <Columns.Column>
-                                                    <Field>
-                                                        <Control>
-                                                            <Input
-                                                                value={estimatedHours}
-                                                                onChange={(e) => setEstimatedHours(e.target.value)}
-                                                                placeholder='Hours'
-                                                            />
-                                                        </Control>
-                                                    </Field>
-                                                    <Field>
-                                                        <Control>
-                                                            <Input
-                                                                value={estimatedMinutes}
-                                                                onChange={(e) => setEstimatedMinutes(e.target.value)}
-                                                                placeholder='Minutes'
-                                                            />
-                                                        </Control>
-                                                    </Field>
-                                                    <p style={{ fontSize: '80%' }} className='has-text-grey'>
-                                                        Optional. The estimated time for a Volunteer to complete this task. This information is used for Activity Status Reports.
-                              </p>
-                                                </Columns.Column>
-                                                <Columns.Column></Columns.Column>
-                                            </Columns>
-
-                                            <Field>
-                                                <Label>
-                                                    Volunteers
-                        <span style={{ color: '#F83D34' }}>*</span>
-                                                </Label>
                                                 <Control>
-                                                    <div style={{ display: 'flex', alignItems: 'center' }}>
-                                                        <Select
-                                                            onChange={(e) => setNumVolunteers(e.target.value)}
-                                                            name='numVolunteers'
-                                                            value={numVolunteers}
-                                                            style={{ marginRight: '10px' }}
-                                                        >
-                                                            {count.map((c) => (
-                                                                <option>{c}</option>
-                                                            ))}
-                                                        </Select>
-                          Volunteers per task/time
-                        </div>
+                                                    <Input
+                                                        value={estimatedHours}
+                                                        onChange={(e) => setEstimatedHours(e.target.value)}
+                                                        placeholder='Hours'
+                                                    />
                                                 </Control>
                                             </Field>
-                                        </div>
-                                    )}
+                                            <Field>
+                                                <Control>
+                                                    <Input
+                                                        value={estimatedMinutes}
+                                                        onChange={(e) => setEstimatedMinutes(e.target.value)}
+                                                        placeholder='Minutes'
+                                                    />
+                                                </Control>
+                                            </Field>
+                                            <p style={{ fontSize: '80%' }} className='has-text-grey'>
+                                                Optional. The estimated time for a Volunteer to complete this task. This information is used for Activity Status Reports.
+                                            </p>
+                                        </Columns.Column>
+                                        <Columns.Column></Columns.Column>
+                                    </Columns>
+
+                                    <Field>
+                                        <Label>
+                                            Volunteers
+                                            <span style={{ color: '#F83D34' }}>*</span>
+                                        </Label>
+                                        <Control>
+                                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                                                <Select
+                                                    onChange={(e) => setNumVolunteers(e.target.value)}
+                                                    name='numVolunteers'
+                                                    value={numVolunteers}
+                                                    style={{ marginRight: '10px' }}
+                                                >
+                                                    {count.map((c) => (
+                                                        <option>{c}</option>
+                                                    ))}
+                                                </Select>
+                                                Volunteers per task/time
+                                            </div>
+                                        </Control>
+                                    </Field>
+                                </div>
+                            )}
                         <div
                             style={{
                                 display: 'flex',
@@ -951,9 +858,9 @@ export default function ActivityEdit(props) {
                                     style={{ display: activeTab === 'What' ? 'none' : 'block' }}
                                 >
                                     Back
-                    </Button>
+                                </Button>
                             </Link>
-                            <Link to= {activeTab === 'Who' ? '/calendar' : '#'} style={{ color: 'white' }}>
+                            <Link to={activeTab === 'Who' ? '/calendar' : '#'} style={{ color: 'white' }}>
                                 <Button
                                     color='primary'
                                     onClick={() => activeTab === 'Who' ? handleSubmit() :
@@ -976,9 +883,4 @@ export default function ActivityEdit(props) {
             </Container>
         </div>
     )
-}
-
-ActivityEdit.propTypes = {
-    activity_pk: PropTypes.number,
-
 }
