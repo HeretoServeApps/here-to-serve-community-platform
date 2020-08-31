@@ -35,6 +35,7 @@ import {
   CreditCard,
   RefreshCw,
   Star,
+  Layers,
 } from 'react-feather'
 
 export default function CommunityHome(props) {
@@ -68,7 +69,6 @@ export default function CommunityHome(props) {
 
   const [userRole, setUserRole] = useState('')
   const [showLeaveCommunityModal, setShowLeaveCommunityModal] = useState(false)
-
 
   const years = [...Array(15).keys()].map((i) => i + 2020)
   const months = [
@@ -551,60 +551,59 @@ export default function CommunityHome(props) {
               ) : (
                 <div>
                   <hr />
-                      <Button
-                      onClick={() => setShowLeaveCommunityModal(true)}
-                      style={{
-                        boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)',
-                      }}
-                      color='primary'
-                    >
-                      Leave community
-                    </Button>
-                    <Modal
-                      show={showLeaveCommunityModal}
-                      onClose={() => setShowLeaveCommunityModal(false)}
-                      closeOnBlur={true}
-                    >
-                      <Modal.Card>
-                        <Modal.Card.Head onClose={() => setShowLeaveCommunityModal(false)}>
-                          <Modal.Card.Title>
-                            Leave Community
-                          </Modal.Card.Title>
-                        </Modal.Card.Head>
-                        <Section style={{ backgroundColor: 'white' }}>
-                          Are you sure you want to leave this community? You can't
-                          undo this action.
-                        </Section>
-                        <Modal.Card.Foot
-                          style={{
-                            alignItems: 'center',
-                            justifyContent: 'space-between',
-                          }}
+                  <Button
+                    onClick={() => setShowLeaveCommunityModal(true)}
+                    style={{
+                      boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)',
+                    }}
+                    color='primary'
+                  >
+                    Leave community
+                  </Button>
+                  <Modal
+                    show={showLeaveCommunityModal}
+                    onClose={() => setShowLeaveCommunityModal(false)}
+                    closeOnBlur={true}
+                  >
+                    <Modal.Card>
+                      <Modal.Card.Head
+                        onClose={() => setShowLeaveCommunityModal(false)}
+                      >
+                        <Modal.Card.Title>Leave Community</Modal.Card.Title>
+                      </Modal.Card.Head>
+                      <Section style={{ backgroundColor: 'white' }}>
+                        Are you sure you want to leave this community? You can't
+                        undo this action.
+                      </Section>
+                      <Modal.Card.Foot
+                        style={{
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                        }}
+                      >
+                        <Button
+                          onClick={() => setShowLeaveCommunityModal(false)}
                         >
-                          <Button onClick={() => setShowLeaveCommunityModal(false)}>
-                            Cancel
-                          </Button>
-                          <Button
-                            color='primary'
-                            onClick={() => removeCommunityMember()}
-                          >
-                            Leave Community
-                          </Button>
-                        </Modal.Card.Foot>
-                      </Modal.Card>
-                    </Modal>
+                          Cancel
+                        </Button>
+                        <Button
+                          color='primary'
+                          onClick={() => removeCommunityMember()}
+                        >
+                          Leave Community
+                        </Button>
+                      </Modal.Card.Foot>
+                    </Modal.Card>
+                  </Modal>
                 </div>
               )}
             </Box>
           </Columns.Column>
           <Columns.Column size={7}>
-            {showWelcomeCard && (
-              localStorage.getItem('is-staff') === 'true' ? (
-                WelcomeCardStaff
-              ) : (
-                WelcomeCardMember
-              )
-            )}
+            {showWelcomeCard &&
+              (localStorage.getItem('is-staff') === 'true'
+                ? WelcomeCardStaff
+                : WelcomeCardMember)}
             {/* What to show depends on what the user specified for homepage highlight in edit community */}
             {displayCalendar && calendar}
             {displayWellWishes && wellWishesContainer}
@@ -678,6 +677,14 @@ export default function CommunityHome(props) {
                     <div style={{ display: 'flex', alignItems: 'center' }}>
                       <Star size={12} style={{ marginRight: '10px' }} />{' '}
                       <p>Create Custom Section</p>
+                    </div>
+                  </p>
+                </Link>
+                <Link to='/manage-custom-sections'>
+                  <p className='sidebar'>
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                      <Layers size={12} style={{ marginRight: '10px' }} />{' '}
+                      <p>Manage Custom Sections</p>
                     </div>
                   </p>
                 </Link>
