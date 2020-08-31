@@ -20,7 +20,7 @@ import {
   Textarea,
   Checkbox,
 } from 'react-bulma-components/lib/components/form'
-import MultiSelect from "@khanacademy/react-multi-select";
+import MultiSelect from '@khanacademy/react-multi-select'
 import SideBar from '../components/sidebar'
 
 export default function CreateNewActivity(props) {
@@ -49,7 +49,9 @@ export default function CreateNewActivity(props) {
   }
 
   let history = useHistory()
-  const years = Array.from(Array(5).keys()).map((y) => (y + (new Date().getFullYear())))
+  const years = Array.from(Array(5).keys()).map(
+    (y) => y + new Date().getFullYear()
+  )
   const months = [
     'January',
     'February',
@@ -173,9 +175,6 @@ export default function CreateNewActivity(props) {
   ]
   const count = Array.from(Array(51).keys()).slice(1, 51)
 
-
-
-
   const token = localStorage.getItem('token')
 
   const [activeTab, setActiveTab] = useState('What')
@@ -211,7 +210,6 @@ export default function CreateNewActivity(props) {
   const [coordinators, setCoordinators] = useState([])
   const [selectedCoordinators, setSelectedCoordinators] = useState([])
 
-
   const categories = [
     'Giving Rides',
     'Preparing Meals',
@@ -239,7 +237,9 @@ export default function CreateNewActivity(props) {
     { name: 'Low-carb', isChecked: false },
     { name: 'Low-salt', isChecked: false },
   ]
-  const [dietaryRestrictions, setDietaryRestrictions] = useState(initDietaryRestrictions)
+  const [dietaryRestrictions, setDietaryRestrictions] = useState(
+    initDietaryRestrictions
+  )
 
   const initDaysOfWeek = [
     { name: 'Sunday', isChecked: false },
@@ -248,7 +248,7 @@ export default function CreateNewActivity(props) {
     { name: 'Wednesday', isChecked: false },
     { name: 'Thursday', isChecked: false },
     { name: 'Friday', isChecked: false },
-    { name: 'Saturday', isChecked: false }
+    { name: 'Saturday', isChecked: false },
   ]
   const [daysOfWeek, setDaysOfWeek] = useState(initDaysOfWeek)
 
@@ -277,7 +277,7 @@ export default function CreateNewActivity(props) {
   }
 
   const containsDay = (array = [], day) => {
-    return array.some((d) => (DateUtils.isSameDay(d, day)))
+    return array.some((d) => DateUtils.isSameDay(d, day))
   }
 
   const handleDayClick = (day, modifiers = {}) => {
@@ -384,7 +384,10 @@ export default function CreateNewActivity(props) {
       })
       .then(
         (response) => {
-          const options = response.data.map((item) => ({ label: `${item['first_name']} ${item['last_name']}`, value: item['id'] }))
+          const options = response.data.map((item) => ({
+            label: `${item['first_name']} ${item['last_name']}`,
+            value: item['id'],
+          }))
           setCoordinators(options)
         },
         (error) => {
@@ -393,42 +396,62 @@ export default function CreateNewActivity(props) {
       )
   }, [token])
 
-
   const handleSubmit = useCallback(() => {
     let dietaryRestrictionStatus = {}
-    dietaryRestrictions.forEach((restriction) => dietaryRestrictionStatus[restriction.name] = restriction.isChecked)
+    dietaryRestrictions.forEach(
+      (restriction) =>
+        (dietaryRestrictionStatus[restriction.name] = restriction.isChecked)
+    )
 
     const param = JSON.stringify({
-      'title': activityName,
-      'description': notes,
-      'activity_type': category,
-      'community': localStorage.getItem('community-id'),
-      "dates": selectedDays,
-      'est_hours': estimatedHours,
-      'est_minutes': estimatedMinutes,
-      'num_volunteers_needed': numVolunteers,
-      'pickup_location': pickupLocation,
-      'destination_location': destination,
-      'location': location,
-      'dietary_restrictions': dietaryRestrictionStatus,
-      'start_time': startTime,
-      'end_time': endTime,
-      'all_day': allDay,
-      'no_end_time': noEndTime,
-      'coordinators': selectedCoordinators,
+      title: activityName,
+      description: notes,
+      activity_type: category,
+      community: localStorage.getItem('community-id'),
+      dates: selectedDays,
+      est_hours: estimatedHours,
+      est_minutes: estimatedMinutes,
+      num_volunteers_needed: numVolunteers,
+      pickup_location: pickupLocation,
+      destination_location: destination,
+      location: location,
+      dietary_restrictions: dietaryRestrictionStatus,
+      start_time: startTime,
+      end_time: endTime,
+      all_day: allDay,
+      no_end_time: noEndTime,
+      coordinators: selectedCoordinators,
     })
-    axios.post('/activity/', param, {
-      headers: {
-        'Authorization': `JWT ${token}`,
-        'Content-Type': 'application/json',
-      },
-    })
-      .then(
-        (response, err) => {
-          console.log(err)
-          history.push('/calendar')
-        })
-  }, [selectedCoordinators, activityName, notes, category, selectedDays, estimatedHours, estimatedMinutes, numVolunteers, pickupLocation, destination, location, startTime, endTime, token, allDay, noEndTime, dietaryRestrictions])
+    axios
+      .post('/activity/', param, {
+        headers: {
+          Authorization: `JWT ${token}`,
+          'Content-Type': 'application/json',
+        },
+      })
+      .then((response, err) => {
+        console.log(err)
+        history.push('/calendar')
+      })
+  }, [
+    selectedCoordinators,
+    activityName,
+    notes,
+    category,
+    selectedDays,
+    estimatedHours,
+    estimatedMinutes,
+    numVolunteers,
+    pickupLocation,
+    destination,
+    location,
+    startTime,
+    endTime,
+    token,
+    allDay,
+    noEndTime,
+    dietaryRestrictions,
+  ])
 
   return (
     <div>
@@ -436,7 +459,6 @@ export default function CreateNewActivity(props) {
 
       <Container style={containerStyle}>
         <Columns isMultiline={true}>
-
           <Columns.Column size={3}>
             <SideBar />
           </Columns.Column>
@@ -472,15 +494,15 @@ export default function CreateNewActivity(props) {
                 <Tabs.Tab onClick={() => setActiveTab('Who')}>Who</Tabs.Tab>
               </Tabs>
             ) : (
-                    <Tabs type='boxed' size='small' style={{ marginBottom: '0' }}>
-                      <Tabs.Tab onClick={() => setActiveTab('What')}>What</Tabs.Tab>
-                      <Tabs.Tab onClick={() => setActiveTab('When')}>When</Tabs.Tab>
-                      <Tabs.Tab onClick={() => setActiveTab('Where')}>Where</Tabs.Tab>
-                      <Tabs.Tab active onClick={() => setActiveTab('Who')}>
-                        Who
+              <Tabs type='boxed' size='small' style={{ marginBottom: '0' }}>
+                <Tabs.Tab onClick={() => setActiveTab('What')}>What</Tabs.Tab>
+                <Tabs.Tab onClick={() => setActiveTab('When')}>When</Tabs.Tab>
+                <Tabs.Tab onClick={() => setActiveTab('Where')}>Where</Tabs.Tab>
+                <Tabs.Tab active onClick={() => setActiveTab('Who')}>
+                  Who
                 </Tabs.Tab>
-                    </Tabs>
-                  )}
+              </Tabs>
+            )}
 
             {activeTab === 'What' ? (
               <div className='what' style={formContainerStyle}>
@@ -492,7 +514,9 @@ export default function CreateNewActivity(props) {
                       name='category'
                       value={category}
                     >
-                      {categories.map((cat) => (<option>{cat}</option>))}
+                      {categories.map((cat) => (
+                        <option>{cat}</option>
+                      ))}
                     </Select>
                   </Control>
                 </Field>
@@ -501,21 +525,87 @@ export default function CreateNewActivity(props) {
                     Activity Name<span style={{ color: '#F83D34' }}>*</span>
                   </Label>
                   <Control>
-                    <Input maxLength={120}
+                    <Input
+                      maxLength={120}
                       value={activityName}
                       onChange={(e) => setActivityName(e.target.value)}
                     />
                   </Control>
-                  {category === 'Giving Rides' ? (<p style={{ fontSize: '80%'}} className='has-text-grey'>example: "Rides to medical appointment, Social Event, Soccer practice, Carpool."</p>) : (<></>)}
-                  {category === 'Preparing Meals' ? (<p style={{ fontSize: '80%'}} className='has-text-grey'>example: "Weekday Dinners, Sunday Brunch."</p>) : (<></>)}
-                  {category === 'Shopping' ? (<p style={{ fontSize: '80%'}} className='has-text-grey'>example: "Grocery shopping, Pharmacy pick-up."</p>) : (<></>)}
-                  {category === 'Childcare' ? (<p style={{ fontSize: '80%'}} className='has-text-grey'>example: "Weekday a.m. childcare, Weekend eve babysitting."</p>) : (<></>)}
-                  {category === 'Pet Care' ? (<p style={{ fontSize: '80%'}} className='has-text-grey'>example: "Weekday a.m. pet care, Weekend eve pet care."</p>) : (<></>)}
-                  {category === 'Laundry' ? (<p style={{ fontSize: '80%'}} className='has-text-grey'>example: "Weekly laundry load."</p>) : (<></>)}
-                  {category === 'House Cleaning' ? (<p style={{ fontSize: '80%'}} className='has-text-grey'>example: "Bathroom cleaning, Tidying bed."</p>) : (<></>)}
-                  {category === 'Visits' ? (<p style={{ fontSize: '80%'}} className='has-text-grey'>example: "Afternoon reading, Weekend visits."</p>) : (<></>)}
-                  {category === 'Miscellaneous' ? (<p style={{ fontSize: '80%'}} className='has-text-grey'>examples: "House cleaning, Lawn care, or other general errands."</p>) : (<></>)}
-                  {category === 'Occasion' ? (<p style={{ fontSize: '80%'}} className='has-text-grey'>Need to keep track of important dates or milestones? Add important occasions such as birthdays, anniversaries, and more.</p>) : (<></>)}
+                  {category === 'Giving Rides' ? (
+                    <p style={{ fontSize: '80%' }} className='has-text-grey'>
+                      example: "Rides to medical appointment, Social Event,
+                      Soccer practice, Carpool."
+                    </p>
+                  ) : (
+                    <></>
+                  )}
+                  {category === 'Preparing Meals' ? (
+                    <p style={{ fontSize: '80%' }} className='has-text-grey'>
+                      example: "Weekday Dinners, Sunday Brunch."
+                    </p>
+                  ) : (
+                    <></>
+                  )}
+                  {category === 'Shopping' ? (
+                    <p style={{ fontSize: '80%' }} className='has-text-grey'>
+                      example: "Grocery shopping, Pharmacy pick-up."
+                    </p>
+                  ) : (
+                    <></>
+                  )}
+                  {category === 'Childcare' ? (
+                    <p style={{ fontSize: '80%' }} className='has-text-grey'>
+                      example: "Weekday a.m. childcare, Weekend eve
+                      babysitting."
+                    </p>
+                  ) : (
+                    <></>
+                  )}
+                  {category === 'Pet Care' ? (
+                    <p style={{ fontSize: '80%' }} className='has-text-grey'>
+                      example: "Weekday a.m. pet care, Weekend eve pet care."
+                    </p>
+                  ) : (
+                    <></>
+                  )}
+                  {category === 'Laundry' ? (
+                    <p style={{ fontSize: '80%' }} className='has-text-grey'>
+                      example: "Weekly laundry load."
+                    </p>
+                  ) : (
+                    <></>
+                  )}
+                  {category === 'House Cleaning' ? (
+                    <p style={{ fontSize: '80%' }} className='has-text-grey'>
+                      example: "Bathroom cleaning, Tidying bed."
+                    </p>
+                  ) : (
+                    <></>
+                  )}
+                  {category === 'Visits' ? (
+                    <p style={{ fontSize: '80%' }} className='has-text-grey'>
+                      example: "Afternoon reading, Weekend visits."
+                    </p>
+                  ) : (
+                    <></>
+                  )}
+                  {category === 'Miscellaneous' ? (
+                    <p style={{ fontSize: '80%' }} className='has-text-grey'>
+                      examples: "House cleaning, Lawn care, or other general
+                      errands."
+                    </p>
+                  ) : (
+                    <></>
+                  )}
+                  {category === 'Occasion' ? (
+                    <p style={{ fontSize: '80%' }} className='has-text-grey'>
+                      Need to keep track of important dates or milestones? Add
+                      important occasions such as birthdays, anniversaries, and
+                      more.
+                    </p>
+                  ) : (
+                    <></>
+                  )}
                 </Field>
                 {category === 'Preparing Meals' && (
                   <Field>
@@ -528,10 +618,15 @@ export default function CreateNewActivity(props) {
                               <Checkbox
                                 style={{ marginRight: '10px' }}
                                 onChange={() => {
-                                  setDietaryRestrictions((dietaryRestrictions) => {
-                                    dietaryRestrictions[i].isChecked = !dietaryRestrictions[i].isChecked
-                                    return dietaryRestrictions
-                                  })
+                                  setDietaryRestrictions(
+                                    (dietaryRestrictions) => {
+                                      dietaryRestrictions[
+                                        i
+                                      ].isChecked = !dietaryRestrictions[i]
+                                        .isChecked
+                                      return dietaryRestrictions
+                                    }
+                                  )
                                 }}
                               />
                               <p>{restriction.name}</p>
@@ -550,15 +645,74 @@ export default function CreateNewActivity(props) {
                       onChange={(e) => setNotes(e.target.value)}
                     />
                   </Control>
-                  {category === 'Giving Rides' ? (<p style={{ fontSize: '80%'}} className='has-text-grey'>examples: <br />- travel time <br />- other stops</p>) : (<></>)}
-                  {category === 'Preparing Meals' ? (<p style={{ fontSize: '80%'}} className='has-text-grey'>examples: <br />- allergies <br />- no. people <br />- delivery instr.</p>) : (<></>)}
-                  {category === 'Shopping' ? (<p style={{ fontSize: '80%'}} className='has-text-grey'>example: <br />- items needed</p>) : (<></>)}
-                  {category === 'Childcare' ? (<p style={{ fontSize: '80%'}} className='has-text-grey'>example: <br />- feeding instructions<br />- kids favorites</p>) : (<></>)}
-                  {category === 'Pet Care' ? (<p style={{ fontSize: '80%'}} className='has-text-grey'>example: <br />- feeding instructions<br />- favorite pet toys</p>) : (<></>)}
-                  {category === 'Laundry' ? (<p style={{ fontSize: '80%'}} className='has-text-grey'>example: <br />- washing machine settings</p>) : (<></>)}
-                  {category === 'House Cleaning' ? (<p style={{ fontSize: '80%'}} className='has-text-grey'>example: <br />- rooms to clean</p>) : (<></>)}                  
-                  {category === 'Visits' ? (<p style={{ fontSize: '80%'}} className='has-text-grey'>examples: <br />- additional instructions <br />- favorites <br />- activity ideas</p>) : (<></>)}
-                  {category === 'Occasion' ? (<p style={{ fontSize: '80%'}} className='has-text-grey'>Share important information with members of your Community about this occasion.</p>) : (<></>)}
+                  {category === 'Giving Rides' ? (
+                    <p style={{ fontSize: '80%' }} className='has-text-grey'>
+                      examples: <br />- travel time <br />- other stops
+                    </p>
+                  ) : (
+                    <></>
+                  )}
+                  {category === 'Preparing Meals' ? (
+                    <p style={{ fontSize: '80%' }} className='has-text-grey'>
+                      examples: <br />- allergies <br />- no. people <br />-
+                      delivery instr.
+                    </p>
+                  ) : (
+                    <></>
+                  )}
+                  {category === 'Shopping' ? (
+                    <p style={{ fontSize: '80%' }} className='has-text-grey'>
+                      example: <br />- items needed
+                    </p>
+                  ) : (
+                    <></>
+                  )}
+                  {category === 'Childcare' ? (
+                    <p style={{ fontSize: '80%' }} className='has-text-grey'>
+                      example: <br />- feeding instructions
+                      <br />- kids favorites
+                    </p>
+                  ) : (
+                    <></>
+                  )}
+                  {category === 'Pet Care' ? (
+                    <p style={{ fontSize: '80%' }} className='has-text-grey'>
+                      example: <br />- feeding instructions
+                      <br />- favorite pet toys
+                    </p>
+                  ) : (
+                    <></>
+                  )}
+                  {category === 'Laundry' ? (
+                    <p style={{ fontSize: '80%' }} className='has-text-grey'>
+                      example: <br />- washing machine settings
+                    </p>
+                  ) : (
+                    <></>
+                  )}
+                  {category === 'House Cleaning' ? (
+                    <p style={{ fontSize: '80%' }} className='has-text-grey'>
+                      example: <br />- rooms to clean
+                    </p>
+                  ) : (
+                    <></>
+                  )}
+                  {category === 'Visits' ? (
+                    <p style={{ fontSize: '80%' }} className='has-text-grey'>
+                      examples: <br />- additional instructions <br />-
+                      favorites <br />- activity ideas
+                    </p>
+                  ) : (
+                    <></>
+                  )}
+                  {category === 'Occasion' ? (
+                    <p style={{ fontSize: '80%' }} className='has-text-grey'>
+                      Share important information with members of your Community
+                      about this occasion.
+                    </p>
+                  ) : (
+                    <></>
+                  )}
                 </Field>
               </div>
             ) : activeTab === 'When' ? (
@@ -569,7 +723,11 @@ export default function CreateNewActivity(props) {
                 <Columns>
                   <Columns.Column>
                     <Field style={{ marginRight: '10px' }}>
-                      {category === 'Giving Rides' ? (<p>Pick-up Time</p>) : (<p>Start Time</p>)}
+                      {category === 'Giving Rides' ? (
+                        <p>Pick-up Time</p>
+                      ) : (
+                        <p>Start Time</p>
+                      )}
                       <Control>
                         <Select
                           onChange={(e) => setStartTime(e.target.value)}
@@ -584,7 +742,9 @@ export default function CreateNewActivity(props) {
                         <div style={checkboxStyle}>
                           <Checkbox
                             style={{ marginRight: '10px' }}
-                            onChange={() => { setAllDay(!allDay) }}
+                            onChange={() => {
+                              setAllDay(!allDay)
+                            }}
                           />
                           <p>All Day</p>
                         </div>
@@ -593,7 +753,11 @@ export default function CreateNewActivity(props) {
                   </Columns.Column>
                   <Columns.Column>
                     <Field>
-                    {category === 'Giving Rides' ? (<p>Drop-off Time {'(optional)'}</p>) : (<p>End Time {'(optional)'}</p>)}
+                      {category === 'Giving Rides' ? (
+                        <p>Drop-off Time {'(optional)'}</p>
+                      ) : (
+                        <p>End Time {'(optional)'}</p>
+                      )}
                       <Control>
                         <Select
                           onChange={(e) => setEndTime(e.target.value)}
@@ -608,7 +772,9 @@ export default function CreateNewActivity(props) {
                         <div style={checkboxStyle}>
                           <Checkbox
                             style={{ marginRight: '10px' }}
-                            onChange={() => { setNoEndTime(!noEndTime) }}
+                            onChange={() => {
+                              setNoEndTime(!noEndTime)
+                            }}
                           />
                           <p>None</p>
                         </div>
@@ -768,98 +934,110 @@ export default function CreateNewActivity(props) {
                           placeholder='Example: 456 Walnut Ave, New York, NY'
                         />
                       </Control>
-                      <p style={{ fontSize: '80%'}} className='has-text-grey'>
-                        The system will try to automatically display directions to the specified address(es) specified.
-                        For best results, please use this format: Address, City, State all on one line.
+                      <p style={{ fontSize: '80%' }} className='has-text-grey'>
+                        The system will try to automatically display directions
+                        to the specified address(es) specified. For best
+                        results, please use this format: Address, City, State
+                        all on one line.
                       </p>
                     </Field>
                   </div>
                 ) : (
-                    <Field>
-                      <Control>
-                        <Textarea
-                          value={location}
-                          onChange={(e) => setLocation(e.target.value)}
-                          placeholder={
-                            category === 'Preparing Meals' && 'Delivery Location'
-                          }
-                        />
-                      </Control>
-                      <p style={{ fontSize: '80%'}} className='has-text-grey'>
-                        The system will try to automatically display directions to the specified address(es) specified.
-                        For best results, please use this format: Address, City, State all on one line.
-                      </p>
-                    </Field>
-                  )}
+                  <Field>
+                    <Control>
+                      <Textarea
+                        value={location}
+                        onChange={(e) => setLocation(e.target.value)}
+                        placeholder={
+                          category === 'Preparing Meals' && 'Delivery Location'
+                        }
+                      />
+                    </Control>
+                    <p style={{ fontSize: '80%' }} className='has-text-grey'>
+                      The system will try to automatically display directions to
+                      the specified address(es) specified. For best results,
+                      please use this format: Address, City, State all on one
+                      line.
+                    </p>
+                  </Field>
+                )}
               </div>
             ) : (
-                    <div className='who' style={formContainerStyle}>
-                      <Field>
-                        <Label>
-                          Activity Coordinator
+              <div className='who' style={formContainerStyle}>
+                <Field>
+                  <Label>
+                    Activity Coordinator
                     <span style={{ color: '#F83D34' }}>*</span>
-                        </Label>
-                        <MultiSelect
-                          valueRenderer={(selectedCoordinators) => <span width='100%'>Selected {selectedCoordinators.length} users </span>}
-                          options={coordinators}
-                          selected={selectedCoordinators}
-                          onSelectedChanged={(selected) => setSelectedCoordinators(selected)}
+                  </Label>
+                  <MultiSelect
+                    valueRenderer={(selectedCoordinators) => (
+                      <span width='100%'>
+                        Selected {selectedCoordinators.length} users{' '}
+                      </span>
+                    )}
+                    options={coordinators}
+                    selected={coordinators}
+                    onSelectedChanged={(selected) =>
+                      setSelectedCoordinators(selected)
+                    }
+                  />
+                </Field>
+                <Label>
+                  Estimated Average Task Time
+                  <span style={{ color: '#F83D34' }}>*</span>
+                </Label>
+                <Columns>
+                  <Columns.Column>
+                    <Field>
+                      <Control>
+                        <Input
+                          value={estimatedHours}
+                          onChange={(e) => setEstimatedHours(e.target.value)}
+                          placeholder='Hours'
                         />
-                      </Field>
-                      <Label>
-                        Estimated Average Task Time
-                    <span style={{ color: '#F83D34' }}>*</span>
-                      </Label>
-                      <Columns>
-                        <Columns.Column>
-                          <Field>
-                            <Control>
-                              <Input
-                                value={estimatedHours}
-                                onChange={(e) => setEstimatedHours(e.target.value)}
-                                placeholder='Hours'
-                              />
-                            </Control>
-                          </Field>
-                          <Field>
-                            <Control>
-                              <Input
-                                value={estimatedMinutes}
-                                onChange={(e) => setEstimatedMinutes(e.target.value)}
-                                placeholder='Minutes'
-                              />
-                            </Control>
-                          </Field>
-                          <p style={{ fontSize: '80%'}} className='has-text-grey'>
-                            Optional. The estimated time for a Volunteer to complete this task. This information is used for Activity Status Reports.
-                          </p>
-                        </Columns.Column>
-                        <Columns.Column></Columns.Column>
-                      </Columns>
+                      </Control>
+                    </Field>
+                    <Field>
+                      <Control>
+                        <Input
+                          value={estimatedMinutes}
+                          onChange={(e) => setEstimatedMinutes(e.target.value)}
+                          placeholder='Minutes'
+                        />
+                      </Control>
+                    </Field>
+                    <p style={{ fontSize: '80%' }} className='has-text-grey'>
+                      Optional. The estimated time for a Volunteer to complete
+                      this task. This information is used for Activity Status
+                      Reports.
+                    </p>
+                  </Columns.Column>
+                  <Columns.Column></Columns.Column>
+                </Columns>
 
-                      <Field>
-                        <Label>
-                          Volunteers
+                <Field>
+                  <Label>
+                    Volunteers
                     <span style={{ color: '#F83D34' }}>*</span>
-                        </Label>
-                        <Control>
-                          <div style={{ display: 'flex', alignItems: 'center' }}>
-                            <Select
-                              onChange={(e) => setNumVolunteers(e.target.value)}
-                              name='numVolunteers'
-                              value={numVolunteers}
-                              style={{ marginRight: '10px' }}
-                            >
-                              {count.map((c) => (
-                                <option>{c}</option>
-                              ))}
-                            </Select>
+                  </Label>
+                  <Control>
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                      <Select
+                        onChange={(e) => setNumVolunteers(e.target.value)}
+                        name='numVolunteers'
+                        value={numVolunteers}
+                        style={{ marginRight: '10px' }}
+                      >
+                        {count.map((c) => (
+                          <option>{c}</option>
+                        ))}
+                      </Select>
                       Volunteers per task/time
                     </div>
-                        </Control>
-                      </Field>
-                    </div>
-                  )}
+                  </Control>
+                </Field>
+              </div>
+            )}
             <div
               style={{
                 display: 'flex',
@@ -875,8 +1053,8 @@ export default function CreateNewActivity(props) {
                       activeTab === 'When'
                         ? 'What'
                         : activeTab === 'Where'
-                          ? 'When'
-                          : 'Where'
+                        ? 'When'
+                        : 'Where'
                     )
                   }
                   style={{ display: activeTab === 'What' ? 'none' : 'block' }}
@@ -887,14 +1065,16 @@ export default function CreateNewActivity(props) {
               <Link to='#' style={{ color: 'white' }}>
                 <Button
                   color='primary'
-                  onClick={() => activeTab === 'Who' ? handleSubmit() :
-                    setActiveTab(
-                      activeTab === 'What'
-                        ? 'When'
-                        : activeTab === 'When'
-                          ? 'Where'
-                          : 'Who'
-                    )
+                  onClick={() =>
+                    activeTab === 'Who'
+                      ? handleSubmit()
+                      : setActiveTab(
+                          activeTab === 'What'
+                            ? 'When'
+                            : activeTab === 'When'
+                            ? 'Where'
+                            : 'Who'
+                        )
                   }
                   disabled={activeTab === 'Who' ? !validForm : false}
                 >

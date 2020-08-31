@@ -83,15 +83,6 @@ const SideBar = (props) => {
 
             <hr />
 
-            <Link to='/announcements'>
-              <p className='sidebar'>
-                <div style={{ display: 'flex', alignItems: 'center' }}>
-                  <Inbox size={12} style={{ marginRight: '10px' }} />{' '}
-                  <p>Manage Announcements & Emails</p>
-                </div>
-              </p>
-            </Link>
-
             <Link to='/create-announcement'>
               <p className='sidebar'>
                 <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -101,7 +92,7 @@ const SideBar = (props) => {
               </p>
             </Link>
 
-            <Link to='#'>
+            <Link to='/email-members'>
               <p className='sidebar'>
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                   <Mail size={12} style={{ marginRight: '10px' }} />{' '}

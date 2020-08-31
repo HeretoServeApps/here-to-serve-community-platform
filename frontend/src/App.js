@@ -39,6 +39,7 @@ import PasswordSettings from './pages/PasswordSettings'
 import ActivityEdit from './pages/ActivityEdit'
 import ManageCustomSections from './pages/ManageCustomSections'
 import JoinRequests from './pages/JoinRequests'
+import EmailMembers from './pages/EmailMembers'
 
 export default function App() {
   const [loggedIn, setLoggedIn] = useState(
@@ -308,6 +309,7 @@ export default function App() {
             component={ManageCustomSections}
           />
           <PrivateRoute path='/join-requests' exact component={JoinRequests} />
+          <PrivateRoute path='/email-members' exact component={EmailMembers} />
         </Switch>
         <AppFooter />
       </Router>

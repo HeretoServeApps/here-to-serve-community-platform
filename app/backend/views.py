@@ -574,6 +574,36 @@ class InviteUsers(APIView):
             return Response(status=status.HTTP_400_BAD_REQUEST)
         return Response(status=status.HTTP_200_OK)
 
+class SendEmail(APIView):
+    """
+    Let a commmunity leader or admin send emails to a group of members. 
+    """
+    permission_classes = (permissions.IsAuthenticated, )
+
+    def post(self, request, format=None):
+        data = request.data
+        from_email = data['from_email']
+        to_emails = list(data['to_emails'])
+        community = data['community']
+        sender_name = data['sender']
+        subject = data['subject']
+        message = data['content']
+
+        messages = []
+        for recipient in to_emails:
+            item = (subject, message, from_email, [recipient]) 
+            messages.append(item)
+
+        # send_mass_email prevent recipients from seeing other recipients' email addresses. 
+        try:
+            send_mass_mail(
+                tuple(messages),
+                fail_silently = False,
+            )
+        except BadHeaderError:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        return Response(status=status.HTTP_200_OK)
+
 
 class WellWishViewSet(viewsets.ModelViewSet):
     queryset = WellWish.objects.all().order_by('name')
