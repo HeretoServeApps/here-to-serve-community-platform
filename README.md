@@ -72,7 +72,7 @@ Note: if you are using a python before 3.3, it doesn't come with venv. Install [
 
 #### Installing Requirements
 
-Make sure that you are in the here-to-serve/app directory. Another way to check is that
+Make sure that you are in the `here-to-serve/app` directory. Another way to check is that
 when you type ls into terminal, you should see a file called requirements.txt:
 
 ```
@@ -85,7 +85,7 @@ This will install all current requirements for the project's backend.
 First install ```yarn```. ```yarn``` is a nice package for dependency management. For instructions
 on how to install ```yarn```, visit [yarn website](https://classic.yarnpkg.com/en/docs/install).
 
-Then install necessary frontend packages by:
+Starting back at the base directory `here-to-serve`,  install necessary frontend packages by:
 
 ```
 $ cd frontend

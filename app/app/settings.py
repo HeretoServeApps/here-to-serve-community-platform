@@ -160,17 +160,10 @@ CORS_ORIGIN_WHITELIST = [
     'http://localhost:3000',
     'http://127.0.0.1:3000'
 ]
-ALLOWED_HOSTS = [config('HEROKU_APP_URL'), '127.0.0.1:8000', 'localhost']
+# ALLOWED_HOSTS = [config('HEROKU_APP_URL'), '127.0.0.1:8000', 'localhost']
+ALLOWED_HOSTS = ['127.0.0.1:8000', 'localhost']
 
 CORS_ORIGIN_ALLOW_ALL = True
-
-# Email Settings
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.gmail.com' # mail service smtp
-EMAIL_HOST_USER = 'h4i.heretoserve@gmail.com' # email id
-EMAIL_HOST_PASSWORD = 'h4ipassword123' #password
 
 #AWS 
 AWS_ACCESS_KEY_ID = config('S3_KEY')
@@ -180,9 +173,17 @@ AWS_STORAGE_BUCKET_NAME = 'here-to-serve-test'
 AWS_S3_REGION_NAME = 'us-east-2'
 AWS_DEFAULT_ACL = None
 
+# Email Settings
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com' # mail service smtp
+EMAIL_HOST_USER = config('HOST_EMAIL')
+EMAIL_HOST_PASSWORD = config('HOST_EMAIL_PASSWORD') #password
+
 # Django file uploads
 DATA_UPLOAD_MAX_MEMORY_SIZE = 5242880  # (5 MB)
 
 # Deploy
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
