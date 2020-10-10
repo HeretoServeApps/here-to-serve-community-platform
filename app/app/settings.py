@@ -22,10 +22,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '9$i_38%ylycr5=#nj0*hnu0py+&k#6d0e8+gbj!0yuoug0qu7x'
+SECRET_KEY = config('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
 
@@ -160,8 +160,8 @@ CORS_ORIGIN_WHITELIST = [
     'http://localhost:3000',
     'http://127.0.0.1:3000'
 ]
-# ALLOWED_HOSTS = [config('HEROKU_APP_URL'), '127.0.0.1:8000', 'localhost']
-ALLOWED_HOSTS = ['127.0.0.1:8000', 'localhost']
+ALLOWED_HOSTS = [config('HEROKU_APP_URL'), '127.0.0.1:8000', 'localhost']
+# ALLOWED_HOSTS = ['127.0.0.1:8000', 'localhost']
 
 CORS_ORIGIN_ALLOW_ALL = True
 
@@ -185,5 +185,5 @@ EMAIL_HOST_PASSWORD = config('HOST_EMAIL_PASSWORD') #password
 DATA_UPLOAD_MAX_MEMORY_SIZE = 5242880  # (5 MB)
 
 # Deploy
-# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
