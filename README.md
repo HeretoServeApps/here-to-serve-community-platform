@@ -133,7 +133,7 @@ More info on these commands [here](https://docs.djangoproject.com/en/3.0/ref/dja
 $ python manage.py createsuperuser
 ```
 
-Enter in the admin information. 
+Enter in the admin information. This can be anything (doesn't have to be real information). The email and password entered can later be used to log onto the website, Django admin, and Django REST API. 
 
 #### Running the Project Locally
 
@@ -163,10 +163,7 @@ While your backend is running, open a new terminal window and `cd` into `here-to
 $ yarn start
 ```
 
-And navigate to localhost:3000.
-
-These are test communities we added with the admin view. If you want to test further, 
-try going to admin view (localhost:8000/admin) and add some more communities.
+And navigate to localhost:3000. You should see the home page of the website with the login and register buttons.
 
 Note: You have to have both frontend and backend running to run the entire project. 
 If you only have the backend running, you can access the admin and API pages. 
