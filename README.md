@@ -33,13 +33,28 @@
 
 ## Project structure
 
-The backend is under `app` folder, while the frontend is in the `frontend` folder. <br />
+If you open the here-to-serve folder, you should see the following structure:
 
-Under the `app` folder is the applications of the project are stored. `backend` is our main app, 
-where we will add models like `Community` and `Group` to. The other is `authentication`, which is where we 
-will be storing our `User` model and login/registration logic. The subfolder `app` inside of the outter `app`
-folder stores our main settings (eg. when we add a new app we need to go to app/settings.py).  
+```
++-- README.md
++-- readme_media
++-- app --> all of our app files
+|   +-- app --> backend app settings
+|   +-- backend --> backend app code (models, views, urls, etc.)
+|   +-- build
+|   +-- public
+|   +-- src --> frontend app code (components, pages, stylesheets, etc.)
+|   +-- .gitignore
+|   +-- jsconfig.json
+|   +-- manage.py
+|   +-- package.json
+|   +-- Procfile
+|   +-- requirements.txt
+|   +-- runtime.txt
+|   +-- yarn.lock
+```
 
+The items with --> are the ones that you will need to pay attention to and may modify during development. 
 
 ## Setting up: Backend
 
@@ -52,12 +67,16 @@ $ cd here-to-serve/app
 
 ##### Initialize a virtual environment
 
+Virtual environments let you install all of your python dependencies inside of the project you are working on. In other words, it packages your project and its dependencies so that those dependencies will only exist inside of the relevant project. This ensures that you will not override dependencies you already have installed on your computer and allows you to have multiple apps with different versions of the same dependency.  
+
 Windows:
 
 ```
 $ python -m venv venv
-$ venv\Scripts\activate.bat
+$ venv/Scripts/activate.bat
 ```
+
+Note: if you are using git bash on Windows, you'll need to `cd` into venv/Scripts/ and then type in `. activate` (note the space between the period and activate) to activate the environment.
 
 Unix/MacOS:
 
@@ -73,7 +92,7 @@ Note: if you are using a python before 3.3, it doesn't come with venv. Install [
 #### Installing Requirements
 
 Make sure that you are in the `here-to-serve/app` directory. Another way to check is that
-when you type ls into terminal, you should see a file called requirements.txt:
+when you type `ls` into terminal, you should see a file called requirements.txt:
 
 ```
 $ pip install -r requirements.txt
@@ -85,10 +104,10 @@ This will install all current requirements for the project's backend.
 First install ```yarn```. ```yarn``` is a nice package for dependency management. For instructions
 on how to install ```yarn```, visit [yarn website](https://classic.yarnpkg.com/en/docs/install).
 
-Starting back at the base directory `here-to-serve`,  install necessary frontend packages by:
+Starting back at the base directory `here-to-serve` (tip: to go back to a parent directory, you can type `cd ..`),  install necessary frontend packages by:
 
 ```
-$ cd frontend
+$ cd app
 $ yarn install
 ```
 
@@ -98,7 +117,7 @@ $ yarn install
 
 If you just started or cloned the project, have added new models or database tables to the project, or modified any model,
 run the following commands to add the changes to the project. Make sure you are in
-the same directory as manage.py:
+the same directory as manage.py (should be in the outter app directory):
 
 ```
 $ python manage.py makemigrations
@@ -122,6 +141,8 @@ Enter in the admin information.
 $ python manage.py runserver
 ```
 
+If you run into errors such as `no such variable called config('S3_KEY')` found, contact project's PM or TL for access to the `.env` file.
+
 #### Important Endpoints
 
 - localhost:8000/admin <br />
@@ -136,14 +157,13 @@ This endpoint allows you to view the models as a rest API.
 
 
 ## Running Project: Frontend
+While your backend is running, open a new terminal window and `cd` into `here-to-serve/app` directory (you do not need to activate your virtual environment here since we are only running the frontend):
 
 ```
-$ cd frontend
 $ yarn start
 ```
 
 And navigate to localhost:3000.
-
 
 These are test communities we added with the admin view. If you want to test further, 
 try going to admin view (localhost:8000/admin) and add some more communities.
