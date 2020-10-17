@@ -59,6 +59,7 @@ export default function AccountSettings() {
                     setState(json.state)
                     setZipcode(json.zipcode)
                     setPk(json.id)
+                    localStorage.setItem('user-id', json.id)
                 })
         }
     }, [])

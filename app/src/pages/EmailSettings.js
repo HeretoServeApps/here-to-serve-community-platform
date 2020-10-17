@@ -14,7 +14,8 @@ export default function AccountSettings() {
     padding: '4rem',
   }
 
-  const [infoAboutH2S, setInfoAboutH2S] = useState(false)
+  const pk = localStorage.getItem('user-id')
+  const [infoAboutH2S, setInfoAboutH2S] = useState(true)
   const [newsletter, setNewsLetter]     = useState(false)
   
   const handleOnCheckInformationAboutH2S = useCallback(() => {
@@ -33,7 +34,7 @@ export default function AccountSettings() {
         </Columns.Column>
         <Columns.Column>
         <Heading size={4} style={{ marginBottom: '3%', }}>Email Settings</Heading>
-        <CheckboxField text={'Information about family and Here to Serve'} onChange={handleOnCheckInformationAboutH2S} />
+        <CheckboxField text={'Information about family and Here to Serve'} checked={infoAboutH2S} onChange={handleOnCheckInformationAboutH2S} />
         <CheckboxField text={'Receive Here to Serve newsletter'} onChange={handleOnCheckNewsLetter} />
         </Columns.Column>
       </Columns>
