@@ -142,8 +142,7 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-
-class User(AbstractBaseUser, PermissionsMixin):
+class User(AbstractBaseUser, PermissionsMixin) :
 
     FAMILY = 'Family'
     FRIEND = 'Friend'
@@ -218,6 +217,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     phone_number_2_type = models.CharField(max_length=30, blank=True, default='')
     how_learn = models.TextField(blank=True, default='')
     who_help = models.CharField(max_length=256, blank=True, default='')
+    email_task_reminders = models.BooleanField(default=True)
     how_help = models.CharField(
         max_length=128,
         choices=HOW_HELP_CHOICES,

@@ -33,7 +33,7 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ('id', 'email', 'first_name', 'last_name', 'phone_number_1', 'phone_number_1_type',
                   'phone_number_2', 'phone_number_2_type', 'address_line_1', 'address_line_2', 
-                  'city', 'zipcode', 'state', 'country', 'is_staff')
+                  'city', 'zipcode', 'state', 'country', 'is_staff', 'email_task_reminders')
 
     def update(self, instance, validated_data):
         instance.first_name = validated_data.get('first_name', instance.first_name)
