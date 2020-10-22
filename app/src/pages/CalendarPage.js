@@ -544,12 +544,12 @@ export default function CalendarPage() {
               <Button onClick={() => setShowRemoveModel(false)}>Cancel</Button>
               {isDeactivate ? (
                 <Button color='primary' onClick={() => deactivateActivity(selectedEvent.id)}>
-                Deactivate Activity
-                 </Button>
+                  Deactivate Activity
+                </Button>
               ) : (
                 <Button color='primary' onClick={() => removeActivity(selectedEvent.id)}>
-                Delete Activity
-                 </Button>
+                  Delete Activity
+                </Button>
               )}
             </Modal.Card.Foot>
           </Modal.Card>
