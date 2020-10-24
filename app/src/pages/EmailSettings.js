@@ -1,4 +1,5 @@
-import React, { useCallback, useState } from "react"
+import React, { useEffect, useCallback, useState } from "react"
+import axios from 'axios'
 
 import Container from 'react-bulma-components/lib/components/container';
 import Columns from 'react-bulma-components/lib/components/columns'
@@ -17,8 +18,9 @@ export default function AccountSettings() {
   const pk = localStorage.getItem('user-id')
   const [infoAboutH2S, setInfoAboutH2S] = useState(true)
   const [newsletter, setNewsLetter]     = useState(false)
-  const [emailTaskReminders, setEmailTaskReminders] = useState(true)
+  const [emailTaskReminders, setEmailTaskReminders] = useState(false)
   
+  // Functions
   const handleOnCheckInformationAboutH2S = useCallback(() => {
     setInfoAboutH2S(!infoAboutH2S)
   })
@@ -31,34 +33,46 @@ export default function AccountSettings() {
     setEmailTaskReminders(!emailTaskReminders)
   })
 
+  // API calls
   const editEmailSettings = useCallback(() => {
-   
-          var url = '/edit-user/' + pk + '/'
-          var myHeaders = new Headers()
+    var url = '/edit-user/' + pk + '/'
+    var myHeaders = new Headers()
           
     myHeaders.append('Authorization', `JWT ${localStorage.getItem('token')}`)
-          myHeaders.append('id', pk)
-  
-          var formdata = new FormData();
+    myHeaders.append('id', pk)
+
+    var formdata = new FormData();
    
     formdata.append('email_task_reminders', emailTaskReminders)
     
-  
-          var requestOptions = {
-              method: 'PUT',
-              headers: myHeaders,
-              body: formdata,
-              redirect: 'follow'
-          }
-  
-          fetch(url, requestOptions)
-          .then(response => response.text())
-          .then(result => {
-              window.location.reload()
-          })
-          .catch(error => console.log('error', error))
-      }, 
-      [pk, emailTaskReminders]) 
+    var requestOptions = {
+        method: 'PATCH',
+        headers: myHeaders,
+        body: formdata,
+        redirect: 'follow'
+    }
+
+    fetch(url, requestOptions)
+    .then(response => response.text())
+    .then(result => {
+        window.location.reload()
+    })
+    .catch(error => console.log('error', error))
+  }, 
+  [pk, emailTaskReminders]) 
+
+  useEffect(() => {
+    fetch('/current_user/', {
+        headers: {
+            Authorization: `JWT ${localStorage.getItem('token')}`
+        }
+    })
+        .then(res => res.json())
+        .then(json => {
+            setEmailTaskReminders(json.email_task_reminders)
+        })
+  }, [])
+
 
   return (
     <Container style={containerStyle}>
@@ -72,13 +86,13 @@ export default function AccountSettings() {
         <CheckboxField text={'Receive Here to Serve newsletter'} onChange={handleOnCheckNewsLetter} />
         <CheckboxField text={'Reminders for tasks you signed up for'}checked={emailTaskReminders} onChange={handleOnCheckEmailTaskReminders} />
         <Button 
-                        color="primary" 
-                        fullwidth={true} 
-                        style={{maxWidth: '40%', marginTop: '8%'}} 
-                        onClick={() => editEmailSettings()}
-                    >
-                        SAVE CHANGES
-                    </Button>
+          color="primary" 
+          fullwidth={true} 
+          style={{maxWidth: '40%', marginTop: '8%'}} 
+          onClick={() => editEmailSettings()}
+        >
+          SAVE CHANGES
+        </Button>
         </Columns.Column>
       </Columns>
     </Container>
