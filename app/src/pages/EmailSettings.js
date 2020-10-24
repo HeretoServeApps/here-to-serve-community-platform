@@ -13,6 +13,7 @@ export default function AccountSettings() {
     maxWidth: '80%',
     padding: '4rem',
   }
+  
   const pk = localStorage.getItem('user-id')
   const [infoAboutH2S, setInfoAboutH2S] = useState(true)
   const [newsletter, setNewsLetter]     = useState(false)
