@@ -34,7 +34,7 @@ export default function Announcements(props) {
 
   useEffect(() => {
     axios
-      .get('/announcement', {
+      .get('/announcement/', {
         headers: {
           Authorization: `JWT ${token}`,
         },

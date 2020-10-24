@@ -93,7 +93,7 @@ export default function MessageBoard(props) {
 
   useEffect(() => {
     axios
-      .get('/messages', {
+      .get('/messages/', {
         headers: {
           Authorization: `JWT ${token}`,
         },

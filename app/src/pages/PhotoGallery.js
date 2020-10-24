@@ -77,7 +77,7 @@ export default function PhotoGallery(props) {
 
   useEffect(() => {
     axios
-      .get('/photos', {
+      .get('/photos/', {
         headers: {
           Authorization: `JWT ${token}`,
         },
@@ -134,8 +134,6 @@ export default function PhotoGallery(props) {
       .then((result) => window.location.reload())
       .catch((error) => console.log('error', error))
   })
-
-  const showModal = (p) => {}
 
   if (isEditing) {
     return (
@@ -259,19 +257,3 @@ export default function PhotoGallery(props) {
     </div>
   )
 }
-
-/*
-{photos.length === 0 ? (
-                <p style={noteStyle}>
-                  No photos have been added to this gallery.
-                </p>
-              ) : (
-                photos.map((p) => (
-                  <Columns.Column size={3} key={p.uuid}>
-                    <Image
-                      src={p.photo.split('?')[0]}
-                      onClick={() => showModal(p)}
-                    />
-                  </Columns.Column>
-                ))
-              )} */
