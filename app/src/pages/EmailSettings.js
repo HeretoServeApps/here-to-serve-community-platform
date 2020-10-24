@@ -1,5 +1,4 @@
 import React, { useEffect, useCallback, useState } from "react"
-import axios from 'axios'
 
 import Container from 'react-bulma-components/lib/components/container';
 import Columns from 'react-bulma-components/lib/components/columns'
