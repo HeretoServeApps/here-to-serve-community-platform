@@ -2,7 +2,7 @@
   "name": "frontend",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:8000/api",
+  "proxy": "http://localhost:8000",
   "dependencies": {
     "@khanacademy/react-multi-select": "^0.3.3",
     "@react-pdf/renderer": "^2.0.0-beta.6",
@@ -61,5 +61,5 @@
       "last 1 safari version"
     ]
   },
-  "homepage": "/assets"
+  "homepage": "/home"
 }

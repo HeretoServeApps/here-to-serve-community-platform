@@ -14,7 +14,7 @@ const Header = (props) => {
 
   const logged_out_header = (
     <Navbar.Container position='end'>
-      <Link className={'navbar-item'} to='/'>
+      <Link className={'navbar-item'} to='/home'>
         <Heading size={6}>Home</Heading>
       </Link>
       <Link className={'navbar-item'} to='/login'>

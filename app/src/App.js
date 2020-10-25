@@ -206,7 +206,7 @@ export default function App() {
               <Login handle_login={handleLogin} logged_in={loggedIn} />
             )}
           />
-          <Route path='/' exact component={Welcome} />
+          <Route path='/home' exact component={Welcome} />
           <Route
             path='/forgot-password'
             render={() => (
