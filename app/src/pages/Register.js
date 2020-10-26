@@ -118,7 +118,7 @@ export default function Register(props) {
       localStorage.getItem('token') !== undefined
     ) {
       var formdata = new FormData()
-      formdata.append('community', who.name)
+      formdata.append('community', who)
       formdata.append('user', email)
       formdata.append('role', 'COMM_MEMBER')
 
