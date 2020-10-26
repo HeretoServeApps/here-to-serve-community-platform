@@ -58,6 +58,7 @@ export default function Register(props) {
   const [skillsToOffer, setSkillsToOffer] = useState('')
   const [validForm, setValidForm] = useState(false)
   const [communities, setCommunities] = useState([])
+  const [communityToIsClosedMap, setCommunityToIsClosedMap] = useState({}) // Map the community to its is_closed status
 
   let history = useHistory()
 
@@ -117,7 +118,7 @@ export default function Register(props) {
       localStorage.getItem('token') !== undefined
     ) {
       var formdata = new FormData()
-      formdata.append('community', who)
+      formdata.append('community', who.name)
       formdata.append('user', email)
       formdata.append('role', 'COMM_MEMBER')
 
@@ -141,10 +142,13 @@ export default function Register(props) {
   useEffect(() => {
     axios.get('/communities/').then((response) => {
       let suggestedCommunities = []
+      let isClosedMap = {}
       for(var i = 0; i < response.data.length; i++) {
         suggestedCommunities.push(response.data[i].name)
+        isClosedMap[response.data[i].name] = response.data[i].is_closed
       }
       setCommunities(suggestedCommunities)
+      setCommunityToIsClosedMap(isClosedMap)
     })
   }, [])
 

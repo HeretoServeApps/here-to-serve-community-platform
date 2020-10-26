@@ -60,7 +60,7 @@ export default function CreateCommunity() {
     formdata.append('zipcode', zipcode)
     formdata.append('country', country)
     formdata.append('photo_file', photoFile)
-    formdata.append('is_closed', isClosed)
+    formdata.append('is_closed', isClosed.toString())
 
     var requestOptions = {
       method: 'POST',
@@ -72,7 +72,7 @@ export default function CreateCommunity() {
     fetch(url, requestOptions)
       .then((response) => 
     {
-      //After user creates the community, they are added as a community leader
+      //After user creates the community, they are added as the admin (only admins can create new communities)
       var formdata = new FormData()
       formdata.append('community', name)
       formdata.append('user', localStorage.getItem('email'))
@@ -179,7 +179,7 @@ export default function CreateCommunity() {
         <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
           <Checkbox
             style={{ marginRight: '10px' }}
-            onChange={(e) => setIsClosed(!e.target.checked)}
+            onChange={(e) => setIsClosed(e.target.checked)}
           />
           <p>
             Allow friends and family to find this community by name and/or
