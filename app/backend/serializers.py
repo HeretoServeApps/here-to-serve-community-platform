@@ -49,6 +49,7 @@ class UserSerializer(serializers.ModelSerializer):
         instance.zipcode = validated_data.get('zipcode', instance.zipcode)
         instance.state = validated_data.get('state', instance.state)
         instance.country = validated_data.get('country', instance.country)
+        instance.email_task_reminders = validated_data.get('email_task_reminders', instance.email_task_reminders)
 
         instance.save()
         return instance

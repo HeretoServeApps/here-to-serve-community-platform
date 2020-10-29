@@ -14,7 +14,7 @@ const Header = (props) => {
 
   const logged_out_header = (
     <Navbar.Container position='end'>
-      <Link className={'navbar-item'} to='/'>
+      <Link className={'navbar-item'} to='/home'>
         <Heading size={6}>Home</Heading>
       </Link>
       <Link className={'navbar-item'} to='/login'>
@@ -39,7 +39,7 @@ const Header = (props) => {
       <Link className={'navbar-item'} to='/account-settings'>
         <Heading size={6}>My Account</Heading>
       </Link>
-      <Link className={'navbar-item'} to='/' onClick={() => props.handle_logout()}>
+      <Link className={'navbar-item'} to='/home' onClick={() => props.handle_logout()}>
         <Heading size={6}>Logout</Heading>
       </Link>
     </Navbar.Container>
