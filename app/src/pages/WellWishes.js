@@ -98,7 +98,7 @@ export default function WellWishes(props) {
 
   useEffect(() => {
     axios
-      .get('/well-wishes', {
+      .get('/well-wishes/', {
         headers: {
           Authorization: `JWT ${token}`,
         },

@@ -20,7 +20,8 @@ import {
   Textarea,
   Checkbox,
 } from 'react-bulma-components/lib/components/form'
-import MultiSelect from '@khanacademy/react-multi-select'
+import MultiSelect from 'react-multi-select-component'
+
 import SideBar from '../components/sidebar'
 
 export default function CreateNewActivity(props) {
@@ -398,6 +399,10 @@ export default function CreateNewActivity(props) {
       (restriction) =>
         (dietaryRestrictionStatus[restriction.name] = restriction.isChecked)
     )
+
+    let coordinatorIds = []
+    selectedCoordinators.forEach((coordinator) => coordinatorIds.push(coordinator['value']))
+
     const param = JSON.stringify({
       title: activityName,
       description: notes,
@@ -415,7 +420,7 @@ export default function CreateNewActivity(props) {
       end_time: endTime,
       all_day: allDay,
       no_end_time: noEndTime,
-      coordinators: selectedCoordinators,
+      coordinators: coordinatorIds,
       volunteers: [],
     })
     axios
@@ -961,22 +966,16 @@ export default function CreateNewActivity(props) {
             ) : (
               <div className='who' style={formContainerStyle}>
                 <Field>
-                  <Label>
-                    Activity Coordinator
-                    <span style={{ color: '#F83D34' }}>*</span>
-                  </Label>
-                  <MultiSelect
-                    valueRenderer={(selectedCoordinators) => (
-                      <span width='100%'>
-                        Selected {selectedCoordinators.length} users{' '}
-                      </span>
-                    )}
-                    options={coordinators}
-                    selected={coordinators}
-                    onSelectedChanged={(selected) =>
-                      setSelectedCoordinators(selected)
-                    }
-                  />
+                    <Label>
+                        Activity Coordinator(s)
+                        <span style={{ color: '#F83D34' }}>*</span>
+                    </Label>
+                    <MultiSelect
+                        options={coordinators}
+                        value={selectedCoordinators}
+                        onChange={setSelectedCoordinators}
+                        labelledBy={'Select'}
+                    />
                 </Field>
                 <Label>
                   Estimated Average Task Time
