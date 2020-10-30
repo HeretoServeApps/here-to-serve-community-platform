@@ -11,7 +11,6 @@ import {
     Control,
     Input,
     Select,
-    Textarea,
     Label
 } from 'react-bulma-components/lib/components/form'
 
@@ -20,7 +19,6 @@ export default function AssignVolunteers() {
         margin: '5% 5%',
         maxWidth: '100%'
     }
-
 
     const [taskFrom, setTaskFrom] = useState('')
     const [taskTo, setTaskTo] = useState('')
@@ -95,11 +93,6 @@ export default function AssignVolunteers() {
                         </Field>
                         <Columns>
                             <Columns.Column size={1}>
-                                <Button color='primary'>
-                                    Send Email
-                                </Button>
-                            </Columns.Column>
-                            <Columns.Column size={1}>
                                 <Button className='is-primary is-inverted'
                                     // onClick={() => goBackToCalendar()}
                                     style={
@@ -109,6 +102,11 @@ export default function AssignVolunteers() {
                                         }
                                 }>
                                     Cancel
+                                </Button>
+                            </Columns.Column>
+                            <Columns.Column size={2}>
+                                <Button color='primary'>
+                                    Send Email
                                 </Button>
                             </Columns.Column>
                         </Columns>
