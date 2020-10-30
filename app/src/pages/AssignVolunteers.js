@@ -91,25 +91,16 @@ export default function AssignVolunteers() {
                                     placeholder={taskMessage}/>
                             </Control>
                         </Field>
-                        <Columns>
-                            <Columns.Column size={1}>
-                                <Button className='is-primary is-inverted'
-                                    // onClick={() => goBackToCalendar()}
-                                    style={
-                                        {
-                                            display: 'block',
-                                            marginTop: '0%'
-                                        }
-                                }>
-                                    Cancel
-                                </Button>
-                            </Columns.Column>
-                            <Columns.Column size={2}>
-                                <Button color='primary'>
-                                    Send Email
-                                </Button>
-                            </Columns.Column>
-                        </Columns>
+                            <Button className='is-primary is-inverted'
+                                // onClick={() => goBackToCalendar()}
+                                style={
+                                    {
+                                        display: 'block',
+                                        marginTop: '0%'
+                                    }
+                            }>
+                                Cancel
+                            </Button>
                     </Columns.Column>
                 </Columns>
             </Container>
