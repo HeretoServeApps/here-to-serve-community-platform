@@ -54,7 +54,7 @@ const CommunityNavbar = () => {
                     : 'is-small is-primary'
                 }
               >
-                <strong>{title[0]}</strong>
+                <strong style={{ fontSize: '1.3em' }}>{title[0]}</strong>
               </Button>
             </Link>
           ))}
