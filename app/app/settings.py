@@ -25,7 +25,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = config('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 # Application definition
 
@@ -85,13 +85,18 @@ WSGI_APPLICATION = 'app.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'PASSWORD': config('POSTGRESQL_DATABASE_PASSWORD'),
+        'HOST': 'localhost',
+        'PORT': ''
     }
 }
 
-db_from_env = dj_database_url.config(conn_max_age=600)
-DATABASES['default'].update(db_from_env)
+if DEBUG == False:
+    db_from_env = dj_database_url.config(conn_max_age=600)
+    DATABASES['default'].update(db_from_env)
 
 # User model
 AUTH_USER_MODEL = 'backend.User'
@@ -192,7 +197,8 @@ STATICFILES_DIRS = [
 STATIC_URL = '/assets/'
 
 # Local settings import
-try:
-  from local_settings import *
-except ImportError:
-  pass
+# try:
+#   from .local_settings import *
+# except ImportError:
+#   print('Did not find local settings file')
+#   pass

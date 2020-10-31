@@ -11,20 +11,25 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
-from app.app.settings import BASE_DIR
+from decouple import config
+from app.app.settings import *
 
-
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+TEMPLATE_DEBUG = DEBUG
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'here-to-serve',
+        'USER': 'posgres',
+        'PASSWORD': config('POSTGRESQL_DATABASE_PASSWORD'),
+        'HOST': 'localhost',
+        'PORT': ''
     }
 }
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
