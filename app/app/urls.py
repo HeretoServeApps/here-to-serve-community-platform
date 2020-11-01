@@ -21,6 +21,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('backend.urls')),
     path('tinymce/', include('tinymce.urls')),
-    # re_path('app/', TemplateView.as_view(template_name='index.html')),
-    re_path(r'^(?P<path>.*)/$',TemplateView.as_view(template_name='index.html')),
+    re_path('app/*', TemplateView.as_view(template_name='index.html')),
+    # re_path(r'^(?P<path>.*)/$',TemplateView.as_view(template_name='index.html')),
 ]

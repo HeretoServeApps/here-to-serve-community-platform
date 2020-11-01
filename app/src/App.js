@@ -189,146 +189,148 @@ export default function App() {
       )
   }, [])
 
+  const baseName = ''
+
   return (
     <div>
-      <Router>
+      <Router basename='/app'>
         <Header logged_in={loggedIn} handle_logout={handleLogout} />
         <Switch>
           {/* Routes that are available without authentication */}
           <Route
-            path='/register'
+            path={baseName + '/register'}
             render={() => (
               <Register handle_signup={handleSignup} logged_in={loggedIn} />
             )}
           />
           <Route
-            path='/login'
+            path={baseName + '/login'}
             render={() => (
               <Login handle_login={handleLogin} logged_in={loggedIn} />
             )}
           />
-          <Route path='/home' exact component={Welcome} />
+          <Route path={baseName + '/home'} exact component={Welcome} />
           <Route
-            path='/forgot-password'
+            path={baseName + '/forgot-password'}
             render={() => (
               <ForgotPassword handle_forgot_password={handleForgotPassword} />
             )}
           />
-          <Route path='/reset-password' exact component={ResetPassword} />
+          <Route path={baseName + '/reset-password'} exact component={ResetPassword} />
           <Route
-            path='/forgot-password-confirmation'
+            path={baseName + '/forgot-password-confirmation'}
             exact
             component={ForgotPasswordConfirm}
           />
           <Route
-            path='/reset-password-confirmation'
+            path={baseName + '/reset-password-confirmation'}
             exact
             component={ResetPasswordConfirm}
           />
 
           {/* Routes that are available only if user logs in */}
           <PrivateRoute
-            path='/my-communities'
+            path={baseName + '/my-communities'}
             exact
             component={MyCommunities}
           />
           <PrivateRoute
-            path='/select-communities'
+            path={baseName + '/select-communities'}
             exact
             component={SelectCommunities}
           />
           <PrivateRoute
-            path='/create-community'
+            path={baseName + '/create-community'}
             exact
             component={CreateCommunity}
           />
           <PrivateRoute
-            path='/account-settings'
+            path={baseName + '/account-settings'}
             exact
             component={AccountSettings}
           />
           <PrivateRoute
-            path='/email-settings'
+            path={baseName + '/email-settings'}
             exact
             component={EmailSettings}
           />
           <PrivateRoute
-            path='/community-home'
+            path={baseName + '/community-home'}
             exact
             component={CommunityHome}
           />
-          <PrivateRoute path='/calendar' exact component={CalendarPage} />
+          <PrivateRoute path={baseName + '/calendar'} exact component={CalendarPage} />
           <PrivateRoute
-            path='/create-new-activity'
+            path={baseName + '/create-new-activity'}
             exact
             component={CreateNewActivity}
           />
-          <PrivateRoute path='/announcements' exact component={Announcements} />
+          <PrivateRoute path={baseName + '/announcements'} exact component={Announcements} />
           <PrivateRoute
-            path='/create-announcement'
+            path={baseName + '/create-announcement'}
             exact
             component={CreateAnnouncement}
           />
           <PrivateRoute
-            path='/community-people'
+            path={baseName + '/community-people'}
             exact
             component={CommunityPeople}
           />
           <PrivateRoute
-            path='/community/:member'
+            path={baseName + '/community/:member'}
             exact
             component={OneCommunityMember}
           />
           <PrivateRoute
-            path='/add-people'
+            path={baseName + '/add-people'}
             exact
             component={CommunityAddMembers}
           />
-          <PrivateRoute path='/ways-to-help' exact component={WaysToHelp} />
-          <PrivateRoute path='/well-wishes' exact component={WellWishes} />
+          <PrivateRoute path={baseName + '/ways-to-help'} exact component={WaysToHelp} />
+          <PrivateRoute path={baseName + '/well-wishes'} exact component={WellWishes} />
           <PrivateRoute
-            path='/create-custom-section'
+            path={baseName + '/create-custom-section'}
             exact
             component={CreateCustomSection}
           />
-          <PrivateRoute path='/about' exact component={CommunityAbout} />
+          <PrivateRoute path={baseName + '/about'} exact component={CommunityAbout} />
           <PrivateRoute
-            path='/activity-report'
+            path={baseName + '/activity-report'}
             exact
             component={ActivityReport}
           />
           <PrivateRoute
-            path='/custom/:section'
+            path={baseName + '/custom/:section'}
             exact
             component={CustomGeneral}
           />
-          <PrivateRoute path='/photo-gallery' exact component={PhotoGallery} />
+          <PrivateRoute path={baseName + '/photo-gallery'} exact component={PhotoGallery} />
           <PrivateRoute
-            path='/edit-community'
+            path={baseName + '/edit-community'}
             exact
             component={CommunityEdit}
           />
-          <PrivateRoute path='/message-board' exact component={MessageBoard} />
+          <PrivateRoute path={baseName + '/message-board'} exact component={MessageBoard} />
           <PrivateRoute
-            path='/password-settings'
+            path={baseName + '/password-settings'}
             exact
             component={PasswordSettings}
           />
           <PrivateRoute
-            path='/edit-activity/:activity'
+            path={baseName + '/edit-activity/:activity'}
             exact
             component={ActivityEdit}
           />
           <PrivateRoute
-            path='/manage-custom-sections'
+            path={baseName + '/manage-custom-sections'}
             exact
             component={ManageCustomSections}
           />
-          <PrivateRoute path='/join-requests' exact component={JoinRequests} />
-          <PrivateRoute path='/email-members' exact component={EmailMembers} />
-          <PrivateRoute path='/assign-volunteers' exact component={AssignVolunteers} />
+          <PrivateRoute path={baseName + '/join-requests'} exact component={JoinRequests} />
+          <PrivateRoute path={baseName + '/email-members'} exact component={EmailMembers} />
+          <PrivateRoute path={baseName + '/assign-volunteers'} exact component={AssignVolunteers} />
           <PrivateRoute
-            path='/manage-activities'
+            path={baseName + '/manage-activities'}
             exact
             component={ManageActivities}
           />
