@@ -8,6 +8,8 @@ node_modules
 __pycache__
 db.sqlite3
 media
+*/local_settings.py
+./app/app/local_settings.py
 
 # Backup files # 
 *.bak 
