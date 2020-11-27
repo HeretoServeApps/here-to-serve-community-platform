@@ -41,6 +41,7 @@ import ManageCustomSections from './pages/ManageCustomSections'
 import JoinRequests from './pages/JoinRequests'
 import EmailMembers from './pages/EmailMembers'
 import ManageActivities from './pages/ManageActivities'
+import AssignVolunteers from 'pages/AssignVolunteers'
 
 export default function App() {
   const [loggedIn, setLoggedIn] = useState(
@@ -190,7 +191,7 @@ export default function App() {
 
   return (
     <div>
-      <Router>
+      <Router basename='/app'>
         <Header logged_in={loggedIn} handle_logout={handleLogout} />
         <Switch>
           {/* Routes that are available without authentication */}
@@ -256,7 +257,7 @@ export default function App() {
             exact
             component={CommunityHome}
           />
-          <PrivateRoute path='/calendar' exact component={CalendarPage} />
+          <PrivateRoute path={'/calendar'} exact component={CalendarPage} />
           <PrivateRoute
             path='/create-new-activity'
             exact
@@ -325,6 +326,7 @@ export default function App() {
           />
           <PrivateRoute path='/join-requests' exact component={JoinRequests} />
           <PrivateRoute path='/email-members' exact component={EmailMembers} />
+          <PrivateRoute path='/assign-volunteers' exact component={AssignVolunteers} />
           <PrivateRoute
             path='/manage-activities'
             exact

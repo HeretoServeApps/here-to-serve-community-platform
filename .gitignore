@@ -8,6 +8,8 @@ node_modules
 __pycache__
 db.sqlite3
 media
+*/local_settings.py
+./app/app/local_settings.py
 
 # Backup files # 
 *.bak 
@@ -53,6 +55,10 @@ wheels/
 # Installer logs 
 pip-log.txt 
 pip-delete-this-directory.txt 
+Pipfile
+Pipfile.lock
+*/Pipfile
+*/Pipfile.lock
 
 # Unit test / coverage reports 
 htmlcov/ 
@@ -82,6 +88,7 @@ celerybeat-schedule.*
 .env 
 */.env
 .venv 
+*/.venv
 env/ 
 venv/ 
 venv2/
@@ -145,3 +152,6 @@ backend/.DS_Store
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+build/
+*/build/

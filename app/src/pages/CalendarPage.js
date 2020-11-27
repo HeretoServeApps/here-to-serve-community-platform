@@ -502,13 +502,27 @@ export default function CalendarPage() {
             ))}
           </ul>
           <br />
-          <Button
-            className='is-primary is-inverted'
-            onClick={() => goBackToCalendar()}
-            style={{ display: 'block', marginTop: '3%' }}
-          >
-            Back
-          </Button>
+          <Columns>
+            <Columns.Column size={3}>
+            {localStorage.getItem('user-role') === 'Administrator' && (
+              <Link to='/assign-volunteers' style={{ color: 'white' }}>
+              <Button color='primary'>
+                Assign Volunteers
+              </Button>
+              </Link>
+              
+              )}
+            </Columns.Column>
+            <Columns.Column size={3}>
+            <Button
+                className='is-primary is-inverted'
+                onClick={() => goBackToCalendar()}
+                style={{ display: 'block', marginTop: '0%' }}
+              >
+                Back
+            </Button>
+            </Columns.Column>
+          </Columns>
         </Container>
         <Modal
           show={showRemoveModal}

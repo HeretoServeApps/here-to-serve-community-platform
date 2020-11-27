@@ -74,6 +74,9 @@ export default function CreateCommunity() {
     {
       //After user creates the community, they are added as the admin (only admins can create new communities)
       var formdata = new FormData()
+      var myHeaders = new Headers()
+      myHeaders.append('Authorization', `JWT ${localStorage.getItem('token')}`)
+
       formdata.append('community', name)
       formdata.append('user', localStorage.getItem('email'))
       formdata.append('role', 'ADMIN')
@@ -81,11 +84,12 @@ export default function CreateCommunity() {
 
       var requestOptions = {
         method: 'POST',
+        headers: myHeaders,
         body: formdata,
         redirect: 'follow',
       }
 
-      fetch(process.env.REACT_APP_API_URL + '/community-role-register/', requestOptions)
+      fetch('/community-role-register/', requestOptions)
         .then((response) => response.text())
         .then((result) => history.push('/my-communities'))
         .catch((error) => console.log('error', error))})

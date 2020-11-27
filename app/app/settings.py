@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 import os
 from datetime import timedelta
 from decouple import config
+import dj_database_url
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -25,6 +26,7 @@ SECRET_KEY = config('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+USE_POSTGRES = False
 
 # Application definition
 
@@ -82,12 +84,30 @@ WSGI_APPLICATION = 'app.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+DATABASES = {}
+if USE_POSTGRES:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'postgres',
+            'USER': 'postgres',
+            'PASSWORD': config('POSTGRESQL_DATABASE_PASSWORD'),
+            'HOST': 'localhost',
+            'PORT': ''
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
+    }
+
+
+if DEBUG == False:
+    db_from_env = dj_database_url.config(conn_max_age=600)
+    DATABASES['default'].update(db_from_env)
 
 # User model
 AUTH_USER_MODEL = 'backend.User'
@@ -157,7 +177,6 @@ CORS_ORIGIN_WHITELIST = [
     'http://127.0.0.1:3000'
 ]
 ALLOWED_HOSTS = [config('HEROKU_APP_URL'), '127.0.0.1:8000', 'localhost']
-# ALLOWED_HOSTS = ['127.0.0.1:8000', 'localhost']
 
 CORS_ORIGIN_ALLOW_ALL = True
 
@@ -187,3 +206,10 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'build'),
 ]
 STATIC_URL = '/assets/'
+
+# Local settings import
+# try:
+#   from .local_settings import *
+# except ImportError:
+#   print('Did not find local settings file')
+#   pass

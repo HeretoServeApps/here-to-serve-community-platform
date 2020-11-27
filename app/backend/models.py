@@ -35,7 +35,8 @@ class Community(models.Model):
     )
     display_leaders_on_home_page = models.CharField(blank=False, default='true', max_length=5)
     photo_file = models.FileField(
-        default='https://vignette.wikia.nocookie.net/project-pokemon/images/4/47/Placeholder.png/revision/latest?cb=20170330235552&format=original'
+        default='https://vignette.wikia.nocookie.net/project-pokemon/images/4/47/Placeholder.png/revision/latest?cb=20170330235552&format=original',
+        max_length=500
     )
 
     def __str__(self):
@@ -409,6 +410,6 @@ class Photo(models.Model):
     )
     created_at = models.DateTimeField(auto_now_add=True) 
     title = models.CharField(max_length=100, default='')
-    photo = models.FileField()
+    photo = models.FileField(max_length=500)
     description = models.CharField(max_length=256, default='')
     community = models.ForeignKey(Community, on_delete=models.CASCADE, null=False, blank=False)
