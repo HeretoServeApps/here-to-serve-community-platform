@@ -132,7 +132,7 @@ export default function Register(props) {
       }
 
       fetch(
-        process.env.REACT_APP_API_URL + '/community-role-register/',
+        '/community-role-register/',
         requestOptions
       )
         .then((response) => response.text())
