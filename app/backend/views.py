@@ -740,7 +740,11 @@ class AddVolunteerToCommunity(APIView):
     def post(self, request, format=None):
         user_email = request.data['user']
         user = User.objects.get(email=user_email).id
+        community_id = request.data['community']
+        community = Community.objects.get(id = community_id)
         request.data['user'] = user
+        if (community.is_closed == "true") :
+            request.data['is_approved'] = True
         serializer = CommunityUserRoleSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
