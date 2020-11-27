@@ -37,7 +37,7 @@ import PhotoGallery from './pages/PhotoGallery'
 import MessageBoard from './pages/MessageBoard'
 import PasswordSettings from './pages/PasswordSettings'
 import ActivityEdit from './pages/ActivityEdit'
-import ManageCustomSections from './pages/ManageCustomSections'
+import CustomSections from './pages/CustomSections'
 import JoinRequests from './pages/JoinRequests'
 import EmailMembers from './pages/EmailMembers'
 import ManageActivities from './pages/ManageActivities'
@@ -320,9 +320,9 @@ export default function App() {
             component={ActivityEdit}
           />
           <PrivateRoute
-            path='/manage-custom-sections'
+            path='/custom-sections'
             exact
-            component={ManageCustomSections}
+            component={CustomSections}
           />
           <PrivateRoute path='/join-requests' exact component={JoinRequests} />
           <PrivateRoute path='/email-members' exact component={EmailMembers} />

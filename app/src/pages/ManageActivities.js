@@ -308,7 +308,7 @@ export default function ManageActivities() {
                                     <tr>
                                         <th>Activity</th>
                                         <th>Time</th>
-                                        <th>Options</th>
+                                        <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>

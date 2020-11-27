@@ -10,6 +10,8 @@ const Bar = styled.div`
   padding: 0 5%;
 `
 
+const activeLink = 'Home'
+
 const links = [
   ['About', '/about'],
   ['Calendar', '/calendar'],
@@ -19,9 +21,8 @@ const links = [
   ['Photo Gallery', '/photo-gallery'],
   ['Well Wishes', '/well-wishes'],
   ['People', '/community-people'],
+  ['Custom Sections', '/custom-sections']
 ]
-
-const activeLink = 'Home'
 
 const CommunityNavbar = () => {
   return (
