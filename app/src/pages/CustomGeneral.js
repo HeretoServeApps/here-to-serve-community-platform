@@ -36,7 +36,7 @@ export default function CustomGeneral(props) {
   const [subject, setSubject] = useState('')
   const [message, setMessage] = useState('')
   const [validForm, setValidForm] = useState(false)
-  let history = useHistory()
+  const [userRole, _ ] = useState(localStorage.getItem('user-role'))
 
   var containerStyle = {
     margin: '5% 5%',
@@ -221,13 +221,15 @@ export default function CustomGeneral(props) {
                   <Heading size={4}>{title}</Heading>
                 </Columns.Column>
                 <Columns.Column size={2}>
-                  <Button
-                    color='primary'
-                    className='is-fullwidth'
-                    onClick={() => setIsEditing(true)}
-                  >
-                    Edit
-                  </Button>
+                  {userRole === 'Administrator' && 
+                    <Button
+                      color='primary'
+                      className='is-fullwidth'
+                      onClick={() => setIsEditing(true)}
+                    >
+                      Edit
+                    </Button>
+                }
                 </Columns.Column>
               </Columns>
             )}
@@ -333,8 +335,8 @@ export default function CustomGeneral(props) {
                                   ],
                                   toolbar:
                                     'undo redo | formatselect | link image | bold italic backcolor | \
-                      alignleft aligncenter alignright alignjustify | \
-                      bullist numlist outdent indent | removeformat | help',
+                                    alignleft aligncenter alignright alignjustify | \
+                                    bullist numlist outdent indent | removeformat | help',
                                 }}
                                 onEditorChange={(content, editor) =>
                                   setMessage(content)

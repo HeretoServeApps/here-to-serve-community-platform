@@ -8,7 +8,7 @@ import Heading from 'react-bulma-components/lib/components/heading'
 import CommunityNavbar from '../components/communityNavbar'
 import Button from 'react-bulma-components/lib/components/button'
 import SideBar from '../components/sidebar'
-import { Edit2, XCircle, X, Coffee, CheckCircle } from 'react-feather'
+import { Edit2, X, Coffee, CheckCircle } from 'react-feather'
 import {
   Control,
   Label,

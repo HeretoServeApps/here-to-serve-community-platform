@@ -168,7 +168,6 @@ export default function ActivityReport() {
                                         >
                                             <Button
                                                 style={{
-                                                    marginBottom: '1rem',
                                                     boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)',
                                                 }}
                                                 color='primary'

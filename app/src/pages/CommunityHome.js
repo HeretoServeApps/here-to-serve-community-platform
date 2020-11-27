@@ -9,7 +9,6 @@ import '../../node_modules/react-image-gallery/styles/css/image-gallery.css'
 
 import Container from 'react-bulma-components/lib/components/container'
 import Box from 'react-bulma-components/lib/components/box'
-import Menu from 'react-bulma-components/lib/components/menu'
 import Columns from 'react-bulma-components/lib/components/columns'
 import Heading from 'react-bulma-components/lib/components/heading'
 import CommunityNavbar from '../components/communityNavbar'
@@ -22,8 +21,8 @@ import Media from 'react-bulma-components/lib/components/media'
 import Content from 'react-bulma-components/lib/components/content'
 import Modal from 'react-bulma-components/lib/components/modal'
 import Section from 'react-bulma-components/lib/components/section'
+import PostCard from '../components/postCard'
 
-import CustomSections from '../components/customSections'
 import {
   Edit,
   Home,
@@ -34,8 +33,7 @@ import {
   Calendar as CalendarIcon,
   CreditCard,
   RefreshCw,
-  Star,
-  Layers,
+  Coffee
 } from 'react-feather'
 
 export default function CommunityHome(props) {
@@ -64,6 +62,7 @@ export default function CommunityHome(props) {
 
   const [wellWishes, setWellWishes] = useState([])
   const [familyUpdates, setFamilyUpdates] = useState([])
+  const [messageBoard, setMessageBoard] = useState([])
   const [waystoHelp, setWaysToHelp] = useState('')
   const [photoGallery, setPhotoGallery] = useState('')
 
@@ -188,6 +187,25 @@ export default function CommunityHome(props) {
             setWaysToHelp(response.data[0].ways_to_help)
           } else if (response.data[0].home_page_highlight === 'Message Board') {
             setDisplayMessageBoard(true)
+            axios
+              .get('/messages/', {
+                headers: {
+                  Authorization: `JWT ${token}`,
+                },
+                params: {
+                  name: localStorage.getItem('community-name'),
+                  zipcode: localStorage.getItem('community-zipcode'),
+                  is_closed: localStorage.getItem('community-is-closed'),
+                },
+              })
+              .then(
+                (response) => {
+                  setMessageBoard(response.data)
+                },
+                (error) => {
+                  console.log(error)
+                }
+              )
           } else if (response.data[0].home_page_highlight === 'Photo Gallery') {
             setDisplayPhotoGallery(true)
             axios
@@ -481,6 +499,44 @@ export default function CommunityHome(props) {
     </div>
   )
 
+  const messageBoardContainer = (
+    <div>
+      {messageBoard.length > 0 ? (
+        messageBoard
+          .slice()
+          .reverse()
+          .map((a, index) => {
+            return (
+              <Card key={index} style={{ marginBottom: '5%' }}>
+                <Card.Content>
+                  <Media.Item style={{ marginBottom: '2%' }}>
+                    <Heading subtitle size={6}>
+                      <b>{a.author_name}</b> posted in{' '}
+                      <b className='has-theme-color'>Message Board</b>
+                    </Heading>
+                    <Heading size={4}>{a.subject}</Heading>
+                  </Media.Item>
+                  <Content>
+                    <div dangerouslySetInnerHTML={{ __html: a.message }}></div>
+                  </Content>
+                  <p style={{ fontSize: '80%' }} className='has-text-grey'>
+                    {a.date_time}
+                  </p>
+                </Card.Content>
+              </Card>
+            )
+          })
+      ) : (
+        <p style={noteStyle}>
+          <Coffee size={100} color='#E5E5E5' />
+          <br />
+          <br />
+          Sit tight! Nothing has been posted on the Message Board yet.
+        </p>
+      )}
+  </div>
+  )
+
   const photoGalleryContainer = (
     <div>
       {photoGallery.length === 0 ? (
@@ -608,6 +664,7 @@ export default function CommunityHome(props) {
             {displayCalendar && calendar}
             {displayWellWishes && wellWishesContainer}
             {displayFamilyUpdates && familyUpdatesContainer}
+            {displayMessageBoard && messageBoardContainer}
             {displayWaysToHelp && waysToHelpContainer}
             {displayPhotoGallery && photoGalleryContainer}
           </Columns.Column>
@@ -669,27 +726,6 @@ export default function CommunityHome(props) {
               </Button>
             </a>
             <br />
-            <Menu>
-              <Menu.List>
-                <CustomSections />
-                <Link to='/create-custom-section'>
-                  <p className='sidebar'>
-                    <div style={{ display: 'flex', alignItems: 'center' }}>
-                      <Star size={12} style={{ marginRight: '10px' }} />{' '}
-                      <p>Create Custom Section</p>
-                    </div>
-                  </p>
-                </Link>
-                <Link to='/manage-custom-sections'>
-                  <p className='sidebar'>
-                    <div style={{ display: 'flex', alignItems: 'center' }}>
-                      <Layers size={12} style={{ marginRight: '10px' }} />{' '}
-                      <p>Manage Custom Sections</p>
-                    </div>
-                  </p>
-                </Link>
-              </Menu.List>
-            </Menu>
           </Columns.Column>
         </Columns>
       </Container>

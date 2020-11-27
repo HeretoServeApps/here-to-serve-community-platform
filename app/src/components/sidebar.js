@@ -121,7 +121,7 @@ const SideBar = (props) => {
               </p>
             </Link>
 
-            <Link to='/manage-custom-sections'>
+            <Link to='/custom-sections'>
               <p className='sidebar'>
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                   <Layers size={12} style={{ marginRight: '10px' }} />{' '}

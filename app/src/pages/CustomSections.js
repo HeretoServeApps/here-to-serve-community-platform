@@ -10,11 +10,12 @@ import axios from 'axios'
 import SideBar from '../components/sidebar'
 import EditCustomSection from '../components/editCustomSection'
 import DeleteCustomSection from '../components/deleteCustomSection'
+import Button from 'react-bulma-components/lib/components/button';
 
 export default function ManageCustomSections() {
   const token = localStorage.getItem('token')
   const [sections, setSections] = useState([])
-
+  const [userRole, _ ] = useState(localStorage.getItem('user-role'))
 
   var formContainerStyle = {
     padding: '5%',
@@ -75,14 +76,36 @@ export default function ManageCustomSections() {
             <SideBar />
           </Columns.Column>
           <Columns.Column size={9}>
-            <Heading size={4}>Manage Custom Sections</Heading>
+            <Columns>
+              <Columns.Column size={8}>
+                {userRole === 'Administrator' ?
+                  <Heading size={4}>Manage Custom Sections</Heading> : <Heading size={4}>Custom Sections</Heading>  
+                }
+              </Columns.Column>      
+              <Columns.Column size={4}>
+                {userRole === 'Administrator' &&
+                  <Link to='/create-custom-section'>
+                    <Button
+                      style={{
+                          boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)',
+                      }}
+                      color='primary'
+                      fullwidth={true}
+                    >
+                      Create Custom Section
+                    </Button>
+                  </Link>
+                }
+              </Columns.Column>      
+            </Columns>
+
             <Container style={formContainerStyle}>
               <Table>
                 <thead>
                   <tr>
                     <th>Section Name</th>
                     <th>Section Type</th>
-                    <th></th>
+                    {userRole === 'Administrator' && <th>Actions</th>}
                   </tr>
                 </thead>
                 <tbody>
@@ -118,18 +141,20 @@ export default function ManageCustomSections() {
                             ? 'Button'
                             : 'General'}
                         </td>
-                        <td>
-                          <EditCustomSection
-                            id={s.id}
-                            name={s.name}
-                            type={s.type}
-                            title={s.title}
-                            description={s.description}
-                            link={s.link}
-                            general_content={s.general_content}
-                          />
-                          <DeleteCustomSection id={s.id} />
-                        </td>
+                        {userRole === 'Administrator' &&
+                          <td>
+                            <EditCustomSection
+                              id={s.id}
+                              name={s.name}
+                              type={s.type}
+                              title={s.title}
+                              description={s.description}
+                              link={s.link}
+                              general_content={s.general_content}
+                            />
+                            <DeleteCustomSection id={s.id} />
+                          </td>
+                        }
                       </tr>
                     ))
                   ) : (
