@@ -26,6 +26,7 @@ SECRET_KEY = config('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
+USE_POSTGRES = False
 
 # Application definition
 
@@ -83,16 +84,26 @@ WSGI_APPLICATION = 'app.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'postgres',
-        'USER': 'postgres',
-        'PASSWORD': config('POSTGRESQL_DATABASE_PASSWORD'),
-        'HOST': 'localhost',
-        'PORT': ''
+DATABASES = {}
+if USE_POSTGRES:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'postgres',
+            'USER': 'postgres',
+            'PASSWORD': config('POSTGRESQL_DATABASE_PASSWORD'),
+            'HOST': 'localhost',
+            'PORT': ''
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
+    }
+
 
 if DEBUG == False:
     db_from_env = dj_database_url.config(conn_max_age=600)
