@@ -191,7 +191,7 @@ export default function App() {
 
   return (
     <div>
-      <Router>
+      <Router basename='/app'>
         <Header logged_in={loggedIn} handle_logout={handleLogout} />
         <Switch>
           {/* Routes that are available without authentication */}
@@ -257,7 +257,7 @@ export default function App() {
             exact
             component={CommunityHome}
           />
-          <PrivateRoute path='/calendar' exact component={CalendarPage} />
+          <PrivateRoute path={'/calendar'} exact component={CalendarPage} />
           <PrivateRoute
             path='/create-new-activity'
             exact
