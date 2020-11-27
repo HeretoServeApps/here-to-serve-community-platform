@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import axios from 'axios'
 
 import Container from 'react-bulma-components/lib/components/container'
@@ -29,6 +29,8 @@ export default function CommunityEdit() {
         margin: '5% 5%',
         maxWidth: '100%',
     }
+
+    let history = useHistory()
 
     const [communityName, setCommunityName] = useState('')
     const [communityDescription, setCommunityDescription] = useState('')
@@ -132,7 +134,7 @@ export default function CommunityEdit() {
             }
 
             fetch('/edit-community/' + pk, requestOptions)
-            .then(response => response.text())
+            .then(response => history.push('/my-communities'))
             .catch(error => console.log('error', error))
     })
 
