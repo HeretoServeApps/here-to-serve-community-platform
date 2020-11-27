@@ -142,7 +142,7 @@ export default function App() {
 
       var config = {
         method: 'post',
-        url: process.env.REACT_APP_API_URL + '/users/',
+        url: '/users/',
         headers: {
           'Content-Type': 'application/json',
         },
