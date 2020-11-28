@@ -186,4 +186,4 @@ class DiscussionPostSerializer(serializers.ModelSerializer):
 class PhotoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Photo
-        fields = ('title', 'photo', 'description', 'community')
+        fields = ('id', 'title', 'photo', 'description', 'community', 'day', 'month', 'year', 'time')

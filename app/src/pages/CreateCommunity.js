@@ -20,7 +20,6 @@ import Image from 'react-bulma-components/lib/components/image';
 import Icon from 'react-bulma-components/lib/components/icon';
 
 import CheckboxField from '../components/checkboxfield'
-import CheckboxTermofUse from '../components/checkboxTermofUse'
 
 export default function CreateCommunity() {
   // Non-bulma styles
@@ -69,7 +68,7 @@ export default function CreateCommunity() {
     }
 
     fetch(url, requestOptions)
-      .then((response) => 
+      .then((_) => 
     {
       //After user creates the community, they are added as the admin (only admins can create new communities)
       var formdata = new FormData()
@@ -90,9 +89,9 @@ export default function CreateCommunity() {
 
       fetch('/community-role-register/', requestOptions)
         .then((response) => response.text())
-        .then((result) => history.push('/my-communities'))
+        .then((_) => history.push('/my-communities'))
         .catch((error) => console.log('error', error))})
-      .then((result) => {
+      .then((_) => {
         history.push('/my-communities')
       })
       .catch((error) => console.log('error', error))
@@ -190,7 +189,6 @@ export default function CreateCommunity() {
           </p>
         </div>
         <CheckboxField text={'Allow all members to send invitations.'} />
-        <CheckboxTermofUse />
       </Field>
       <Button
         onClick={() => handleSubmit(name, description, zipcode, country, isClosed, photoFile)}

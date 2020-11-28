@@ -6,7 +6,6 @@ import Heading from 'react-bulma-components/lib/components/heading'
 import Button from 'react-bulma-components/lib/components/button'
 
 const DeleteCustomSection = ({ id }) => {
-  const token = localStorage.getItem('token')
   const [showDelete, setShowDelete] = useState(false)
 
   // Delete custom section
@@ -30,7 +29,7 @@ const DeleteCustomSection = ({ id }) => {
       .then((response) => response.text())
       .then((result) => window.location.reload())
       .catch((error) => console.log('error', error))
-  })
+  }, [])
 
   return (
     <span>

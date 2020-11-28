@@ -13,6 +13,7 @@ import Columns from 'react-bulma-components/lib/components/columns'
 import Heading from 'react-bulma-components/lib/components/heading'
 import Modal from 'react-bulma-components/lib/components/modal'
 import Section from 'react-bulma-components/lib/components/section'
+import Menu from 'react-bulma-components/lib/components/menu'
 import {
   Select,
   Control,
@@ -23,7 +24,7 @@ import {
 import CheckboxField from '../components/checkboxfield'
 import CommunityNavbar from '../components/communityNavbar'
 import CustomSections from '../components/customSections'
-import { RefreshCw, Clipboard, Layers, Edit2, Trash2, PauseCircle, Calendar as CalendarIcon } from 'react-feather'
+import { RefreshCw, Clipboard, Layers, Edit2, Trash2, PauseCircle, Star, Calendar as CalendarIcon } from 'react-feather'
 
 export default function CalendarPage() {
   var containerStyle = {
@@ -245,7 +246,7 @@ export default function CalendarPage() {
         },
       })
       .then(
-        (response) => {
+        (_) => {
           window.location.reload()
         },
         (error) => {
@@ -580,7 +581,30 @@ export default function CalendarPage() {
         <Columns isMultiline={true}>
           <Columns.Column size={3}>
             <Box>
+              <Menu>
+                <Menu.List>
+                  <Link to='/create-custom-section'>
+                    <p className='sidebar'>
+                      <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <Star size={12} style={{ marginRight: '10px' }} />{' '}
+                        <p color='black'>Create Custom Section</p>
+                      </div>
+                    </p>
+                  </Link>
+                  <Link to='/custom-sections'>
+                    <p className='sidebar'>
+                      <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <Layers size={12} style={{ marginRight: '10px' }} />{' '}
+                        <p color='black'>Manage Custom Sections</p>
+                      </div>
+                    </p>
+                  </Link>
+                </Menu.List>
+              </Menu>
+              <hr />
+
               <CustomSections />
+
               <Heading size={6}>Status</Heading>
               <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
                 <Checkbox

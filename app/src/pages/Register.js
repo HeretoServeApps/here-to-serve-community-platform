@@ -121,7 +121,7 @@ export default function Register(props) {
       formdata.append('community', who)
       formdata.append('user', email)
       formdata.append('role', 'COMM_MEMBER')
-      if (communityToIsClosedMap[who] == "true") {
+      if (communityToIsClosedMap[who] === "true") {
         formdata.append('is_approved', true)
       }
 
@@ -418,7 +418,6 @@ export default function Register(props) {
                 type='password'
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder='Password*'
-                type='password'
               />
             </Control>
           </Field>
@@ -431,7 +430,6 @@ export default function Register(props) {
                 type='password'
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 placeholder='Confirm Password*'
-                type='password'
               />
             </Control>
           </Field>
