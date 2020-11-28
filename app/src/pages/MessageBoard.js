@@ -89,7 +89,7 @@ export default function MessageBoard(props) {
           console.log(error)
         }
       )
-  }, [subject, message])
+  }, [subject, message, token])
 
   useEffect(() => {
     axios

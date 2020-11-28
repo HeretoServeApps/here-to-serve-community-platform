@@ -13,7 +13,6 @@ import {
   Paperclip,
   Mail,
   Send,
-  Inbox,
   Edit,
   Star,
 } from 'react-feather'
@@ -24,6 +23,26 @@ const SideBar = (props) => {
       <Menu color='white'>
         <Menu.List>
           <Box>
+            <Link to='/create-custom-section'>
+              <p className='sidebar'>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                  <Star size={12} style={{ marginRight: '10px' }} />{' '}
+                  <p>Create Custom Section</p>
+                </div>
+              </p>
+            </Link>
+
+            <Link to='/custom-sections'>
+              <p className='sidebar'>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                  <Layers size={12} style={{ marginRight: '10px' }} />{' '}
+                  <p>Manage Custom Sections</p>
+                </div>
+              </p>
+            </Link>
+
+            <hr />
+
             <CustomSections />
 
             <Link to='/create-new-activity'>
@@ -106,26 +125,6 @@ const SideBar = (props) => {
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                   <Edit size={12} style={{ marginRight: '10px' }} />{' '}
                   <p>Edit Community Information</p>
-                </div>
-              </p>
-            </Link>
-
-            <hr />
-
-            <Link to='/create-custom-section'>
-              <p className='sidebar'>
-                <div style={{ display: 'flex', alignItems: 'center' }}>
-                  <Star size={12} style={{ marginRight: '10px' }} />{' '}
-                  <p>Create Custom Section</p>
-                </div>
-              </p>
-            </Link>
-
-            <Link to='/custom-sections'>
-              <p className='sidebar'>
-                <div style={{ display: 'flex', alignItems: 'center' }}>
-                  <Layers size={12} style={{ marginRight: '10px' }} />{' '}
-                  <p>Manage Custom Sections</p>
                 </div>
               </p>
             </Link>

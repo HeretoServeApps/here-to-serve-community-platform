@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 
-import Button from 'react-bulma-components/lib/components/button'
-import Box from 'react-bulma-components/lib/components/box'
 import Menu from 'react-bulma-components/lib/components/menu'
 import { Link as LinkIcon, MessageSquare, FileText } from 'react-feather'
 
@@ -10,15 +8,6 @@ import axios from 'axios'
 
 export default function CustomSections() {
   const [sections, setSections] = useState([])
-
-  var containerStyle = {
-    margin: '5% auto',
-    maxWidth: '300px',
-    padding: '1rem',
-    border: '0.1rem solid #E5E5E5',
-    borderRadius: '10px',
-  }
-  const [userRole, setUserRole] = useState('')
 
   useEffect(() => {
     axios
@@ -38,10 +27,6 @@ export default function CustomSections() {
           console.log(error)
         }
       )
-  }, [])
-
-  useEffect(() => {
-    setUserRole(localStorage.getItem('user-role'))
   }, [])
 
   return (

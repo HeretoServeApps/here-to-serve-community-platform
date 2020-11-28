@@ -406,9 +406,13 @@ class EventActivity(models.Model):
 
 class Photo(models.Model):
     uuid = models.UUIDField(
-        primary_key=True, default=uuid.uuid4, editable=False,
+        default=uuid.uuid4, editable=False,
     )
-    created_at = models.DateTimeField(auto_now_add=True) 
+    created_at = models.DateTimeField(auto_now_add=True)
+    day = models.CharField(max_length=2, default='01', blank=False)
+    month = models.CharField(max_length=12, default='January', blank=False)
+    year = models.CharField(max_length=4, default='2020', blank=False)
+    time = models.CharField(max_length=8, default='12:00 PM')
     title = models.CharField(max_length=100, default='')
     photo = models.FileField(max_length=500)
     description = models.CharField(max_length=256, default='')

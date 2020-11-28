@@ -50,12 +50,6 @@ export default function CommunityEdit() {
     ]
 
     const [showRemoveModal, setShowRemoveModel] = useState(false)
-    const [isDeactivate, setIsDeactivate] = useState(false)
-
-    function deactivate(deactivate) {
-        setIsDeactivate(deactivate);
-        setShowRemoveModel(true);
-    }
 
     useEffect(() => {
         axios
@@ -120,22 +114,17 @@ export default function CommunityEdit() {
 
 
     const removeCommunity = useCallback(() => {
-        axios
-            .delete('/edit-community/' + localStorage.getItem('community-id'))
-            
-            
-            var url = '/edit-community/' + pk + '/'
-            var myHeaders = new Headers()
-            myHeaders.append('Authorization', `JWT ${localStorage.getItem('token')}`)
+        var myHeaders = new Headers()
+        myHeaders.append('Authorization', `JWT ${localStorage.getItem('token')}`)
 
-            var requestOptions = {
-                method: 'DELETE',
-                headers: myHeaders,
-            }
+        var requestOptions = {
+            method: 'DELETE',
+            headers: myHeaders,
+        }
 
-            fetch('/edit-community/' + pk, requestOptions)
-            .then(response => history.push('/my-communities'))
-            .catch(error => console.log('error', error))
+        fetch('/edit-community/' + pk, requestOptions)
+        .then(_ => history.push('/my-communities'))
+        .catch(error => console.log('error', error))
     })
 
     return (
@@ -316,50 +305,33 @@ export default function CommunityEdit() {
             </Container>
 
             <Modal
-          show={showRemoveModal}
-          onClose={() => setShowRemoveModel(false)}
-          closeOnBlur={true}
-        >
-          <Modal.Card>
-            <Modal.Card.Head onClose={() => setShowRemoveModel(false)}>
-            {isDeactivate ? (
-                <Modal.Card.Title>Remove "{communityName}" Community</Modal.Card.Title>
-              ) : (
-                <Modal.Card.Title>Remove "{communityName}" Community</Modal.Card.Title>
-              )}
-
-            </Modal.Card.Head>
-            {isDeactivate ? (
-                <Section style={{ backgroundColor: 'white' }}>
-              Are you sure you want to shutdown this community?
-            </Section>
-              ) : (
-                <Section style={{ backgroundColor: 'white' }}>
-              Are you sure you want to shutdown this community? You can't undo
-              this action.
-            </Section>
-              )}
-
-            <Modal.Card.Foot
-              style={{
-                alignItems: 'center',
-                justifyContent: 'space-between',
-              }}
+                show={showRemoveModal}
+                onClose={() => setShowRemoveModel(false)}
+                closeOnBlur={true}
             >
-              <Button onClick={() => setShowRemoveModel(false)}>Cancel</Button>
-              {isDeactivate ? (
-                <Button color='primary' onClick={() => removeCommunity()}>
-                  Shutdown Community 
-                </Button>
-              ) : (
-                <Button color='primary' onClick={() => removeCommunity()}>
-                  Shutdown Community
-                </Button>
-              )}
-            </Modal.Card.Foot>
-          </Modal.Card>
-        </Modal>
+                <Modal.Card>
+                    <Modal.Card.Head onClose={() => setShowRemoveModel(false)}>
+                        <Modal.Card.Title>Remove "{communityName}" Community</Modal.Card.Title>
+                    </Modal.Card.Head>
+                        <Section style={{ backgroundColor: 'white' }}>
+                            Are you sure you want to shutdown this community? You can't undo
+                            this action.
+                        </Section>
+                    <Modal.Card.Foot
+                        style={{
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                        }}
+                        >
+                        <Button onClick={() => setShowRemoveModel(false)}>
+                            Cancel
+                        </Button>
+                        <Button color='primary' onClick={() => removeCommunity()}>
+                            Shutdown Community
+                        </Button>
+                    </Modal.Card.Foot>
+                </Modal.Card>
+            </Modal>
         </div>
-
     )
 }

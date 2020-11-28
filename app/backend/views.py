@@ -848,6 +848,12 @@ class AddPhoto(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
+class PhotoEditDeleteView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Photo.objects.all()
+    serializer_class = PhotoSerializer
+
+
 class MessageViewSet(viewsets.ModelViewSet):
     queryset = Message.objects.all().order_by('name')
     serializer_class = MessageSerializer
