@@ -1,6 +1,7 @@
 import json, uuid
 from datetime import datetime, time
 from pprint import pprint
+from decouple import config
 
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
@@ -562,9 +563,9 @@ class InviteUsers(APIView):
         sender_name = data['sender']
 
         subject = '[Here to Serve] Join {community}\'s Care Community'.format(community=community)
-        message = '{sender} has invited you to join {community}\'s Care Community.' \
-                    ' Please go to {url} to access the volunteer platform.'.format(
-                        sender=sender_name, community=community, url='http://localhost:3000/'
+        message = 'You have been invited to join {community}\'s online care community.' \
+                    ' Please click on {url} to join, receive updates, as well as support the family.'.format(
+                        community=community, url=config('HEROKU_APP_REGISTER_URL')
                     )
 
         messages = []

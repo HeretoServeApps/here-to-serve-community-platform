@@ -186,7 +186,7 @@ export default function MessageBoard(props) {
                                   alignleft aligncenter alignright alignjustify | \
                                   bullist numlist outdent indent | link image media | help',
                         file_browser_callback_types: 'image',
-                        file_picker_callback: function (callback, value, meta) {
+                        file_picker_callback: function (callback, _, meta) {
                           if (meta.filetype == 'image') {
                             var input = document.getElementById('my-file')
                             input.click()
