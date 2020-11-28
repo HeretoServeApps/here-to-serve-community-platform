@@ -16,7 +16,6 @@ import Button from 'react-bulma-components/lib/components/button'
 import Container from 'react-bulma-components/lib/components/container'
 import Heading from 'react-bulma-components/lib/components/heading'
 import Columns from 'react-bulma-components/lib/components/columns'
-import Notification from 'react-bulma-components/lib/components/notification'
 import Image from 'react-bulma-components/lib/components/image';
 import Icon from 'react-bulma-components/lib/components/icon';
 
@@ -201,9 +200,6 @@ export default function CreateCommunity() {
       >
         CREATE COMMUNITY
       </Button>
-      <Notification className='has-text-grey'>
-        <a href='#'>Click here</a> to find and join existing communities.
-      </Notification>
     </Container>
   )
 }
