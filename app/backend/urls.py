@@ -61,4 +61,5 @@ urlpatterns = [
     path('add-message/', views.AddMessage.as_view()),
     path('delete-message/', views.DeleteMessage.as_view()),
     path('edit-message/', views.EditMessage.as_view()),
+    re_path(r'^edit-photo/(?P<pk>\d+)/$', views.PhotoEditDeleteView.as_view()),
 ]

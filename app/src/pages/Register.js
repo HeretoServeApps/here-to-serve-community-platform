@@ -121,6 +121,9 @@ export default function Register(props) {
       formdata.append('community', who)
       formdata.append('user', email)
       formdata.append('role', 'COMM_MEMBER')
+      if (communityToIsClosedMap[who] === "true") {
+        formdata.append('is_approved', true)
+      }
 
       var requestOptions = {
         method: 'POST',
@@ -129,7 +132,7 @@ export default function Register(props) {
       }
 
       fetch(
-        process.env.REACT_APP_API_URL + '/community-role-register/',
+        '/community-role-register/',
         requestOptions
       )
         .then((response) => response.text())
@@ -415,7 +418,6 @@ export default function Register(props) {
                 type='password'
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder='Password*'
-                type='password'
               />
             </Control>
           </Field>
@@ -428,7 +430,6 @@ export default function Register(props) {
                 type='password'
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 placeholder='Confirm Password*'
-                type='password'
               />
             </Control>
           </Field>

@@ -50,9 +50,9 @@ const Header = (props) => {
       <Box>
         <Navbar color='white'>
           <Navbar.Brand style={{ display: 'flex', alignItems: 'center' }}>
-            <a href={props.logged_in ? '/my-communities' : '/'}>
+            <Link to={props.logged_in ? '/my-communities' : '/home'}>
               <img src={logo} alt='logo' width='160' />
-            </a>
+            </Link>
             <Navbar.Burger
               role='button'
               ariaLabel='menu'

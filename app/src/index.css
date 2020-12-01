@@ -129,3 +129,6 @@ thead th {
 .has-theme-color {
   color: #2c8595;
 }
+
+/* Remove warning from tinymce */
+.tox-notification { display: none !important }

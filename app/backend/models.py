@@ -35,7 +35,8 @@ class Community(models.Model):
     )
     display_leaders_on_home_page = models.CharField(blank=False, default='true', max_length=5)
     photo_file = models.FileField(
-        default='https://vignette.wikia.nocookie.net/project-pokemon/images/4/47/Placeholder.png/revision/latest?cb=20170330235552&format=original'
+        default='https://vignette.wikia.nocookie.net/project-pokemon/images/4/47/Placeholder.png/revision/latest?cb=20170330235552&format=original',
+        max_length=500
     )
 
     def __str__(self):
@@ -405,10 +406,14 @@ class EventActivity(models.Model):
 
 class Photo(models.Model):
     uuid = models.UUIDField(
-        primary_key=True, default=uuid.uuid4, editable=False,
+        default=uuid.uuid4, editable=False,
     )
-    created_at = models.DateTimeField(auto_now_add=True) 
+    created_at = models.DateTimeField(auto_now_add=True)
+    day = models.CharField(max_length=2, default='01', blank=False)
+    month = models.CharField(max_length=12, default='January', blank=False)
+    year = models.CharField(max_length=4, default='2020', blank=False)
+    time = models.CharField(max_length=8, default='12:00 PM')
     title = models.CharField(max_length=100, default='')
-    photo = models.FileField()
+    photo = models.FileField(max_length=500)
     description = models.CharField(max_length=256, default='')
     community = models.ForeignKey(Community, on_delete=models.CASCADE, null=False, blank=False)

@@ -9,7 +9,7 @@ import Heading from 'react-bulma-components/lib/components/heading'
 import Table from 'react-bulma-components/lib/components/table'
 import Columns from 'react-bulma-components/lib/components/columns'
 import Button from 'react-bulma-components/lib/components/button'
-import { UserPlus, Check } from 'react-feather'
+import { Check } from 'react-feather'
 import SideBar from '../components/sidebar'
 import CommunityNavbar from '../components/communityNavbar'
 
@@ -26,10 +26,7 @@ export default function CommunityPeople() {
   }
 
   const [people, setPeople] = useState([])
-  const [userRole, setUserRole] = useState('')
   const [search, setSearch] = useState('')
-
-  let history = useHistory()
 
   const roleMap = {
     'Community Leader': 'COMM_LEADER',
@@ -52,7 +49,6 @@ export default function CommunityPeople() {
       .then(
         (response) => {
           setPeople(Array.from(response.data.people))
-          setUserRole(response.data.user_role)
         },
         (error) => {
           console.log(error)
@@ -74,7 +70,7 @@ export default function CommunityPeople() {
           'Content-Type': 'application/json',
         },
       })
-      .then((result) => window.location.reload())
+      .then((_) => window.location.reload())
       .catch((error) => console.log('error', error))
   })
 

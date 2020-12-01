@@ -16,12 +16,10 @@ import Button from 'react-bulma-components/lib/components/button'
 import Container from 'react-bulma-components/lib/components/container'
 import Heading from 'react-bulma-components/lib/components/heading'
 import Columns from 'react-bulma-components/lib/components/columns'
-import Notification from 'react-bulma-components/lib/components/notification'
 import Image from 'react-bulma-components/lib/components/image';
 import Icon from 'react-bulma-components/lib/components/icon';
 
 import CheckboxField from '../components/checkboxfield'
-import CheckboxTermofUse from '../components/checkboxTermofUse'
 
 export default function CreateCommunity() {
   // Non-bulma styles
@@ -70,10 +68,13 @@ export default function CreateCommunity() {
     }
 
     fetch(url, requestOptions)
-      .then((response) => 
+      .then((_) => 
     {
       //After user creates the community, they are added as the admin (only admins can create new communities)
       var formdata = new FormData()
+      var myHeaders = new Headers()
+      myHeaders.append('Authorization', `JWT ${localStorage.getItem('token')}`)
+
       formdata.append('community', name)
       formdata.append('user', localStorage.getItem('email'))
       formdata.append('role', 'ADMIN')
@@ -81,15 +82,16 @@ export default function CreateCommunity() {
 
       var requestOptions = {
         method: 'POST',
+        headers: myHeaders,
         body: formdata,
         redirect: 'follow',
       }
 
-      fetch(process.env.REACT_APP_API_URL + '/community-role-register/', requestOptions)
+      fetch('/community-role-register/', requestOptions)
         .then((response) => response.text())
-        .then((result) => history.push('/my-communities'))
+        .then((_) => history.push('/my-communities'))
         .catch((error) => console.log('error', error))})
-      .then((result) => {
+      .then((_) => {
         history.push('/my-communities')
       })
       .catch((error) => console.log('error', error))
@@ -187,7 +189,6 @@ export default function CreateCommunity() {
           </p>
         </div>
         <CheckboxField text={'Allow all members to send invitations.'} />
-        <CheckboxTermofUse />
       </Field>
       <Button
         onClick={() => handleSubmit(name, description, zipcode, country, isClosed, photoFile)}
@@ -197,9 +198,6 @@ export default function CreateCommunity() {
       >
         CREATE COMMUNITY
       </Button>
-      <Notification className='has-text-grey'>
-        <a href='#'>Click here</a> to find and join existing communities.
-      </Notification>
     </Container>
   )
 }
