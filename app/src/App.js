@@ -37,7 +37,7 @@ import PhotoGallery from './pages/PhotoGallery'
 import MessageBoard from './pages/MessageBoard'
 import PasswordSettings from './pages/PasswordSettings'
 import ActivityEdit from './pages/ActivityEdit'
-import ManageCustomSections from './pages/ManageCustomSections'
+import CustomSections from './pages/CustomSections'
 import JoinRequests from './pages/JoinRequests'
 import EmailMembers from './pages/EmailMembers'
 import ManageActivities from './pages/ManageActivities'
@@ -142,7 +142,7 @@ export default function App() {
 
       var config = {
         method: 'post',
-        url: process.env.REACT_APP_API_URL + '/users/',
+        url: '/users/',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -191,7 +191,7 @@ export default function App() {
 
   return (
     <div>
-      <Router>
+      <Router basename='/app'>
         <Header logged_in={loggedIn} handle_logout={handleLogout} />
         <Switch>
           {/* Routes that are available without authentication */}
@@ -257,7 +257,7 @@ export default function App() {
             exact
             component={CommunityHome}
           />
-          <PrivateRoute path='/calendar' exact component={CalendarPage} />
+          <PrivateRoute path={'/calendar'} exact component={CalendarPage} />
           <PrivateRoute
             path='/create-new-activity'
             exact
@@ -320,9 +320,9 @@ export default function App() {
             component={ActivityEdit}
           />
           <PrivateRoute
-            path='/manage-custom-sections'
+            path='/custom-sections'
             exact
-            component={ManageCustomSections}
+            component={CustomSections}
           />
           <PrivateRoute path='/join-requests' exact component={JoinRequests} />
           <PrivateRoute path='/email-members' exact component={EmailMembers} />

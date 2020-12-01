@@ -8,13 +8,11 @@ import Heading from 'react-bulma-components/lib/components/heading'
 import CommunityNavbar from '../components/communityNavbar'
 import Button from 'react-bulma-components/lib/components/button'
 import {
-  Select,
   Control,
   Label,
   Field,
   Input,
   Textarea,
-  Checkbox,
   Radio,
 } from 'react-bulma-components/lib/components/form'
 import axios from 'axios'

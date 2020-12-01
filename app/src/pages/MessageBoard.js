@@ -8,7 +8,7 @@ import Heading from 'react-bulma-components/lib/components/heading'
 import CommunityNavbar from '../components/communityNavbar'
 import Button from 'react-bulma-components/lib/components/button'
 import SideBar from '../components/sidebar'
-import { Edit2, XCircle, X, Coffee, CheckCircle } from 'react-feather'
+import { Edit2, X, Coffee, CheckCircle } from 'react-feather'
 import {
   Control,
   Label,
@@ -89,7 +89,7 @@ export default function MessageBoard(props) {
           console.log(error)
         }
       )
-  }, [subject, message])
+  }, [subject, message, token])
 
   useEffect(() => {
     axios
@@ -186,7 +186,7 @@ export default function MessageBoard(props) {
                                   alignleft aligncenter alignright alignjustify | \
                                   bullist numlist outdent indent | link image media | help',
                         file_browser_callback_types: 'image',
-                        file_picker_callback: function (callback, value, meta) {
+                        file_picker_callback: function (callback, _, meta) {
                           if (meta.filetype == 'image') {
                             var input = document.getElementById('my-file')
                             input.click()

@@ -77,7 +77,7 @@ export default function CommunityAbout() {
           <br />
           <br />
           Visit the Here to Serve home page:{' '}
-          <a href='https://www.heretoserve.org/' target='_blank'>
+          <a href='https://www.heretoserve.org/' target='_blank' rel='noopener noreferrer'>
             heretoserve.org
           </a>
           .

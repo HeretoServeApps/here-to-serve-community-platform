@@ -76,7 +76,7 @@ export default function CommunityAddMembers() {
             }),
         })
             .then((res) => res.json())
-            .then((json) => { setSuccess(true) },
+            .then((_) => { setSuccess(true) },
             (error) => {
                 console.log(error)
             }) 
@@ -168,8 +168,8 @@ export default function CommunityAddMembers() {
                 <strong>Subject:</strong> [Here to Serve] Join {localStorage.getItem('community-name')}'s Care Community
                 <br />
                 <br />
-                <strong>Message:</strong> {firstName} {lastName} has invited you to join {localStorage.getItem('community-name')}'s Care Community.
-                Please click <Link to='/'>here</Link> to access the volunteer platform.
+                <strong>Message:</strong> You have been invited to join {localStorage.getItem('community-name')}'s online care community. Please click  
+                <Link to='/register'> here</Link> to join, receive updates, as well as support the family.
 
                 <Columns style={{marginTop: '5%'}}>
                     <Columns.Column>
