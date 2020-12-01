@@ -25,6 +25,9 @@ const Header = (props) => {
 
   const logged_in_header = (
     <Navbar.Container position='end'>
+      <Link className={'navbar-item'} to='/add-people'>
+        <Heading size={6}>Tell/Invite A Friend!</Heading>
+      </Link>
       <Link className={'navbar-item'} to='/my-communities'>
         <Heading size={6}>My Communities</Heading>
       </Link>
@@ -42,6 +45,7 @@ const Header = (props) => {
       <Link className={'navbar-item'} to='/home' onClick={() => props.handle_logout()}>
         <Heading size={6}>Logout</Heading>
       </Link>
+      
     </Navbar.Container>
   )
 

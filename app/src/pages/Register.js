@@ -121,6 +121,9 @@ export default function Register(props) {
       formdata.append('community', who)
       formdata.append('user', email)
       formdata.append('role', 'COMM_MEMBER')
+      if (communityToIsClosedMap[who] == "true") {
+        formdata.append('is_approved', true)
+      }
 
       var requestOptions = {
         method: 'POST',
