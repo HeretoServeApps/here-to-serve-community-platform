@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { useHistory } from 'react-router-dom'
+import { Editor } from '@tinymce/tinymce-react'
 
 import Container from 'react-bulma-components/lib/components/container'
 import Columns from 'react-bulma-components/lib/components/columns'
@@ -188,10 +189,26 @@ export default function CreateCustomSection(props) {
                 </Label>
                 <Control>
                   {type !== 'BUTTON' ? (
-                    <Textarea
-                      value={description}
-                      onChange={(e) => setDescription(e.target.value)}
-                    />
+                    <Control>
+                      <Editor
+                        init={{
+                          height: 300,
+                          menubar: false,
+                          plugins: [
+                          'advlist autolink lists link image charmap print preview anchor',
+                          'searchreplace visualblocks code fullscreen',
+                          'insertdatetime media table paste code help wordcount',
+                          ],
+                          toolbar:
+                          'undo redo | formatselect | link image | bold italic backcolor | \
+                          alignleft aligncenter alignright alignjustify | \
+                          bullist numlist outdent indent | removeformat | help',
+                          }}
+                        onEditorChange={(content, editor) =>
+                          setDescription(content)
+                        }
+                        />
+                    </Control>
                   ) : (
                     <Input
                       value={link}
