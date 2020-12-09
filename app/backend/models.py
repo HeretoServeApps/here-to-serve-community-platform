@@ -405,9 +405,6 @@ class EventActivity(models.Model):
 
 
 class Photo(models.Model):
-    uuid = models.UUIDField(
-        default=uuid.uuid4, editable=False,
-    )
     created_at = models.DateTimeField(auto_now_add=True)
     day = models.CharField(max_length=2, default='01', blank=False)
     month = models.CharField(max_length=12, default='January', blank=False)
