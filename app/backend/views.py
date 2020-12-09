@@ -826,7 +826,6 @@ class AddDiscussionPost(APIView):
         request.data['community'] = community
         request.data['user'] = user
         serializer = DiscussionPostSerializer(data=request.data)
-        print(request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)

@@ -114,7 +114,7 @@ export default function CustomGeneral(props) {
 
     fetch(url, requestOptions)
       .then((response) => response.text())
-      .then((result) => window.location.reload())
+      .then((_) => window.location.reload())
       .catch((error) => console.log('error', error))
   })
 
@@ -146,7 +146,7 @@ export default function CustomGeneral(props) {
         },
       })
       .then(
-        (response) => {
+        (_) => {
           window.location.reload()
         },
         (error) => {
@@ -260,7 +260,7 @@ export default function CustomGeneral(props) {
                       alignleft aligncenter alignright alignjustify | \
                       bullist numlist outdent indent | removeformat | help',
                       }}
-                      onEditorChange={(content, editor) =>
+                      onEditorChange={(content, _) =>
                         setNewContent(content)
                       }
                     />
