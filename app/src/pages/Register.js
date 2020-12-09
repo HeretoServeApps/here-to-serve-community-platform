@@ -121,11 +121,7 @@ export default function Register(props) {
       formdata.append('community', who)
       formdata.append('user', email)
       formdata.append('role', 'COMM_MEMBER')
-<<<<<<< HEAD
-      if (communityToIsClosedMap[who] == "true") {
-=======
       if (communityToIsClosedMap[who] === "true") {
->>>>>>> master
         formdata.append('is_approved', true)
       }
 
