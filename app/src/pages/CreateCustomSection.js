@@ -157,7 +157,7 @@ export default function CreateCustomSection(props) {
                     value='DP'
                   >
                     {' '}
-                    Discussions and Pages
+                    Discussions and Pages (Personal Blogs and Forums) 
                   </Radio>
                   <br />
                   <Radio
@@ -166,7 +166,7 @@ export default function CreateCustomSection(props) {
                     value='GENERAL'
                   >
                     {' '}
-                    General
+                    General (A simple web page without comments)
                   </Radio>
                   <br />
                   <Radio
@@ -175,7 +175,7 @@ export default function CreateCustomSection(props) {
                     value='BUTTON'
                   >
                     {' '}
-                    Button
+                    Button (Links to another web page)
                   </Radio>
                 </Control>
               </Field>
