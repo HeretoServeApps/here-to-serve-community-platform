@@ -14,6 +14,7 @@ import {
   Field,
   Input,
   Radio,
+  Textarea
 } from 'react-bulma-components/lib/components/form'
 import axios from 'axios'
 import SideBar from '../components/sidebar'
@@ -27,6 +28,7 @@ export default function CreateCustomSection(props) {
   const [link, setLink] = useState('')
   const [validForm, setValidForm] = useState(false)
   const [newContent, setContent] = useState('')
+
   let history = useHistory()
 
   var formContainerStyle = {
@@ -85,7 +87,6 @@ export default function CreateCustomSection(props) {
       general_content: newContent,
       link: link,
       community: localStorage.getItem('community-name'),
-      general_content: '',
     })
 
     axios
@@ -96,13 +97,14 @@ export default function CreateCustomSection(props) {
         },
       })
       .then((_) => {
-          history.push('/community-home')
+          history.push('/custom-sections')
         },
         (error) => {
           console.log(error)
         }
       )
   }, [name, title, type, description, link, newContent])
+  
 
   return (
     <div>
@@ -182,13 +184,13 @@ export default function CreateCustomSection(props) {
               </Field>
               <Field>
                 <Label>
-                  {type !== 'BUTTON' ? 'Content' : 'Link'}
-                  {type === 'BUTTON' && (
-                    <span style={{ color: '#F83D34' }}>*</span>
-                  )}
+                  {type === 'BUTTON' && <div>Link<span style={{ color: '#F83D34' }}>*</span></div>}
+                  {type === 'DP' && <div>Description<span style={{ color: '#F83D34' }}>*</span></div>}
+                  {type === 'GENERAL' && <div>Content<span style={{ color: '#F83D34' }}>*</span></div>}
                 </Label>
+                <input id="my-file" type="file" name="my-file" style={{display:"none"}} />
                 <Control>
-                  {type !== 'BUTTON' ? (
+                  {type === 'GENERAL' && (
                     <Control>
                       <Editor
                         initialValue={newContent}
@@ -225,12 +227,19 @@ export default function CreateCustomSection(props) {
                         onEditorChange={(content, _) => setContent(content)}
                       />
                     </Control>
-                  ) : (
+                  )} 
+                  {type === 'DP' &&
+                    <Textarea
+                      value={description}
+                      onChange={(e) => setDescription(e.target.value)}
+                    />
+                  }
+                  {type === 'BUTTON' &&
                     <Input
                       value={link}
                       onChange={(e) => setLink(e.target.value)}
                     />
-                  )}
+                  }
                 </Control>
               </Field>
             </div>

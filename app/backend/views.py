@@ -720,7 +720,6 @@ class AddCustomSection(APIView):
 
     def post(self, request, format=None):
         community_name = request.data['community']
-        print( request.data['general_content'])
         community = Community.objects.get(name=community_name).id
         request.data['community'] = community
         serializer = CustomSectionSerializer(data=request.data)
@@ -827,7 +826,6 @@ class AddDiscussionPost(APIView):
         request.data['community'] = community
         request.data['user'] = user
         serializer = DiscussionPostSerializer(data=request.data)
-        print(request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
