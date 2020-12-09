@@ -291,7 +291,7 @@ export default function CreateAnnouncement(props) {
         },
       })
       .then(
-        (response) => {
+        (_) => {
           history.push('/announcements')
         },
         (error) => {
@@ -428,11 +428,10 @@ export default function CreateAnnouncement(props) {
                     },
                     paste_data_images: true,
                   }}
-                  onEditorChange={(content, editor) => setMessage(content)}
+                  onEditorChange={(content, _) => setMessage(content)}
                 />
                 </Control>
               </Field>
-              <Field></Field>
               <div className='thursday' style={checkboxStyle}>
                 <Checkbox
                   style={{ marginRight: '10px' }}

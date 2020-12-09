@@ -72,7 +72,7 @@ class CustomSection(models.Model):
     title = models.CharField(max_length=64, blank=True)
     description = models.CharField(max_length=128, blank=True)
     community = models.ForeignKey(Community, on_delete=models.CASCADE, null=False, blank=False)
-    general_content = HTMLField(blank=True)
+    general_content = HTMLField()
 
     def __str__(self):
         return self.name

@@ -13,7 +13,6 @@ import {
   Label,
   Field,
   Input,
-  Textarea,
   Radio,
 } from 'react-bulma-components/lib/components/form'
 import axios from 'axios'
@@ -27,6 +26,7 @@ export default function CreateCustomSection(props) {
   const [description, setDescription] = useState('')
   const [link, setLink] = useState('')
   const [validForm, setValidForm] = useState(false)
+  const [newContent, setContent] = useState('')
   let history = useHistory()
 
   var formContainerStyle = {
@@ -82,6 +82,7 @@ export default function CreateCustomSection(props) {
       title: type === 'BUTTON' ? name : title,
       type: type,
       description: description,
+      general_content: newContent,
       link: link,
       community: localStorage.getItem('community-name'),
       general_content: '',
@@ -94,15 +95,14 @@ export default function CreateCustomSection(props) {
           'Content-Type': 'application/json',
         },
       })
-      .then(
-        (response) => {
+      .then((_) => {
           history.push('/community-home')
         },
         (error) => {
           console.log(error)
         }
       )
-  }, [name, title, type, description, link])
+  }, [name, title, type, description, link, newContent])
 
   return (
     <div>
@@ -182,7 +182,7 @@ export default function CreateCustomSection(props) {
               </Field>
               <Field>
                 <Label>
-                  {type !== 'BUTTON' ? 'Description' : 'Link'}
+                  {type !== 'BUTTON' ? 'Content' : 'Link'}
                   {type === 'BUTTON' && (
                     <span style={{ color: '#F83D34' }}>*</span>
                   )}
@@ -191,23 +191,39 @@ export default function CreateCustomSection(props) {
                   {type !== 'BUTTON' ? (
                     <Control>
                       <Editor
+                        initialValue={newContent}
                         init={{
-                          height: 300,
+                          height: 500,
                           menubar: false,
                           plugins: [
-                          'advlist autolink lists link image charmap print preview anchor',
-                          'searchreplace visualblocks code fullscreen',
-                          'insertdatetime media table paste code help wordcount',
+                              'advlist autolink lists link image charmap print preview anchor',
+                              'searchreplace wordcount visualblocks code fullscreen',
+                              'insertdatetime media table contextmenu paste code'
                           ],
-                          toolbar:
-                          'undo redo | formatselect | link image | bold italic backcolor | \
-                          alignleft aligncenter alignright alignjustify | \
-                          bullist numlist outdent indent | removeformat | help',
-                          }}
-                        onEditorChange={(content, editor) =>
-                          setDescription(content)
-                        }
-                        />
+                          toolbar: 'insertfile undo redo | formatselect | bold italic backcolor | \
+                                    alignleft aligncenter alignright alignjustify | \
+                                    bullist numlist outdent indent | link image media | help',
+                          file_browser_callback_types: 'image',
+                          file_picker_callback: function (callback, _, meta) {
+                            if (meta.filetype === 'image') {
+                                var input = document.getElementById('my-file');
+                                input.click()
+                                input.onchange = function () {
+                                    var file = input.files[0];
+                                    var reader = new FileReader();
+                                    reader.onload = function (e) {
+                                        callback(e.target.result, {
+                                            alt: file.name
+                                        })
+                                    }
+                                    reader.readAsDataURL(file);
+                                };
+                            }
+                          },
+                          paste_data_images: true,
+                        }}
+                        onEditorChange={(content, _) => setContent(content)}
+                      />
                     </Control>
                   ) : (
                     <Input

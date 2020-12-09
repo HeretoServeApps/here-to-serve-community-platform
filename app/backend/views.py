@@ -687,6 +687,7 @@ class AddCustomSection(APIView):
 
     def post(self, request, format=None):
         community_name = request.data['community']
+        print( request.data['general_content'])
         community = Community.objects.get(name=community_name).id
         request.data['community'] = community
         serializer = CustomSectionSerializer(data=request.data)
