@@ -35,7 +35,7 @@ export default function CommunityAddMembers() {
     const [communityExists, setCommunityExists] = useState(false)
 
 
-   
+
     const addEmail = useCallback((email) => {
         setAllEmails(allEmails.concat(email))
         setInputEmail('')
@@ -59,7 +59,6 @@ export default function CommunityAddMembers() {
         }
     }, [])
 
-    let history = useHistory()
     const sendEmail = useCallback((fromEmail, toEmails, community, sender) => {
         setSuccess(true)
         fetch('/invite-members/', {
@@ -68,7 +67,7 @@ export default function CommunityAddMembers() {
                 'Content-Type': 'application/json',
                 'Authorization': `JWT ${localStorage.getItem('token')}`
             },
-            body: JSON.stringify({ 
+            body: JSON.stringify({
                 from_email: fromEmail,
                 to_emails: toEmails,
                 community: community,
@@ -77,40 +76,39 @@ export default function CommunityAddMembers() {
         })
             .then((res) => res.json())
             .then((_) => { setSuccess(true) },
-            (error) => {
-                console.log(error)
-            }) 
+                (error) => {
+                    console.log(error)
+                })
     }, [])
 
     const sendEmailWOCommunity = useCallback((fromEmail, toEmails, sender) => {
         setSuccess(true)
-        fetch('/invite-members/', {
+        fetch('/invite-members-no-community/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `JWT ${localStorage.getItem('token')}`
             },
-            body: JSON.stringify({ 
+            body: JSON.stringify({
                 from_email: fromEmail,
                 to_emails: toEmails,
                 sender: sender
             }),
         })
             .then((res) => res.json())
-            .then((json) => { setSuccess(true) },
-            (error) => {
-                console.log(error)
-            }) 
+            .then((_) => { setSuccess(true) },
+                (error) => {
+                    console.log(error)
+                })
     }, [])
-    
-    if (communityExists) {
-    if(success) {
+
+    if (success) {
         return (
             <div>
                 <CommunityNavbar />
                 <Container style={containerStyle}>
-                    An email has been sent to the addresses you provided. 
-                    <br />
+                    An email has been sent to the addresses you provided.
+                <br />
                     <Button
                         className='is-primary is-inverted'
                         style={{
@@ -120,16 +118,16 @@ export default function CommunityAddMembers() {
                         onClick={() => setSuccess(false)}
                     >
                         Back
-                    </Button> 
+                </Button>
                 </Container>
             </div>
         )
     }
-    
+
     return (
         <div>
-            
-            <CommunityNavbar /> 
+
+            <CommunityNavbar />
             <Container style={containerStyle}>
                 <Heading size={4}>Invite Members</Heading>
                 <strong>Send from:</strong> {localStorage.getItem('email')}
@@ -152,7 +150,7 @@ export default function CommunityAddMembers() {
                                     onClick={() => addEmail(inputEmail)}
                                 >
                                     Add
-                            </Button>
+                        </Button>
                             </Columns.Column>
                         </Columns>
                     </Control>
@@ -163,15 +161,25 @@ export default function CommunityAddMembers() {
                         <li key={e}>{e}</li>
                     ))}
                 </ul>
-
-                <br />
-                <strong>Subject:</strong> [Here to Serve] Join {localStorage.getItem('community-name')}'s Care Community
-                <br />
-                <br />
-                <strong>Message:</strong> You have been invited to join {localStorage.getItem('community-name')}'s online care community. Please click  
-                <Link to='/register'> here</Link> to join, receive updates, as well as support the family.
-
-                <Columns style={{marginTop: '5%'}}>
+                
+                {communityExists ? 
+                    <div>
+                        <strong>Subject:</strong> [Here to Serve] Join {localStorage.getItem('community-name')}'s Care Community
+                        <br />
+                        <br />
+                        <strong>Message:</strong> You have been invited to join {localStorage.getItem('community-name')}'s online care community. Please click
+                        <Link to='/register'> here</Link> to join, receive updates, as well as support the family.
+                    </div>
+                    :
+                    <div>
+                        <strong>Subject:</strong> [Here to Serve] Join Here to Serve
+                        <br />
+                        <br />
+                        <strong>Message:</strong> {firstName} {lastName} has invited you to join Here To Serve.
+                        Please click <a href='https://here-to-serve.herokuapp.com/app'>here</a> to access the volunteer platform.
+                    </div>
+                }
+                <Columns style={{ marginTop: '5%' }}>
                     <Columns.Column>
                         <Link to='/community-people'>
                             <Button
@@ -183,140 +191,51 @@ export default function CommunityAddMembers() {
                                 fullwidth={true}
                             >
                                 Cancel
-                            </Button>
+                        </Button>
                         </Link>
                     </Columns.Column>
                     <Columns.Column>
-                        <Button
-                            color='primary'
-                            style={{
-                                marginBottom: '1rem',
-                                boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)',
-                            }}
-                            fullwidth={true}
-                            onClick={() => 
-                                sendEmail(
-                                    localStorage.getItem('email'),
-                                    allEmails,
-                                    localStorage.getItem('community-name'),
-                                    firstName + ' ' + lastName,
-                                )
-                            }
-                        >
-                            Send Invite
-                        </Button>
-                    </Columns.Column>
-                </Columns>
-
-
-            </Container>
-        </div >
-    )
-}
-if(success) {
-    return (
-        <div>
-            <Container style={containerStyle}>
-                An email has been sent to the addresses you provided. 
-                <br />
-                <Button
-                    className='is-primary is-inverted'
-                    style={{
-                        marginTop: '3%',
-                        boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)',
-                    }}
-                    onClick={() => setSuccess(false)}
-                >
-                    Back
-                </Button> 
-            </Container>
-        </div>
-    )
-}
-
-    return (
-        <div>
-            
-            <Container style={containerStyle}>
-                <Heading size={4}>Invite Members</Heading>
-                <strong>Send from:</strong> {localStorage.getItem('email')}
-
-                <Field>
-                    <Label>Send to:</Label>
-                    <Control>
-                        <Columns>
-                            <Columns.Column size={10}>
-                                <Input
-                                    value={inputEmail}
-                                    onChange={e => setInputEmail(e.target.value)}
-                                    placeholder='Enter email address to send invites to Here-to-Serve.'
-                                />
-                            </Columns.Column>
-                            <Columns.Column>
-                                <Button
-                                    style={{ marginBottom: '1rem' }}
-                                    color='primary'
-                                    onClick={() => addEmail(inputEmail)}
-                                >
-                                    Add
-                            </Button>
-                            </Columns.Column>
-                        </Columns>
-                    </Control>
-                </Field>
-
-                <ul>
-                    {allEmails.map(e => (
-                        <li key={e}>{e}</li>
-                    ))}
-                </ul>
-
-                <br />
-                <strong>Subject:</strong> [Here to Serve] Join Here-To-Serve!
-                <br />
-                <br />
-                <strong>Message:</strong> {firstName} {lastName} has invited you to join Here-To-Serve
-                Please click <Link to='/'>here</Link> to access the volunteer platform.
-
-                <Columns style={{marginTop: '5%'}}>
-                    <Columns.Column>
-                        <Link to='/community-people'>
+                        {communityExists ? 
                             <Button
-                                className='is-primary is-inverted'
+                                color='primary'
                                 style={{
                                     marginBottom: '1rem',
                                     boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)',
                                 }}
                                 fullwidth={true}
+                                onClick={() =>
+                                    sendEmail(
+                                        localStorage.getItem('email'),
+                                        allEmails,
+                                        localStorage.getItem('community-name'),
+                                        firstName + ' ' + lastName,
+                                    )
+                                }
                             >
-                                Cancel
+                                Send Invite
                             </Button>
-                        </Link>
-                    </Columns.Column>
-                    <Columns.Column>
-                        <Button
-                            color='primary'
-                            style={{
-                                marginBottom: '1rem',
-                                boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)',
-                            }}
-                            fullwidth={true}
-                            onClick={() => 
-                                sendEmailWOCommunity(
-                                    localStorage.getItem('email'),
-                                    allEmails,
-                                    firstName + ' ' + lastName,
-                                )
-                            }
-                        >
-                            Send Invite
-                        </Button>
+                            :
+                            <Button
+                                color='primary'
+                                style={{
+                                    marginBottom: '1rem',
+                                    boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)',
+                                }}
+                                fullwidth={true}
+                                onClick={() =>
+                                    sendEmailWOCommunity(
+                                        localStorage.getItem('email'),
+                                        allEmails,
+                                        firstName + ' ' + lastName,
+                                    )
+                                }
+                            >
+                                Send Invite
+                            </Button>
+                        }
                     </Columns.Column>
                 </Columns>
-
-
             </Container>
         </div >
     )
-
 }
