@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { useHistory } from 'react-router-dom'
+import { Editor } from '@tinymce/tinymce-react'
 
 import Container from 'react-bulma-components/lib/components/container'
 import Columns from 'react-bulma-components/lib/components/columns'
@@ -12,8 +13,8 @@ import {
   Label,
   Field,
   Input,
-  Textarea,
   Radio,
+  Textarea
 } from 'react-bulma-components/lib/components/form'
 import axios from 'axios'
 import SideBar from '../components/sidebar'
@@ -26,6 +27,8 @@ export default function CreateCustomSection(props) {
   const [description, setDescription] = useState('')
   const [link, setLink] = useState('')
   const [validForm, setValidForm] = useState(false)
+  const [newContent, setContent] = useState('')
+
   let history = useHistory()
 
   var formContainerStyle = {
@@ -81,9 +84,9 @@ export default function CreateCustomSection(props) {
       title: type === 'BUTTON' ? name : title,
       type: type,
       description: description,
+      general_content: newContent,
       link: link,
       community: localStorage.getItem('community-name'),
-      general_content: '',
     })
 
     axios
@@ -93,15 +96,15 @@ export default function CreateCustomSection(props) {
           'Content-Type': 'application/json',
         },
       })
-      .then(
-        (response) => {
-          history.push('/community-home')
+      .then((_) => {
+          history.push('/custom-sections')
         },
         (error) => {
           console.log(error)
         }
       )
-  }, [name, title, type, description, link])
+  }, [name, title, type, description, link, newContent])
+  
 
   return (
     <div>
@@ -157,7 +160,7 @@ export default function CreateCustomSection(props) {
                     value='DP'
                   >
                     {' '}
-                    Discussions and Pages
+                    Discussions and Pages (Personal Blogs and Forums) 
                   </Radio>
                   <br />
                   <Radio
@@ -166,7 +169,7 @@ export default function CreateCustomSection(props) {
                     value='GENERAL'
                   >
                     {' '}
-                    General
+                    General (A simple web page without comments)
                   </Radio>
                   <br />
                   <Radio
@@ -175,29 +178,68 @@ export default function CreateCustomSection(props) {
                     value='BUTTON'
                   >
                     {' '}
-                    Button
+                    Button (Links to another web page)
                   </Radio>
                 </Control>
               </Field>
               <Field>
                 <Label>
-                  {type !== 'BUTTON' ? 'Description' : 'Link'}
-                  {type === 'BUTTON' && (
-                    <span style={{ color: '#F83D34' }}>*</span>
-                  )}
+                  {type === 'BUTTON' && <div>Link<span style={{ color: '#F83D34' }}>*</span></div>}
+                  {type === 'DP' && <div>Description<span style={{ color: '#F83D34' }}>*</span></div>}
+                  {type === 'GENERAL' && <div>Content<span style={{ color: '#F83D34' }}>*</span></div>}
                 </Label>
+                <input id="my-file" type="file" name="my-file" style={{display:"none"}} />
                 <Control>
-                  {type !== 'BUTTON' ? (
+                  {type === 'GENERAL' && (
+                    <Control>
+                      <Editor
+                        initialValue={newContent}
+                        init={{
+                          height: 500,
+                          menubar: false,
+                          plugins: [
+                              'advlist autolink lists link image charmap print preview anchor',
+                              'searchreplace wordcount visualblocks code fullscreen',
+                              'insertdatetime media table contextmenu paste code'
+                          ],
+                          toolbar: 'insertfile undo redo | formatselect | bold italic backcolor | \
+                                    alignleft aligncenter alignright alignjustify | \
+                                    bullist numlist outdent indent | link image media | help',
+                          file_browser_callback_types: 'image',
+                          file_picker_callback: function (callback, _, meta) {
+                            if (meta.filetype === 'image') {
+                                var input = document.getElementById('my-file');
+                                input.click()
+                                input.onchange = function () {
+                                    var file = input.files[0];
+                                    var reader = new FileReader();
+                                    reader.onload = function (e) {
+                                        callback(e.target.result, {
+                                            alt: file.name
+                                        })
+                                    }
+                                    reader.readAsDataURL(file);
+                                };
+                            }
+                          },
+                          paste_data_images: true,
+                        }}
+                        onEditorChange={(content, _) => setContent(content)}
+                      />
+                    </Control>
+                  )} 
+                  {type === 'DP' &&
                     <Textarea
                       value={description}
                       onChange={(e) => setDescription(e.target.value)}
                     />
-                  ) : (
+                  }
+                  {type === 'BUTTON' &&
                     <Input
                       value={link}
                       onChange={(e) => setLink(e.target.value)}
                     />
-                  )}
+                  }
                 </Control>
               </Field>
             </div>
