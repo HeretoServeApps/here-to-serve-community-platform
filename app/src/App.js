@@ -42,6 +42,7 @@ import JoinRequests from './pages/JoinRequests'
 import EmailMembers from './pages/EmailMembers'
 import ManageActivities from './pages/ManageActivities'
 import AssignVolunteers from 'pages/AssignVolunteers'
+import Administration from './pages/Administration'
 
 export default function App() {
   const [loggedIn, setLoggedIn] = useState(
@@ -332,6 +333,7 @@ export default function App() {
             exact
             component={ManageActivities}
           />
+          <PrivateRoute path='/administration' exact component={Administration} />
         </Switch>
         <AppFooter />
       </Router>
