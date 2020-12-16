@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import axios from 'axios'
 import { Editor } from '@tinymce/tinymce-react'
-import { useHistory } from 'react-router-dom'
 
 import Container from 'react-bulma-components/lib/components/container'
 import Columns from 'react-bulma-components/lib/components/columns'
@@ -26,6 +25,8 @@ export default function CustomGeneral(props) {
 
   const [title, setTitle] = useState('')
   const [newTitle, setNewTitle] = useState('')
+  const [name, setName] = useState('')
+  const [link, setLink] = useState('')
   const [type, setType] = useState('')
   const [description, setDescription] = useState('')
   const [newDescription, setNewDescription] = useState('')
@@ -81,11 +82,13 @@ export default function CustomGeneral(props) {
         (response) => {
           setTitle(response.data[0].title)
           setNewTitle(response.data[0].title)
+          setName(response.data[0].name)
           setType(response.data[0].type)
           setDescription(response.data[0].description)
           setNewDescription(response.data[0].description)
           setContent(response.data[0].general_content)
           setNewContent(response.data[0].general_content)
+          setLink(response.data[0].link)
         },
         (error) => {
           console.log(error)
@@ -104,6 +107,8 @@ export default function CustomGeneral(props) {
     formdata.append('title', newTitle)
     formdata.append('description', newDescription)
     formdata.append('general_content', newContent)
+    formdata.append('name', name)
+    formdata.append('link', link)
 
     var requestOptions = {
       method: 'POST',
@@ -256,9 +261,9 @@ export default function CustomGeneral(props) {
                           'insertdatetime media table paste code help wordcount',
                         ],
                         toolbar:
-                          'undo redo | formatselect | link image | bold italic backcolor | \
+                          'undo redo | fontsizeselect | link image | bold italic underline backcolor | \
                       alignleft aligncenter alignright alignjustify | \
-                      bullist numlist outdent indent | removeformat | help',
+                      bullist numlist outdent indent | removeformat',
                       }}
                       onEditorChange={(content, _) =>
                         setNewContent(content)
@@ -334,9 +339,9 @@ export default function CustomGeneral(props) {
                                     'insertdatetime media table paste code help wordcount',
                                   ],
                                   toolbar:
-                                    'undo redo | formatselect | link image | bold italic backcolor | \
+                                    'undo redo | fontsizeselect | link image | bold italic underline backcolor | \
                                     alignleft aligncenter alignright alignjustify | \
-                                    bullist numlist outdent indent | removeformat | help',
+                                    bullist numlist outdent indent | removeformat',
                                 }}
                                 onEditorChange={(content, editor) =>
                                   setMessage(content)

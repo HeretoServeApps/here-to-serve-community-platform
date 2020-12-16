@@ -193,7 +193,7 @@ export default function WellWishes(props) {
                             'insertdatetime media table contextmenu paste code',
                           ],
                           toolbar:
-                            'insertfile undo redo | formatselect | bold italic backcolor | \
+                            'insertfile undo redo | formatselect | bold italic underline backcolor | \
                               alignleft aligncenter alignright alignjustify | \
                               bullist numlist outdent indent | link image media | help',
                           file_browser_callback_types: 'image',
