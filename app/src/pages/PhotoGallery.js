@@ -237,7 +237,6 @@ export default function PhotoGallery() {
             setNewTime(currentPhoto.time)
             setNewYear(currentPhoto.year)
             setNewMonth(currentPhoto.month)
-            setNewFileURL(currentPhoto.original)
             setNewFile(currentPhoto.fullURL)
             setNewDescription(currentPhoto.description.substring(currentPhoto.description.indexOf('\n') + 1))
             setCurrentPhotoIndex(0)
@@ -285,7 +284,7 @@ export default function PhotoGallery() {
     setNewTime(currentPhoto.time)
     setNewYear(currentPhoto.year)
     setNewMonth(currentPhoto.month)
-    setNewFileURL(currentPhoto.original)
+    setNewFile(currentPhoto.fullURL)
     setNewDescription(currentPhoto.description.substring(currentPhoto.description.indexOf('\n') + 1))
     setCurrentPhotoIndex(currentIndex)
   })
@@ -316,14 +315,13 @@ export default function PhotoGallery() {
     var formdata = new FormData();
     formdata.append('title', newTitle)
     formdata.append('description', newDescription)
-    formdata.append('day', newDay)
+    formdata.append('day', newDay.toString())
     formdata.append('time', newTime)
-    formdata.append('month', newMonth)
-    formdata.append('year', newYear)
+    formdata.append('month', newMonth.toString())
+    formdata.append('year', newYear.toString())
 
-    if(newFile != '') {
+    if(newFileURL) 
       formdata.append('photo', newFile)
-    }
 
     var requestOptions = {
         method: 'PATCH',
@@ -338,7 +336,7 @@ export default function PhotoGallery() {
             window.location.reload()
         )
         .catch(error => console.log('error', error))
-  })
+  }, [newTitle, newDescription, newDay, newTime, newMonth, newYear, newFile, currentPhotoIndex])
 
   // Render views ------------------------------------------------------
 
@@ -564,7 +562,7 @@ export default function PhotoGallery() {
                   </Label>
                   <Control>
                     <InputFile
-                      value={newFileURL}
+                      value={newFile}
                       icon={<Icon icon='upload' />}
                       fullwidth={true}
                       onChange={(e) => {
@@ -580,7 +578,7 @@ export default function PhotoGallery() {
                       src={
                         newFileURL !== ''
                           ? newFileURL
-                          : 'https://vignette.wikia.nocookie.net/project-pokemon/images/4/47/Placeholder.png/revision/latest?cb=20170330235552&format=original'
+                          : newFile
                       }
                     />
                   </Columns.Column>
