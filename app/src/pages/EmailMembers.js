@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react'
-import { useHistory } from 'react-router-dom'
+import { useHistory, Prompt } from 'react-router-dom'
 
 import Container from 'react-bulma-components/lib/components/container'
 import Heading from 'react-bulma-components/lib/components/heading'
@@ -201,6 +201,7 @@ export default function EmailMembers() {
             >
               Send Email
             </Button>
+            <Prompt message="Are you sure you want to leave? Your work won't be saved." />
           </Columns.Column>
         </Columns>
       </Container>

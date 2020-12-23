@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import DayPicker, { DateUtils } from 'react-day-picker'
 import 'react-day-picker/lib/style.css'
-import { Link } from 'react-router-dom'
+import { Link} from 'react-router-dom'
 import axios from 'axios'
 import moment from 'moment'
 
@@ -855,6 +855,7 @@ export default function ActivityEdit() {
                                                     : 'Where'
                                         )
                                     }
+
                                     style={{ display: activeTab === 'What' ? 'none' : 'block' }}
                                 >
                                     Back
@@ -871,12 +872,14 @@ export default function ActivityEdit() {
                                                     ? 'Where'
                                                     : 'Who'
                                         )
+
                                     }
                                     disabled={activeTab === 'Who' ? !validForm : false}
                                 >
                                     {activeTab !== 'Who' ? 'Continue' : 'Finish'}
                                 </Button>
                             </Link>
+
                         </div>
                     </Columns.Column>
                 </Columns>
