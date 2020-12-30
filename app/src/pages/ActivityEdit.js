@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import DayPicker, { DateUtils } from 'react-day-picker'
+import PropTypes from 'prop-types'
 import 'react-day-picker/lib/style.css'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
@@ -23,7 +24,7 @@ import {
 import MultiSelect from 'react-multi-select-component'
 import SideBar from '../components/sidebar'
 
-export default function ActivityEdit() {
+export default function ActivityEdit(props) {
     //Styles
     var containerStyle = {
         margin: '5% 5%',
@@ -47,8 +48,6 @@ export default function ActivityEdit() {
         display: 'flex',
         justifyContent: 'flex-start',
     }
-
-    const activityPk = localStorage.getItem('activity-id')
 
     const years = Array.from(Array(5).keys()).map((y) => (y + (new Date().getFullYear())))
     const months = [
@@ -304,7 +303,7 @@ export default function ActivityEdit() {
     // API call to prepopulate fields relevant to activity
     useEffect(() => {
         axios
-            .get(`/edit-activity/${activityPk}/`, {
+            .get(`/edit-activity/${props.location.state.primary_key}/`, {
                 headers: {
                     Authorization: `JWT ${localStorage.getItem('token')}`,
                 },
@@ -354,7 +353,7 @@ export default function ActivityEdit() {
                         ]
                         for (var j = 0; j < initDietaryRestrictions.length; j++) {
                             if (response.data.dietary_restrictions.includes(initDietaryRestrictions[j].name))
-                                initDietaryRestrictions[i].isChecked = true
+                                initDietaryRestrictions[j].isChecked = true
                         }
                         setDietaryRestrictions(initDietaryRestrictions)
                     }
@@ -374,7 +373,7 @@ export default function ActivityEdit() {
                     console.log(error)
                 }
             )
-    }, [activityPk])
+    }, [])
 
     function removeActivity(pk) {
         var url = '/edit-activity/' + pk + '/'
@@ -394,7 +393,7 @@ export default function ActivityEdit() {
     }
 
     const handleSubmit = useCallback(() => {
-        removeActivity(activityPk)
+        removeActivity(props.location.state.primary_key)
 
         let dietaryRestrictionStatus = {}
         dietaryRestrictions.forEach((restriction) => dietaryRestrictionStatus[restriction.name] = restriction.isChecked)
@@ -436,7 +435,7 @@ export default function ActivityEdit() {
                     console.log(err)
                 })
 
-    }, [category, activityName, notes, estimatedHours, estimatedMinutes, startYear, endYear, startMonth, endMonth, startDay, endDay, startTime, endTime, selectedDays, numVolunteers, selectedCoordinators, dietaryRestrictions, pickupLocation, destination, location, dietaryRestrictions, activityPk])
+    }, [category, activityName, notes, estimatedHours, estimatedMinutes, startYear, endYear, startMonth, endMonth, startDay, endDay, startTime, endTime, selectedDays, numVolunteers, selectedCoordinators, dietaryRestrictions, pickupLocation, destination, location, dietaryRestrictions])
 
     return (
         <div>
@@ -447,7 +446,11 @@ export default function ActivityEdit() {
                         <SideBar />
                     </Columns.Column>
                     <Columns.Column size={9}>
-                        <Heading size={4}>Edit Activity</Heading>
+                        {category === 'Occasion' ? 
+                            <Heading size={4}>Edit Event</Heading> 
+                            :
+                            <Heading size={4}>Edit Activity</Heading> 
+                        }
                         {activeTab === 'What' ? (
                             <Tabs type='boxed' size='small' style={{ marginBottom: '0' }}>
                                 <Tabs.Tab active onClick={() => setActiveTab('What')}>
@@ -884,3 +887,8 @@ export default function ActivityEdit() {
         </div>
     )
 }
+
+ActivityEdit.propTypes = {
+    primary_key: PropTypes.number.isRequired,
+}
+  
