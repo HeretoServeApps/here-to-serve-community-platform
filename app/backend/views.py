@@ -583,6 +583,39 @@ class InviteUsers(APIView):
             return Response(status=status.HTTP_400_BAD_REQUEST)
         return Response(status=status.HTTP_200_OK)
 
+
+class InviteUsersNoCommunity(APIView):
+    """
+    Let a commmunity leader or admin email invitations to a group of emails without a specific community id. 
+    """
+    permission_classes = (permissions.IsAuthenticated, )
+
+    def post(self, request, format=None):
+        data = request.data
+        from_email = data['from_email']
+        to_emails = list(data['to_emails'])
+        sender_name = data['sender']
+
+        subject = '[Here to Serve] Join Here to Serve'
+        message = 'You have been invited to join Here to Serve. ' \
+                  'Please click on {url} to access the volunteer platform.'.format(url=config('HEROKU_APP_REGISTER_URL'))
+
+        messages = []
+        for recipient in to_emails:
+            item = (subject, message, from_email, [recipient]) 
+            messages.append(item)
+
+        # send_mass_email prevent recipients from seeing other recipients' email addresses. 
+        try:
+            send_mass_mail(
+                tuple(messages),
+                fail_silently = False,
+            )
+        except BadHeaderError:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        return Response(status=status.HTTP_200_OK)
+
+
 class SendEmail(APIView):
     """
     Let a commmunity leader or admin send emails to a group of members. 
@@ -793,7 +826,6 @@ class AddDiscussionPost(APIView):
         request.data['community'] = community
         request.data['user'] = user
         serializer = DiscussionPostSerializer(data=request.data)
-        print(request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
