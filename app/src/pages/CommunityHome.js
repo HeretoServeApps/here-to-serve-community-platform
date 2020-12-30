@@ -21,7 +21,6 @@ import Media from 'react-bulma-components/lib/components/media'
 import Content from 'react-bulma-components/lib/components/content'
 import Modal from 'react-bulma-components/lib/components/modal'
 import Section from 'react-bulma-components/lib/components/section'
-import PostCard from '../components/postCard'
 
 import {
   Edit,
@@ -568,7 +567,7 @@ export default function CommunityHome(props) {
               {showLeaders && coordinators.length !== 0 ? (
                 <div>
                   <Heading size={6}>
-                    <Users size={12} /> Community Leaders
+                    <Users size={12} /> Community Heads
                   </Heading>
                   {coordinators.map((c, index) => (
                     <div style={{ marginBottom: '10px' }} key={index}>

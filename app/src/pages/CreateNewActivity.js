@@ -24,7 +24,7 @@ import MultiSelect from 'react-multi-select-component'
 
 import SideBar from '../components/sidebar'
 
-export default function CreateNewActivity(props) {
+export default function CreateNewActivity() {
   //Styles
   var containerStyle = {
     margin: '5% 5%',
@@ -393,6 +393,11 @@ export default function CreateNewActivity(props) {
       )
   }, [token])
 
+  useEffect(() => {
+    if(category === 'Preparing Meals')
+      setNotes('Number of people:')
+  }, [category])
+
   const handleSubmit = useCallback(() => {
     let dietaryRestrictionStatus = {}
     dietaryRestrictions.forEach(
@@ -430,7 +435,7 @@ export default function CreateNewActivity(props) {
           'Content-Type': 'application/json',
         },
       })
-      .then((response, err) => {
+      .then((_, err) => {
         console.log(err)
         history.push('/calendar')
       })
