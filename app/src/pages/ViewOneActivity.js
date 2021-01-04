@@ -152,9 +152,14 @@ export default function ViewOneActivity(props) {
                         </div>
                     )}
                     {/* Volunteer information */}
-                    <b>Volunteers Needed:</b> {activity.num_volunteers_needed - activityVolunteers.length} out of {activity.num_volunteers_needed}
-                    <br />
-                    <br />
+                    {activity.activity_type !== 'Occasion' && 
+                        <div>
+                            <b>Volunteers Needed:</b> {activity.num_volunteers_needed - activityVolunteers.length} out of {activity.num_volunteers_needed} 
+                            <br />
+                            <br />
+                        </div>   
+                    }
+                    
                     <b>Notes:</b>
                     <br />
                     {activity.description}    

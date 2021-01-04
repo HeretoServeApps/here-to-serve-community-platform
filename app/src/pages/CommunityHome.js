@@ -130,15 +130,36 @@ export default function CommunityHome(props) {
     setDate(moment(`${selectedMonth} ${selectedYear}`, 'MMMM YYYY').toDate())
   }
 
+  // function processEvents(data) {
+  //   let tempData = [];
+  //   data.forEach((activity) => {
+  //     if (activity['is_active'] && typeof activity['start_time'] === 'string') {
+  //       activity['start_time'] = new Date(activity['start_time'])
+  //       activity['end_time'] = new Date(activity['end_time'])
+  //       tempData.push(activity)
+  //     }
+  //   })
+  //   setEvents(tempData)
+  // }
   function processEvents(data) {
+    let tempData = [];
     data.forEach((activity) => {
-      if (typeof activity['start_time'] === 'string') {
-        activity['start_time'] = new Date(activity['start_time'])
-        activity['end_time'] = new Date(activity['end_time'])
-        activity['title'] = activity['activity_type'] + ': ' + activity['title']
+      if (activity['is_active']) {
+        if (typeof activity['start_time'] === 'string') {
+        var timezone_offset = new Date(
+          activity['start_time']
+        ).getTimezoneOffset()
+        activity['start_time'] = moment(activity['start_time'])
+          .add(timezone_offset, 'm')
+          .toDate()
+        activity['end_time'] = moment(activity['end_time'])
+          .add(timezone_offset, 'm')
+          .toDate()
+       }
+      tempData.push(activity)
       }
     })
-    return data
+    setEvents(tempData)
   }
 
   useEffect(() => {
@@ -298,7 +319,7 @@ export default function CommunityHome(props) {
       })
       .then(
         (response) => {
-          setEvents(response.data)
+          processEvents(response.data)
         },
         (error) => {
           console.log(error)
@@ -412,7 +433,7 @@ export default function CommunityHome(props) {
           toolbar={false}
           date={date}
           onNavigate={(date) => setDate(date)}
-          events={processEvents(events)}
+          events={events}
           startAccessor='start_time'
           endAccessor='end_time'
           allDayAccessor='all_day'
