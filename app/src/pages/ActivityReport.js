@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback } from 'react'
 import axios from 'axios'
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
-import { PDFDownloadLink } from '@react-pdf/renderer'
 
 import { Input, Select, Field, Label, Control } from 'react-bulma-components/lib/components/form'
 import Container from 'react-bulma-components/lib/components/container'
@@ -11,9 +10,9 @@ import Table from 'react-bulma-components/lib/components/table'
 import Columns from 'react-bulma-components/lib/components/columns'
 import Button from 'react-bulma-components/lib/components/button'
 
-import PDF from '../components/activityPDF'
 import CommunityNavbar from '../components/communityNavbar'
 import SideBar from '../components/sidebar'
+import generatePDF from "../components/generateActivityPDF";
 
 export default function ActivityReport() {
     // Create styles
@@ -81,28 +80,13 @@ export default function ActivityReport() {
         'December',
     ]
 
-    const nextMonthMap = {
-        'January': 'February',
-        'February': 'March',
-        'March': 'April',
-        'April': 'May',
-        'May': 'June',
-        'June': 'July',
-        'July': 'August',
-        'August': 'September',
-        'September': 'October',
-        'October': 'November',
-        'November': 'December',
-        'December': 'Janurary',
-    }
-
     // Date range
     const [startMonth, setStartMonth] = useState(months[new Date().getMonth()])
     const [startDay, setStartDay] = useState(new Date().getDate())
-    const [startYear, setStartYear] = useState(new Date().getFullYear())
-    const [endMonth, setEndMonth] = useState(nextMonthMap[months[new Date().getMonth()]])
+    const [startYear, setStartYear] = useState(new Date().getFullYear() - 1)
+    const [endMonth, setEndMonth] = useState(months[new Date().getMonth()])
     const [endDay, setEndDay] = useState(new Date().getDate())
-    const [endYear, setEndYear] = useState(new Date().getFullYear())
+    const [endYear, setEndYear] = useState(new Date().getFullYear() + 1)
 
     const [activities, setActivities] = useState([])
     const [search, setSearch] = useState('')
@@ -151,31 +135,29 @@ export default function ActivityReport() {
                             <Columns.Column size={4}>
                                 <Columns>
                                     <Columns.Column>
-                                        <PDFDownloadLink
-                                            document={
-                                                <PDF
-                                                    activity_type={selectedActivityType}
-                                                    start_day={startDay}
-                                                    start_month={startMonth}
-                                                    start_year={startYear}
-                                                    end_day={endDay}
-                                                    end_month={endMonth}
-                                                    end_year={endYear}
-                                                    search={search}
-                                                />
+                                        <Button
+                                            style={{
+                                                boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)',
+                                            }}
+                                            color='primary'
+                                            fullwidth={true}
+                                            onClick={() => generatePDF
+                                                (
+                                                    activities, 
+                                                    {'start_day': startDay,
+                                                     'start_month': startMonth,
+                                                     'start_year': startYear,
+                                                     'end_day': endDay,
+                                                     'end_month': endMonth,
+                                                     'end_year': endYear,
+                                                     'search': search,
+                                                     'activity_type': selectedActivityType,
+                                                    }
+                                                )
                                             }
-                                            fileName="report.pdf"
                                         >
-                                            <Button
-                                                style={{
-                                                    boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)',
-                                                }}
-                                                color='primary'
-                                                fullwidth={true}
-                                            >
-                                                Export Report
-                                            </Button>
-                                        </PDFDownloadLink>
+                                            Export Report PDF
+                                        </Button>
                                     </Columns.Column>
                                 </Columns>
                             </Columns.Column>
@@ -287,7 +269,7 @@ export default function ActivityReport() {
                                         <th>Volunteer Status</th>
                                         <th>Average Volunteer Time/Person <br />(Requested)</th>
                                         <th>Average Volunteer Time/Person <br />(Actual)</th>
-                                        <th>Active Status</th>
+                                        <th>Status</th>
                                     </tr>
                                 </thead>
                                 <tbody>
