@@ -83,28 +83,13 @@ export default function ManageActivities() {
         'December',
     ]
 
-    const nextMonthMap = {
-        'January': 'February',
-        'February': 'March',
-        'March': 'April',
-        'April': 'May',
-        'May': 'June',
-        'June': 'July',
-        'July': 'August',
-        'August': 'September',
-        'September': 'October',
-        'October': 'November',
-        'November': 'December',
-        'December': 'Janurary',
-    }
-
     // Date range
     const [startMonth, setStartMonth] = useState(months[new Date().getMonth()])
     const [startDay, setStartDay] = useState(new Date().getDate())
-    const [startYear, setStartYear] = useState(new Date().getFullYear())
-    const [endMonth, setEndMonth] = useState(nextMonthMap[months[new Date().getMonth()]])
+    const [startYear, setStartYear] = useState(new Date().getFullYear() - 1)
+    const [endMonth, setEndMonth] = useState(months[new Date().getMonth()])
     const [endDay, setEndDay] = useState(new Date().getDate())
-    const [endYear, setEndYear] = useState(new Date().getFullYear())
+    const [endYear, setEndYear] = useState(new Date().getFullYear() + 1)
 
     const [activities, setActivities] = useState([])
     const [search, setSearch] = useState('')
