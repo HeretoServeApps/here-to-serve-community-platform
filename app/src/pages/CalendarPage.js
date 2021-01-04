@@ -3,7 +3,7 @@ import { Calendar, momentLocalizer } from 'react-big-calendar'
 import moment from 'moment'
 import '../index.css'
 import 'react-big-calendar/lib/sass/styles.scss'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import axios from 'axios'
 
 import Button from 'react-bulma-components/lib/components/button'
@@ -11,8 +11,6 @@ import Box from 'react-bulma-components/lib/components/box'
 import Container from 'react-bulma-components/lib/components/container'
 import Columns from 'react-bulma-components/lib/components/columns'
 import Heading from 'react-bulma-components/lib/components/heading'
-import Modal from 'react-bulma-components/lib/components/modal'
-import Section from 'react-bulma-components/lib/components/section'
 import Menu from 'react-bulma-components/lib/components/menu'
 import {
   Select,
@@ -24,24 +22,15 @@ import {
 import CheckboxField from '../components/checkboxfield'
 import CommunityNavbar from '../components/communityNavbar'
 import CustomSections from '../components/customSections'
-import { RefreshCw, Clipboard, Layers, Edit2, Trash2, PauseCircle, Star, Calendar as CalendarIcon } from 'react-feather'
+import { RefreshCw, Clipboard, Layers, Star, Calendar as CalendarIcon } from 'react-feather'
 
 export default function CalendarPage() {
+  let history = useHistory()
+
   var containerStyle = {
     margin: '5% 5%',
     maxWidth: '100%',
   }
-
-  var eventContainerStyle = {
-    margin: '5% auto',
-    maxWidth: '870px',
-    maxHeight: '1000px',
-    padding: '4rem',
-    border: '0.1rem solid #E5E5E5',
-    borderRadius: '1rem',
-  }
-
-  const token = localStorage.getItem('token')
 
   const [selectedMonth, setSelectedMonth] = useState(moment().format('MMMM'))
   const [selectedYear, setSelectedYear] = useState(moment().format('YYYY'))
@@ -79,11 +68,6 @@ export default function CalendarPage() {
   // Events and event selection
   const [events, setEvents] = useState([])
 
-  const [selectedEvent, setSelectedEvent] = useState(null)
-  const [isSelectingEvent, setIsSelectingEvent] = useState(false)
-  const [showRemoveModal, setShowRemoveModel] = useState(false)
-  const [isDeactivate, setIsDeactivate] = useState(false)
-
   // Setup the localizer by providing the moment (or globalize) Object
   // to the correct localizer.
   const localizer = momentLocalizer(moment)
@@ -115,7 +99,6 @@ export default function CalendarPage() {
         activity['end_time'] = moment(activity['end_time'])
           .add(timezone_offset, 'm')
           .toDate()
-        activity['title'] = activity['activity_type'] + ': ' + activity['title']
        }
       tempData.push(activity)
       }
@@ -124,20 +107,13 @@ export default function CalendarPage() {
     setOriginalEvents(tempData)
   }
 
-  //toggles popup view for delete and deactivate
-  function deactivate(deactivate) {
-    setIsDeactivate(deactivate);
-    setShowRemoveModel(true);
-  }
-
-  const getEventInfo = useCallback((event) => {
-    setSelectedEvent(event)
-    setIsSelectingEvent(true)
-  })
-
-  const goBackToCalendar = useCallback(() => {
-    setSelectedEvent(null)
-    setIsSelectingEvent(false)
+  const goToActivity = useCallback((activity) => {
+    history.push({
+      pathname: '/view-one-activity/' + activity.id,
+      state: {
+        primary_key: activity.id
+      }
+    })
   })
 
   // Filter by activity function
@@ -231,30 +207,6 @@ export default function CalendarPage() {
     setEvents(filteredEvents)
   }
 
-  //adds volunteer to activity
-  const addVolunteer = useCallback(() => {
-    const param = JSON.stringify({
-      activity: selectedEvent.id,
-      user: localStorage.getItem('email'),
-    })
-
-    axios
-      .post('/add-volunteer-to-activity/', param, {
-        headers: {
-          Authorization: `JWT ${token}`,
-          'Content-Type': 'application/json',
-        },
-      })
-      .then(
-        (_) => {
-          window.location.reload()
-        },
-        (error) => {
-          console.log(error)
-        }
-      )
-  }, [selectedEvent, token])
-
   // API CALLS ---------------------------------------------------------------------------------------------
 
   useEffect(() => {
@@ -295,283 +247,6 @@ export default function CalendarPage() {
         }
       )
   }, [])
-
-  const removeActivity = useCallback((pk) => {
-    var url = '/edit-activity/' + pk + '/'
-    var myHeaders = new Headers()
-    myHeaders.append('Authorization', `JWT ${localStorage.getItem('token')}`)
-
-    var requestOptions = {
-        method: 'DELETE',
-        headers: myHeaders,
-        redirect: 'follow'
-    }
-
-    fetch(url, requestOptions)
-    .then(response => response.text())
-    .then(result => window.location.reload())
-    .catch(error => console.log('error', error));
-  })
-
-  const deactivateActivity = useCallback((pk) => {
-    setIsDeactivate(false)
-    setShowRemoveModel(false)
-    var url = '/edit-activity/' + pk + '/'
-    var myHeaders = new Headers()
-    myHeaders.append('Authorization', `JWT ${localStorage.getItem('token')}`)
-
-    const param = JSON.stringify({
-      'is_active' : false
-    })
-
-    axios
-        .patch(url, param, {
-          headers: {
-            'Authorization': `JWT ${localStorage.getItem('token')}`,
-            'Content-Type': 'application/json',
-          },
-        })
-          .then(
-            (response, err) => {
-              console.log(err)
-            })
-          .then(result => window.location.reload())
-  })
-
-  // RENDERS ---------------------------------------------------------------------------------------------
-
-  // Users will see this if they are selecting an event
-  if (isSelectingEvent) {
-    const isRideActivity = selectedEvent.activity_type === 'Giving Rides'
-    const isMealActivity = selectedEvent.activity_type === 'Preparing Meals'
-    return (
-      <div>
-        <CommunityNavbar />
-        <Container style={eventContainerStyle}>
-          <Heading size={4}>{selectedEvent.title}</Heading>
-          {localStorage.getItem('user-role') === 'Administrator' ? (
-            <Columns>
-              <Columns.Column>
-                <Link to={'/edit-activity/' + selectedEvent.title}>
-                  <Button
-                    style={{
-                      boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)',
-                    }}
-                    fullwidth={true}
-                    color='primary'
-                    onClick={() => localStorage.setItem('activity-id', selectedEvent.id)}
-                  >
-                    <Edit2 size={12} style={{ marginRight: '10px' }} />
-                    Edit Activity
-                  </Button>
-                </Link>
-              </Columns.Column>
-              <Columns.Column>
-                <Button
-                  style={{
-                    boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)',
-                  }}
-                  fullwidth={true}
-                  color='danger'
-                  onClick={() => deactivate(false)}
-                >
-                  <Trash2 size={12} style={{ marginRight: '10px' }} />
-                  Delete Activity
-                </Button>
-              </Columns.Column>
-            <Columns.Column>
-                <Button
-                  className='is-primary is-inverted'
-                  style={{
-                    boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)',
-                  }}
-                  onClick={() => deactivate(true)}
-                >
-                  <PauseCircle size={12} style={{ marginRight: '10px' }} />
-                  Deactivate Activity
-                </Button>
-              </Columns.Column>
-            </Columns>
-          ) : (
-            <Columns.Column>
-              <Button
-                onClick={() => addVolunteer()}
-                style={{
-                  boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)',
-                }}
-                color='primary'
-              >
-                Sign up as a volunteer
-              </Button>
-            </Columns.Column>
-          )}
-          <Heading size={6}>Details:</Heading>
-          <i>Date:</i> {moment(selectedEvent.start_time).format('LL')}
-          <br />
-          <i>Time:</i> Between {moment(selectedEvent.start_time).format('LT')}{' '}
-          and {moment(selectedEvent.end_time).format('LT')}
-          <br />
-          {isRideActivity ? (
-            <div>
-              <i>Pickup Location: </i>{' '}
-              <a
-                target='_blank'
-                rel='noopener noreferrer'
-                href={
-                  'https://maps.google.com/?q=' + selectedEvent.pickup_location
-                }
-              >
-                {selectedEvent.pickup_location}
-              </a>
-              <br />
-              <i>Destination: </i>{' '}
-              <a
-                target='_blank'
-                rel='noopener noreferrer'
-                href={
-                  'https://maps.google.com/?q=' +
-                  selectedEvent.destination_location
-                }
-              >
-                {selectedEvent.destination_location}
-              </a>
-            </div>
-          ) : isMealActivity ? (
-            <div>
-              <i>Delivery Location: </i>{' '}
-              <a
-                target='_blank'
-                rel='noopener noreferrer'
-                href={
-                  'https://maps.google.com/?q=' +
-                  selectedEvent.delivery_location
-                }
-              >
-                {selectedEvent.delivery_location}
-              </a>
-            </div>
-          ) : (
-                <div>
-                  <i>Location: </i>
-                  <a
-                    target='_blank'
-                    rel='noopener noreferrer'
-                    href={'https://maps.google.com/?q=' + selectedEvent.location}
-                  >
-                    {selectedEvent.location}
-                  </a>{' '}
-                </div>
-              )}
-          {isMealActivity ? (
-            <div>
-              <i>Dietary Restrictions: </i>{' '}
-              <ul>
-                {selectedEvent.dietary_restrictions.map((r) => (
-                  <li>{r}</li>
-                ))}
-              </ul>
-            </div>
-          ) : (
-              ''
-            )}
-          <i>Volunteers Needed:</i> {selectedEvent.num_volunteers_needed - selectedEvent.volunteers.length} out of {selectedEvent.num_volunteers_needed}
-          <br />
-          <i>Notes:</i> {selectedEvent.description}
-          <br />
-          <Heading size={6} style={{ marginTop: '5%' }}>
-            People:{' '}
-          </Heading>
-          <i>Volunteers:</i>{' '}
-          {selectedEvent.volunteers.length === 0 ? (
-            'No volunteers has signed up.'
-          ) : (
-            <ul>
-              {selectedEvent.volunteers.map((person) => (
-                <li>
-                  {person.first_name} {person.last_name}: {person.email}
-                </li>
-              ))}
-            </ul>
-          )}
-          <br />
-          <i>Coordinators:</i>
-          <ul>
-            {selectedEvent.coordinators.map((person) => (
-              <li>
-                {person.first_name} {person.last_name}: {person.phone_number_1}
-              </li>
-            ))}
-          </ul>
-          <br />
-          <Columns>
-            <Columns.Column size={3}>
-            {localStorage.getItem('user-role') === 'Administrator' && (
-              <Link to='/assign-volunteers' style={{ color: 'white' }}>
-              <Button color='primary'>
-                Assign Volunteers
-              </Button>
-              </Link>
-              
-              )}
-            </Columns.Column>
-            <Columns.Column size={3}>
-            <Button
-                className='is-primary is-inverted'
-                onClick={() => goBackToCalendar()}
-                style={{ display: 'block', marginTop: '0%' }}
-              >
-                Back
-            </Button>
-            </Columns.Column>
-          </Columns>
-        </Container>
-        <Modal
-          show={showRemoveModal}
-          onClose={() => setShowRemoveModel(false)}
-          closeOnBlur={true}
-        >
-          <Modal.Card>
-            <Modal.Card.Head onClose={() => setShowRemoveModel(false)}>
-            {isDeactivate ? (
-                <Modal.Card.Title>Deactivate "{selectedEvent.title}"</Modal.Card.Title>
-              ) : (
-                <Modal.Card.Title>Delete "{selectedEvent.title}"</Modal.Card.Title>
-              )}
-
-            </Modal.Card.Head>
-            {isDeactivate ? (
-                <Section style={{ backgroundColor: 'white' }}>
-              Are you sure you want to deactivate this activity?
-            </Section>
-              ) : (
-                <Section style={{ backgroundColor: 'white' }}>
-              Are you sure you want to delete this activity? You can't undo
-              this action.
-            </Section>
-              )}
-
-            <Modal.Card.Foot
-              style={{
-                alignItems: 'center',
-                justifyContent: 'space-between',
-              }}
-            >
-              <Button onClick={() => setShowRemoveModel(false)}>Cancel</Button>
-              {isDeactivate ? (
-                <Button color='primary' onClick={() => deactivateActivity(selectedEvent.id)}>
-                  Deactivate Activity
-                </Button>
-              ) : (
-                <Button color='primary' onClick={() => removeActivity(selectedEvent.id)}>
-                  Delete Activity
-                </Button>
-              )}
-            </Modal.Card.Foot>
-          </Modal.Card>
-        </Modal>
-      </div>
-    )
-  }
 
   // Otherwise they will see the entire calendar
   return (
@@ -760,7 +435,7 @@ export default function CalendarPage() {
                 endAccessor='end_time'
                 allDayAccessor='all_day'
                 popup={true}
-                onSelectEvent={(event) => getEventInfo(event)}
+                onSelectEvent={(e) => goToActivity(e)}
                 eventPropGetter={(event) => ({
                   style: {
                     backgroundColor: event.color,
