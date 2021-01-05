@@ -303,7 +303,10 @@ class ActivityViewSet(viewsets.ViewSet):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class ActivityList(APIView):
+class TaskList(APIView):
+    '''
+    Retrieving a list of tasks (all activities regardless of event batch)
+    '''
     permission_classes = (permissions.IsAuthenticated,)
 
     def get(self, request, community_id):
@@ -369,10 +372,91 @@ class ActivityList(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-# 
-# Class for dealing with editing a single activity (series of tasks of the same event batch)
-# 
+class ActivityList(APIView):
+    '''
+    Retrieving a list of activities (unique event batch)
+    '''
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get(self, request, community_id):
+        activities = Activity.objects.filter(community=community_id)
+        serializer = ActivitySerializer(activities, many=True)
+        added_event_batch = set()
+        result = []
+        for activity in serializer.data:
+            if activity['event_batch'] not in added_event_batch:
+                added_event_batch.add(activity['event_batch'])
+                tasks = Activity.objects.filter(community=community_id, event_batch=activity['event_batch'])
+                activity['tasks'] = ActivitySerializer(tasks, many=True).data
+
+                earliest_start_time = tasks.earliest('start_time').start_time
+                latest_end_time = tasks.latest('end_time').end_time
+                activity['start_time'] = earliest_start_time
+                activity['end_time'] = latest_end_time
+                
+                if activity['activity_type'] == 'Giving Rides':
+                    ride_activity_obj = get_object_or_404(RideActivity.objects.all(), activity=activity['id'])
+                    ride_activity_serializer = RideActivitySerializer(ride_activity_obj)
+                    for item in ride_activity_serializer.data:
+                        activity[item] = ride_activity_serializer.data[item]
+                elif activity['activity_type'] == 'Preparing Meals':
+                    preparing_meal_obj = get_object_or_404(MealActivity.objects.all(), activity=activity['id'])
+                    preparing_meal_serializer = MealActivitySerializer(preparing_meal_obj)
+                    for item in preparing_meal_serializer.data:
+                        if item == 'dietary_restrictions':
+                            # Since dietary restrictions is a string, we want to convert it to a map and process it
+                            restrictions_string = preparing_meal_serializer.data[item]
+                            json_acceptable_string = restrictions_string.replace("'", "\"")
+                            restrictions_map = json.loads(json_acceptable_string)
+                            true_restrictions = []
+                            for restriction in restrictions_map:
+                                if restrictions_map[restriction]:
+                                    true_restrictions.append(restriction)
+                            activity[item] = true_restrictions
+                        else:
+                            activity[item] = preparing_meal_serializer.data[item]
+                else:
+                    all_other_activity_obj = get_object_or_404(EventActivity.objects.all(), activity=activity['id'])
+                    all_other_activity_serializer = EventActivitySerializer(all_other_activity_obj)
+                    for item in all_other_activity_serializer.data:
+                        activity[item] = all_other_activity_serializer.data[item]
+                
+                # Activity with type 'Occasion' has a different color 
+                if activity['activity_type'] == 'Occasion':
+                    activity['color'] = '#e6a940'
+                    activity['activity_status'] = 'Occasion'
+                # Depending on the outcome of [volunteers needed - volunteers signed up],
+                # we change the color of the activity
+                else:
+                    # If all volunteer spots have been filled, color this activity blue
+                    if int(activity['num_volunteers_needed']) - len(activity['volunteers']) == 0:
+                        activity['color'] = '#60a1db'
+                        activity['activity_status'] = "Needs met"
+                    else: # Otherwise color it green
+                        activity['color'] = '#46b378'
+                        activity['activity_status'] = "Help needed"
+                    
+                    # Data for the activity report page
+                    minutes_per_volunteer = float((activity['est_hours']*60 + activity['est_minutes']))/float(activity['num_volunteers_needed'])
+                    activity['est_hours_per_volunteer'] = minutes_per_volunteer//60
+                    activity['est_minutes_per_volunteer'] = minutes_per_volunteer - activity['est_hours_per_volunteer']*60
+
+                    if len(activity['volunteers']) > 0:
+                        minutes_per_volunteer_actual = float((activity['est_hours']*60 + activity['est_minutes']))/float(len(activity['volunteers']))
+                        activity['actual_hours_per_volunteer'] = minutes_per_volunteer_actual//60
+                        activity['actual_minutes_per_volunteer'] = minutes_per_volunteer_actual - activity['actual_hours_per_volunteer']*60
+                    else:
+                        activity['actual_hours_per_volunteer'] = 0
+                        activity['actual_minutes_per_volunteer'] = 0
+                result.append(activity)
+        return Response(result, status=status.HTTP_200_OK)
+
+
 class ActivityEditView(APIView):
+    '''
+    Class for dealing with editing a single activity (series of tasks of the same event batch)
+    '''
+
     permission_classes = (permissions.IsAuthenticated,)
 
     def get(self, request, activity_id):
