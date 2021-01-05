@@ -539,7 +539,7 @@ export default function CreateNewActivity() {
                   </Control>
                   {category === 'Giving Rides' ? (
                     <p style={{ fontSize: '80%' }} className='has-text-grey'>
-                      example: "Rides to medical appointment, Social Event,
+                      examples: "Rides to medical appointment, Social Event,
                       Soccer practice, Carpool."
                     </p>
                   ) : (
@@ -547,21 +547,21 @@ export default function CreateNewActivity() {
                   )}
                   {category === 'Preparing Meals' ? (
                     <p style={{ fontSize: '80%' }} className='has-text-grey'>
-                      example: "Weekday Dinners, Sunday Brunch."
+                      examples: "Weekday Dinners, Sunday Brunch."
                     </p>
                   ) : (
                     <></>
                   )}
                   {category === 'Shopping' ? (
                     <p style={{ fontSize: '80%' }} className='has-text-grey'>
-                      example: "Grocery shopping, Pharmacy pick-up."
+                      examples: "Grocery shopping, Pharmacy pick-up."
                     </p>
                   ) : (
                     <></>
                   )}
                   {category === 'Childcare' ? (
                     <p style={{ fontSize: '80%' }} className='has-text-grey'>
-                      example: "Weekday a.m. childcare, Weekend eve
+                      examples: "Weekday a.m. childcare, Weekend eve
                       babysitting."
                     </p>
                   ) : (
@@ -569,28 +569,28 @@ export default function CreateNewActivity() {
                   )}
                   {category === 'Pet Care' ? (
                     <p style={{ fontSize: '80%' }} className='has-text-grey'>
-                      example: "Weekday a.m. pet care, Weekend eve pet care."
+                      examples: "Weekday a.m. pet care, Weekend eve pet care."
                     </p>
                   ) : (
                     <></>
                   )}
                   {category === 'Laundry' ? (
                     <p style={{ fontSize: '80%' }} className='has-text-grey'>
-                      example: "Weekly laundry load."
+                      examples: "Weekly laundry load."
                     </p>
                   ) : (
                     <></>
                   )}
                   {category === 'House Cleaning' ? (
                     <p style={{ fontSize: '80%' }} className='has-text-grey'>
-                      example: "Bathroom cleaning, Tidying bed."
+                      examples: "Bathroom cleaning, Tidying bed."
                     </p>
                   ) : (
                     <></>
                   )}
                   {category === 'Visits' ? (
                     <p style={{ fontSize: '80%' }} className='has-text-grey'>
-                      example: "Afternoon reading, Weekend visits."
+                      examples: "Afternoon reading, Weekend visits."
                     </p>
                   ) : (
                     <></>
