@@ -452,6 +452,61 @@ class ActivityList(APIView):
         return Response(result, status=status.HTTP_200_OK)
 
 
+class TaskEditView(APIView):
+    '''
+    Class for dealing with editing, deleting, and getting a single task
+    '''
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get(self, request, activity_id):
+        task = Activity.objects.get(pk=activity_id)
+
+        task_serializer = ActivitySerializer(task).data
+
+        if task_serializer['activity_type'] == 'Giving Rides':
+            ride_activity_obj = get_object_or_404(RideActivity.objects.all(), activity=activity_id)
+            ride_activity_serializer = RideActivitySerializer(ride_activity_obj)
+            for item in ride_activity_serializer.data:
+                task_serializer[item] = ride_activity_serializer.data[item]
+        elif task_serializer['activity_type'] == 'Preparing Meals':
+            preparing_meal_obj = get_object_or_404(MealActivity.objects.all(), activity=activity_id)
+            preparing_meal_serializer = MealActivitySerializer(preparing_meal_obj)
+            for item in preparing_meal_serializer.data:
+                if item == 'dietary_restrictions':
+                    # Since dietary restrictions is a string, we want to convert it to a map and process it
+                    restrictions_string = preparing_meal_serializer.data[item]
+                    json_acceptable_string = restrictions_string.replace("'", "\"")
+                    restrictions_map = json.loads(json_acceptable_string)
+                    true_restrictions = []
+                    for restriction in restrictions_map:
+                        if restrictions_map[restriction]:
+                            true_restrictions.append(restriction)
+                    task_serializer[item] = true_restrictions
+                else:
+                    task_serializer[item] = preparing_meal_serializer.data[item]
+        else:
+            all_other_activity_obj = get_object_or_404(EventActivity.objects.all(), activity=activity_id)
+            all_other_activity_serializer = EventActivitySerializer(all_other_activity_obj)
+            for item in all_other_activity_serializer.data:
+                task_serializer[item] = all_other_activity_serializer.data[item]
+        return Response(task_serializer, status=status.HTTP_200_OK)
+
+    def delete(self, request, activity_id):
+        # this function deletes a batch of tasks sharing the same event batch
+        task = Activity.objects.get(pk=activity_id)
+        task.delete()
+        return Response('Task deleted', status=status.HTTP_204_NO_CONTENT)
+
+    def patch(self, request, activity_id):
+        task = Activity.objects.get(pk=activity_id)
+        serializer = ActivitySerializer(task, data=request.data, partial=True)
+        if serializer.is_valid():
+            question = serializer.save()
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.data)
+
+
 class ActivityEditView(APIView):
     '''
     Class for dealing with editing a single activity (series of tasks of the same event batch)

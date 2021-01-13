@@ -60,6 +60,7 @@ urlpatterns = [
     path('add-photo/', views.AddPhoto.as_view()),
     path('edit-community-user-role/', views.EditCommunityUserRole.as_view()),
     path(r'edit-activity/<int:activity_id>/', views.ActivityEditView.as_view()),
+    path(r'edit-task/<int:activity_id>/', views.TaskEditView.as_view()),
     path('add-message/', views.AddMessage.as_view()),
     path('delete-message/', views.DeleteMessage.as_view()),
     path('edit-message/', views.EditMessage.as_view()),
