@@ -85,8 +85,9 @@ export default function ViewOneActivity(props) {
                 <p>
                     <b>Date</b>: {moment(activity.start_time).format('LL')}
                     <br />
-                    <b>Time</b>: Between {moment(activity.start_time).format('LT')}{' '}
-                    and {moment(activity.end_time).format('LT')}
+                    <b>Time</b>: 
+                    Between {moment(activity.start_time).add(new Date(activity.start_time).getTimezoneOffset(), 'm').format('LT')}{' '}
+                    and {moment(activity.end_time).add(new Date(activity.end_time).getTimezoneOffset(), 'm').format('LT')}
 
                     {/* Show location */}
                     {activity.activity_type === 'Giving Rides' ? (
@@ -192,8 +193,12 @@ export default function ViewOneActivity(props) {
                     )}
                 </p>
                 <br />
-                {/* TODO: Fix */}
-                <Link>
+                <Link to={{ 
+                    pathname: '/edit-task/' + activity.id,
+                    state: {
+                        primary_key: activity.id
+                    }
+                }}>
                     <Edit size={12} style={{ marginRight: '10px' }} />
                     Edit this task
                 </Link>

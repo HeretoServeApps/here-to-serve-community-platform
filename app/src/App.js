@@ -44,6 +44,7 @@ import ManageActivities from './pages/ManageActivities'
 import AssignVolunteers from 'pages/AssignVolunteers'
 import Administration from './pages/Administration'
 import ViewOneActivity from './pages/ViewOneActivity'
+import EditTask from './pages/EditTask'
 
 export default function App() {
   const [loggedIn, setLoggedIn] = useState(
@@ -325,6 +326,11 @@ export default function App() {
             path='/view-one-activity/:activity'
             exact
             component={ViewOneActivity}
+          />
+          <PrivateRoute
+            path='/edit-task/:task'
+            exact
+            component={EditTask}
           />
           <PrivateRoute
             path='/custom-sections'
