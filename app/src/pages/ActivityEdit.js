@@ -388,7 +388,7 @@ export default function ActivityEdit(props) {
 
         fetch(url, requestOptions)
             .then(response => response.text())
-            .then(result => window.location.reload())
+            .then(_ => window.location.reload())
             .catch(error => console.log('error', error));
     }
 
@@ -431,7 +431,7 @@ export default function ActivityEdit(props) {
             },
         })
             .then(
-                (response, err) => {
+                (_, err) => {
                     console.log(err)
                 })
 

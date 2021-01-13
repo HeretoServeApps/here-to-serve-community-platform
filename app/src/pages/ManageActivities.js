@@ -96,12 +96,14 @@ export default function ManageActivities() {
     const [selectedActivityType, setSelectedActivityType] = useState('Filter by Activity Type')
     const moment = extendMoment(Moment);
 
-    const [showRemoveModal, setShowRemoveModal] = useState(false)
+    const [showRemoveModalActivity, setShowRemoveModalActivity] = useState(false)
     const [isDeactivate, setIsDeactivate] = useState(false)
     const [showActivateModal, setShowActivateModal] = useState(false)
 
     const [selectedActivityId, setSelectedActivityId] = useState(0)
     const [selectedActivityTitle, setSelectedActivityTitle] = useState('')
+
+    const [showRemoveModalTask, setShowremoveModalTask] = useState(false)
 
     useEffect(() => {
         axios
@@ -122,7 +124,7 @@ export default function ManageActivities() {
 
     const deactivateActivity = useCallback((pk) => {
         setIsDeactivate(false)
-        setShowRemoveModal(false)
+        setShowRemoveModalActivity(false)
         var url = '/edit-activity/' + pk + '/'
         var myHeaders = new Headers()
         myHeaders.append('Authorization', `JWT ${localStorage.getItem('token')}`)
@@ -169,21 +171,45 @@ export default function ManageActivities() {
     }, [])
 
     //toggles popup view for delete and deactivate
-    function triggerDeactivateOrDeleteModal(deactivate, id, title) {
+    function triggerDeactivateOrDeleteModalActivity(deactivate, id, title) {
         setSelectedActivityId(id)
         setSelectedActivityTitle(title)
         setIsDeactivate(deactivate);
-        setShowRemoveModal(true);
+        setShowRemoveModalActivity(true);
     }
 
     function triggerActivateModal(id, title) {
         setSelectedActivityId(id)
         setSelectedActivityTitle(title)
-        setShowActivateModal(true);
+        setShowActivateModal(true)
     }
 
     const removeActivity = useCallback((pk) => {
         var url = '/edit-activity/' + pk + '/'
+        var myHeaders = new Headers()
+        myHeaders.append('Authorization', `JWT ${localStorage.getItem('token')}`)
+    
+        var requestOptions = {
+            method: 'DELETE',
+            headers: myHeaders,
+            redirect: 'follow'
+        }
+    
+        fetch(url, requestOptions)
+        .then(response => response.text())
+        .then(_ => window.location.reload())
+        .catch(error => console.log('error', error));
+    }, [])
+
+
+    function triggerDeleteModalTask(id, title, time) {
+        setSelectedActivityId(id)
+        setSelectedActivityTitle(title + ' on ' + time)
+        setShowremoveModalTask(true)
+    }
+
+    const removeTask = useCallback((pk) => {
+        var url = '/edit-task/' + pk + '/'
         var myHeaders = new Headers()
         myHeaders.append('Authorization', `JWT ${localStorage.getItem('token')}`)
     
@@ -343,10 +369,10 @@ export default function ManageActivities() {
                                                 transitionTime={300} 
                                                 trigger={
                                                     <Columns>
-                                                        <Columns.Column size={8}>
+                                                        <Columns.Column size={6}>
                                                             {a.title + ' (' + a.activity_type + ') — ' + moment(a.start_time).format('LL') + ' to ' + moment(a.end_time).format('LL')}
                                                         </Columns.Column>
-                                                        <Columns.Column size={1}>
+                                                        <Columns.Column size={2}>
                                                             <Link style={{color: 'white'}} to={{ 
                                                                 pathname: '/edit-activity/' + a.id,
                                                                 state: {
@@ -357,15 +383,15 @@ export default function ManageActivities() {
                                                                 Edit
                                                             </Link>
                                                         </Columns.Column>
-                                                        <Columns.Column size={1}>
-                                                            <Link style={{color: 'white'}} onClick={() => triggerDeactivateOrDeleteModal(false, a.id, a.title)}>
+                                                        <Columns.Column size={2}>
+                                                            <Link style={{color: 'white'}} onClick={() => triggerDeactivateOrDeleteModalActivity(false, a.id, a.title)}>
                                                                 <Trash2 size={12} style={{ marginRight: '10px' }} />
                                                                 Delete
                                                             </Link>
                                                         </Columns.Column>
                                                         <Columns.Column size={2}>
                                                             {a.is_active ?
-                                                                <Link style={{color: 'white'}} onClick={() => triggerDeactivateOrDeleteModal(true, a.id, a.title)}>
+                                                                <Link style={{color: 'white'}} onClick={() => triggerDeactivateOrDeleteModalActivity(true, a.id, a.title)}>
                                                                     <PauseCircle size={12} style={{ marginRight: '10px' }} />
                                                                     Deactivate
                                                                 </Link>
@@ -382,7 +408,7 @@ export default function ManageActivities() {
                                                 {a.tasks.map((task) => (
                                                     <div>
                                                         <Columns>
-                                                            <Columns.Column size={8}>
+                                                            <Columns.Column size={6}>
                                                                 {task.title}
                                                                 <p>
                                                                     {moment(task.start_time).format('LL')}{' '}
@@ -390,14 +416,19 @@ export default function ManageActivities() {
                                                                     and {moment(task.end_time).add(new Date(task.start_time).getTimezoneOffset(), 'm').format('LT')}
                                                                 </p>
                                                             </Columns.Column>
-                                                            <Columns.Column size={1}>
-                                                                <Link>
+                                                            <Columns.Column size={2}>
+                                                                <Link to={{ 
+                                                                    pathname: '/edit-task/' + task.id,
+                                                                    state: {
+                                                                        primary_key: task.id
+                                                                    }
+                                                                }}>    
                                                                     <Edit2 size={12} style={{ marginRight: '10px' }} />
                                                                     Edit
                                                                 </Link>
                                                             </Columns.Column>
-                                                            <Columns.Column size={1}>
-                                                                <Link>
+                                                            <Columns.Column size={2}>
+                                                                <Link onClick={() => triggerDeleteModalTask(task.id, task.title, moment(task.start_time).format('LL'))}>
                                                                     <Trash2 size={12} style={{ marginRight: '10px' }} />
                                                                     Delete
                                                                 </Link>
@@ -420,12 +451,12 @@ export default function ManageActivities() {
                 </Columns>
             </Container>
             <Modal
-                show={showRemoveModal}
-                onClose={() => setShowRemoveModal(false)}
+                show={showRemoveModalActivity}
+                onClose={() => setShowRemoveModalActivity(false)}
                 closeOnBlur={true}
             >
                 <Modal.Card>
-                    <Modal.Card.Head onClose={() => setShowRemoveModal(false)}>
+                    <Modal.Card.Head onClose={() => setShowRemoveModalActivity(false)}>
                     {isDeactivate ? (
                         <Modal.Card.Title>Deactivate "{selectedActivityTitle}"</Modal.Card.Title>
                     ) : (
@@ -449,7 +480,7 @@ export default function ManageActivities() {
                         justifyContent: 'space-between',
                     }}
                     >
-                    <Button onClick={() => setShowRemoveModal(false)}>Cancel</Button>
+                    <Button onClick={() => setShowRemoveModalActivity(false)}>Cancel</Button>
                     {isDeactivate ? (
                         <Button color='primary' onClick={() => deactivateActivity(selectedActivityId)}>
                             Deactivate Activity
@@ -483,6 +514,31 @@ export default function ManageActivities() {
                     <Button onClick={() => setShowActivateModal(false)}>Cancel</Button>
                         <Button color='primary' onClick={() => activateActivity(selectedActivityId)}>
                             Activate Activity
+                        </Button>
+                    </Modal.Card.Foot>
+                </Modal.Card>
+            </Modal>
+            <Modal
+                show={showRemoveModalTask}
+                onClose={() => setShowremoveModalTask(false)}
+                closeOnBlur={true}
+            >
+                <Modal.Card>
+                    <Modal.Card.Head onClose={() => setShowremoveModalTask(false)}>
+                        <Modal.Card.Title>Delete "{selectedActivityTitle}"</Modal.Card.Title>
+                    </Modal.Card.Head>
+                    <Section style={{ backgroundColor: 'white' }}>
+                        Are you sure you want to delete this task? You can't undo this action.
+                    </Section>
+                    <Modal.Card.Foot
+                    style={{
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                    }}
+                    >
+                    <Button onClick={() => setShowremoveModalTask(false)}>Cancel</Button>
+                        <Button color='primary' onClick={() => removeTask(selectedActivityId)}>
+                            Delete Task
                         </Button>
                     </Modal.Card.Foot>
                 </Modal.Card>
