@@ -15,6 +15,7 @@ from django.utils.encoding import force_bytes
 from django.utils.decorators import method_decorator
 from django.views.decorators.debug import sensitive_post_parameters
 from django.conf import settings 
+from django.db.models import Count, Sum
 
 from rest_framework import viewsets, permissions, status
 from rest_framework import generics
@@ -357,19 +358,48 @@ class TaskList(APIView):
                     activity['color'] = '#46b378'
                     activity['activity_status'] = "Help needed"
                 
-                # Data for the activity report page
-                minutes_per_volunteer = float((activity['est_hours']*60 + activity['est_minutes']))/float(activity['num_volunteers_needed'])
-                activity['est_hours_per_volunteer'] = minutes_per_volunteer//60
-                activity['est_minutes_per_volunteer'] = minutes_per_volunteer - activity['est_hours_per_volunteer']*60
-
-                if len(activity['volunteers']) > 0:
-                    minutes_per_volunteer_actual = float((activity['est_hours']*60 + activity['est_minutes']))/float(len(activity['volunteers']))
-                    activity['actual_hours_per_volunteer'] = minutes_per_volunteer_actual//60
-                    activity['actual_minutes_per_volunteer'] = minutes_per_volunteer_actual - activity['actual_hours_per_volunteer']*60
-                else:
-                    activity['actual_hours_per_volunteer'] = 0
-                    activity['actual_minutes_per_volunteer'] = 0
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class ActivitySummary(APIView):
+    '''
+    Retrieving summaries of activities by categories
+    '''
+    permission_classes = (permissions.IsAuthenticated,) 
+
+    def get(self, request, community_id):
+        activities = []
+        result_json = []
+        # if request.query_params.get('activity_type') != 'Filter by Activity Type':
+        #     activities = Activity.objects.filter(community=community_id, activity_type=request.query_params.get('activity_type'), start_time__gte = request.query_params.get('start_date'), end_time__lte = request.query_params.get('end_date'))
+        # else:
+        #     activities = Activity.objects.filter(community=community_id, start_time__gte = request.query_params.get('start_date'), end_time__lte = request.query_params.get('end_date'))
+        
+        # # Calculate total number of volunteers
+        # if request.query_params.get('activity_type') != 'Filter by Activity Type':
+        #     result = activities.annotate(num_volunteers=Count('volunteers'))
+        #     total_volunteers = 0
+        #     for activity in result:
+        #         total_volunteers += activity.num_volunteers
+
+        #     result_json.append({
+        #         'total_volunteers': total_volunteers,
+        #         'total_hours': activities.aggregate(Sum('est_hours')),
+        #         'total_minutes': activities.aggregate(Sum('est_minutes'))
+        #     })
+        # else:
+        #     for category, category_type in Activity.ACTIVITY_TYPE_CHOICES:
+        #         category_activities = activities.filter(activity_type=request.query_params.get('activity_type'))
+        #         result = category_activities.annotate(num_volunteers=Count('volunteers'))
+        #         total_volunteers = 0
+        #         for activity in result:
+        #             total_volunteers += activity.num_volunteers
+        #         result_json.append({
+        #             'total_volunteers': total_volunteers,
+        #             'total_hours': category_activities.aggregate(total_hours=Sum('est_hours'))['total_hours'],
+        #             'total_minutes': category_activities.aggregate(total_minutes=Sum('est_minutes'))['total_minutes']
+        #         })
+        return Response(result_json, status=status.HTTP_200_OK)
 
 
 class ActivityList(APIView):
@@ -435,19 +465,6 @@ class ActivityList(APIView):
                     else: # Otherwise color it green
                         activity['color'] = '#46b378'
                         activity['activity_status'] = "Help needed"
-                    
-                    # Data for the activity report page
-                    minutes_per_volunteer = float((activity['est_hours']*60 + activity['est_minutes']))/float(activity['num_volunteers_needed'])
-                    activity['est_hours_per_volunteer'] = minutes_per_volunteer//60
-                    activity['est_minutes_per_volunteer'] = minutes_per_volunteer - activity['est_hours_per_volunteer']*60
-
-                    if len(activity['volunteers']) > 0:
-                        minutes_per_volunteer_actual = float((activity['est_hours']*60 + activity['est_minutes']))/float(len(activity['volunteers']))
-                        activity['actual_hours_per_volunteer'] = minutes_per_volunteer_actual//60
-                        activity['actual_minutes_per_volunteer'] = minutes_per_volunteer_actual - activity['actual_hours_per_volunteer']*60
-                    else:
-                        activity['actual_hours_per_volunteer'] = 0
-                        activity['actual_minutes_per_volunteer'] = 0
                 result.append(activity)
         return Response(result, status=status.HTTP_200_OK)
 

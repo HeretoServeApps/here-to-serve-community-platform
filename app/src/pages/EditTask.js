@@ -236,7 +236,7 @@ export default function EditTask(props) {
         var startTimeString = startYear + '-' + startMonthNumeral + '-' + startDay + 'T' + startTime.split(' ')[0] + ':00Z'
         var endMonthNumeral =  months.indexOf(endMonth) + 1
         var endTimeString = endYear + '-' + endMonthNumeral + '-' + endDay + 'T' + endTime.split(' ')[0] + ':00Z'
-        console.log(startTimeString)
+
         formdata.append('num_volunteers_needed', numVolunteers)
         formdata.append('start_time', startTimeString)
         formdata.append('end_time', endTimeString)

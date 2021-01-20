@@ -12,7 +12,7 @@ const generatePDF = (activities, filters) => {
   const moment = extendMoment(Moment);
 
   // define the columns we want and their titles
-  const tableColumn = ["Activity", "Time", "Avg. Volunteer Time/Person (Requested)", "Avg. Volunteer Time/Person (Actual)"];
+  const tableColumn = ["Activity", "Time", "Avg. Volunteer Time/Person", "Status"];
   // define an empty array of rows
   const tableRows = [];
 
@@ -41,15 +41,14 @@ const generatePDF = (activities, filters) => {
     {
         let time = moment(a.start_time).format('LL') + ' between ' + moment(a.start_time).add(new Date(a.start_time).getTimezoneOffset(), 'm').format('LT')
         + ' and ' + moment(a.end_time).add(new Date(a.start_time).getTimezoneOffset(), 'm').format('LT')
-        let timePerPersonRequested = a.activity_type !== 'Occasion' ? a.est_hours_per_volunteer + ' hours ' + Math.round(a.est_minutes_per_volunteer) + ' minutes ' : 'N/A'
-        let timePerPersonActual = a.activity_type !== 'Occasion' && a.actual_hours_per_volunteer !== 0 && a.actual_minutes_per_volunteer !== 0 ? 
-        a.actual_hours_per_volunteer + ' hours ' + Math.round(a.actual_minutes_per_volunteer) + ' minutes ' : 
-        a.activity_type !== 'Occasion' ?  'No volunteers have signed-up' : 'Occasions have no volunteers.'
+        let timePerPersonRequested = a.activity_type !== 'Occasion' ? a.est_hours + ' hours ' + a.est_minutes + ' minutes ' : 'N/A'
+        let status = a.is_active ? 'Active' : 'Inactive'
+      
         const activityData = [
-        a.activity_type + ': ' + a.title,
-        time,
-        timePerPersonRequested,
-        timePerPersonActual,
+          a.activity_type + ': ' + a.title,
+          time,
+          timePerPersonRequested,
+          status
         ];
         // push each activity's info into a row
         tableRows.push(activityData);
@@ -62,9 +61,10 @@ const generatePDF = (activities, filters) => {
   // we use a date string to generate our filename.
   const dateStr = date[0] + date[1] + date[2] + date[3] + date[4];
   // ticket title. and margin-top + margin-left
-  doc.text("Activity Report for " + date[0] + ', ' + date[1] + ' ' + date[2] + ', ' + date[3], 14, 15);
+  // doc.text("Activity Report for " + date[0] + ', ' + date[1] + ' ' + date[2] + ', ' + date[3], 14, 15);
+  doc.text("Activity Report for " + filters['start_month'] + ' ' + filters['start_day'] + ', ' + filters['start_year'] + ' to ' + filters['end_month'] + ' ' + filters['end_day'] + ', ' + filters['end_year'], 14, 15)
   // we define the name of our PDF file.
-  doc.save(`heretoserve_report_${dateStr}.pdf`);
+  doc.save(`heretoserve_detailed_report_${dateStr}.pdf`);
 };
 
 export default generatePDF;

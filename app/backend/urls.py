@@ -57,6 +57,7 @@ urlpatterns = [
     path('edit-discussion-post/', views.EditDiscussionPost.as_view()),
     path(r'activities/<int:community_id>/', views.TaskList.as_view()),
     path(r'unique-activities/<int:community_id>/', views.ActivityList.as_view()),
+    path(r'activity-summary/<int:community_id>/', views.ActivitySummary.as_view()),
     path('add-photo/', views.AddPhoto.as_view()),
     path('edit-community-user-role/', views.EditCommunityUserRole.as_view()),
     path(r'edit-activity/<int:activity_id>/', views.ActivityEditView.as_view()),
