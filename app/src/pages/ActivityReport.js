@@ -12,7 +12,9 @@ import Button from 'react-bulma-components/lib/components/button'
 
 import CommunityNavbar from '../components/communityNavbar'
 import SideBar from '../components/sidebar'
-import generatePDF from "../components/generateActivityPDF";
+import generatePDF from "../components/generateActivityPDFDetailed"
+import generatePDFSummary from "../components/generateActivityPDFSummary"
+
 
 export default function ActivityReport() {
     // Create styles
@@ -49,7 +51,6 @@ export default function ActivityReport() {
 
     const years = Array.from(Array(5).keys()).map((y) => (y + (new Date().getFullYear())))
     const count = Array.from(Array(51).keys()).slice(1, 51)
-
 
     const monthMap = new Map()
     monthMap['January'] = 1
@@ -93,6 +94,8 @@ export default function ActivityReport() {
     const [selectedActivityType, setSelectedActivityType] = useState('Filter by Activity Type')
     const moment = extendMoment(Moment);
 
+    const [activitySummaries, setActivitySummaries] = useState([])
+
     useEffect(() => {
         axios
             .get(`/activities/${localStorage.getItem('community-id')}`, {
@@ -119,6 +122,38 @@ export default function ActivityReport() {
         return range.contains(dateFormatted)
     }, [startDay, startMonth, startYear, endDay, endMonth, endYear])
 
+
+    useEffect(() => {
+        var startMonthNumeral =  monthMap[startMonth] 
+        var startTimeString = startYear + '-' + startMonthNumeral + '-' + startDay + 'T12:00:00Z'
+        var endMonthNumeral =  monthMap[endMonth]
+        var endTimeString = endYear + '-' + endMonthNumeral + '-' + endDay + 'T12:00:00Z'
+    
+        const parameters = JSON.stringify({
+            start_date: startTimeString,
+            end_date: endTimeString,
+            activity_type: selectedActivityType
+        })
+        var url = `/activity-summary/${localStorage.getItem('community-id')}/?start_date=${startTimeString}&end_date=${endTimeString}&activity_type=${selectedActivityType}`
+        console.log(url)
+
+        axios
+            .get(url, {
+                headers: {
+                    'Authorization': `JWT ${localStorage.getItem('token')}`,
+                    'Content-Type': 'application/json',
+                },
+            })
+            .then(
+                (response) => {
+                    setActivitySummaries(response.data)
+                },
+                (error) => {
+                    console.log(error)
+                }
+            )
+      }, [startDay, startMonth, startYear, endDay, endMonth, endYear, selectedActivityType])
+
     return (
         <div>
             <CommunityNavbar />
@@ -129,37 +164,60 @@ export default function ActivityReport() {
                     </Columns.Column>
                     <Columns.Column size={9}>
                         <Columns>
-                            <Columns.Column size={8}>
+                            <Columns.Column size={4}>
                                 <Heading size={4}>Activity Report</Heading>
                             </Columns.Column>
                             <Columns.Column size={4}>
-                                <Columns>
-                                    <Columns.Column>
-                                        <Button
-                                            style={{
-                                                boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)',
-                                            }}
-                                            color='primary'
-                                            fullwidth={true}
-                                            onClick={() => generatePDF
-                                                (
-                                                    activities, 
-                                                    {'start_day': startDay,
-                                                     'start_month': startMonth,
-                                                     'start_year': startYear,
-                                                     'end_day': endDay,
-                                                     'end_month': endMonth,
-                                                     'end_year': endYear,
-                                                     'search': search,
-                                                     'activity_type': selectedActivityType,
-                                                    }
-                                                )
+                                <Button
+                                    style={{
+                                        boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)',
+                                    }}
+                                    color='primary'
+                                    fullwidth={true}
+                                    onClick={() => generatePDF
+                                        (
+                                            activities,
+                                            {
+                                                'start_day': startDay,
+                                                'start_month': startMonth,
+                                                'start_year': startYear,
+                                                'end_day': endDay,
+                                                'end_month': endMonth,
+                                                'end_year': endYear,
+                                                'search': search,
+                                                'activity_type': selectedActivityType,
                                             }
-                                        >
-                                            Export Report PDF
-                                        </Button>
-                                    </Columns.Column>
-                                </Columns>
+                                        )
+                                    }
+                                >
+                                    Export Report PDF (Detailed)
+                                </Button>
+                            </Columns.Column>
+                            <Columns.Column size={4}>
+                                <Button
+                                    style={{
+                                        boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)',
+                                    }}
+                                    color='primary'
+                                    fullwidth={true}
+                                    onClick={() => generatePDFSummary
+                                        (
+                                            activitySummaries,
+                                            {
+                                                'start_day': startDay,
+                                                'start_month': startMonth,
+                                                'start_year': startYear,
+                                                'end_day': endDay,
+                                                'end_month': endMonth,
+                                                'end_year': endYear,
+                                                'search': search,
+                                                'activity_type': selectedActivityType,
+                                            }
+                                        )
+                                    }
+                                >
+                                    Export Report PDF (Summary)
+                                </Button>
                             </Columns.Column>
                         </Columns>
                         <Container style={formContainerStyle}>
@@ -267,8 +325,7 @@ export default function ActivityReport() {
                                         <th>Activity</th>
                                         <th>Time</th>
                                         <th>Volunteer Status</th>
-                                        <th>Average Volunteer Time/Person <br />(Requested)</th>
-                                        <th>Average Volunteer Time/Person <br />(Actual)</th>
+                                        <th>Volunteer Time/Person</th>
                                         <th>Status</th>
                                     </tr>
                                 </thead>
@@ -303,23 +360,8 @@ export default function ActivityReport() {
                                                             {a.volunteers.length}/{a.num_volunteers_needed} volunteers
                                                         </td>
                                                         {a.activity_type !== 'Occasion' ?
-                                                            (<td>{a.est_hours_per_volunteer} hours <br />{Math.round(a.est_minutes_per_volunteer)} minutes</td>) :
+                                                            (<td>{a.est_hours} hours <br />{a.est_minutes} minutes</td>) :
                                                             (<td>N/A</td>)}
-
-                                                        {a.activity_type !== 'Occasion' && (a.actual_hours_per_volunteer !== 0 || a.actual_minutes_per_volunteer !== 0) ?
-                                                            <td>
-                                                                {a.actual_hours_per_volunteer} hours <br />{Math.round(a.actual_minutes_per_volunteer)} minutes
-                                                            </td>
-                                                            :
-                                                            a.activity_type !== 'Occasion' ?
-                                                                (<td>
-                                                                    No volunteers have signed-up
-                                                                </td>)
-                                                                :
-                                                                (<td>
-                                                                    Occasions do not have volunteers
-                                                                </td>)
-                                                        }
                                                         {a.is_active ?
                                                             (<td> Active</td>)
                                                             :
