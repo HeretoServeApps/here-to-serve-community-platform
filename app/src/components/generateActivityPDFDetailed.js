@@ -54,15 +54,14 @@ const generatePDF = (activities, filters) => {
         tableRows.push(activityData);
     }
   });
-
+  
+  // title. and margin-top + margin-left
+  doc.text("Activity Report for " + filters['start_month'] + ' ' + filters['start_day'] + ', ' + filters['start_year'] + ' to ' + filters['end_month'] + ' ' + filters['end_day'] + ', ' + filters['end_year'], 14, 15)
   // startY is basically margin-top
   doc.autoTable(tableColumn, tableRows, { startY: 20 });
   const date = Date().split(" ");
   // we use a date string to generate our filename.
   const dateStr = date[0] + date[1] + date[2] + date[3] + date[4];
-  // ticket title. and margin-top + margin-left
-  // doc.text("Activity Report for " + date[0] + ', ' + date[1] + ' ' + date[2] + ', ' + date[3], 14, 15);
-  doc.text("Activity Report for " + filters['start_month'] + ' ' + filters['start_day'] + ', ' + filters['start_year'] + ' to ' + filters['end_month'] + ' ' + filters['end_day'] + ', ' + filters['end_year'], 14, 15)
   // we define the name of our PDF file.
   doc.save(`heretoserve_detailed_report_${dateStr}.pdf`);
 };

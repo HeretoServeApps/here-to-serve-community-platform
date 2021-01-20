@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
 import '../index.css'
@@ -47,6 +47,28 @@ export default function ViewOneActivity(props) {
             )
     }, [])
 
+    const signUpToVolunteer = useCallback(() => {
+        const param = JSON.stringify({
+            activity: activity.id,
+            user: localStorage.getItem('email'),
+        })
+
+        axios.post('/add-volunteer-to-activity/', param, {
+            headers: {
+                Authorization: `JWT ${localStorage.getItem('token')}`,
+                'Content-Type': 'application/json',
+            },
+        })
+        .then(
+            (_) => {
+                window.location.reload()
+            },
+            (error) => {
+                console.log(error)
+            }
+        )
+    }, [activity])
+
     return (
         <div>
             <CommunityNavbar />
@@ -68,18 +90,32 @@ export default function ViewOneActivity(props) {
                         </Link>
                     </Columns.Column>
                     <Columns.Column size={3}>
-                        <Link to='/assign-volunteers' style={{ color: 'white' }}>
+                        {localStorage.getItem('user-role') !== 'Administrator' ?
                             <Button
                                 style={{
-                                boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)',
+                                    boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)',
                                 }}
                                 fullwidth={true}
                                 color='primary'
+                                onClick={() => signUpToVolunteer()}
                             >
                                 <UserPlus size={12} style={{ marginRight: '10px' }} />
-                                Assign
+                                Sign-up
                             </Button>
-                        </Link>
+                            :
+                            <Link to='/assign-volunteers' style={{ color: 'white' }}>
+                                <Button
+                                    style={{
+                                        boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)',
+                                    }}
+                                    fullwidth={true}
+                                    color='primary'
+                                >
+                                    <UserPlus size={12} style={{ marginRight: '10px' }} />
+                                    Assign
+                                </Button>
+                            </Link>
+                        }
                     </Columns.Column>
                 </Columns>
                 <p>

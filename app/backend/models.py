@@ -368,6 +368,9 @@ class Activity(models.Model):
     coordinators = models.ManyToManyField(User, related_name="coordinators")
     volunteers = models.ManyToManyField(User, related_name="volunteers")
 
+    def __str__(self):
+        return f'{self.title} ({self.id})'
+
 
 class RideActivity(models.Model):
     activity = models.OneToOneField(

@@ -368,37 +368,42 @@ class ActivitySummary(APIView):
     permission_classes = (permissions.IsAuthenticated,) 
 
     def get(self, request, community_id):
-        activities = []
         result_json = []
-        # if request.query_params.get('activity_type') != 'Filter by Activity Type':
-        #     activities = Activity.objects.filter(community=community_id, activity_type=request.query_params.get('activity_type'), start_time__gte = request.query_params.get('start_date'), end_time__lte = request.query_params.get('end_date'))
-        # else:
-        #     activities = Activity.objects.filter(community=community_id, start_time__gte = request.query_params.get('start_date'), end_time__lte = request.query_params.get('end_date'))
-        
-        # # Calculate total number of volunteers
-        # if request.query_params.get('activity_type') != 'Filter by Activity Type':
-        #     result = activities.annotate(num_volunteers=Count('volunteers'))
-        #     total_volunteers = 0
-        #     for activity in result:
-        #         total_volunteers += activity.num_volunteers
-
-        #     result_json.append({
-        #         'total_volunteers': total_volunteers,
-        #         'total_hours': activities.aggregate(Sum('est_hours')),
-        #         'total_minutes': activities.aggregate(Sum('est_minutes'))
-        #     })
-        # else:
-        #     for category, category_type in Activity.ACTIVITY_TYPE_CHOICES:
-        #         category_activities = activities.filter(activity_type=request.query_params.get('activity_type'))
-        #         result = category_activities.annotate(num_volunteers=Count('volunteers'))
-        #         total_volunteers = 0
-        #         for activity in result:
-        #             total_volunteers += activity.num_volunteers
-        #         result_json.append({
-        #             'total_volunteers': total_volunteers,
-        #             'total_hours': category_activities.aggregate(total_hours=Sum('est_hours'))['total_hours'],
-        #             'total_minutes': category_activities.aggregate(total_minutes=Sum('est_minutes'))['total_minutes']
-        #         })
+        activity_type = request.query_params.get('activity_type')
+        start_date = request.query_params.get('start_date')
+        end_date = request.query_params.get('end_date')
+        # Calculate total number of volunteers
+        if request.query_params.get('activity_type') != 'Filter by Activity Type':
+            activities = Activity.objects.filter(community=community_id, 
+                                    activity_type=activity_type, 
+                                    start_time__gte = start_date, 
+                                    end_time__lte = end_date). \
+                                    annotate(num_volunteers=Count('volunteers'))
+            total_volunteers = 0
+            for activity in result:
+                total_volunteers += activity.num_volunteers
+            result_json.append({
+                'activity_type': activity_type,
+                'total_volunteers': total_volunteers,
+                'total_hours': activities.aggregate(Sum('est_hours')),
+                'total_minutes': activities.aggregate(Sum('est_minutes'))
+            })
+        else:
+            for category, category_type in Activity.ACTIVITY_TYPE_CHOICES:
+                category_activities = Activity.objects.filter(community=community_id, 
+                                                              activity_type=category_type,
+                                                              start_time__gte = start_date, 
+                                                              end_time__lte = end_date). \
+                                                              annotate(num_volunteers=Count('volunteers'))
+                total_volunteers = 0
+                for activity in category_activities:
+                    total_volunteers += activity.num_volunteers
+                result_json.append({
+                    'activity_type': category_type,
+                    'total_volunteers': total_volunteers,
+                    'total_hours': category_activities.aggregate(total_hours=Sum('est_hours'))['total_hours'],
+                    'total_minutes': category_activities.aggregate(total_minutes=Sum('est_minutes'))['total_minutes']
+                })
         return Response(result_json, status=status.HTTP_200_OK)
 
 
@@ -910,7 +915,7 @@ class AddVolunteerToActivity(APIView):
     """
     A user can add themself as a volunteer for an activity.
     """
-    permission_classes = (permissions.AllowAny, )
+    permission_classes = (permissions.IsAuthenticated, )
 
     def post(self, request, format=None):
         activity_id = request.data['activity']

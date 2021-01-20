@@ -129,13 +129,16 @@ export default function ActivityReport() {
         var endMonthNumeral =  monthMap[endMonth]
         var endTimeString = endYear + '-' + endMonthNumeral + '-' + endDay + 'T12:00:00Z'
     
-        const params = JSON.stringify({
+        const parameters = JSON.stringify({
             start_date: startTimeString,
             end_date: endTimeString,
             activity_type: selectedActivityType
         })
+        var url = `/activity-summary/${localStorage.getItem('community-id')}/?start_date=${startTimeString}&end_date=${endTimeString}&activity_type=${selectedActivityType}`
+        console.log(url)
+
         axios
-            .get(`/activity-summary//${localStorage.getItem('community-id')}/`, params, {
+            .get(url, {
                 headers: {
                     'Authorization': `JWT ${localStorage.getItem('token')}`,
                     'Content-Type': 'application/json',
@@ -144,7 +147,6 @@ export default function ActivityReport() {
             .then(
                 (response) => {
                     setActivitySummaries(response.data)
-                    console.log(response.data)
                 },
                 (error) => {
                     console.log(error)
