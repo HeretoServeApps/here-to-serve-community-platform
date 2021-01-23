@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import countryList from 'react-select-country-list'
-import { useHistory } from 'react-router-dom'
+import { useHistory, Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import axios from 'axios'
 
@@ -588,7 +588,7 @@ export default function Register(props) {
         CREATE ACCOUNT
       </Button>
       <Notification style={notifStyle}>
-        Already have an account? <a href='/login'>Log in here.</a>
+        Already have an account? <Link to='/login'>Log in here.</Link>
       </Notification>
     </Container>
     

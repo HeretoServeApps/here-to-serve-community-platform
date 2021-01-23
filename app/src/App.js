@@ -177,7 +177,7 @@ export default function App() {
   }, [])
 
   const handleForgotPassword = useCallback((email) => {
-    fetch(`${process.env.REACT_APP_API_URL}/reset-password/`, {
+    fetch('/reset-password/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

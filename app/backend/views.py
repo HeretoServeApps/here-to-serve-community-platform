@@ -198,7 +198,7 @@ class ResetPassword(APIView):
         for user in self.get_users(email):
             uid = urlsafe_base64_encode(force_bytes(user.pk))
             token = default_token_generator.make_token(user)
-            url = "http://localhost:3000/reset-password?uid=" + uid + "&token=" + token
+            url = f"{config('HEROKU_APP_URL')}/app/reset-password?uid=" + uid + "&token=" + token
 
         msg_plain = 'We received a request to reset your password for your Here to Serve account. ' \
                     'Here is your password reset link: ' + url + '. If you did not send ' \

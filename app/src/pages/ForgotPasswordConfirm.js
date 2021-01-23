@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 import Container from 'react-bulma-components/lib/components/container'
 
@@ -16,7 +17,7 @@ export default function ForgotPasswordConfirm() {
     <Container style={containerStyle}>
       <p>
         An email has been sent to the email address you entered. 
-        If you did not receive this email, please try again <a href="/forgot-password">here</a>. 
+        If you did not receive this email, please try again <Link href="/forgot-password">here</Link>. 
         Make sure the email you entered is associated with a valid account.  
       </p>
       <br />
