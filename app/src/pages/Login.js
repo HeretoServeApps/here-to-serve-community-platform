@@ -95,7 +95,7 @@ export default function Login(props) {
         Incorrect username or password.
       </div>
       <Notification style={notifStyle}>
-        <a href='/forgot-password'>Forgot Password?</a> or{' '}
+        <Link to='/forgot-password'>Forgot Password?</Link> or{' '}
         <Link to='/register'>Create Account</Link>
       </Notification>
     </Container>
