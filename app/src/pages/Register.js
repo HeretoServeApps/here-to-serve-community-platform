@@ -36,9 +36,6 @@ export default function Register(props) {
     textAlign: 'center',
   }
 
-  
-
-  
   const [addressLine1, setAddressLine1] = useState('')
   const [addressLine2, setAddressLine2] = useState('')
   const [city, setCity] = useState('')
@@ -212,10 +209,6 @@ export default function Register(props) {
       default:
         break;
     }
-  
-        console.log(errors)
-    
-    
   }
 
 
@@ -224,7 +217,6 @@ export default function Register(props) {
     <Container style={containerStyle}>
       <Heading size={4}>Join a Care Community</Heading>
       <Heading size={6}>Basic Information</Heading>
-      
       <Columns>
         <Columns.Column>
           <Field>
@@ -235,12 +227,9 @@ export default function Register(props) {
                 value={values.firstName}
                 onChange={(e) => handleChange(e)}
                 placeholder='First Name*'
-                
               />
               {errors.firstName.length >= 0 && 
               <span className='error'>{errors.firstName}</span>}
-
-              
             </Control>
           </Field>
         </Columns.Column>
@@ -252,7 +241,6 @@ export default function Register(props) {
                 value={values.lastName}
                 onChange={(e) => handleChange(e)}
                 placeholder='Last Name*'
-                
               />
               {errors.lastName.length >= 0 && 
               <span className='error'>{errors.lastName}</span>}
@@ -267,7 +255,6 @@ export default function Register(props) {
             value={addressLine1}
             onChange={(e) => setAddressLine1(e.target.value)}
             placeholder='Address Line 1*'
-            
           />
         </Control>
       </Field>
@@ -298,7 +285,6 @@ export default function Register(props) {
             name='country'
             value={country}
             onChange={(e) => setCountry(e.target.value)}
-            
           >
             {countryList()
               .getLabels()
@@ -333,7 +319,6 @@ export default function Register(props) {
                 value={values.zipcode}
                 onChange={(e) => handleChange(e)}
                 placeholder='Zip Code*'
-                
               />
               {errors.zipcode.length >= 0 && 
               <span className='error'>{errors.zipcode}</span>}
@@ -341,7 +326,6 @@ export default function Register(props) {
           </Field>
         </Columns.Column>
       </Columns>
-
       <Columns>
         <Columns.Column>
           <Field>
@@ -377,7 +361,6 @@ export default function Register(props) {
           </Field>
         </Columns.Column>
       </Columns>
-
       <Columns>
         <Columns.Column>
           <Field>
@@ -434,7 +417,6 @@ export default function Register(props) {
             onChange={(e) => setHowKnow(e.target.value)}
             name='howKnow'
             value={howKnow}
-            
           >
             <option>Please select an option</option>
             <option>Family</option>
@@ -474,7 +456,6 @@ export default function Register(props) {
             onChange={(e) => setSkillsToOffer(e.target.value)}
             name='skillsToOffer'
             value={skillsToOffer}
-            
           >
             <option></option>
             <option>
@@ -505,7 +486,7 @@ export default function Register(props) {
             
           />
           {errors.email.length >= 0 && 
-              <span className='error'>{errors.email}</span>}
+          <span className='error'>{errors.email}</span>}
         </Control>
       </Field>
       <Field>
@@ -515,7 +496,6 @@ export default function Register(props) {
             value={values.confirmEmail}
             onChange={(e) => handleChange(e)}
             placeholder='Confirm Email*'
-            
           />
           {errors.confirmEmail.length >= 0 && 
           <span className='error'>{errors.confirmEmail}</span>}
