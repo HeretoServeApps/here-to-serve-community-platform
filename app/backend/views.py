@@ -122,7 +122,6 @@ class UserList(APIView):
     permission_classes = (permissions.AllowAny,)
 
     def post(self, request, format=None):
-        print('Got here')
         serializer = UserSerializerWithToken(data=request.data)
         if serializer.is_valid():
             serializer.save()
