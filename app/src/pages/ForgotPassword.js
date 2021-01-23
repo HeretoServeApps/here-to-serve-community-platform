@@ -28,6 +28,7 @@ export default function ForgotPassword(props) {
   }
 
   const [email, setEmail] = useState('')
+  const [validForm, setValidForm] = useState(false)
 
   let history = useHistory()
 
@@ -36,6 +37,14 @@ export default function ForgotPassword(props) {
       history.push('/my-communities')
     }
   })
+
+  useEffect(() => {
+    const formValues = [email]
+    const notValidForm = formValues.some((formVal) => {
+      return formVal === ''
+    })
+    setValidForm(notValidForm)
+  }, [email])
   
   return (
     <Container style={containerStyle}>
@@ -58,6 +67,7 @@ export default function ForgotPassword(props) {
         style={{ marginBottom: '1rem' }}
         color='primary'
         fullwidth={true}
+        disabled={validForm}
         onClick={() => {
           props.handle_forgot_password(email);
           history.push('/forgot-password-confirmation');

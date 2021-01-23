@@ -145,7 +145,7 @@ export default function App() {
 
       var config = {
         method: 'post',
-        url: '/users/',
+        url: `${process.env.REACT_APP_API_URL}/users/`,
         headers: {
           'Content-Type': 'application/json',
         },
@@ -176,7 +176,7 @@ export default function App() {
   }, [])
 
   const handleForgotPassword = useCallback((email) => {
-    fetch('/reset-password/', {
+    fetch(`${process.env.REACT_APP_API_URL}/reset-password/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -185,7 +185,7 @@ export default function App() {
     })
       .then((res) => res.json())
       .then(
-        (json) => {},
+        (_) => {},
         (error) => {
           console.log(error)
         }

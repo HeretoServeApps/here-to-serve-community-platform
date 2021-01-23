@@ -186,3 +186,8 @@ thead th {
   color: black; }
   
 /* End of collapsible*/
+
+.error {
+  font-size: 12px;
+  color: red;
+}
