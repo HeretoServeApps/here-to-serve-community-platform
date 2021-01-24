@@ -84,6 +84,7 @@ export default function CommunityOneMember(props) {
             'community-id': localStorage.getItem('community-id'),
             'user-email': newEmail,
             'role': roleMap[newRole],
+            'is_approved': true
         })
         axios.post('/edit-community-user-role/', param, {
             headers: {

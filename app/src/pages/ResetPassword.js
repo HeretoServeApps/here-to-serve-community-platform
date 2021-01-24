@@ -56,7 +56,7 @@ export default function ResetPassword(props) {
           uid: uid,
           token: token,
       })
-      axios.post(/*`${process.env.REACT_APP_API_URL}/reset-password/confirm/`*/'/reset-password/confirm/', body, config)
+      axios.post(/*`${process.env.REACT_APP_API_URL}/reset-password/confirm/`*/'/reset-password-confirm/', body, config)
       .then(
         (_) => {
           history.push('/reset-password-confirmation')

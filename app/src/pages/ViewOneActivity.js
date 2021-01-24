@@ -51,6 +51,7 @@ export default function ViewOneActivity(props) {
         const param = JSON.stringify({
             activity: activity.id,
             user: localStorage.getItem('email'),
+            is_email: false
         })
 
         axios.post('/add-volunteer-to-activity/', param, {
@@ -103,7 +104,18 @@ export default function ViewOneActivity(props) {
                                 Sign-up
                             </Button>
                             :
-                            <Link to='/assign-volunteers' style={{ color: 'white' }}>
+                            <Link to={{ 
+                                pathname: '/assign-volunteers/',
+                                state: {
+                                    activity_id: props.location.state.primary_key,
+                                    activity_title: activity.title,
+                                    activity_start_date: moment(activity.start_time).format('LL'),
+                                    activity_start_time: moment(activity.start_time).add(new Date(activity.start_time).getTimezoneOffset(), 'm').format('LT'),
+                                    activity_end_time: moment(activity.end_time).add(new Date(activity.end_time).getTimezoneOffset(), 'm').format('LT')
+                                }
+                                }} 
+                                style={{ color: 'white' }}
+                            >
                                 <Button
                                     style={{
                                         boxShadow: '1px 1px 3px 2px rgba(0,0,0,0.1)',
