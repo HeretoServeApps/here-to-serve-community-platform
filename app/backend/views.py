@@ -31,6 +31,7 @@ from .serializers import (
 from .models import (
     Community, User, CommunityUserRole, Activity, EventActivity, MealActivity, RideActivity, Announcement, CustomSection, WellWish, DiscussionPost, Photo, Message
 )
+from .utils import sendEmailNotification
 
 
 sensitive_post_parameters_m = method_decorator(sensitive_post_parameters())
@@ -786,6 +787,8 @@ class SendEmail(APIView):
     def post(self, request, format=None):
         data = request.data
         from_email = data['from_email']
+        if from_email == '':
+            from_email = settings.EMAIL_HOST_USER
         to_emails = list(data['to_emails'])
         community = data['community']
         sender_name = data['sender']
@@ -919,11 +922,20 @@ class AddVolunteerToActivity(APIView):
 
     def post(self, request, format=None):
         activity_id = request.data['activity']
-        user_email = request.data['user']
+        user_email = request.data['user'].strip()
         user = User.objects.get(email=user_email).id
         activity = Activity.objects.get(id=activity_id)
         activity.volunteers.add(user)
         activity.save()
+        if request.data['is_email']:
+            sendEmailNotification(
+                toEmails=[user_email],
+                message=request.data['message'],
+                subject=request.data['subject'],
+                community=request.data['community_id'],
+                senderName=User.objects.get(email=request.data['sender_email']), 
+                fromEmail=request.data['sender_email']
+            )
         return Response('Added new volunteer to activity')
 
 class AddVolunteerToCommunity(APIView):

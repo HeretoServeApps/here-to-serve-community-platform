@@ -35,7 +35,6 @@ export default function CommunityPeople() {
   }
 
   const [people, setPeople] = useState([])
-  const [userRole, setUserRole] = useState(localStorage.getItem('user-role'))
   const [search, setSearch] = useState('')
 
   let history = useHistory()
@@ -55,7 +54,6 @@ export default function CommunityPeople() {
       .then(
         (response) => {
           setPeople(Array.from(response.data.people))
-          setUserRole(response.data.user_role)
         },
         (error) => {
           console.log(error)
