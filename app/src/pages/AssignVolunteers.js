@@ -171,7 +171,7 @@ export default function AssignVolunteers(props) {
                                         toolbar:
                                             'insertfile undo redo | formatselect | bold italic underline backcolor | \
                                             alignleft aligncenter alignright alignjustify | \
-                                            bullist numlist outdent indent | link image | help',
+                                            bullist numlist outdent indent | link | help',
                                         file_browser_callback_types: 'image',
                                         file_picker_callback: function (
                                             callback,

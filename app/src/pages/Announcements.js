@@ -14,7 +14,7 @@ import { Coffee, Radio } from 'react-feather'
 
 import axios from 'axios'
 
-export default function Announcements(props) {
+export default function Announcements() {
   const token = localStorage.getItem('token')
   const [announcements, setAnnouncements] = useState([])
 

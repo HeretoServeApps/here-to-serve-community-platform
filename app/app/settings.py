@@ -105,9 +105,9 @@ else:
     }
 
 
-# if DEBUG == False:
-db_from_env = dj_database_url.config(conn_max_age=600)
-DATABASES['default'].update(db_from_env)
+if DEBUG == False:
+    db_from_env = dj_database_url.config(conn_max_age=600)
+    DATABASES['default'].update(db_from_env)
 
 # User model
 AUTH_USER_MODEL = 'backend.User'

@@ -31,7 +31,7 @@ from .serializers import (
 from .models import (
     Community, User, CommunityUserRole, Activity, EventActivity, MealActivity, RideActivity, Announcement, CustomSection, WellWish, DiscussionPost, Photo, Message
 )
-from .utils import sendEmailNotification
+from .utils import sendEmailNotification, sendMassEmailNotification
 
 
 sensitive_post_parameters_m = method_decorator(sensitive_post_parameters())
@@ -624,6 +624,22 @@ class AddAnnouncement(APIView):
         serializer = AnnouncementSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
+
+            # Sending notification to users
+            if request.data['send_email']:
+                user_ids = CommunityUserRole.objects.filter(community=request.data['community']).values_list('user', flat=True)
+                user_emails = User.objects.filter(pk__in=list(user_ids)).values_list('email', flat=True)
+                url = config('HEROKU_APP_URL') + '/app/login'
+                message = f'A new family update has been posted in {community_name} Care Community. Log into ' + url + ' (Community Platform) to view the update.'
+                subject = f'[Here to Serve Community Platform] New Update in {community_name} Care Community'
+                sendMassEmailNotification(
+                    list(user_emails),
+                    message,
+                    subject,
+                    community,
+                    senderName='Here to Serve Admin',
+                    fromEmail=settings.EMAIL_HOST_USER
+                )
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

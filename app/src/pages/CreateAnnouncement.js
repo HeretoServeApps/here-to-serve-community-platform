@@ -20,7 +20,7 @@ import {
 } from 'react-bulma-components/lib/components/form'
 import axios from 'axios'
 
-export default function CreateAnnouncement(props) {
+export default function CreateAnnouncement() {
   const token = localStorage.getItem('token')
 
   var formContainerStyle = {
@@ -281,6 +281,7 @@ export default function CreateAnnouncement(props) {
       user: localStorage.getItem('email'),
       community: localStorage.getItem('community-name'),
       author_name: '',
+      send_email: sendEmail
     })
 
     axios
@@ -298,7 +299,7 @@ export default function CreateAnnouncement(props) {
           console.log(error)
         }
       )
-  }, [subject, message, month, day, year, time, showHome])
+  }, [subject, message, month, day, year, time, showHome, sendEmail])
 
   return (
     <div>
@@ -446,7 +447,7 @@ export default function CreateAnnouncement(props) {
                   onClick={() => setSendEmail(!sendEmail)}
                   checked={sendEmail}
                 />
-                <p> Send update to all community members via email</p>
+                <p>Send update to all community members via email</p>
               </div>
             </div>
             <br />

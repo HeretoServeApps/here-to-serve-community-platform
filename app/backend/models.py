@@ -276,6 +276,11 @@ class CommunityUserRole(models.Model):
     # When a user joins a community, they must be approved
     is_approved = models.BooleanField(default=False, null=False, blank=False)
 
+    def __str__(self):
+        community = Community.objects.get(id=self.community.id).name
+        user = User.objects.get(id=self.user.id).first_name + ' ' + User.objects.get(id=self.user.id).last_name
+        return f'{community} ({self.community.id}) <> {user} ({self.user.id})'
+
 
 class Announcement(models.Model):
     TRUE = 'true'
