@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import { Link, useHistory } from 'react-router-dom'
+import { Link, useHistory, Prompt } from 'react-router-dom'
 import axios from 'axios'
 
 import Container from 'react-bulma-components/lib/components/container'
@@ -126,6 +126,8 @@ export default function CommunityEdit() {
         .then(_ => history.push('/my-communities'))
         .catch(error => console.log('error', error))
     })
+
+    
 
     return (
         <div>
@@ -332,6 +334,7 @@ export default function CommunityEdit() {
                     </Modal.Card.Foot>
                 </Modal.Card>
             </Modal>
+            <Prompt message="Are you sure you want to leave? Your work won't be saved." />
         </div>
     )
 }

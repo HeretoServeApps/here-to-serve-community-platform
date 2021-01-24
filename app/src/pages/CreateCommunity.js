@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react'
 import countryList from 'react-select-country-list'
-import { useHistory } from 'react-router-dom'
+import { useHistory, Prompt } from 'react-router-dom'
 
 import {
   Field,
@@ -44,9 +44,10 @@ export default function CreateCommunity() {
   const [photoURL, setPhotoURL] = useState('')
 
   let history = useHistory()
-
+  let [isBlocking, setIsBlocking] = useState(true);
 
   const handleSubmit = useCallback((name, description, zipcode, country, isClosed, photoFile) => {
+    setIsBlocking(false)
     // First add the community to database
     var url = '/community/'
     var myHeaders = new Headers()
@@ -191,13 +192,16 @@ export default function CreateCommunity() {
         <CheckboxField text={'Allow all members to send invitations.'} />
       </Field>
       <Button
-        onClick={() => handleSubmit(name, description, zipcode, country, isClosed, photoFile)}
+        onClick={() => 
+          handleSubmit(name, description, zipcode, country, isClosed, photoFile)
+        }
         style={{ marginTop: '1rem', marginBottom: '1rem' }}
         color='primary'
         fullwidth={true}
       >
         CREATE COMMUNITY
       </Button>
+      <Prompt when={isBlocking} message="Are you sure you want to leave? Your work won't be saved." />
     </Container>
   )
 }

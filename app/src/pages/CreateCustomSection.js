@@ -202,9 +202,11 @@ export default function CreateCustomSection(props) {
                               'searchreplace wordcount visualblocks code fullscreen',
                               'insertdatetime media table contextmenu paste code'
                           ],
+
                           toolbar: 'undo redo | fontsizeselect | link image | bold italic underline backcolor | \
                                     alignleft aligncenter alignright alignjustify | \
                                     bullist numlist outdent indent | removeformat',
+                              
                           file_browser_callback_types: 'image',
                           file_picker_callback: function (callback, _, meta) {
                             if (meta.filetype === 'image') {

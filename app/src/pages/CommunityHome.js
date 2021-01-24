@@ -50,7 +50,7 @@ export default function CommunityHome(props) {
   const [events, setEvents] = useState([])
 
   const [showWelcomeCard, setShowWelcomeCard] = useState(true)
-  const [showLeaders, setShowLeaders] = useState(true)
+  const [showLeaders, setShowLeaders] = useState(false)
 
   const [displayCalendar, setDisplayCalendar] = useState(false)
   const [displayFamilyUpdates, setDisplayFamilyUpdates] = useState(false)
